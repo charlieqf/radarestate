@@ -1,0 +1,55 @@
+name: Daily Radar
+
+on:
+  workflow_dispatch:
+    inputs:
+      include_regional_daily:
+        description: 'Include Newcastle-Hunter regional daily bundle'
+        required: false
+        default: false
+        type: boolean
+  schedule:
+    - cron: '30 20 * * 0-4'
+
+jobs:
+  daily-radar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Write Supabase connection file
+        run: |
+          cat <<'EOF' > supabase.txt
+          ${{ secrets.SUPABASE_DB_URL }}
+          EOF
+
+      - name: Run daily pipeline
+        env:
+          RADARESTATE_NOTIFY_WEBHOOK_URL: ${{ secrets.RADARESTATE_NOTIFY_WEBHOOK_URL }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.include_regional_daily }}" = "true" ]; then
+            npm run pipeline:daily -- --include-regional-daily
+          else
+            npm run pipeline:daily
+          fi
+
+      - name: Upload daily artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-radar-artifacts
+          path: |
+            dashboard/*.html
+            reports/weekly-radar*.md
+            client-output/*.html
+            archive/daily/**
+            runs/latest-daily.json

@@ -1,0 +1,245 @@
+{
+  "extends": "precinct-focus-map.json",
+  "precincts": [
+    {
+      "code": "PRECINCT_PARRAMATTA_CBD",
+      "name": "Parramatta CBD",
+      "type": "centre",
+      "primaryCouncil": "Parramatta",
+      "allowedCouncils": ["Parramatta"],
+      "policyTheme": "Expanded;TOD",
+      "watchPriority": "high",
+      "keywords": ["Parramatta CBD", "Parramatta"]
+    },
+    {
+      "code": "PRECINCT_CARLINGFORD",
+      "name": "Carlingford",
+      "type": "centre",
+      "primaryCouncil": "Parramatta",
+      "allowedCouncils": ["Parramatta", "Ryde"],
+      "policyTheme": "Expanded;LMR",
+      "watchPriority": "medium",
+      "keywords": ["Carlingford"]
+    },
+    {
+      "code": "PRECINCT_MERRYLANDS",
+      "name": "Merrylands",
+      "type": "centre",
+      "primaryCouncil": "Cumberland",
+      "allowedCouncils": ["Cumberland"],
+      "policyTheme": "Expanded;LMR",
+      "watchPriority": "medium",
+      "keywords": ["Merrylands"]
+    },
+    {
+      "code": "PRECINCT_GRANVILLE",
+      "name": "Granville",
+      "type": "centre",
+      "primaryCouncil": "Cumberland",
+      "allowedCouncils": ["Cumberland", "Parramatta"],
+      "policyTheme": "Expanded;TOD",
+      "watchPriority": "medium",
+      "keywords": ["Granville"]
+    },
+    {
+      "code": "PRECINCT_DRUMMOYNE",
+      "name": "Drummoyne",
+      "type": "centre",
+      "primaryCouncil": "Canada Bay",
+      "allowedCouncils": ["Canada Bay"],
+      "policyTheme": "Expanded",
+      "watchPriority": "medium",
+      "keywords": ["Drummoyne"]
+    },
+    {
+      "code": "PRECINCT_EDGECLIFF",
+      "name": "Edgecliff",
+      "type": "centre",
+      "primaryCouncil": "Woollahra",
+      "allowedCouncils": ["Woollahra"],
+      "policyTheme": "Expanded;Observed",
+      "watchPriority": "high",
+      "keywords": ["Edgecliff"]
+    },
+    {
+      "code": "PRECINCT_DOUBLE_BAY",
+      "name": "Double Bay",
+      "type": "centre",
+      "primaryCouncil": "Woollahra",
+      "allowedCouncils": ["Woollahra"],
+      "policyTheme": "Expanded;Observed",
+      "watchPriority": "high",
+      "keywords": ["Double Bay"]
+    },
+    {
+      "code": "PRECINCT_CRONULLA",
+      "name": "Cronulla",
+      "type": "centre",
+      "primaryCouncil": "Sutherland Shire",
+      "allowedCouncils": ["Sutherland Shire"],
+      "policyTheme": "Expanded;Observed",
+      "watchPriority": "high",
+      "keywords": ["Cronulla"]
+    },
+    {
+      "code": "PRECINCT_SUTHERLAND",
+      "name": "Sutherland",
+      "type": "centre",
+      "primaryCouncil": "Sutherland Shire",
+      "allowedCouncils": ["Sutherland Shire"],
+      "policyTheme": "Expanded;Observed",
+      "watchPriority": "medium",
+      "keywords": ["Sutherland"]
+    },
+    {
+      "code": "PRECINCT_KIRRAWEE",
+      "name": "Kirrawee",
+      "type": "centre",
+      "primaryCouncil": "Sutherland Shire",
+      "allowedCouncils": ["Sutherland Shire"],
+      "policyTheme": "Expanded;Observed",
+      "watchPriority": "medium",
+      "keywords": ["Kirrawee"]
+    },
+    {
+      "code": "PRECINCT_CASTLE_HILL",
+      "name": "Castle Hill",
+      "type": "centre",
+      "primaryCouncil": "The Hills Shire",
+      "allowedCouncils": ["The Hills Shire"],
+      "policyTheme": "Expanded;Observed;TOD",
+      "watchPriority": "high",
+      "keywords": ["Castle Hill"]
+    },
+    {
+      "code": "PRECINCT_GABLES",
+      "name": "Gables",
+      "type": "centre",
+      "primaryCouncil": "The Hills Shire",
+      "allowedCouncils": ["The Hills Shire"],
+      "policyTheme": "Expanded;Observed",
+      "watchPriority": "medium",
+      "keywords": ["Gables"]
+    },
+    {
+      "code": "PRECINCT_DURAL",
+      "name": "Dural",
+      "type": "centre",
+      "primaryCouncil": "The Hills Shire",
+      "allowedCouncils": ["The Hills Shire"],
+      "policyTheme": "Expanded;Observed",
+      "watchPriority": "low",
+      "keywords": ["Dural"]
+    },
+    {
+      "code": "PRECINCT_SEVEN_HILLS",
+      "name": "Seven Hills",
+      "type": "centre",
+      "primaryCouncil": "Blacktown",
+      "allowedCouncils": ["Blacktown"],
+      "policyTheme": "Expanded;Observed",
+      "watchPriority": "medium",
+      "keywords": ["Seven Hills"]
+    },
+    {
+      "code": "PRECINCT_MARSDEN_PARK",
+      "name": "Marsden Park",
+      "type": "centre",
+      "primaryCouncil": "Blacktown",
+      "allowedCouncils": ["Blacktown"],
+      "policyTheme": "Expanded;Observed",
+      "watchPriority": "high",
+      "keywords": ["Marsden Park"]
+    },
+    {
+      "code": "PRECINCT_TALLAWONG",
+      "name": "Tallawong",
+      "type": "station",
+      "primaryCouncil": "Blacktown",
+      "allowedCouncils": ["Blacktown"],
+      "policyTheme": "Expanded;TOD",
+      "watchPriority": "high",
+      "keywords": ["Tallawong"]
+    },
+    {
+      "code": "PRECINCT_SCHOFIELDS",
+      "name": "Schofields",
+      "type": "station",
+      "primaryCouncil": "Blacktown",
+      "allowedCouncils": ["Blacktown"],
+      "policyTheme": "Expanded;Observed",
+      "watchPriority": "medium",
+      "keywords": ["Schofields"]
+    },
+    {
+      "code": "PRECINCT_MOUNT_DRUITT",
+      "name": "Mount Druitt",
+      "type": "centre",
+      "primaryCouncil": "Blacktown",
+      "allowedCouncils": ["Blacktown"],
+      "policyTheme": "Expanded;Observed",
+      "watchPriority": "medium",
+      "keywords": ["Mount Druitt"]
+    },
+    {
+      "code": "PRECINCT_PENRITH",
+      "name": "Penrith",
+      "type": "centre",
+      "primaryCouncil": "Penrith",
+      "allowedCouncils": ["Penrith"],
+      "policyTheme": "Expanded;Observed",
+      "watchPriority": "high",
+      "keywords": ["Penrith", "Penrith City Centre"]
+    },
+    {
+      "code": "PRECINCT_ST_MARYS",
+      "name": "St Marys",
+      "type": "centre",
+      "primaryCouncil": "Penrith",
+      "allowedCouncils": ["Penrith"],
+      "policyTheme": "Expanded;Observed",
+      "watchPriority": "high",
+      "keywords": ["St Marys"]
+    },
+    {
+      "code": "PRECINCT_BEXLEY",
+      "name": "Bexley",
+      "type": "centre",
+      "primaryCouncil": "Bayside",
+      "allowedCouncils": ["Bayside"],
+      "policyTheme": "Expanded;Observed",
+      "watchPriority": "medium",
+      "keywords": ["Bexley"]
+    },
+    {
+      "code": "PRECINCT_SANDRINGHAM",
+      "name": "Sandringham",
+      "type": "centre",
+      "primaryCouncil": "Bayside",
+      "allowedCouncils": ["Bayside"],
+      "policyTheme": "Expanded;Observed",
+      "watchPriority": "low",
+      "keywords": ["Sandringham"]
+    },
+    {
+      "code": "PRECINCT_CABRAMATTA",
+      "name": "Cabramatta",
+      "type": "centre",
+      "primaryCouncil": "Fairfield",
+      "allowedCouncils": ["Fairfield"],
+      "policyTheme": "Expanded;Observed",
+      "watchPriority": "high",
+      "keywords": ["Cabramatta"]
+    },
+    {
+      "code": "PRECINCT_SMITHFIELD",
+      "name": "Smithfield",
+      "type": "centre",
+      "primaryCouncil": "Fairfield",
+      "allowedCouncils": ["Fairfield"],
+      "policyTheme": "Expanded;Observed",
+      "watchPriority": "medium",
+      "keywords": ["Smithfield"]
+    }
+  ]
+}

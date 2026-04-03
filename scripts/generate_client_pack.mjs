@@ -44,6 +44,34 @@ function runNodeScript(relativeScript, args = []) {
   })
 }
 
+function parseArgs() {
+  const args = process.argv.slice(2)
+  const options = {
+    regionGroup: 'Greater Sydney',
+    label: 'Sydney',
+    slug: 'latest',
+    dashboardPath: null,
+    radarPath: null,
+    deepDiveConfig: null
+  }
+  for (const arg of args) {
+    if (arg.startsWith('--region-group=')) options.regionGroup = arg.split('=')[1].trim()
+    if (arg.startsWith('--label=')) options.label = arg.split('=')[1].trim()
+    if (arg.startsWith('--slug=')) options.slug = arg.split('=')[1].trim()
+    if (arg.startsWith('--dashboard-path=')) options.dashboardPath = arg.split('=')[1].trim()
+    if (arg.startsWith('--radar-path=')) options.radarPath = arg.split('=')[1].trim()
+    if (arg.startsWith('--deep-dive-config=')) options.deepDiveConfig = arg.split('=')[1].trim()
+  }
+  return options
+}
+
+function readJson(relativeOrAbsolutePath) {
+  const absolutePath = path.isAbsolute(relativeOrAbsolutePath)
+    ? relativeOrAbsolutePath
+    : path.join(root, relativeOrAbsolutePath)
+  return JSON.parse(fs.readFileSync(absolutePath, 'utf8'))
+}
+
 function slugify(value) {
   return String(value).trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
 }
@@ -54,26 +82,33 @@ function formatNumber(value) {
 }
 
 async function main() {
+  const options = parseArgs()
   const client = await connectWithFallback()
   try {
     const topOpportunity = await client.query(
       `select precinct_name, council_name, opportunity_rating, friction_score, recent_application_count, active_pipeline_count
-       from public.v_precinct_shortlist
-       order by case opportunity_rating when 'A' then 1 when 'B' then 2 else 3 end,
-                friction_score asc nulls last,
-                recent_application_count desc nulls last,
-                active_pipeline_count desc nulls last
-       limit 1`
+        from public.v_precinct_shortlist
+        join public.councils c on c.canonical_name = v_precinct_shortlist.council_name
+       where c.region_group = $1
+        order by case opportunity_rating when 'A' then 1 when 'B' then 2 else 3 end,
+                 friction_score asc nulls last,
+                 recent_application_count desc nulls last,
+                 active_pipeline_count desc nulls last
+       limit 1`,
+      [options.regionGroup]
     )
 
     const topRisk = await client.query(
       `select precinct_name, council_name, opportunity_rating, friction_score, recent_application_count, active_pipeline_count
-       from public.v_precinct_shortlist
+        from public.v_precinct_shortlist
+        join public.councils c on c.canonical_name = v_precinct_shortlist.council_name
        where constraint_count > 0
-       order by friction_score desc nulls last,
-                recent_application_count desc nulls last,
-                active_pipeline_count desc nulls last
-       limit 1`
+         and c.region_group = $1
+        order by friction_score desc nulls last,
+                 recent_application_count desc nulls last,
+                 active_pipeline_count desc nulls last
+       limit 1`,
+      [options.regionGroup]
     )
 
     if (!topOpportunity.rows.length) throw new Error('No top opportunity precinct found')
@@ -82,14 +117,46 @@ async function main() {
     const best = topOpportunity.rows[0]
     const risk = topRisk.rows[0]
 
-    runNodeScript('scripts/generate_dashboard_report.mjs')
-    runNodeScript('scripts/generate_weekly_radar.mjs')
-    runNodeScript('scripts/generate_deep_dive_memo.mjs', [`--precinct=${best.precinct_name}`])
-    runNodeScript('scripts/generate_deep_dive_memo.mjs', [`--precinct=${risk.precinct_name}`])
+    const dashboardPath = options.dashboardPath || (options.slug === 'latest' ? 'dashboard/latest-report.html' : `dashboard/${options.slug}-report.html`)
+    const radarPath = options.radarPath || (options.slug === 'latest' ? 'reports/weekly-radar-latest.md' : `reports/weekly-radar-${options.slug}.md`)
+
+    runNodeScript('scripts/generate_dashboard_report.mjs', [
+      `--region-group=${options.regionGroup}`,
+      `--label=${options.label}`,
+      `--output-name=${options.slug === 'latest' ? 'latest-report' : `${options.slug}-report`}`
+    ])
+    runNodeScript('scripts/generate_weekly_radar.mjs', [
+      `--region-group=${options.regionGroup}`,
+      `--label=${options.label}`,
+      `--output-name=${options.slug}`,
+      `--dashboard-path=${dashboardPath}`
+    ])
+
+    let deepDivePrecincts = []
+    if (options.deepDiveConfig) {
+      const config = readJson(options.deepDiveConfig)
+      deepDivePrecincts = config.precincts || []
+      runNodeScript('scripts/generate_deep_dive_batch.mjs', [`--config=${options.deepDiveConfig}`])
+    } else {
+      deepDivePrecincts = [best.precinct_name, risk.precinct_name]
+      runNodeScript('scripts/generate_deep_dive_memo.mjs', [
+        `--precinct=${best.precinct_name}`,
+        `--dashboard-path=${dashboardPath}`,
+        `--radar-path=${radarPath}`
+      ])
+      runNodeScript('scripts/generate_deep_dive_memo.mjs', [
+        `--precinct=${risk.precinct_name}`,
+        `--dashboard-path=${dashboardPath}`,
+        `--radar-path=${radarPath}`
+      ])
+      runNodeScript('scripts/render_client_reports.mjs')
+    }
+
+    const deepDiveFiles = [...new Set(deepDivePrecincts.map((precinct) => `reports/deep-dive-${slugify(precinct)}.md`))]
 
     const today = new Date().toISOString().slice(0, 10)
     const markdown = [
-      '# Client Pack',
+      `# ${options.label} Client Pack`,
       '',
       `## Date`,
       '',
@@ -97,17 +164,15 @@ async function main() {
       '',
       '## Included Deliverables',
       '',
-      '- `dashboard/latest-report.html`',
-      '- `reports/weekly-radar-latest.md`',
-      `- \`reports/deep-dive-${slugify(best.precinct_name)}.md\``,
-      `- \`reports/deep-dive-${slugify(risk.precinct_name)}.md\``,
+      `- \`${dashboardPath}\``,
+      `- \`${radarPath}\``,
+      ...deepDiveFiles.map((file) => `- \`${file}\``),
       '',
       '## Reading Order',
       '',
-      '1. Open `dashboard/latest-report.html` for the visual scan.',
-      '2. Read `reports/weekly-radar-latest.md` for the current market-level interpretation.',
-      `3. Read \`reports/deep-dive-${slugify(best.precinct_name)}.md\` for the current strongest opportunity precinct.`,
-      `4. Read \`reports/deep-dive-${slugify(risk.precinct_name)}.md\` for the strongest cautionary or risk-adjusted precinct.`,
+      `1. Open \`${dashboardPath}\` for the visual scan.`,
+      `2. Read \`${radarPath}\` for the current market-level interpretation.`,
+      ...deepDiveFiles.map((file, index) => `${index + 3}. Read \`${file}\` for precinct-level detail.`),
       '',
       '## This Pack Highlights',
       '',
@@ -125,7 +190,8 @@ async function main() {
 
     const reportsDir = path.join(root, 'reports')
     fs.mkdirSync(reportsDir, { recursive: true })
-    const outPath = path.join(reportsDir, 'client-pack-latest.md')
+    const fileName = options.slug === 'latest' ? 'client-pack-latest.md' : `client-pack-${options.slug}.md`
+    const outPath = path.join(reportsDir, fileName)
     fs.writeFileSync(outPath, markdown, 'utf8')
     console.log(`Wrote ${outPath}`)
 

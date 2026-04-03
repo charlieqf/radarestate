@@ -1,84 +1,9 @@
-import fs from 'node:fs'
-import path from 'node:path'
-import { marked } from 'marked'
-
-const root = process.cwd()
-const reportsDir = path.join(root, 'reports')
-const outputDir = path.join(root, 'client-output')
-
-function readFile(filePath) {
-  return fs.readFileSync(filePath, 'utf8')
-}
-
-function ensureDir(dirPath) {
-  fs.mkdirSync(dirPath, { recursive: true })
-}
-
-function titleFromMarkdown(markdown, fallback) {
-  const match = markdown.match(/^#\s+(.+)$/m)
-  return match ? match[1].trim() : fallback
-}
-
-function slugToLabel(fileName) {
-  return fileName
-    .replace(/\.md$/i, '')
-    .replace(/-/g, ' ')
-    .replace(/\b\w/g, (m) => m.toUpperCase())
-}
-
-function markdownPathToHref(targetPath) {
-  if (targetPath.startsWith('dashboard/')) {
-    return `../${targetPath}`
-  }
-  if (targetPath.startsWith('reports/')) {
-    return targetPath.replace(/^reports\//, '').replace(/\.md$/i, '.html')
-  }
-  return targetPath
-}
-
-function preprocessMarkdown(markdown) {
-  return markdown.replace(/`((?:dashboard|reports)\/[^`]+\.(?:html|md))`/g, (_, targetPath) => {
-    return `[\`${targetPath}\`](${markdownPathToHref(targetPath)})`
-  })
-}
-
-function navItems(files) {
-  const priority = new Map([
-    ['client-pack-latest.md', 1],
-    ['weekly-radar-latest.md', 2]
-  ])
-
-  return files
-    .slice()
-    .sort((a, b) => {
-      const pa = priority.get(path.basename(a)) || 10
-      const pb = priority.get(path.basename(b)) || 10
-      if (pa !== pb) return pa - pb
-      return path.basename(a).localeCompare(path.basename(b))
-    })
-    .map((filePath) => {
-      const fileName = path.basename(filePath)
-      return {
-        fileName,
-        href: fileName.replace(/\.md$/i, '.html'),
-        label: slugToLabel(fileName),
-        title: titleFromMarkdown(readFile(filePath), slugToLabel(fileName))
-      }
-    })
-}
-
-function pageTemplate({ title, bodyHtml, nav, currentHref }) {
-  const navHtml = nav.map((item) => {
-    const active = item.href === currentHref ? 'nav-link active' : 'nav-link'
-    return `<a class="${active}" href="${item.href}"><span class="nav-title">${item.title}</span><span class="nav-meta">${item.label}</span></a>`
-  }).join('')
-
-  return `<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${title}</title>
+  <title>Newcastle-Hunter Client Pack</title>
   <script>
     (() => {
       const storageKey = 'radarestate-theme';
@@ -393,10 +318,41 @@ function pageTemplate({ title, bodyHtml, nav, currentHref }) {
         <a class="action-link" href="../dashboard/latest-report.html">Open Visual Dashboard</a>
         <a class="action-link" href="index.html">Open Client Pack</a>
       </div>
-      <nav class="nav">${navHtml}</nav>
+      <nav class="nav"><a class="nav-link" href="client-pack-latest.html"><span class="nav-title">Sydney Client Pack</span><span class="nav-meta">Client Pack Latest</span></a><a class="nav-link" href="weekly-radar-latest.html"><span class="nav-title">Sydney Planning Opportunity Radar</span><span class="nav-meta">Weekly Radar Latest</span></a><a class="nav-link active" href="client-pack-newcastle-hunter.html"><span class="nav-title">Newcastle-Hunter Client Pack</span><span class="nav-meta">Client Pack Newcastle Hunter</span></a><a class="nav-link" href="coverage-readiness-greater-sydney-expanded.html"><span class="nav-title">Coverage Readiness: greater-sydney-expanded</span><span class="nav-meta">Coverage Readiness Greater Sydney Expanded</span></a><a class="nav-link" href="coverage-readiness-newcastle-hunter-pilot.html"><span class="nav-title">Coverage Readiness: newcastle-hunter-pilot</span><span class="nav-meta">Coverage Readiness Newcastle Hunter Pilot</span></a><a class="nav-link" href="deep-dive-bankstown.html"><span class="nav-title">Deep Dive: Bankstown</span><span class="nav-meta">Deep Dive Bankstown</span></a><a class="nav-link" href="deep-dive-cessnock.html"><span class="nav-title">Deep Dive: Cessnock</span><span class="nav-meta">Deep Dive Cessnock</span></a><a class="nav-link" href="deep-dive-five-dock.html"><span class="nav-title">Deep Dive: Five Dock</span><span class="nav-meta">Deep Dive Five Dock</span></a><a class="nav-link" href="deep-dive-gladesville.html"><span class="nav-title">Deep Dive: Gladesville</span><span class="nav-meta">Deep Dive Gladesville</span></a><a class="nav-link" href="deep-dive-mayfield.html"><span class="nav-title">Deep Dive: Mayfield</span><span class="nav-meta">Deep Dive Mayfield</span></a><a class="nav-link" href="deep-dive-newcastle-city-centre.html"><span class="nav-title">Deep Dive: Newcastle City Centre</span><span class="nav-meta">Deep Dive Newcastle City Centre</span></a><a class="nav-link" href="weekly-radar-newcastle-hunter.html"><span class="nav-title">Newcastle-Hunter Planning Opportunity Radar</span><span class="nav-meta">Weekly Radar Newcastle Hunter</span></a></nav>
     </aside>
     <main class="main">
-      <article class="article">${bodyHtml}</article>
+      <article class="article"><h1>Newcastle-Hunter Client Pack</h1>
+<h2>Date</h2>
+<p>2026-04-03</p>
+<h2>Included Deliverables</h2>
+<ul>
+<li><a href="../dashboard/newcastle-hunter-report.html"><code>dashboard/newcastle-hunter-report.html</code></a></li>
+<li><a href="weekly-radar-newcastle-hunter.html"><code>reports/weekly-radar-newcastle-hunter.md</code></a></li>
+<li><a href="deep-dive-mayfield.html"><code>reports/deep-dive-mayfield.md</code></a></li>
+<li><a href="deep-dive-newcastle-city-centre.html"><code>reports/deep-dive-newcastle-city-centre.md</code></a></li>
+<li><a href="deep-dive-cessnock.html"><code>reports/deep-dive-cessnock.md</code></a></li>
+</ul>
+<h2>Reading Order</h2>
+<ol>
+<li>Open <a href="../dashboard/newcastle-hunter-report.html"><code>dashboard/newcastle-hunter-report.html</code></a> for the visual scan.</li>
+<li>Read <a href="weekly-radar-newcastle-hunter.html"><code>reports/weekly-radar-newcastle-hunter.md</code></a> for the current market-level interpretation.</li>
+<li>Read <a href="deep-dive-mayfield.html"><code>reports/deep-dive-mayfield.md</code></a> for precinct-level detail.</li>
+<li>Read <a href="deep-dive-newcastle-city-centre.html"><code>reports/deep-dive-newcastle-city-centre.md</code></a> for precinct-level detail.</li>
+<li>Read <a href="deep-dive-cessnock.html"><code>reports/deep-dive-cessnock.md</code></a> for precinct-level detail.</li>
+</ol>
+<h2>This Pack Highlights</h2>
+<ul>
+<li>Best current opportunity precinct: <code>Mayfield</code> (Newcastle)</li>
+<li>Opportunity profile: rating <code>B</code>, risk <code>0</code>, recent apps <code>213</code>, active pipeline <code>0</code></li>
+<li>Highest-friction tracked precinct: <code>Cessnock</code> (Cessnock)</li>
+<li>Risk profile: rating <code>C</code>, risk <code>5</code>, recent apps <code>215</code>, active pipeline <code>1</code></li>
+</ul>
+<h2>Notes</h2>
+<ul>
+<li>This pack is generated from current Supabase data and is intended as a point-in-time research deliverable.</li>
+<li>The current risk layer is materially useful, but still combines proxy and sample-based spatial signals rather than full parcel-level constraints.</li>
+</ul>
+</article>
     </main>
   </div>
   <script>
@@ -421,39 +377,4 @@ function pageTemplate({ title, bodyHtml, nav, currentHref }) {
     })();
   </script>
 </body>
-</html>`
-}
-
-async function main() {
-  ensureDir(outputDir)
-  const files = fs.readdirSync(reportsDir)
-    .filter((name) => name.endsWith('.md'))
-    .map((name) => path.join(reportsDir, name))
-
-  const nav = navItems(files)
-  marked.setOptions({ gfm: true, breaks: false })
-
-  for (const filePath of files) {
-    const fileName = path.basename(filePath)
-    const markdown = preprocessMarkdown(readFile(filePath))
-    const title = titleFromMarkdown(markdown, slugToLabel(fileName))
-    const bodyHtml = marked.parse(markdown)
-    const outputFileName = fileName.replace(/\.md$/i, '.html')
-    const html = pageTemplate({
-      title,
-      bodyHtml,
-      nav,
-      currentHref: outputFileName
-    })
-    fs.writeFileSync(path.join(outputDir, outputFileName), html, 'utf8')
-    if (fileName === 'client-pack-latest.md') {
-      fs.writeFileSync(path.join(outputDir, 'index.html'), html, 'utf8')
-    }
-    console.log(`Rendered ${outputFileName}`)
-  }
-}
-
-main().catch((error) => {
-  console.error(error)
-  process.exit(1)
-})
+</html>

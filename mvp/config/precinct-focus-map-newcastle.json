@@ -1,0 +1,206 @@
+{
+  "regionGroup": "Hunter",
+  "recentFrom": "2025-01-01",
+  "precincts": [
+    {
+      "code": "PRECINCT_NEWCASTLE_CITY_CENTRE",
+      "name": "Newcastle City Centre",
+      "type": "centre",
+      "primaryCouncil": "Newcastle",
+      "allowedCouncils": ["Newcastle"],
+      "policyTheme": "Hunter;Observed",
+      "watchPriority": "high",
+      "keywords": ["Newcastle", "Newcastle West", "Newcastle East"]
+    },
+    {
+      "code": "PRECINCT_BROADMEADOW",
+      "name": "Broadmeadow",
+      "type": "station",
+      "primaryCouncil": "Newcastle",
+      "allowedCouncils": ["Newcastle"],
+      "policyTheme": "Hunter;TOD",
+      "watchPriority": "high",
+      "keywords": ["Broadmeadow"]
+    },
+    {
+      "code": "PRECINCT_MAYFIELD",
+      "name": "Mayfield",
+      "type": "centre",
+      "primaryCouncil": "Newcastle",
+      "allowedCouncils": ["Newcastle"],
+      "policyTheme": "Hunter",
+      "watchPriority": "medium",
+      "keywords": ["Mayfield"]
+    },
+    {
+      "code": "PRECINCT_KOTARA",
+      "name": "Kotara",
+      "type": "centre",
+      "primaryCouncil": "Newcastle",
+      "allowedCouncils": ["Newcastle"],
+      "policyTheme": "Hunter",
+      "watchPriority": "medium",
+      "keywords": ["Kotara"]
+    },
+    {
+      "code": "PRECINCT_CHARLESTOWN",
+      "name": "Charlestown",
+      "type": "centre",
+      "primaryCouncil": "Lake Macquarie",
+      "allowedCouncils": ["Lake Macquarie"],
+      "policyTheme": "Hunter;Observed",
+      "watchPriority": "high",
+      "keywords": ["Charlestown"]
+    },
+    {
+      "code": "PRECINCT_GLENDALE",
+      "name": "Glendale",
+      "type": "centre",
+      "primaryCouncil": "Lake Macquarie",
+      "allowedCouncils": ["Lake Macquarie"],
+      "policyTheme": "Hunter;Observed",
+      "watchPriority": "high",
+      "keywords": ["Glendale"]
+    },
+    {
+      "code": "PRECINCT_WARNERS_BAY",
+      "name": "Warners Bay",
+      "type": "centre",
+      "primaryCouncil": "Lake Macquarie",
+      "allowedCouncils": ["Lake Macquarie"],
+      "policyTheme": "Hunter",
+      "watchPriority": "medium",
+      "keywords": ["Warners Bay"]
+    },
+    {
+      "code": "PRECINCT_BELMONT",
+      "name": "Belmont",
+      "type": "centre",
+      "primaryCouncil": "Lake Macquarie",
+      "allowedCouncils": ["Lake Macquarie"],
+      "policyTheme": "Hunter",
+      "watchPriority": "medium",
+      "keywords": ["Belmont"]
+    },
+    {
+      "code": "PRECINCT_MAITLAND",
+      "name": "Maitland",
+      "type": "centre",
+      "primaryCouncil": "Maitland",
+      "allowedCouncils": ["Maitland"],
+      "policyTheme": "Hunter;Observed",
+      "watchPriority": "high",
+      "keywords": ["Maitland"]
+    },
+    {
+      "code": "PRECINCT_EAST_MAITLAND",
+      "name": "East Maitland",
+      "type": "centre",
+      "primaryCouncil": "Maitland",
+      "allowedCouncils": ["Maitland"],
+      "policyTheme": "Hunter",
+      "watchPriority": "medium",
+      "keywords": ["East Maitland"]
+    },
+    {
+      "code": "PRECINCT_RUTHERFORD",
+      "name": "Rutherford",
+      "type": "centre",
+      "primaryCouncil": "Maitland",
+      "allowedCouncils": ["Maitland"],
+      "policyTheme": "Hunter",
+      "watchPriority": "medium",
+      "keywords": ["Rutherford"]
+    },
+    {
+      "code": "PRECINCT_THORNTON",
+      "name": "Thornton",
+      "type": "centre",
+      "primaryCouncil": "Maitland",
+      "allowedCouncils": ["Maitland"],
+      "policyTheme": "Hunter",
+      "watchPriority": "medium",
+      "keywords": ["Thornton"]
+    },
+    {
+      "code": "PRECINCT_RAYMOND_TERRACE",
+      "name": "Raymond Terrace",
+      "type": "centre",
+      "primaryCouncil": "Port Stephens",
+      "allowedCouncils": ["Port Stephens"],
+      "policyTheme": "Hunter;Observed",
+      "watchPriority": "high",
+      "keywords": ["Raymond Terrace"]
+    },
+    {
+      "code": "PRECINCT_NELSON_BAY",
+      "name": "Nelson Bay",
+      "type": "centre",
+      "primaryCouncil": "Port Stephens",
+      "allowedCouncils": ["Port Stephens"],
+      "policyTheme": "Hunter",
+      "watchPriority": "medium",
+      "keywords": ["Nelson Bay"]
+    },
+    {
+      "code": "PRECINCT_MEDOWIE",
+      "name": "Medowie",
+      "type": "centre",
+      "primaryCouncil": "Port Stephens",
+      "allowedCouncils": ["Port Stephens"],
+      "policyTheme": "Hunter",
+      "watchPriority": "medium",
+      "keywords": ["Medowie"]
+    },
+    {
+      "code": "PRECINCT_WILLIAMTOWN",
+      "name": "Williamtown",
+      "type": "centre",
+      "primaryCouncil": "Port Stephens",
+      "allowedCouncils": ["Port Stephens"],
+      "policyTheme": "Hunter",
+      "watchPriority": "low",
+      "keywords": ["Williamtown"]
+    },
+    {
+      "code": "PRECINCT_CESSNOCK",
+      "name": "Cessnock",
+      "type": "centre",
+      "primaryCouncil": "Cessnock",
+      "allowedCouncils": ["Cessnock"],
+      "policyTheme": "Hunter;Observed",
+      "watchPriority": "high",
+      "keywords": ["Cessnock"]
+    },
+    {
+      "code": "PRECINCT_KURRI_KURRI",
+      "name": "Kurri Kurri",
+      "type": "centre",
+      "primaryCouncil": "Cessnock",
+      "allowedCouncils": ["Cessnock"],
+      "policyTheme": "Hunter",
+      "watchPriority": "medium",
+      "keywords": ["Kurri Kurri"]
+    },
+    {
+      "code": "PRECINCT_BRANXTON",
+      "name": "Branxton",
+      "type": "centre",
+      "primaryCouncil": "Cessnock",
+      "allowedCouncils": ["Cessnock"],
+      "policyTheme": "Hunter",
+      "watchPriority": "medium",
+      "keywords": ["Branxton"]
+    },
+    {
+      "code": "PRECINCT_HUNTLEE",
+      "name": "Huntlee",
+      "type": "centre",
+      "primaryCouncil": "Cessnock",
+      "allowedCouncils": ["Cessnock"],
+      "policyTheme": "Hunter",
+      "watchPriority": "medium",
+      "keywords": ["Huntlee"]
+    }
+  ]
+}

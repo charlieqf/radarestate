@@ -36,6 +36,23 @@ async function connectWithFallback() {
   throw lastError || new Error('Unable to connect to Supabase')
 }
 
+function parseArgs() {
+  const args = process.argv.slice(2)
+  const options = {
+    regionGroup: 'Greater Sydney',
+    label: 'Sydney',
+    outputName: 'latest',
+    dashboardPath: 'dashboard/latest-report.html'
+  }
+  for (const arg of args) {
+    if (arg.startsWith('--region-group=')) options.regionGroup = arg.split('=')[1].trim()
+    if (arg.startsWith('--label=')) options.label = arg.split('=')[1].trim()
+    if (arg.startsWith('--output-name=')) options.outputName = arg.split('=')[1].trim()
+    if (arg.startsWith('--dashboard-path=')) options.dashboardPath = arg.split('=')[1].trim()
+  }
+  return options
+}
+
 function formatNumber(value) {
   if (value === null || value === undefined || value === '') return '-'
   return new Intl.NumberFormat('en-AU').format(Number(value))
@@ -81,8 +98,8 @@ function pickTopNames(rows, field, count) {
   return rows.slice(0, count).map((row) => `\`${row[field]}\``)
 }
 
-function buildHeadline(topA, constrained) {
-  const leaders = pickTopNames(topA, 'precinct_name', 3)
+function buildHeadline(topA, constrained, shortlist) {
+  const leaders = pickTopNames(topA.length ? topA : shortlist, 'precinct_name', 3)
   const risked = pickTopNames(constrained, 'precinct_name', 2)
 
   if (leaders.length && risked.length) {
@@ -94,10 +111,11 @@ function buildHeadline(topA, constrained) {
   return '当前最值得看的不是单一 suburb 热度，而是同时具备 policy momentum、recent activity 和较低 friction 的 precinct。'
 }
 
-function buildExecutiveSummary(topA, constrained, councilRanking, pipeline, constraintRows) {
+function buildExecutiveSummary(topA, constrained, councilRanking, pipeline, constraintRows, shortlist) {
   const bullets = []
-  if (topA.length) {
-    const names = pickTopNames(topA, 'precinct_name', 3).join('、')
+
+  if (topA.length || shortlist.length) {
+    const names = pickTopNames(topA.length ? topA : shortlist, 'precinct_name', 3).join('、')
     bullets.push(`${names} 目前构成首批高优先级 precinct，特点是 active pipeline 和 recent applications 能同时成立，且 friction 仍可控。`)
   }
 
@@ -128,31 +146,32 @@ function buildExecutiveSummary(topA, constrained, councilRanking, pipeline, cons
 }
 
 async function main() {
+  const options = parseArgs()
   const client = await connectWithFallback()
   try {
-    const metaPlanning = await client.query(`select count(*)::int as total from public.planning_proposals`)
-    const metaApps = await client.query(`select count(*)::int as total from public.application_signals`)
-    const metaPrecinct = await client.query(`select count(*)::int as total from public.v_precinct_shortlist`)
-    const metaConstraints = await client.query(`select count(*)::int as total from public.constraints`)
-    const councilRanking = await client.query(`select council_name, target_value, application_recent_count, active_pipeline_count from public.v_council_scoreboard where region_group = 'Greater Sydney' order by application_recent_count desc nulls last, active_pipeline_count desc nulls last limit 10`)
-    const pipeline = await client.query(`select stage, stage_rank, proposal_count, council_count from public.v_policy_pipeline order by stage_rank nulls last, stage`)
-    const shortlist = await client.query(`select precinct_name, council_name, opportunity_rating, policy_score, friction_score, timing_score, recent_application_count, active_pipeline_count, constraint_summary, recommended_action, trigger_summary from public.v_precinct_shortlist limit 10`)
-    const constrained = await client.query(`select precinct_name, council_name, opportunity_rating, friction_score, constraint_summary, recent_application_count, active_pipeline_count from public.v_precinct_shortlist where constraint_count > 0 order by friction_score desc, recent_application_count desc limit 10`)
-    const watchlist = await client.query(`select council_name, stage, title, location_text from public.v_sydney_proposal_watchlist where stage in ('under_assessment','pre_exhibition','on_exhibition','finalisation') order by stage_rank nulls last, last_seen_at desc, title limit 20`)
-    const constraintRows = await client.query(`select constraint_type, severity, count(*)::int as total from public.constraints group by constraint_type, severity order by constraint_type, severity`)
+    const metaPlanning = await client.query(`select count(*)::int as total from public.planning_proposals pp join public.councils c on c.id = pp.council_id where c.region_group = $1`, [options.regionGroup])
+    const metaApps = await client.query(`select count(*)::int as total from public.application_signals a join public.councils c on c.id = a.council_id where c.region_group = $1`, [options.regionGroup])
+    const metaPrecinct = await client.query(`select count(*)::int as total from public.v_precinct_shortlist v join public.councils c on c.canonical_name = v.council_name where c.region_group = $1`, [options.regionGroup])
+    const metaConstraints = await client.query(`select count(*)::int as total from public.constraints ct join public.precincts p on p.id = ct.precinct_id join public.councils c on c.id = p.primary_council_id where c.region_group = $1`, [options.regionGroup])
+    const councilRanking = await client.query(`select council_name, target_value, application_recent_count, active_pipeline_count from public.v_council_scoreboard where region_group = $1 order by application_recent_count desc nulls last, active_pipeline_count desc nulls last limit 10`, [options.regionGroup])
+    const pipeline = await client.query(`select pp.stage, pp.stage_rank, count(*)::int as proposal_count, count(distinct pp.council_id)::int as council_count from public.planning_proposals pp join public.councils c on c.id = pp.council_id where c.region_group = $1 group by pp.stage, pp.stage_rank order by pp.stage_rank nulls last, pp.stage`, [options.regionGroup])
+    const shortlist = await client.query(`select v.precinct_name, v.council_name, v.opportunity_rating, v.policy_score, v.friction_score, v.timing_score, v.recent_application_count, v.active_pipeline_count, v.constraint_summary, v.recommended_action, v.trigger_summary from public.v_precinct_shortlist v join public.councils c on c.canonical_name = v.council_name where c.region_group = $1 order by case v.opportunity_rating when 'A' then 1 when 'B' then 2 else 3 end, v.friction_score asc nulls last, v.recent_application_count desc nulls last limit 10`, [options.regionGroup])
+    const constrained = await client.query(`select v.precinct_name, v.council_name, v.opportunity_rating, v.friction_score, v.constraint_summary, v.recent_application_count, v.active_pipeline_count from public.v_precinct_shortlist v join public.councils c on c.canonical_name = v.council_name where c.region_group = $1 and v.constraint_count > 0 order by v.friction_score desc, v.recent_application_count desc limit 10`, [options.regionGroup])
+    const watchlist = await client.query(`select c.canonical_name as council_name, pp.stage, pp.title, pp.location_text from public.planning_proposals pp join public.councils c on c.id = pp.council_id where c.region_group = $1 and pp.stage in ('under_assessment','pre_exhibition','on_exhibition','finalisation') order by pp.stage_rank nulls last, pp.last_seen_at desc, pp.title limit 20`, [options.regionGroup])
+    const constraintRows = await client.query(`select ct.constraint_type, ct.severity, count(*)::int as total from public.constraints ct join public.precincts p on p.id = ct.precinct_id join public.councils c on c.id = p.primary_council_id where c.region_group = $1 group by ct.constraint_type, ct.severity order by ct.constraint_type, ct.severity`, [options.regionGroup])
 
     const today = new Date().toISOString().slice(0, 10)
     const topA = shortlist.rows.filter((row) => row.opportunity_rating === 'A')
-    const headline = buildHeadline(topA, constrained.rows)
-    const summaryBullets = buildExecutiveSummary(topA, constrained.rows, councilRanking.rows, pipeline.rows, constraintRows.rows)
+    const headline = buildHeadline(topA, constrained.rows, shortlist.rows)
+    const summaryBullets = buildExecutiveSummary(topA, constrained.rows, councilRanking.rows, pipeline.rows, constraintRows.rows, shortlist.rows)
     const dedupedWatchlist = uniqueRows(watchlist.rows, (row) => `${row.stage}|${row.council_name}|${row.title}|${row.location_text}`).slice(0, 12)
 
     const markdown = [
-      '# Sydney Planning Opportunity Radar',
+      `# ${options.label} Planning Opportunity Radar`,
       '',
       `## Week Of ${today}`,
       '',
-      `Companion visual dashboard: \`dashboard/latest-report.html\``,
+      `Companion visual dashboard: \`${options.dashboardPath}\``,
       '',
       '## Headline',
       '',
@@ -251,13 +270,14 @@ async function main() {
       '',
       '1. Prioritise `A`-rated precincts with low friction for deeper street-level or owner-contact research.',
       '2. Keep high-activity but high-friction precincts in a separate risk-adjusted watchlist rather than the main acquisition shortlist.',
-      '3. Use `dashboard/latest-report.html` to visually inspect clusters before writing the next deep-dive memo.',
+      `3. Use \`${options.dashboardPath}\` to visually inspect clusters before writing the next deep-dive memo.`,
       ''
     ].join('\n')
 
     const reportsDir = path.join(root, 'reports')
     fs.mkdirSync(reportsDir, { recursive: true })
-    const outPath = path.join(reportsDir, 'weekly-radar-latest.md')
+    const fileName = options.outputName === 'latest' ? 'weekly-radar-latest.md' : `weekly-radar-${options.outputName}.md`
+    const outPath = path.join(reportsDir, fileName)
     fs.writeFileSync(outPath, markdown, 'utf8')
     console.log(`Wrote ${outPath}`)
   } finally {

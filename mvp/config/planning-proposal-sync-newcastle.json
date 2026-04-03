@@ -1,0 +1,41 @@
+{
+  "stages": [
+    {
+      "stage": "under_assessment",
+      "path": "under%20assessment",
+      "terminal": false
+    },
+    {
+      "stage": "pre_exhibition",
+      "path": "pre-exhibition",
+      "terminal": false
+    },
+    {
+      "stage": "on_exhibition",
+      "path": "under%20exhibition",
+      "terminal": false
+    },
+    {
+      "stage": "finalisation",
+      "path": "finalisation",
+      "terminal": false
+    },
+    {
+      "stage": "made",
+      "path": "lep%20decision",
+      "terminal": true
+    },
+    {
+      "stage": "withdrawn",
+      "path": "withdrawn",
+      "terminal": true
+    }
+  ],
+  "councils": [
+    { "canonicalName": "Newcastle", "filterValue": "NEWCASTLE", "regionGroup": "Hunter" },
+    { "canonicalName": "Lake Macquarie", "filterValue": "LAKE MACQUARIE", "regionGroup": "Hunter" },
+    { "canonicalName": "Maitland", "filterValue": "MAITLAND", "regionGroup": "Hunter" },
+    { "canonicalName": "Port Stephens", "filterValue": "PORT STEPHENS", "regionGroup": "Hunter" },
+    { "canonicalName": "Cessnock", "filterValue": "CESSNOCK", "regionGroup": "Hunter" }
+  ]
+}

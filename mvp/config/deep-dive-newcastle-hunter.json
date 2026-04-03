@@ -1,0 +1,9 @@
+{
+  "dashboardPath": "dashboard/newcastle-hunter-report.html",
+  "radarPath": "reports/weekly-radar-newcastle-hunter.md",
+  "precincts": [
+    "Mayfield",
+    "Newcastle City Centre",
+    "Cessnock"
+  ]
+}

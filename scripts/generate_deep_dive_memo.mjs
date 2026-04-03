@@ -39,10 +39,20 @@ async function connectWithFallback() {
 
 function parseArgs() {
   const args = process.argv.slice(2)
-  const options = { precinct: null }
+  const options = {
+    precinct: null,
+    dashboardPath: 'dashboard/latest-report.html',
+    radarPath: 'reports/weekly-radar-latest.md'
+  }
   for (const arg of args) {
     if (arg.startsWith('--precinct=')) {
       options.precinct = arg.split('=')[1].trim()
+    }
+    if (arg.startsWith('--dashboard-path=')) {
+      options.dashboardPath = arg.split('=')[1].trim()
+    }
+    if (arg.startsWith('--radar-path=')) {
+      options.radarPath = arg.split('=')[1].trim()
     }
   }
   return options
@@ -336,15 +346,15 @@ async function main() {
       '## What To Do Next',
       '',
       `1. Keep \`${row.precinct_name}\` in the \`${row.opportunity_rating}\`-rated watchlist and treat \`${row.recommended_action}\` as the current workflow state.`,
-      `2. Use \`dashboard/latest-report.html\` to inspect the surrounding precinct cluster before doing any street-level or owner-contact work.`,
+      `2. Use \`${options.dashboardPath}\` to inspect the surrounding precinct cluster before doing any street-level or owner-contact work.`,
       constraints.length
         ? `3. Explicitly validate the current risk stack (${constraints.map((item) => item.constraint_type).join(', ')}) before promoting this precinct into a transaction-facing shortlist.`
         : '3. The next uplift in confidence will come from more detailed site-level and constraint work rather than more high-level policy scanning.',
       '',
       '## References',
       '',
-      '- `dashboard/latest-report.html`',
-      '- `reports/weekly-radar-latest.md`',
+      `- \`${options.dashboardPath}\``,
+      `- \`${options.radarPath}\``,
       ''
     ].join('\n')
 

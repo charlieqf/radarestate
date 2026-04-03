@@ -1,0 +1,37 @@
+{
+  "extends": "application-sync-focus-councils.json",
+  "councils": [
+    {
+      "canonicalName": "Sutherland Shire",
+      "trackerDisplayName": "Sutherland Shire Council"
+    },
+    {
+      "canonicalName": "Hunters Hill",
+      "trackerDisplayName": "The Council of the Municipality of Hunters Hill"
+    },
+    {
+      "canonicalName": "Woollahra",
+      "trackerDisplayName": "Woollahra Municipal Council"
+    },
+    {
+      "canonicalName": "Fairfield",
+      "trackerDisplayName": "Fairfield City Council"
+    },
+    {
+      "canonicalName": "The Hills Shire",
+      "trackerDisplayName": "The Hills Shire Council"
+    },
+    {
+      "canonicalName": "Penrith",
+      "trackerDisplayName": "Penrith City Council"
+    },
+    {
+      "canonicalName": "Bayside",
+      "trackerDisplayName": "Bayside Council"
+    },
+    {
+      "canonicalName": "Blacktown",
+      "trackerDisplayName": "Blacktown City Council"
+    }
+  ]
+}

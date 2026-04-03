@@ -12,6 +12,25 @@ function readJson(relativePath) {
   return JSON.parse(readFile(relativePath))
 }
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+function loadConfig(configPath) {
+  const absolutePath = path.isAbsolute(configPath) ? configPath : path.join(root, configPath)
+  const config = JSON.parse(fs.readFileSync(absolutePath, 'utf8'))
+  if (!config.extends) return config
+  const parentPath = path.isAbsolute(config.extends)
+    ? config.extends
+    : path.join(path.dirname(absolutePath), config.extends)
+  const base = loadConfig(parentPath)
+  return {
+    ...base,
+    ...config,
+    precincts: [...(base.precincts || []), ...(config.precincts || [])]
+  }
+}
+
 function getConnectionStrings() {
   const text = readFile('supabase.txt')
   const matches = [...text.matchAll(/postgresql:\/\/[^\s`]+/g)].map((m) => m[0])
@@ -67,12 +86,32 @@ const councilMap = new Map([
   ['Cumberland', 'Cumberland'],
   ['Cumberland Council', 'Cumberland'],
   ['Burwood', 'Burwood'],
-  ['Burwood Council', 'Burwood']
+  ['Burwood Council', 'Burwood'],
+  ['Newcastle', 'Newcastle'],
+  ['Newcastle City Council', 'Newcastle'],
+  ['City of Newcastle', 'Newcastle'],
+  ['Lake Macquarie', 'Lake Macquarie'],
+  ['Lake Macquarie City Council', 'Lake Macquarie'],
+  ['Maitland', 'Maitland'],
+  ['Maitland City Council', 'Maitland'],
+  ['Port Stephens', 'Port Stephens'],
+  ['Port Stephens Council', 'Port Stephens'],
+  ['Cessnock', 'Cessnock'],
+  ['Cessnock City Council', 'Cessnock']
 ])
 
 function canonicalCouncil(raw) {
   const cleaned = clean(raw)
   return cleaned ? councilMap.get(cleaned) || cleaned : null
+}
+
+function parseArgs() {
+  const args = process.argv.slice(2)
+  const options = { configPath: null }
+  for (const arg of args) {
+    if (arg.startsWith('--config=')) options.configPath = arg.split('=')[1].trim()
+  }
+  return options
 }
 
 function escapeRegex(text) {
@@ -110,21 +149,37 @@ async function connectWithFallback() {
 }
 
 async function applyPrecinctViews(client) {
-  await client.query(readFile('supabase/schema.sql'))
-  await client.query(readFile('supabase/precinct_views.sql'))
+  const sqlFiles = ['supabase/schema.sql', 'supabase/precinct_views.sql']
+  for (const file of sqlFiles) {
+    let lastError = null
+    for (let attempt = 1; attempt <= 4; attempt += 1) {
+      try {
+        await client.query(readFile(file))
+        lastError = null
+        break
+      } catch (error) {
+        lastError = error
+        if (!['40P01', '40001'].includes(error.code) || attempt === 4) {
+          throw error
+        }
+        await sleep(500 * attempt)
+      }
+    }
+    if (lastError) throw lastError
+  }
 }
 
-async function ensureCouncil(client, rawName) {
+async function ensureCouncil(client, rawName, regionGroup = 'Greater Sydney') {
   const canonical = canonicalCouncil(rawName)
   if (!canonical) return null
   await client.query(
     `insert into public.councils (canonical_name, display_name, region_group, is_focus)
-     values ($1, $1, 'Greater Sydney', true)
+     values ($1, $1, $2, true)
      on conflict (canonical_name) do update set
        display_name = excluded.display_name,
        region_group = excluded.region_group,
        is_focus = true`,
-    [canonical]
+    [canonical, regionGroup]
   )
   const { rows } = await client.query(
     'select id from public.councils where canonical_name = $1',
@@ -136,7 +191,7 @@ async function ensureCouncil(client, rawName) {
 async function ensurePrecincts(client, config) {
   const precinctMap = new Map()
   for (const precinct of config.precincts) {
-    const councilId = await ensureCouncil(client, precinct.primaryCouncil)
+    const councilId = await ensureCouncil(client, precinct.primaryCouncil, config.regionGroup || 'Greater Sydney')
     const { rows } = await client.query(
       `insert into public.precincts (
          precinct_code, name, precinct_type, primary_council_id, policy_theme, source_url, watch_priority, notes
@@ -156,7 +211,7 @@ async function ensurePrecincts(client, config) {
         precinct.type,
         councilId,
         precinct.policyTheme,
-        'mvp/config/precinct-focus-map.json',
+        config._sourcePath || 'mvp/config/precinct-focus-map.json',
         precinct.watchPriority,
         `keywords=${precinct.keywords.join('|')}`
       ]
@@ -387,7 +442,9 @@ async function rebuildOpportunityItems(client, rows, observedAt) {
 }
 
 async function main() {
-  const config = readJson('mvp/config/precinct-focus-map.json')
+  const cli = parseArgs()
+  const config = loadConfig(cli.configPath || 'mvp/config/precinct-focus-map.json')
+  config._sourcePath = cli.configPath || 'mvp/config/precinct-focus-map.json'
   const observedAt = new Date().toISOString().slice(0, 10)
   const client = await connectWithFallback()
 

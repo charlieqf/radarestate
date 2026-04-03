@@ -59,17 +59,17 @@ Bankstown is worth tracking because activity and policy signals are real, but it
 | Lodgement | Status | Type | Location |
 | --- | --- | --- | --- |
 | 2026-03-30 | Under Assessment | Complying Development Certificate Application | 32 KITCHENER PARADE BANKSTOWN 2200 |
-| 2026-03-25 | Approved | Complying Development Certificate Application | 72 WILKINS STREET BANKSTOWN 2200 |
 | 2026-03-25 | Under Assessment | Modification Application | 8 HILLVIEW AVENUE BANKSTOWN 2200 |
+| 2026-03-25 | Approved | Complying Development Certificate Application | 72 WILKINS STREET BANKSTOWN 2200 |
 | 2026-03-16 | Under Assessment | Complying Development Certificate Application | 96 PRINGLE AVENUE BANKSTOWN 2200 |
 | 2026-03-09 | Additional Information Requested | Complying Development Certificate Application | 10 OGMORE COURT BANKSTOWN 2200 |
 | 2026-03-08 | On Exhibition | Development Application | 175 GREENACRE ROAD BANKSTOWN 2200 |
 | 2026-03-03 | Under Assessment | Complying Development Certificate Application | 327 HUME HIGHWAY BANKSTOWN 2200 |
-| 2026-03-02 | Approved | Complying Development Certificate Application | 32 HOSKINS AVENUE BANKSTOWN 2200 |
 | 2026-03-02 | Approved | Complying Development Certificate Application | 66 RICKARD ROAD BANKSTOWN 2200 |
+| 2026-03-02 | Approved | Complying Development Certificate Application | 32 HOSKINS AVENUE BANKSTOWN 2200 |
+| 2026-03-01 | Additional Information Requested | Complying Development Certificate Application | 56 REYNOLDS AVENUE BANKSTOWN 2200 |
 | 2026-03-01 | Additional Information Requested | Complying Development Certificate Application | 117 NORTHAM AVENUE BANKSTOWN 2200 |
 | 2026-03-01 | Approved | Complying Development Certificate Application | 1A NORTH TERRACE BANKSTOWN 2200 |
-| 2026-03-01 | Additional Information Requested | Complying Development Certificate Application | 56 REYNOLDS AVENUE BANKSTOWN 2200 |
 
 ## Risk And Friction
 

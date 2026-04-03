@@ -1,0 +1,44 @@
+name: Weekly Client Pack
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 22 * * 0'
+
+jobs:
+  weekly-client-pack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Write Supabase connection file
+        run: |
+          cat <<'EOF' > supabase.txt
+          ${{ secrets.SUPABASE_DB_URL }}
+          EOF
+
+      - name: Run weekly pipeline
+        env:
+          RADARESTATE_NOTIFY_WEBHOOK_URL: ${{ secrets.RADARESTATE_NOTIFY_WEBHOOK_URL }}
+        run: npm run pipeline:weekly
+
+      - name: Upload weekly artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-client-pack-artifacts
+          path: |
+            dashboard/*.html
+            reports/*.md
+            client-output/*.html
+            archive/weekly/**
+            runs/latest-weekly.json

@@ -45,6 +45,21 @@ function safeJson(value) {
   return JSON.stringify(value).replace(/</g, '\\u003c')
 }
 
+function parseArgs() {
+  const args = process.argv.slice(2)
+  const options = {
+    regionGroup: 'Greater Sydney',
+    label: 'Sydney',
+    outputName: 'latest-report'
+  }
+  for (const arg of args) {
+    if (arg.startsWith('--region-group=')) options.regionGroup = arg.split('=')[1].trim()
+    if (arg.startsWith('--label=')) options.label = arg.split('=')[1].trim()
+    if (arg.startsWith('--output-name=')) options.outputName = arg.split('=')[1].trim()
+  }
+  return options
+}
+
 function htmlTemplate(data) {
   const generatedAt = new Date().toLocaleString('en-AU', { hour12: false })
   return `<!doctype html>
@@ -52,7 +67,7 @@ function htmlTemplate(data) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>RadarEstate Research Dashboard</title>
+  <title>${data.reportTitle}</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -131,7 +146,55 @@ function htmlTemplate(data) {
     .page {
       max-width: 1440px;
       margin: 0 auto;
-      padding: 28px;
+      padding: 88px 28px 28px;
+    }
+    .theme-switcher {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 1200;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+      box-shadow: 0 12px 30px var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .theme-switcher-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .theme-switcher-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px;
+      border-radius: 999px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+    }
+    .theme-switcher-button {
+      appearance: none;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      min-width: 68px;
+    }
+    .theme-switcher-button[aria-pressed="true"] {
+      background: var(--button-bg);
+      color: var(--button-text);
+      box-shadow: inset 0 0 0 1px var(--line);
     }
     .hero {
       display: grid;
@@ -145,13 +208,6 @@ function htmlTemplate(data) {
       border-radius: 18px;
       padding: 22px;
       box-shadow: 0 16px 40px var(--shadow);
-    }
-    .hero-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 10px;
     }
     .eyebrow {
       color: var(--cyan);
@@ -181,17 +237,6 @@ function htmlTemplate(data) {
       border-radius: 14px;
       background: var(--panel-2);
       border: 1px solid var(--line);
-    }
-    .theme-toggle {
-      appearance: none;
-      border: 1px solid var(--line);
-      background: var(--button-bg);
-      color: var(--button-text);
-      border-radius: 999px;
-      padding: 10px 14px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
     }
     .meta-label {
       color: var(--muted);
@@ -303,21 +348,31 @@ function htmlTemplate(data) {
       margin-top: 16px;
     }
     @media (max-width: 980px) {
+      .page { padding: 92px 18px 18px; }
+      .theme-switcher {
+        left: 18px;
+        right: 18px;
+        justify-content: space-between;
+      }
       .hero { grid-template-columns: 1fr; }
       .span-6, .span-7, .span-5, .span-12 { grid-column: span 12; }
     }
   </style>
 </head>
 <body>
+  <div class="theme-switcher" role="group" aria-label="Theme switcher">
+    <span class="theme-switcher-label">Theme</span>
+    <div class="theme-switcher-group">
+      <button class="theme-switcher-button" type="button" data-theme-option="dark">Dark</button>
+      <button class="theme-switcher-button" type="button" data-theme-option="light">Light</button>
+    </div>
+  </div>
   <div class="page">
     <section class="hero">
       <div class="hero-card">
-        <div class="hero-top">
-          <div class="eyebrow">RadarEstate</div>
-          <button class="theme-toggle" id="themeToggle" type="button">Toggle Theme</button>
-        </div>
-        <h1>Sydney Planning And Activity Research Dashboard</h1>
-        <p class="lede">Public-data powered council-level view across housing target pressure, planning proposal pipeline and recent development activity. This report is generated directly from Supabase views, not from mock sample JSON.</p>
+        <div class="eyebrow">RadarEstate</div>
+        <h1>${data.reportTitle}</h1>
+        <p class="lede">${data.reportLede}</p>
       </div>
       <div class="meta">
         <div class="meta-row">
@@ -492,21 +547,24 @@ function htmlTemplate(data) {
     const reportData = ${safeJson(data)};
     const storageKey = 'radarestate-theme';
     const currentTheme = document.documentElement.dataset.theme || 'dark';
-    const themeToggle = document.getElementById('themeToggle');
+    const themeButtons = [...document.querySelectorAll('[data-theme-option]')];
 
     const cssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
     const axisColor = cssVar('--muted');
     const gridColor = cssVar('--grid');
 
-    themeToggle.textContent = currentTheme === 'dark' ? 'Light Theme' : 'Dark Theme';
-    themeToggle.addEventListener('click', () => {
-      const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      try {
-        window.localStorage.setItem(storageKey, nextTheme);
-      } catch {
-      }
-      document.documentElement.dataset.theme = nextTheme;
-      window.location.reload();
+    themeButtons.forEach((button) => {
+      const theme = button.dataset.themeOption;
+      button.setAttribute('aria-pressed', theme === currentTheme ? 'true' : 'false');
+      button.addEventListener('click', () => {
+        if (theme === currentTheme) return;
+        try {
+          window.localStorage.setItem(storageKey, theme);
+        } catch {
+        }
+        document.documentElement.dataset.theme = theme;
+        window.location.reload();
+      });
     });
 
     const ratingColor = (rating, friction) => {
@@ -666,22 +724,25 @@ function htmlTemplate(data) {
 }
 
 async function main() {
+  const options = parseArgs()
   const client = await connectWithFallback()
   try {
-    const metaPlanning = await client.query(`select count(*)::int as total from public.planning_proposals`)
-    const metaApps = await client.query(`select count(*)::int as total from public.application_signals`)
-    const metaPrecinct = await client.query(`select count(*)::int as total from public.v_precinct_shortlist`)
-    const metaConstraints = await client.query(`select count(*)::int as total from public.constraints`)
-    const recentRanking = await client.query(`select council_name, recent_count, total_count from public.v_recent_application_ranking limit 10`)
-    const pipeline = await client.query(`select stage, stage_rank, proposal_count from public.v_policy_pipeline order by stage_rank nulls last, stage`)
-    const scoreboard = await client.query(`select council_name, target_value, application_recent_count, active_pipeline_count from public.v_council_scoreboard where region_group = 'Greater Sydney' order by active_pipeline_count desc nulls last, made_count desc nulls last limit 12`)
-    const scatter = await client.query(`select council_name, target_value, application_recent_count from public.v_target_pressure_vs_activity where target_value is not null and application_recent_count is not null order by target_value desc nulls last`)
-    const watchlist = await client.query(`select council_name, stage, title, location_text from public.v_sydney_proposal_watchlist where stage in ('under_assessment','pre_exhibition','on_exhibition','finalisation') order by stage_rank nulls last, last_seen_at desc, title limit 20`)
-    const precinctShortlist = await client.query(`select precinct_name, council_name, opportunity_rating, friction_score, recent_application_count, active_pipeline_count, constraint_summary from public.v_precinct_shortlist limit 12`)
-    const constrainedPrecincts = await client.query(`select precinct_name, council_name, friction_score, constraint_summary, recent_application_count, active_pipeline_count from public.v_precinct_shortlist where constraint_count > 0 order by friction_score desc, recent_application_count desc limit 12`)
-    const precinctMapPoints = await client.query(`select precinct_name, council_name, opportunity_rating, friction_score, recent_application_count, active_pipeline_count, constraint_summary, centroid_latitude, centroid_longitude, point_count from public.v_precinct_map_points`)
+    const metaPlanning = await client.query(`select count(*)::int as total from public.planning_proposals pp join public.councils c on c.id = pp.council_id where c.region_group = $1`, [options.regionGroup])
+    const metaApps = await client.query(`select count(*)::int as total from public.application_signals a join public.councils c on c.id = a.council_id where c.region_group = $1`, [options.regionGroup])
+    const metaPrecinct = await client.query(`select count(*)::int as total from public.v_precinct_shortlist v join public.councils c on c.canonical_name = v.council_name where c.region_group = $1`, [options.regionGroup])
+    const metaConstraints = await client.query(`select count(*)::int as total from public.constraints ct join public.precincts p on p.id = ct.precinct_id join public.councils c on c.id = p.primary_council_id where c.region_group = $1`, [options.regionGroup])
+    const recentRanking = await client.query(`select v.council_name, v.recent_count, v.total_count from public.v_recent_application_ranking v join public.councils c on c.canonical_name = v.council_name where c.region_group = $1 limit 10`, [options.regionGroup])
+    const pipeline = await client.query(`select pp.stage, pp.stage_rank, count(*)::int as proposal_count from public.planning_proposals pp join public.councils c on c.id = pp.council_id where c.region_group = $1 group by pp.stage, pp.stage_rank order by pp.stage_rank nulls last, pp.stage`, [options.regionGroup])
+    const scoreboard = await client.query(`select council_name, target_value, application_recent_count, active_pipeline_count from public.v_council_scoreboard where region_group = $1 order by active_pipeline_count desc nulls last, made_count desc nulls last limit 12`, [options.regionGroup])
+    const scatter = await client.query(`select council_name, target_value, application_recent_count from public.v_target_pressure_vs_activity where region_group = $1 and target_value is not null and application_recent_count is not null order by target_value desc nulls last`, [options.regionGroup])
+    const watchlist = await client.query(`select c.canonical_name as council_name, pp.stage, pp.title, pp.location_text from public.planning_proposals pp join public.councils c on c.id = pp.council_id where c.region_group = $1 and pp.stage in ('under_assessment','pre_exhibition','on_exhibition','finalisation') order by pp.stage_rank nulls last, pp.last_seen_at desc, pp.title limit 20`, [options.regionGroup])
+    const precinctShortlist = await client.query(`select v.precinct_name, v.council_name, v.opportunity_rating, v.friction_score, v.recent_application_count, v.active_pipeline_count, v.constraint_summary from public.v_precinct_shortlist v join public.councils c on c.canonical_name = v.council_name where c.region_group = $1 order by case v.opportunity_rating when 'A' then 1 when 'B' then 2 else 3 end, v.friction_score asc nulls last, v.recent_application_count desc nulls last limit 12`, [options.regionGroup])
+    const constrainedPrecincts = await client.query(`select v.precinct_name, v.council_name, v.friction_score, v.constraint_summary, v.recent_application_count, v.active_pipeline_count from public.v_precinct_shortlist v join public.councils c on c.canonical_name = v.council_name where c.region_group = $1 and v.constraint_count > 0 order by v.friction_score desc, v.recent_application_count desc limit 12`, [options.regionGroup])
+    const precinctMapPoints = await client.query(`select v.precinct_name, v.council_name, v.opportunity_rating, v.friction_score, v.recent_application_count, v.active_pipeline_count, v.constraint_summary, v.centroid_latitude, v.centroid_longitude, v.point_count from public.v_precinct_map_points v join public.councils c on c.canonical_name = v.council_name where c.region_group = $1`, [options.regionGroup])
 
     const data = {
+      reportTitle: `${options.label} Planning And Activity Research Dashboard`,
+      reportLede: `Public-data powered view across housing target pressure, planning proposal pipeline, recent development activity and first-pass risk signals for ${options.label}. This report is generated directly from Supabase views, not from mock sample JSON.`,
       meta: {
         totalPlanningProposals: metaPlanning.rows[0].total,
         totalApplicationSignals: metaApps.rows[0].total,
@@ -700,7 +761,7 @@ async function main() {
 
     const dashboardDir = path.join(root, 'dashboard')
     fs.mkdirSync(dashboardDir, { recursive: true })
-    const outputPath = path.join(dashboardDir, 'latest-report.html')
+    const outputPath = path.join(dashboardDir, `${options.outputName}.html`)
     fs.writeFileSync(outputPath, htmlTemplate(data), 'utf8')
     console.log(`Wrote ${outputPath}`)
   } finally {

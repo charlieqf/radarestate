@@ -9,6 +9,10 @@ const FLOOD_SEARCH_URL = 'https://flooddata.ses.nsw.gov.au/api/3/action/package_
 const RECENT_FROM = '2025-01-01'
 const SAMPLE_SIZE = 15
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 function readFile(relativePath) {
   return fs.readFileSync(path.join(root, relativePath), 'utf8')
 }
@@ -49,6 +53,28 @@ function buildPointGeometry(latitude, longitude) {
   })
 }
 
+async function fetchJsonWithRetry(url, init = {}, maxAttempts = 4) {
+  let lastError = null
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    try {
+      const response = await fetch(url, init)
+      if (!response.ok) {
+        if (response.status >= 500 && attempt < maxAttempts) {
+          await sleep(600 * attempt)
+          continue
+        }
+        throw new Error(`Request failed: ${response.status} for ${url}`)
+      }
+      return response.json()
+    } catch (error) {
+      lastError = error
+      if (attempt === maxAttempts) throw error
+      await sleep(600 * attempt)
+    }
+  }
+  throw lastError || new Error(`Request failed for ${url}`)
+}
+
 async function fetchArcGisFeatures(url, latitude, longitude, outFields) {
   const params = new URLSearchParams({
     f: 'pjson',
@@ -59,24 +85,34 @@ async function fetchArcGisFeatures(url, latitude, longitude, outFields) {
     inSR: '4326',
     spatialRel: 'esriSpatialRelIntersects'
   })
-  const response = await fetch(`${url}?${params.toString()}`, {
+  return fetchJsonWithRetry(`${url}?${params.toString()}`, {
     headers: { 'user-agent': 'Mozilla/5.0 (compatible; radarestate-bot/1.0)' }
   })
-  if (!response.ok) {
-    throw new Error(`ArcGIS query failed: ${response.status} for ${url}`)
+}
+
+async function safeFetchArcGisFeatures(url, latitude, longitude, outFields) {
+  try {
+    return await fetchArcGisFeatures(url, latitude, longitude, outFields)
+  } catch (error) {
+    console.warn(`ArcGIS query skipped after retries: ${error.message}`)
+    return { features: [] }
   }
-  return response.json()
 }
 
 async function fetchFloodSearchResults(query, rows = 12) {
   const params = new URLSearchParams({ q: query, rows: String(rows) })
-  const response = await fetch(`${FLOOD_SEARCH_URL}?${params.toString()}`, {
+  return fetchJsonWithRetry(`${FLOOD_SEARCH_URL}?${params.toString()}`, {
     headers: { 'user-agent': 'Mozilla/5.0 (compatible; radarestate-bot/1.0)' }
   })
-  if (!response.ok) {
-    throw new Error(`Flood portal search failed: ${response.status} for ${query}`)
+}
+
+async function safeFetchFloodSearchResults(query, rows = 12) {
+  try {
+    return await fetchFloodSearchResults(query, rows)
+  } catch (error) {
+    console.warn(`Flood metadata search skipped after retries for ${query}: ${error.message}`)
+    return { result: { results: [] } }
   }
-  return response.json()
 }
 
 function severityFromHeat(value) {
@@ -284,7 +320,7 @@ async function buildSpatialConstraintRows(precinctRow, samplePoints, biodiversit
     const key = `${point.latitude},${point.longitude}`
     let biodiversity = biodiversityCache.get(key)
     if (!biodiversity) {
-      biodiversity = await fetchArcGisFeatures(BIODIVERSITY_QUERY_URL, point.latitude, point.longitude, 'BV_Category')
+      biodiversity = await safeFetchArcGisFeatures(BIODIVERSITY_QUERY_URL, point.latitude, point.longitude, 'BV_Category')
       biodiversityCache.set(key, biodiversity)
     }
     const biodiversityFeatures = biodiversity.features || []
@@ -298,7 +334,7 @@ async function buildSpatialConstraintRows(precinctRow, samplePoints, biodiversit
 
     let bushfire = bushfireCache.get(key)
     if (!bushfire) {
-      bushfire = await fetchArcGisFeatures(BUSHFIRE_QUERY_URL, point.latitude, point.longitude, 'd_category')
+      bushfire = await safeFetchArcGisFeatures(BUSHFIRE_QUERY_URL, point.latitude, point.longitude, 'd_category')
       bushfireCache.set(key, bushfire)
     }
     const bushfireFeatures = bushfire.features || []
@@ -359,7 +395,7 @@ async function buildSpatialConstraintRows(precinctRow, samplePoints, biodiversit
 
 async function buildFloodConstraintRows(precinctRow, samplePoints, observedAt) {
   if (!samplePoints?.length) return []
-  const response = await fetchFloodSearchResults(precinctRow.precinct_name)
+  const response = await safeFetchFloodSearchResults(precinctRow.precinct_name)
   const results = response?.result?.results || []
   const pointObjects = samplePoints.map((point) => ({ lat: Number(point.latitude), lon: Number(point.longitude) }))
   const matched = []

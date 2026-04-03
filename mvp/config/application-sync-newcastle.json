@@ -1,0 +1,31 @@
+{
+  "recentFrom": "2025-01-01",
+  "pageSize": 500,
+  "councils": [
+    {
+      "canonicalName": "Newcastle",
+      "trackerDisplayName": "Newcastle City Council",
+      "regionGroup": "Hunter"
+    },
+    {
+      "canonicalName": "Lake Macquarie",
+      "trackerDisplayName": "Lake Macquarie City Council",
+      "regionGroup": "Hunter"
+    },
+    {
+      "canonicalName": "Maitland",
+      "trackerDisplayName": "Maitland City Council",
+      "regionGroup": "Hunter"
+    },
+    {
+      "canonicalName": "Port Stephens",
+      "trackerDisplayName": "Port Stephens Council",
+      "regionGroup": "Hunter"
+    },
+    {
+      "canonicalName": "Cessnock",
+      "trackerDisplayName": "Cessnock City Council",
+      "regionGroup": "Hunter"
+    }
+  ]
+}

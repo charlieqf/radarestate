@@ -14,6 +14,22 @@ function readJson(relativePath) {
   return JSON.parse(readFile(relativePath))
 }
 
+function loadConfig(configPath) {
+  const absolutePath = path.isAbsolute(configPath) ? configPath : path.join(root, configPath)
+  const config = JSON.parse(fs.readFileSync(absolutePath, 'utf8'))
+  if (!config.extends) return config
+  const parentPath = path.isAbsolute(config.extends)
+    ? config.extends
+    : path.join(path.dirname(absolutePath), config.extends)
+  const base = loadConfig(parentPath)
+  return {
+    ...base,
+    ...config,
+    stages: [...(base.stages || []), ...(config.stages || [])],
+    councils: [...(base.councils || []), ...(config.councils || [])]
+  }
+}
+
 function getConnectionStrings() {
   const text = readFile('supabase.txt')
   const matches = [...text.matchAll(/postgresql:\/\/[^\s`]+/g)].map((m) => m[0])
@@ -54,7 +70,13 @@ const councilMap = new Map([
   ['Bayside', 'Bayside'],
   ['Blacktown', 'Blacktown'],
   ['Cumberland', 'Cumberland'],
-  ['Burwood', 'Burwood']
+  ['Burwood', 'Burwood'],
+  ['Newcastle', 'Newcastle'],
+  ['City of Newcastle', 'Newcastle'],
+  ['Lake Macquarie', 'Lake Macquarie'],
+  ['Maitland', 'Maitland'],
+  ['Port Stephens', 'Port Stephens'],
+  ['Cessnock', 'Cessnock']
 ])
 
 function canonicalCouncil(raw) {
@@ -67,13 +89,15 @@ function parseArgs() {
   const options = {
     councils: null,
     stages: null,
-    maxPages: null
+    maxPages: null,
+    configPath: null
   }
 
   for (const arg of args) {
     if (arg.startsWith('--councils=')) options.councils = arg.split('=')[1].split(',').map((value) => value.trim()).filter(Boolean)
     if (arg.startsWith('--stages=')) options.stages = arg.split('=')[1].split(',').map((value) => value.trim()).filter(Boolean)
     if (arg.startsWith('--max-pages=')) options.maxPages = Number.parseInt(arg.split('=')[1], 10)
+    if (arg.startsWith('--config=')) options.configPath = arg.split('=')[1].trim()
   }
 
   return options
@@ -98,17 +122,17 @@ async function connectWithFallback() {
   throw lastError || new Error('Unable to connect to Supabase')
 }
 
-async function ensureCouncil(client, rawName) {
+async function ensureCouncil(client, rawName, regionGroup = 'Greater Sydney') {
   const canonical = canonicalCouncil(rawName)
   if (!canonical) return null
   await client.query(
     `insert into public.councils (canonical_name, display_name, region_group, is_focus)
-     values ($1, $1, 'Greater Sydney', true)
+     values ($1, $1, $2, true)
      on conflict (canonical_name) do update set
        display_name = excluded.display_name,
        region_group = excluded.region_group,
        is_focus = true`,
-    [canonical]
+    [canonical, regionGroup]
   )
   const { rows } = await client.query(
     'select id from public.councils where canonical_name = $1',
@@ -269,7 +293,8 @@ async function collectStageCouncilRows(stageConfig, councilConfig, maxPages) {
 
     collected.push(...parsed.cards.map((row) => ({
       ...row,
-      councilName: councilConfig.canonicalName
+      councilName: councilConfig.canonicalName,
+      regionGroup: councilConfig.regionGroup || 'Greater Sydney'
     })))
 
     if (parsed.cards.length < 9) break
@@ -293,7 +318,7 @@ async function upsertPlanningProposals(client, rows, observedAt) {
   let upserted = 0
   for (const baseRow of dedupedMap.values()) {
     const row = await hydrateProposalRow(baseRow)
-    const councilId = await ensureCouncil(client, row.councilName)
+    const councilId = await ensureCouncil(client, row.councilName, row.regionGroup || 'Greater Sydney')
     const isActive = !['made', 'withdrawn'].includes(row.stage)
     const upsert = await client.query(
       `insert into public.planning_proposals (
@@ -373,8 +398,8 @@ async function verifyRemote(client) {
 }
 
 async function main() {
-  const config = readJson('mvp/config/planning-proposal-sync.json')
   const cli = parseArgs()
+  const config = loadConfig(cli.configPath || 'mvp/config/planning-proposal-sync.json')
   const selectedCouncils = cli.councils ? new Set(cli.councils.map((value) => canonicalCouncil(value) || value)) : null
   const selectedStages = cli.stages ? new Set(cli.stages) : null
 

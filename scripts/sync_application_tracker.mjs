@@ -15,6 +15,21 @@ function readJson(relativePath) {
   return JSON.parse(readFile(relativePath))
 }
 
+function loadConfig(configPath) {
+  const absolutePath = path.isAbsolute(configPath) ? configPath : path.join(root, configPath)
+  const config = JSON.parse(fs.readFileSync(absolutePath, 'utf8'))
+  if (!config.extends) return config
+  const parentPath = path.isAbsolute(config.extends)
+    ? config.extends
+    : path.join(path.dirname(absolutePath), config.extends)
+  const base = loadConfig(parentPath)
+  return {
+    ...base,
+    ...config,
+    councils: [...(base.councils || []), ...(config.councils || [])]
+  }
+}
+
 function getConnectionStrings() {
   const text = readFile('supabase.txt')
   const matches = [...text.matchAll(/postgresql:\/\/[^\s`]+/g)].map((m) => m[0])
@@ -86,7 +101,18 @@ const councilMap = new Map([
   ['Cumberland', 'Cumberland'],
   ['Cumberland Council', 'Cumberland'],
   ['Burwood', 'Burwood'],
-  ['Burwood Council', 'Burwood']
+  ['Burwood Council', 'Burwood'],
+  ['Newcastle', 'Newcastle'],
+  ['Newcastle City Council', 'Newcastle'],
+  ['City of Newcastle', 'Newcastle'],
+  ['Lake Macquarie', 'Lake Macquarie'],
+  ['Lake Macquarie City Council', 'Lake Macquarie'],
+  ['Maitland', 'Maitland'],
+  ['Maitland City Council', 'Maitland'],
+  ['Port Stephens', 'Port Stephens'],
+  ['Port Stephens Council', 'Port Stephens'],
+  ['Cessnock', 'Cessnock'],
+  ['Cessnock City Council', 'Cessnock']
 ])
 
 function canonicalCouncil(raw) {
@@ -101,7 +127,8 @@ function parseArgs() {
     pageSize: null,
     maxPages: null,
     includeStateSignificant: true,
-    councils: null
+    councils: null,
+    configPath: null
   }
 
   for (const arg of args) {
@@ -109,6 +136,7 @@ function parseArgs() {
     if (arg.startsWith('--page-size=')) options.pageSize = Number.parseInt(arg.split('=')[1], 10)
     if (arg.startsWith('--max-pages=')) options.maxPages = Number.parseInt(arg.split('=')[1], 10)
     if (arg.startsWith('--councils=')) options.councils = arg.split('=')[1].split(',').map((value) => value.trim()).filter(Boolean)
+    if (arg.startsWith('--config=')) options.configPath = arg.split('=')[1].trim()
     if (arg === '--skip-ssa') options.includeStateSignificant = false
   }
 
@@ -139,18 +167,18 @@ async function connectWithFallback() {
   throw lastError || new Error('Unable to connect to Supabase')
 }
 
-async function ensureCouncil(client, rawName) {
+async function ensureCouncil(client, rawName, regionGroup = 'Greater Sydney') {
   const canonical = canonicalCouncil(rawName)
   if (!canonical) return null
 
   await client.query(
     `insert into public.councils (canonical_name, display_name, region_group, is_focus)
-     values ($1, $1, 'Greater Sydney', true)
+     values ($1, $1, $2, true)
      on conflict (canonical_name) do update set
        display_name = excluded.display_name,
        region_group = excluded.region_group,
        is_focus = true`,
-    [canonical]
+    [canonical, regionGroup]
   )
 
   const { rows } = await client.query(
@@ -387,7 +415,7 @@ async function upsertCouncilActivityCount(client, councilId, totalCount, recentC
 }
 
 async function syncCouncilApplications(client, councilConfig, options, observedAt) {
-  const councilId = await ensureCouncil(client, councilConfig.canonicalName)
+  const councilId = await ensureCouncil(client, councilConfig.canonicalName, councilConfig.regionGroup || 'Greater Sydney')
   const allTimeCountResponse = await fetchDaPage({
     ApplicationStatus: 'ALL',
     CouncilDisplayName: councilConfig.trackerDisplayName,
@@ -480,8 +508,8 @@ async function verifyRemoteCounts(client, recentFrom) {
 }
 
 async function main() {
-  const config = readJson('mvp/config/application-sync-focus-councils.json')
   const cli = parseArgs()
+  const config = loadConfig(cli.configPath || 'mvp/config/application-sync-focus-councils.json')
   const selectedCouncils = cli.councils ? new Set(cli.councils.map((value) => canonicalCouncil(value) || value)) : null
   const options = {
     recentFrom: cli.recentFrom || config.recentFrom,

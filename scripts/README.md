@@ -12,6 +12,70 @@ npm install
 npm run supabase:apply
 ```
 
+## 自动化入口
+
+### Daily Pipeline
+
+```bash
+npm run pipeline:daily
+```
+
+包含 Hunter regional daily：
+
+```bash
+npm run pipeline:daily -- --include-regional-daily
+```
+
+### Weekly Pipeline
+
+```bash
+npm run pipeline:weekly
+```
+
+默认 weekly pipeline 现在会同时生成：
+
+- Sydney client pack
+- Newcastle-Hunter client pack
+
+如果只想跑 Sydney weekly pack：
+
+```bash
+node scripts/run_pipeline.mjs --mode=weekly --skip-hunter-pack
+```
+
+这两个命令会把同步、构建和报告串起来，并把运行清单写到 `runs/`。
+成功或失败后，还会把关键产物归档到 `archive/`。
+
+### Coverage Readiness Evaluation
+
+```bash
+npm run coverage:evaluate -- --precinct-config=mvp/config/precinct-focus-map-greater-sydney-expanded.json --name=greater-sydney-expanded
+```
+
+输出：
+
+- `reports/coverage-readiness-<name>.md`
+
+用于判断扩区前的 3 个关键问题：
+
+- precinct mapping
+- risk layer availability
+- shortlist/report stability
+
+### Newcastle-Hunter Regional Bundle
+
+```bash
+npm run report:hunter
+```
+
+输出：
+
+- `dashboard/newcastle-hunter-report.html`
+- `reports/weekly-radar-newcastle-hunter.md`
+- `client-output/weekly-radar-newcastle-hunter.html`
+
+这条命令用于生成 Hunter 区域的专属 dashboard 和 weekly radar。
+
 ## 2. 同步 Application Tracker 到 Supabase
 
 默认会：
@@ -56,6 +120,7 @@ node scripts/sync_application_tracker.mjs "--councils=Inner West,North Sydney,Ca
 - 默认优先尝试直连，失败时回退到 `pooler`
 - `Application Tracker` 的 ordinary applications 使用公开 POST API
 - `State Significant` 使用公开 JSON 端点
+- 配置文件支持 `extends`，可用 `--config=` 传入 coverage pack
 
 ## 3. 同步 Planning Proposals 到 Supabase
 
@@ -79,6 +144,12 @@ node scripts/sync_planning_proposals.mjs --stages=under_assessment,pre_exhibitio
 
 ```bash
 node scripts/sync_planning_proposals.mjs "--councils=Canada Bay,Inner West,Sutherland Shire"
+```
+
+也支持：
+
+```bash
+node scripts/sync_planning_proposals.mjs --config=mvp/config/planning-proposal-sync-greater-sydney-expanded.json
 ```
 
 ## 4. 生成研究 Dashboard
@@ -128,6 +199,44 @@ npm run report:deepdive
 ```bash
 node scripts/generate_deep_dive_memo.mjs --precinct="Five Dock"
 ```
+
+也支持指定引用的 dashboard / radar：
+
+```bash
+node scripts/generate_deep_dive_memo.mjs --precinct="Mayfield" --dashboard-path=dashboard/newcastle-hunter-report.html --radar-path=reports/weekly-radar-newcastle-hunter.md
+```
+
+### 批量生成 Deep Dives
+
+```bash
+npm run report:deepdives -- --config=mvp/config/deep-dive-newcastle-hunter.json
+```
+
+### Hunter Deep Dives
+
+```bash
+npm run report:hunter:deepdives
+```
+
+默认会生成：
+
+- `Mayfield`
+- `Newcastle City Centre`
+- `Cessnock`
+
+### Hunter Client Pack
+
+```bash
+npm run report:hunter:pack
+```
+
+输出：
+
+- `dashboard/newcastle-hunter-report.html`
+- `reports/weekly-radar-newcastle-hunter.md`
+- `reports/client-pack-newcastle-hunter.md`
+- `client-output/client-pack-newcastle-hunter.html`
+- 对应 Hunter deep dives HTML / markdown
 
 ## 7. 生成 Client Pack
 
@@ -184,6 +293,12 @@ npm run build:precincts
 - 将 `planning_proposals` 和 `application_signals` 做关键词映射
 - 刷新 precinct summary views
 - 重建 `opportunity_items` 的 precinct shortlist
+
+可扩展运行：
+
+```bash
+node scripts/build_precinct_shortlist.mjs --config=mvp/config/precinct-focus-map-greater-sydney-expanded.json
+```
 
 ## 10. 构建第一版 Constraints Layer
 

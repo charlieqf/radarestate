@@ -1,84 +1,9 @@
-import fs from 'node:fs'
-import path from 'node:path'
-import { marked } from 'marked'
-
-const root = process.cwd()
-const reportsDir = path.join(root, 'reports')
-const outputDir = path.join(root, 'client-output')
-
-function readFile(filePath) {
-  return fs.readFileSync(filePath, 'utf8')
-}
-
-function ensureDir(dirPath) {
-  fs.mkdirSync(dirPath, { recursive: true })
-}
-
-function titleFromMarkdown(markdown, fallback) {
-  const match = markdown.match(/^#\s+(.+)$/m)
-  return match ? match[1].trim() : fallback
-}
-
-function slugToLabel(fileName) {
-  return fileName
-    .replace(/\.md$/i, '')
-    .replace(/-/g, ' ')
-    .replace(/\b\w/g, (m) => m.toUpperCase())
-}
-
-function markdownPathToHref(targetPath) {
-  if (targetPath.startsWith('dashboard/')) {
-    return `../${targetPath}`
-  }
-  if (targetPath.startsWith('reports/')) {
-    return targetPath.replace(/^reports\//, '').replace(/\.md$/i, '.html')
-  }
-  return targetPath
-}
-
-function preprocessMarkdown(markdown) {
-  return markdown.replace(/`((?:dashboard|reports)\/[^`]+\.(?:html|md))`/g, (_, targetPath) => {
-    return `[\`${targetPath}\`](${markdownPathToHref(targetPath)})`
-  })
-}
-
-function navItems(files) {
-  const priority = new Map([
-    ['client-pack-latest.md', 1],
-    ['weekly-radar-latest.md', 2]
-  ])
-
-  return files
-    .slice()
-    .sort((a, b) => {
-      const pa = priority.get(path.basename(a)) || 10
-      const pb = priority.get(path.basename(b)) || 10
-      if (pa !== pb) return pa - pb
-      return path.basename(a).localeCompare(path.basename(b))
-    })
-    .map((filePath) => {
-      const fileName = path.basename(filePath)
-      return {
-        fileName,
-        href: fileName.replace(/\.md$/i, '.html'),
-        label: slugToLabel(fileName),
-        title: titleFromMarkdown(readFile(filePath), slugToLabel(fileName))
-      }
-    })
-}
-
-function pageTemplate({ title, bodyHtml, nav, currentHref }) {
-  const navHtml = nav.map((item) => {
-    const active = item.href === currentHref ? 'nav-link active' : 'nav-link'
-    return `<a class="${active}" href="${item.href}"><span class="nav-title">${item.title}</span><span class="nav-meta">${item.label}</span></a>`
-  }).join('')
-
-  return `<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${title}</title>
+  <title>Coverage Readiness: newcastle-hunter-pilot</title>
   <script>
     (() => {
       const storageKey = 'radarestate-theme';
@@ -393,10 +318,283 @@ function pageTemplate({ title, bodyHtml, nav, currentHref }) {
         <a class="action-link" href="../dashboard/latest-report.html">Open Visual Dashboard</a>
         <a class="action-link" href="index.html">Open Client Pack</a>
       </div>
-      <nav class="nav">${navHtml}</nav>
+      <nav class="nav"><a class="nav-link" href="client-pack-latest.html"><span class="nav-title">Sydney Client Pack</span><span class="nav-meta">Client Pack Latest</span></a><a class="nav-link" href="weekly-radar-latest.html"><span class="nav-title">Sydney Planning Opportunity Radar</span><span class="nav-meta">Weekly Radar Latest</span></a><a class="nav-link" href="client-pack-newcastle-hunter.html"><span class="nav-title">Newcastle-Hunter Client Pack</span><span class="nav-meta">Client Pack Newcastle Hunter</span></a><a class="nav-link" href="coverage-readiness-greater-sydney-expanded.html"><span class="nav-title">Coverage Readiness: greater-sydney-expanded</span><span class="nav-meta">Coverage Readiness Greater Sydney Expanded</span></a><a class="nav-link active" href="coverage-readiness-newcastle-hunter-pilot.html"><span class="nav-title">Coverage Readiness: newcastle-hunter-pilot</span><span class="nav-meta">Coverage Readiness Newcastle Hunter Pilot</span></a><a class="nav-link" href="deep-dive-bankstown.html"><span class="nav-title">Deep Dive: Bankstown</span><span class="nav-meta">Deep Dive Bankstown</span></a><a class="nav-link" href="deep-dive-cessnock.html"><span class="nav-title">Deep Dive: Cessnock</span><span class="nav-meta">Deep Dive Cessnock</span></a><a class="nav-link" href="deep-dive-five-dock.html"><span class="nav-title">Deep Dive: Five Dock</span><span class="nav-meta">Deep Dive Five Dock</span></a><a class="nav-link" href="deep-dive-gladesville.html"><span class="nav-title">Deep Dive: Gladesville</span><span class="nav-meta">Deep Dive Gladesville</span></a><a class="nav-link" href="deep-dive-mayfield.html"><span class="nav-title">Deep Dive: Mayfield</span><span class="nav-meta">Deep Dive Mayfield</span></a><a class="nav-link" href="deep-dive-newcastle-city-centre.html"><span class="nav-title">Deep Dive: Newcastle City Centre</span><span class="nav-meta">Deep Dive Newcastle City Centre</span></a><a class="nav-link" href="weekly-radar-newcastle-hunter.html"><span class="nav-title">Newcastle-Hunter Planning Opportunity Radar</span><span class="nav-meta">Weekly Radar Newcastle Hunter</span></a></nav>
     </aside>
     <main class="main">
-      <article class="article">${bodyHtml}</article>
+      <article class="article"><h1>Coverage Readiness: newcastle-hunter-pilot</h1>
+<h2>Date</h2>
+<p>2026-04-03</p>
+<h2>Scope</h2>
+<ul>
+<li>Precinct config: <code>mvp/config/precinct-focus-map-newcastle.json</code></li>
+<li>Configured councils: <code>5</code></li>
+<li>Configured precincts: <code>20</code></li>
+</ul>
+<h2>Gate Verdict</h2>
+<ul>
+<li>Precinct mapping: <code>PASS</code></li>
+<li>Risk layer availability: <code>PASS</code></li>
+<li>Stable shortlist and report output: <code>PASS</code></li>
+<li>Overall: <code>READY TO EXPAND</code></li>
+</ul>
+<h2>Mapping Coverage</h2>
+<ul>
+<li>Precincts with any signal: <code>20 / 20</code> (100%)</li>
+<li>Precincts with mapped proposals: <code>18</code></li>
+<li>Precincts with mapped applications: <code>20</code></li>
+<li>Total mapped proposals: <code>249</code></li>
+<li>Total mapped applications: <code>2,588</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Council</th>
+<th>Precincts</th>
+<th>With Signals</th>
+<th>Recent Apps</th>
+<th>Active Pipeline</th>
+<th>With Constraints</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Lake Macquarie</td>
+<td>4</td>
+<td>4</td>
+<td>581</td>
+<td>0</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Maitland</td>
+<td>4</td>
+<td>4</td>
+<td>558</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Port Stephens</td>
+<td>4</td>
+<td>4</td>
+<td>526</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Newcastle</td>
+<td>4</td>
+<td>4</td>
+<td>525</td>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Cessnock</td>
+<td>4</td>
+<td>4</td>
+<td>369</td>
+<td>1</td>
+<td>3</td>
+</tr>
+</tbody></table>
+<h2>Risk Layer Availability</h2>
+<ul>
+<li>Precincts with at least one constraint: <code>17 / 20</code> (85%)</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Constraint Type</th>
+<th>Severity</th>
+<th>Count</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>biodiversity_spatial_sample</td>
+<td>medium</td>
+<td>2</td>
+</tr>
+<tr>
+<td>bushfire_spatial_sample</td>
+<td>high</td>
+<td>15</td>
+</tr>
+<tr>
+<td>flood_metadata_signal</td>
+<td>high</td>
+<td>11</td>
+</tr>
+<tr>
+<td>flood_metadata_signal</td>
+<td>medium</td>
+<td>2</td>
+</tr>
+<tr>
+<td>policy_withdrawal_friction</td>
+<td>medium</td>
+<td>2</td>
+</tr>
+</tbody></table>
+<h2>Shortlist And Report Stability</h2>
+<ul>
+<li>Shortlist items in pack: <code>19</code></li>
+<li>Rating mix: <code>A=0</code>, <code>B=9</code>, <code>C=10</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Rank</th>
+<th>Precinct</th>
+<th>Council</th>
+<th>Rating</th>
+<th>Risk</th>
+<th>Recent Apps</th>
+<th>Pipeline</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Mayfield</td>
+<td>Newcastle</td>
+<td>B</td>
+<td>0</td>
+<td>213</td>
+<td>0</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Broadmeadow</td>
+<td>Newcastle</td>
+<td>B</td>
+<td>0</td>
+<td>28</td>
+<td>0</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Newcastle City Centre</td>
+<td>Newcastle</td>
+<td>B</td>
+<td>2</td>
+<td>190</td>
+<td>1</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Nelson Bay</td>
+<td>Port Stephens</td>
+<td>B</td>
+<td>2</td>
+<td>169</td>
+<td>1</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Rutherford</td>
+<td>Maitland</td>
+<td>B</td>
+<td>2</td>
+<td>142</td>
+<td>0</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Thornton</td>
+<td>Maitland</td>
+<td>B</td>
+<td>2</td>
+<td>126</td>
+<td>1</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Kotara</td>
+<td>Newcastle</td>
+<td>B</td>
+<td>2</td>
+<td>94</td>
+<td>0</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Charlestown</td>
+<td>Lake Macquarie</td>
+<td>B</td>
+<td>3</td>
+<td>205</td>
+<td>0</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Raymond Terrace</td>
+<td>Port Stephens</td>
+<td>B</td>
+<td>3</td>
+<td>101</td>
+<td>0</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Medowie</td>
+<td>Port Stephens</td>
+<td>C</td>
+<td>4</td>
+<td>235</td>
+<td>1</td>
+</tr>
+<tr>
+<td>11</td>
+<td>East Maitland</td>
+<td>Maitland</td>
+<td>C</td>
+<td>4</td>
+<td>199</td>
+<td>0</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Belmont</td>
+<td>Lake Macquarie</td>
+<td>C</td>
+<td>4</td>
+<td>176</td>
+<td>0</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Warners Bay</td>
+<td>Lake Macquarie</td>
+<td>C</td>
+<td>4</td>
+<td>143</td>
+<td>0</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Maitland</td>
+<td>Maitland</td>
+<td>C</td>
+<td>4</td>
+<td>91</td>
+<td>1</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Branxton</td>
+<td>Cessnock</td>
+<td>C</td>
+<td>4</td>
+<td>63</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<h2>Interpretation</h2>
+<ul>
+<li>Mapping 已经从 council-level 走到了可用的 precinct-level，不再只是区域热度判断。</li>
+<li>风险层已经能真实改变 shortlist 排序，说明 expanded pack 不会只输出“更热的地方”。</li>
+<li>当前 expanded pack 已经能持续产出足够丰富的 shortlist 和报告内容。</li>
+</ul>
+</article>
     </main>
   </div>
   <script>
@@ -421,39 +619,4 @@ function pageTemplate({ title, bodyHtml, nav, currentHref }) {
     })();
   </script>
 </body>
-</html>`
-}
-
-async function main() {
-  ensureDir(outputDir)
-  const files = fs.readdirSync(reportsDir)
-    .filter((name) => name.endsWith('.md'))
-    .map((name) => path.join(reportsDir, name))
-
-  const nav = navItems(files)
-  marked.setOptions({ gfm: true, breaks: false })
-
-  for (const filePath of files) {
-    const fileName = path.basename(filePath)
-    const markdown = preprocessMarkdown(readFile(filePath))
-    const title = titleFromMarkdown(markdown, slugToLabel(fileName))
-    const bodyHtml = marked.parse(markdown)
-    const outputFileName = fileName.replace(/\.md$/i, '.html')
-    const html = pageTemplate({
-      title,
-      bodyHtml,
-      nav,
-      currentHref: outputFileName
-    })
-    fs.writeFileSync(path.join(outputDir, outputFileName), html, 'utf8')
-    if (fileName === 'client-pack-latest.md') {
-      fs.writeFileSync(path.join(outputDir, 'index.html'), html, 'utf8')
-    }
-    console.log(`Rendered ${outputFileName}`)
-  }
-}
-
-main().catch((error) => {
-  console.error(error)
-  process.exit(1)
-})
+</html>

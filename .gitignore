@@ -1,3 +1,6 @@
 node_modules/
 supabase.txt
 *.log
+runs/*.json
+archive/daily/
+archive/weekly/
