@@ -330,14 +330,21 @@ npm run report:bundle
 输出：
 
 - `delivery-bundles/latest/`
+- `delivery-bundles/weekly/YYYYMMDD/`
 
 其中包含：
 
-- `index.html`
-- `client-output/`
-- `dashboard/`
+- `RadarReport/`
+- `DevelopmentReport/`
 
-这个目录可以直接整体发给客户使用。
+这两套目录都可以直接整体发给客户使用。
+
+说明：
+
+- `RadarReport/` 是每周固定产出的 intelligence layer
+- `DevelopmentReport/` 是开发商硬信息层、单独定价的报告层
+- 默认包含一份固定热点范围的 weekly development report
+- 未来可以在此基础上再加入 client-tailored site universes
 
 ## 9. 构建 Precinct Mapping 与 Shortlist
 

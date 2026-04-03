@@ -11,10 +11,10 @@ function ensureDir(dirPath) {
 function parseArgs() {
   const args = process.argv.slice(2)
   const options = {
-    name: 'latest'
+    date: new Date().toISOString().slice(0, 10).replace(/-/g, '')
   }
   for (const arg of args) {
-    if (arg.startsWith('--name=')) options.name = arg.split('=')[1].trim()
+    if (arg.startsWith('--date=')) options.date = arg.split('=')[1].trim()
   }
   return options
 }
@@ -26,7 +26,7 @@ function removeDirIfExists(dirPath) {
 }
 
 function copyDir(sourceDir, targetDir) {
-  ensureDir(targetDir)
+  ensureDir(path.dirname(targetDir))
   fs.cpSync(sourceDir, targetDir, { recursive: true })
 }
 
@@ -35,13 +35,13 @@ function writeFile(filePath, content) {
   fs.writeFileSync(filePath, content, 'utf8')
 }
 
-function htmlIndex() {
+function rootIndexHtml(title, generatedAt) {
   return `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>RadarEstate Delivery Bundle</title>
+  <title>${title}</title>
   <style>
     :root {
       --bg: #0b1020;
@@ -71,103 +71,221 @@ function htmlIndex() {
       padding: 28px;
       box-shadow: 0 16px 40px rgba(0,0,0,0.18);
     }
-    .eyebrow {
-      color: var(--cyan);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-size: 12px;
-      margin-bottom: 10px;
-    }
-    h1 {
-      margin: 0 0 12px;
-      font-size: 34px;
-      line-height: 1.08;
-    }
-    p {
-      color: var(--muted);
-      line-height: 1.7;
-      font-size: 15px;
-      margin: 0 0 20px;
-    }
-    .actions {
-      display: grid;
-      gap: 12px;
-    }
-    .action {
-      display: inline-block;
-      text-decoration: none;
-      color: var(--text);
-      background: #171f3d;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 14px 16px;
-      font-weight: 700;
-    }
-    .small {
-      margin-top: 16px;
-      font-size: 13px;
-      color: var(--muted);
-    }
+    .eyebrow { color: var(--cyan); text-transform: uppercase; letter-spacing: 0.12em; font-size: 12px; margin-bottom: 10px; }
+    h1 { margin: 0 0 12px; font-size: 34px; line-height: 1.08; }
+    p { color: var(--muted); line-height: 1.7; font-size: 15px; margin: 0 0 20px; }
+    .actions { display: grid; gap: 12px; }
+    .action { display: inline-block; text-decoration: none; color: var(--text); background: #171f3d; border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; font-weight: 700; }
+    .small { margin-top: 16px; font-size: 13px; color: var(--muted); }
   </style>
 </head>
 <body>
   <div class="card">
     <div class="eyebrow">RadarEstate</div>
-    <h1>Client Delivery Bundle</h1>
-    <p>This folder is designed to be shareable as a self-contained delivery bundle. Open the client portal for the primary experience, or jump directly to the dashboard if needed.</p>
+    <h1>${title}</h1>
+    <p>This folder is structured as a formal client delivery package. Open the Radar report for the current intelligence layer, or the Development report folder for the separately priced site-level feasibility layer.</p>
     <div class="actions">
-      <a class="action" href="client-output/index.html">Open Client Portal</a>
-      <a class="action" href="dashboard/latest-report.html">Open Main Dashboard</a>
-      <a class="action" href="dashboard/hero-visual-pack.html">Open Hero Visual Pack</a>
+      <a class="action" href="RadarReport/index.html">Open RadarReport</a>
+      <a class="action" href="DevelopmentReport/index.html">Open DevelopmentReport</a>
     </div>
-    <div class="small">All links inside this bundle are scoped to this folder structure. You can send the entire folder as-is.</div>
+    <div class="small">Generated: ${generatedAt}</div>
   </div>
 </body>
 </html>`
 }
 
-function readmeText(generatedAt) {
+function radarIndexHtml(generatedAt) {
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RadarReport</title>
+  <style>
+    body { font-family: Inter, Arial, sans-serif; margin: 0; padding: 28px; background: #0b1020; color: #e9eefc; }
+    .card { max-width: 760px; margin: 0 auto; background: #121932; border: 1px solid #273154; border-radius: 20px; padding: 24px; }
+    h1 { margin-top: 0; }
+    p, li { color: #92a0c4; line-height: 1.7; }
+    a { color: #7dd3fc; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>RadarReport</h1>
+    <p>This is the weekly radar and watchlist package. It includes the client portal, dashboards, radar reports, insights, and active deep dives.</p>
+    <ul>
+      <li><a href="client-output/index.html">Open Client Portal</a></li>
+      <li><a href="dashboard/latest-report.html">Open Main Dashboard</a></li>
+      <li><a href="dashboard/hero-visual-pack.html">Open Hero Visual Pack</a></li>
+    </ul>
+    <p>Generated: ${generatedAt}</p>
+  </div>
+</body>
+</html>`
+}
+
+function developmentIndexHtml(generatedAt) {
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DevelopmentReport</title>
+  <style>
+    body { font-family: Inter, Arial, sans-serif; margin: 0; padding: 28px; background: #0b1020; color: #e9eefc; }
+    .card { max-width: 760px; margin: 0 auto; background: #121932; border: 1px solid #273154; border-radius: 20px; padding: 24px; }
+    h1 { margin-top: 0; }
+    p, li { color: #92a0c4; line-height: 1.7; }
+    a { color: #7dd3fc; }
+    code { background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>DevelopmentReport</h1>
+    <p>This folder is reserved for separately priced, AI-generated development reports. The standard mode tracks a fixed hotspot universe every week, and later versions can add client-tailored site universes.</p>
+    <ul>
+      <li><a href="overview.html">Open Standard Universe Report</a></li>
+    </ul>
+    <p>If no additional site-level reports were generated this week, check <code>README.txt</code> in this folder.</p>
+    <p>Generated: ${generatedAt}</p>
+  </div>
+</body>
+</html>`
+}
+
+function developmentReadme(generatedAt) {
+  return [
+    'DevelopmentReport',
+    '',
+    `Generated: ${generatedAt}`,
+    '',
+    'This folder is reserved for separately priced AI-generated development reports.',
+    'Current status: the standard weekly hotspot-universe report is included, and no additional site-level reports were generated in this bundle.',
+    '',
+    'Included by default:',
+    '- overview.html / overview.md : standard hotspot-universe report',
+    '',
+    'When available, future site-specific outputs should be placed under:',
+    'sites/<site-slug>/'
+  ].join('\n')
+}
+
+function rootReadme(generatedAt, dateSlug) {
   return [
     'RadarEstate Delivery Bundle',
     '',
     `Generated: ${generatedAt}`,
+    `Week folder: ${dateSlug}`,
     '',
-    'How to use:',
-    '1. Open index.html from this folder.',
-    '2. For the main portal experience, open client-output/index.html.',
-    '3. For direct visuals, open dashboard/latest-report.html or dashboard/hero-visual-pack.html.',
+    'Structure:',
+    '- RadarReport/: current weekly radar, watchlist, dashboards and client portal',
+    '- DevelopmentReport/: separately priced AI-generated site-level feasibility layer',
     '',
-    'This bundle intentionally includes both client-output and dashboard so links work without depending on the original workspace.'
+    'Open index.html from this folder to start.'
   ].join('\n')
+}
+
+function bundleManifest(generatedAt, dateSlug) {
+  return {
+    generated_at: generatedAt,
+    bundle_date: dateSlug,
+    contents: {
+      RadarReport: [
+        'index.html',
+        'client-output/',
+        'dashboard/',
+        'reports/',
+        'manifest.json'
+      ],
+      DevelopmentReport: [
+        'index.html',
+        'overview.html',
+        'overview.md',
+        'README.txt',
+        'sites/',
+        'manifest.json'
+      ]
+    }
+  }
+}
+
+function developmentManifest(generatedAt) {
+  return {
+    generated_at: generatedAt,
+    report_type: 'DevelopmentReport',
+    status: 'standard-universe',
+    notes: 'Standard hotspot-universe report included. No additional site-level development feasibility reports bundled by default.'
+  }
+}
+
+function radarManifest(generatedAt) {
+  return {
+    generated_at: generatedAt,
+    report_type: 'RadarReport',
+    contents: [
+      'client-output/',
+      'dashboard/',
+      'reports/'
+    ]
+  }
+}
+
+function buildPaths(baseDir) {
+  return {
+    root: baseDir,
+    radar: path.join(baseDir, 'RadarReport'),
+    development: path.join(baseDir, 'DevelopmentReport')
+  }
+}
+
+function populateBundle(baseDir, generatedAt, dateSlug) {
+  const paths = buildPaths(baseDir)
+  removeDirIfExists(baseDir)
+  ensureDir(paths.root)
+  ensureDir(paths.radar)
+  ensureDir(paths.development)
+
+  copyDir(path.join(root, 'client-output'), path.join(paths.radar, 'client-output'))
+  copyDir(path.join(root, 'dashboard'), path.join(paths.radar, 'dashboard'))
+  copyDir(path.join(root, 'reports'), path.join(paths.radar, 'reports'))
+
+  const developmentMarkdown = path.join(root, 'reports', 'development-report-standard-universe.md')
+  const developmentHtml = path.join(root, 'client-output', 'development-report-standard-universe.html')
+  if (fs.existsSync(developmentMarkdown)) {
+    writeFile(path.join(paths.development, 'overview.md'), fs.readFileSync(developmentMarkdown, 'utf8'))
+  }
+  if (fs.existsSync(developmentHtml)) {
+    writeFile(path.join(paths.development, 'overview.html'), fs.readFileSync(developmentHtml, 'utf8'))
+  }
+
+  ensureDir(path.join(paths.development, 'sites'))
+
+  writeFile(path.join(paths.root, 'index.html'), rootIndexHtml('RadarEstate Delivery Bundle', generatedAt))
+  writeFile(path.join(paths.root, 'README.txt'), rootReadme(generatedAt, dateSlug))
+  writeFile(path.join(paths.root, 'bundle-manifest.json'), JSON.stringify(bundleManifest(generatedAt, dateSlug), null, 2))
+
+  writeFile(path.join(paths.radar, 'index.html'), radarIndexHtml(generatedAt))
+  writeFile(path.join(paths.radar, 'manifest.json'), JSON.stringify(radarManifest(generatedAt), null, 2))
+
+  writeFile(path.join(paths.development, 'index.html'), developmentIndexHtml(generatedAt))
+  writeFile(path.join(paths.development, 'README.txt'), developmentReadme(generatedAt))
+  writeFile(path.join(paths.development, 'manifest.json'), JSON.stringify(developmentManifest(generatedAt), null, 2))
 }
 
 async function main() {
   const options = parseArgs()
   const generatedAt = new Date().toISOString()
-  const deliveryDir = path.join(bundleRoot, options.name)
+  const latestDir = path.join(bundleRoot, 'latest')
+  const weeklyDir = path.join(bundleRoot, 'weekly', options.date)
 
-  removeDirIfExists(deliveryDir)
-  ensureDir(deliveryDir)
+  ensureDir(bundleRoot)
+  populateBundle(latestDir, generatedAt, options.date)
+  populateBundle(weeklyDir, generatedAt, options.date)
 
-  copyDir(path.join(root, 'client-output'), path.join(deliveryDir, 'client-output'))
-  copyDir(path.join(root, 'dashboard'), path.join(deliveryDir, 'dashboard'))
-
-  writeFile(path.join(deliveryDir, 'index.html'), htmlIndex())
-  writeFile(path.join(deliveryDir, 'README.txt'), readmeText(generatedAt))
-  writeFile(
-    path.join(deliveryDir, 'bundle-manifest.json'),
-    JSON.stringify({
-      generated_at: generatedAt,
-      contents: [
-        'client-output/',
-        'dashboard/',
-        'index.html',
-        'README.txt'
-      ]
-    }, null, 2)
-  )
-
-  console.log(`Wrote delivery bundle: ${deliveryDir}`)
+  console.log(`Wrote delivery bundles:`)
+  console.log(`- ${latestDir}`)
+  console.log(`- ${weeklyDir}`)
 }
 
 main().catch((error) => {

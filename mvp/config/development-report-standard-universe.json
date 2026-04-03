@@ -1,0 +1,11 @@
+{
+  "label": "Sydney Hotspot Development Report",
+  "description": "Fixed hotspot universe for demonstrating and selling the weekly DevelopmentReport layer.",
+  "precincts": [
+    "Gladesville",
+    "Edgecliff",
+    "Five Dock",
+    "Westmead",
+    "Bankstown"
+  ]
+}

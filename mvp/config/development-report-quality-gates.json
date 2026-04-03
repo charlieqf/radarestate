@@ -1,0 +1,33 @@
+{
+  "planningControls": {
+    "minMatchedPoints": 3,
+    "minMatchRatio": 0.6
+  },
+  "parcelMetrics": {
+    "minMatchedPoints": 3,
+    "minMatchRatio": 0.6
+  },
+  "propertyContext": {
+    "minMatchedPoints": 3,
+    "minMatchRatio": 0.6
+  },
+  "assemblyScreening": {
+    "requires": [
+      "planningControls",
+      "parcelMetrics",
+      "propertyContext"
+    ]
+  },
+  "ownershipTitleContext": {
+    "enabled": false,
+    "reason": "No verified public title-owner dataset is currently integrated."
+  },
+  "marketComps": {
+    "enabled": false,
+    "reason": "A public NSW property sales map exists, but a reliable, decision-grade and automation-safe comparable sales dataset is not yet integrated."
+  },
+  "residualPricing": {
+    "enabled": false,
+    "reason": "Residual pricing is blocked until comps and stronger cost assumptions are integrated."
+  }
+}

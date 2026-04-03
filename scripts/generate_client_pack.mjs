@@ -156,6 +156,7 @@ async function main() {
 
     runNodeScript('scripts/generate_hero_visual_pack.mjs')
     runNodeScript('scripts/generate_top10_insights_memo.mjs')
+    runNodeScript('scripts/generate_development_report_universe.mjs')
 
     runNodeScript('scripts/generate_dashboard_report.mjs', [
       `--region-group=${options.regionGroup}`,

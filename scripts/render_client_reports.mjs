@@ -16,6 +16,10 @@ function ensureDir(dirPath) {
   fs.mkdirSync(dirPath, { recursive: true })
 }
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 function unique(values) {
   return [...new Set(values.filter(Boolean))]
 }
@@ -662,9 +666,30 @@ async function main() {
       nav,
       currentHref: outputFileName
     })
-    fs.writeFileSync(path.join(outputDir, outputFileName), html, 'utf8')
+    const outFile = path.join(outputDir, outputFileName)
+    let wrote = false
+    for (let attempt = 1; attempt <= 4; attempt += 1) {
+      try {
+        fs.writeFileSync(outFile, html, 'utf8')
+        wrote = true
+        break
+      } catch (error) {
+        if (error.code !== 'EBUSY' || attempt === 4) throw error
+        await sleep(250 * attempt)
+      }
+    }
+    if (!wrote) throw new Error(`Failed to write ${outFile}`)
     if (fileName === 'client-pack-latest.md') {
-      fs.writeFileSync(path.join(outputDir, 'index.html'), html, 'utf8')
+      const indexFile = path.join(outputDir, 'index.html')
+      for (let attempt = 1; attempt <= 4; attempt += 1) {
+        try {
+          fs.writeFileSync(indexFile, html, 'utf8')
+          break
+        } catch (error) {
+          if (error.code !== 'EBUSY' || attempt === 4) throw error
+          await sleep(250 * attempt)
+        }
+      }
     }
     console.log(`Rendered ${outputFileName}`)
   }
@@ -681,7 +706,16 @@ async function main() {
     currentHref: 'hero-visual-pack.html',
     articleClass: 'article article-wide'
   })
-  fs.writeFileSync(path.join(outputDir, 'hero-visual-pack.html'), heroHtml, 'utf8')
+  const heroOut = path.join(outputDir, 'hero-visual-pack.html')
+  for (let attempt = 1; attempt <= 4; attempt += 1) {
+    try {
+      fs.writeFileSync(heroOut, heroHtml, 'utf8')
+      break
+    } catch (error) {
+      if (error.code !== 'EBUSY' || attempt === 4) throw error
+      await sleep(250 * attempt)
+    }
+  }
   console.log('Rendered hero-visual-pack.html')
 }
 

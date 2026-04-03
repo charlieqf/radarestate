@@ -191,6 +191,109 @@ create table if not exists public.council_activity_counts (
 create index if not exists council_activity_counts_council_idx
   on public.council_activity_counts (council_id, observed_at desc);
 
+create table if not exists public.planning_controls (
+  id uuid primary key default gen_random_uuid(),
+  control_key text unique,
+  precinct_id uuid references public.precincts(id) on delete cascade,
+  council_id uuid references public.councils(id) on delete set null,
+  source_name text not null,
+  zoning_source_url text,
+  fsr_source_url text,
+  height_source_url text,
+  observed_at date not null,
+  sample_point_count integer,
+  matched_point_count integer,
+  sample_location_example text,
+  dominant_zoning_code text,
+  dominant_zoning_label text,
+  zoning_layer_name text,
+  zoning_epi_name text,
+  fsr_min numeric(12,4),
+  fsr_max numeric(12,4),
+  fsr_clause text,
+  fsr_epi_name text,
+  height_min_m numeric(12,4),
+  height_max_m numeric(12,4),
+  height_clause text,
+  height_epi_name text,
+  notes text,
+  raw_payload jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists planning_controls_precinct_idx
+  on public.planning_controls (precinct_id, observed_at desc);
+
+create table if not exists public.parcel_metrics (
+  id uuid primary key default gen_random_uuid(),
+  metric_key text unique,
+  precinct_id uuid references public.precincts(id) on delete cascade,
+  council_id uuid references public.councils(id) on delete set null,
+  source_name text not null,
+  source_url text,
+  observed_at date not null,
+  sample_point_count integer,
+  matched_parcel_count integer,
+  sample_location_example text,
+  lot_count integer,
+  example_lot_id text,
+  example_plan_label text,
+  plan_area_min_sqm numeric(14,2),
+  plan_area_max_sqm numeric(14,2),
+  geometry_area_min_sqm numeric(14,2),
+  geometry_area_max_sqm numeric(14,2),
+  perimeter_min_m numeric(14,2),
+  perimeter_max_m numeric(14,2),
+  bbox_width_min_m numeric(14,2),
+  bbox_width_max_m numeric(14,2),
+  bbox_height_min_m numeric(14,2),
+  bbox_height_max_m numeric(14,2),
+  frontage_candidate_min_m numeric(14,2),
+  frontage_candidate_max_m numeric(14,2),
+  frontage_method text,
+  notes text,
+  raw_payload jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table if exists public.parcel_metrics add column if not exists frontage_candidate_min_m numeric(14,2);
+alter table if exists public.parcel_metrics add column if not exists frontage_candidate_max_m numeric(14,2);
+alter table if exists public.parcel_metrics add column if not exists frontage_method text;
+
+create index if not exists parcel_metrics_precinct_idx
+  on public.parcel_metrics (precinct_id, observed_at desc);
+
+create table if not exists public.property_contexts (
+  id uuid primary key default gen_random_uuid(),
+  context_key text unique,
+  precinct_id uuid references public.precincts(id) on delete cascade,
+  council_id uuid references public.councils(id) on delete set null,
+  source_name text not null,
+  source_url text,
+  observed_at date not null,
+  sample_point_count integer,
+  matched_property_count integer,
+  sample_location_example text,
+  example_propid integer,
+  example_address text,
+  dominant_property_type text,
+  dominant_valnet_status text,
+  dominant_valnet_type text,
+  dissolve_parcel_count_min integer,
+  dissolve_parcel_count_max integer,
+  valnet_lot_count_min integer,
+  valnet_lot_count_max integer,
+  notes text,
+  raw_payload jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists property_contexts_precinct_idx
+  on public.property_contexts (precinct_id, observed_at desc);
+
 create table if not exists public.opportunity_items (
   id uuid primary key default gen_random_uuid(),
   item_key text unique,
@@ -252,6 +355,21 @@ for each row execute function public.set_updated_at();
 drop trigger if exists trg_constraints_updated_at on public.constraints;
 create trigger trg_constraints_updated_at
 before update on public.constraints
+for each row execute function public.set_updated_at();
+
+drop trigger if exists trg_planning_controls_updated_at on public.planning_controls;
+create trigger trg_planning_controls_updated_at
+before update on public.planning_controls
+for each row execute function public.set_updated_at();
+
+drop trigger if exists trg_parcel_metrics_updated_at on public.parcel_metrics;
+create trigger trg_parcel_metrics_updated_at
+before update on public.parcel_metrics
+for each row execute function public.set_updated_at();
+
+drop trigger if exists trg_property_contexts_updated_at on public.property_contexts;
+create trigger trg_property_contexts_updated_at
+before update on public.property_contexts
 for each row execute function public.set_updated_at();
 
 drop trigger if exists trg_opportunity_items_updated_at on public.opportunity_items;
