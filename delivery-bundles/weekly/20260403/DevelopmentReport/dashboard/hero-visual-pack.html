@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hero Visual Pack</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script>
+    (() => {
+      const storageKey = 'radarestate-theme';
+      let stored = null;
+      try {
+        stored = window.localStorage.getItem(storageKey);
+      } catch {
+      }
+      const preferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.dataset.theme = stored || preferred;
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('embedded') === '1') {
+        document.documentElement.dataset.embedded = 'true';
+      }
+    })();
+  </script>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg-accent: #132048;
+      --panel: #121932;
+      --panel-2: #171f3d;
+      --text: #e9eefc;
+      --muted: #92a0c4;
+      --line: #273154;
+      --cyan: #33d1ff;
+      --lime: #b7ff3c;
+      --amber: #ffb547;
+      --red: #ff6b6b;
+      --grid: rgba(146,160,196,0.12);
+      --panel-top: rgba(255,255,255,0.03);
+      --panel-bottom: rgba(255,255,255,0.01);
+      --shadow: rgba(0,0,0,0.18);
+      --button-bg: rgba(255,255,255,0.06);
+      --button-text: var(--text);
+    }
+    html[data-theme="light"] {
+      --bg: #eef4ff;
+      --bg-accent: #d9e8ff;
+      --panel: #ffffff;
+      --panel-2: #f4f8ff;
+      --text: #11203f;
+      --muted: #597094;
+      --line: #d3def0;
+      --cyan: #0f84c9;
+      --lime: #6eab12;
+      --amber: #d6861b;
+      --red: #c94242;
+      --grid: rgba(89,112,148,0.16);
+      --panel-top: rgba(255,255,255,0.92);
+      --panel-bottom: rgba(240,246,255,0.92);
+      --shadow: rgba(45,72,117,0.12);
+      --button-bg: #ffffff;
+      --button-text: #11203f;
+    }
+    * { box-sizing: border-box; }
+    html[data-embedded="true"] .theme-switcher {
+      display: none;
+    }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: radial-gradient(circle at top left, var(--bg-accent) 0, var(--bg) 40%);
+      color: var(--text);
+    }
+    .page {
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 88px 28px 28px;
+    }
+    html[data-embedded="true"] .page {
+      padding: 24px 16px 16px;
+      max-width: none;
+    }
+    .theme-switcher {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 1200;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+      box-shadow: 0 12px 30px var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .theme-switcher-label { color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+    .theme-switcher-group { display: inline-flex; gap: 6px; padding: 4px; border-radius: 999px; background: var(--panel-2); border: 1px solid var(--line); }
+    .theme-switcher-button { appearance: none; border: none; background: transparent; color: var(--muted); border-radius: 999px; padding: 8px 12px; font-size: 12px; font-weight: 700; cursor: pointer; min-width: 68px; }
+    .theme-switcher-button[aria-pressed="true"] { background: var(--button-bg); color: var(--button-text); box-shadow: inset 0 0 0 1px var(--line); }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 20px;
+      margin-bottom: 22px;
+    }
+    .panel {
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: 0 16px 40px var(--shadow);
+      padding: 22px;
+    }
+    .eyebrow { color: var(--cyan); text-transform: uppercase; letter-spacing: 0.12em; font-size: 12px; margin-bottom: 10px; }
+    h1 { margin: 0 0 12px; font-size: 38px; line-height: 1.08; }
+    .lede { color: var(--muted); font-size: 15px; line-height: 1.7; margin: 0; }
+    .stats { display: grid; gap: 12px; }
+    .stat { background: var(--panel-2); border: 1px solid var(--line); border-radius: 16px; padding: 16px; }
+    .stat-label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+    .stat-value { font-size: 24px; font-weight: 800; }
+    .stat-sub { margin-top: 6px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+    .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; }
+    .span-7 { grid-column: span 7; }
+    .span-5 { grid-column: span 5; }
+    .span-12 { grid-column: span 12; }
+    .panel h2 { margin: 0 0 12px; font-size: 20px; }
+    .subtle { color: var(--muted); font-size: 13px; line-height: 1.6; margin-bottom: 16px; }
+    canvas { width: 100% !important; height: 460px !important; }
+    .takeaways { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .takeaway { border: 1px solid var(--line); border-radius: 16px; padding: 16px; background: var(--panel-2); }
+    .takeaway h3 { margin: 0 0 8px; font-size: 15px; }
+    .takeaway p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.6; }
+    .legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 12px; color: var(--muted); font-size: 12px; }
+    .legend-item { display: inline-flex; align-items: center; gap: 8px; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 999px; display: inline-block; }
+    @media (max-width: 980px) {
+      .page { padding: 92px 18px 18px; }
+      .theme-switcher { left: 18px; right: 18px; justify-content: space-between; }
+      .hero { grid-template-columns: 1fr; }
+      .span-7, .span-5, .span-12 { grid-column: span 12; }
+      .takeaways { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="theme-switcher" role="group" aria-label="Theme switcher">
+    <span class="theme-switcher-label">Theme</span>
+    <div class="theme-switcher-group">
+      <button class="theme-switcher-button" type="button" data-theme-option="dark">Dark</button>
+      <button class="theme-switcher-button" type="button" data-theme-option="light">Light</button>
+    </div>
+  </div>
+  <div class="page">
+    <section class="hero">
+      <div class="panel">
+        <div class="eyebrow">RadarEstate</div>
+        <h1>Hero Visual Pack</h1>
+        <p class="lede">A visual first read of where opportunity still survives after risk adjustment. The main lens is not “what is hot”, but where policy, activity and friction are misaligned.</p>
+        <div class="legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#b7ff3c"></span>A-rated precinct</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#33d1ff"></span>B-rated precinct</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#ffb547"></span>C-rated precinct</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#ff6b6b"></span>High risk emphasis</span>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-label">Strongest Opportunity</div>
+          <div class="stat-value">Gladesville</div>
+          <div class="stat-sub">Hunters Hill · rating A · risk 0</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Highest-Frictions</div>
+          <div class="stat-value">Bankstown</div>
+          <div class="stat-sub">Canterbury-Bankstown · recent apps 238 · risk 5</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Region Split</div>
+          <div class="stat-value">Sydney A:4 / Hunter A:0</div>
+          <div class="stat-sub">Sydney avg friction 2.36; Hunter avg friction 3.05</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="panel span-7">
+        <h2>Opportunity vs Risk Matrix</h2>
+        <p class="subtle">X-axis is an opportunity composite built from policy, timing and active pipeline. Y-axis is friction. Bubble size scales with recent applications.</p>
+        <canvas id="matrixChart"></canvas>
+      </div>
+      <div class="panel span-5">
+        <h2>Risk Stack</h2>
+        <p class="subtle">Top constrained precincts split by risk component. Bar length reflects weighted severity, not just count.</p>
+        <canvas id="riskStackChart"></canvas>
+      </div>
+      <div class="panel span-12">
+        <h2>Key Reads</h2>
+        <div class="takeaways">
+          
+            <div class="takeaway">
+              <h3>Leaders are selective, not noisy</h3>
+              <p>Gladesville currently leads because opportunity is high while friction remains low. This is very different from simply ranking by application volume.</p>
+            </div>
+          
+            <div class="takeaway">
+              <h3>Risk is rewriting the shortlist</h3>
+              <p>Bankstown shows how a busy precinct can still become cautionary once flood, bushfire or process friction start stacking together.</p>
+            </div>
+          
+            <div class="takeaway">
+              <h3>Sydney and Hunter are different markets</h3>
+              <p>Sydney currently has 4 A-rated precincts, while Hunter has 0. Hunter is viable, but it behaves more like a watchlist market than a clean conviction market.</p>
+            </div>
+          
+            <div class="takeaway">
+              <h3>Flood and bushfire dominate current risk</h3>
+              <p>The current stack is being shaped much more by flood metadata and bushfire spatial hits than by biodiversity. That is where ranking changes are happening most often.</p>
+            </div>
+          
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const data = {"meta":{"bestOpportunity":{"precinct_name":"Gladesville","council_name":"Hunters Hill","opportunity_rating":"A","friction_score":0},"highestRisk":{"precinct_name":"Bankstown","council_name":"Canterbury-Bankstown","opportunity_rating":"C","friction_score":5,"recent_application_count":"238"},"sydney":{"region_group":"Greater Sydney","shortlist_items":55,"a_count":4,"b_count":35,"c_count":16,"avg_friction":"2.36"},"hunter":{"region_group":"Hunter","shortlist_items":19,"a_count":0,"b_count":9,"c_count":10,"avg_friction":"3.05"}},"matrix":[{"precinct_name":"Gladesville","council_name":"Hunters Hill","region_group":"Greater Sydney","opportunity_rating":"A","policy_score":4,"timing_score":5,"friction_score":0,"recent_application_count":"217","active_pipeline_count":"2","opportunity":12.6,"risk":0,"radius":13.365459931328118},{"precinct_name":"Five Dock","council_name":"Canada Bay","region_group":"Greater Sydney","opportunity_rating":"A","policy_score":4,"timing_score":5,"friction_score":0,"recent_application_count":"113","active_pipeline_count":"2","opportunity":12.6,"risk":0,"radius":11.315072906367325},{"precinct_name":"Edgecliff","council_name":"Woollahra","region_group":"Greater Sydney","opportunity_rating":"A","policy_score":4,"timing_score":4,"friction_score":1,"recent_application_count":"70","active_pipeline_count":"5","opportunity":12.6,"risk":1,"radius":10.183300132670379},{"precinct_name":"Cabramatta","council_name":"Fairfield","region_group":"Greater Sydney","opportunity_rating":"A","policy_score":4,"timing_score":5,"friction_score":2,"recent_application_count":"257","active_pipeline_count":"2","opportunity":12.6,"risk":2,"radius":14.0156097709407},{"precinct_name":"Seven Hills","council_name":"Blacktown","region_group":"Greater Sydney","opportunity_rating":"B","policy_score":2,"timing_score":5,"friction_score":0,"recent_application_count":"282","active_pipeline_count":"1","opportunity":8.8,"risk":0,"radius":14.396427811873332},{"precinct_name":"Mayfield","council_name":"Newcastle","region_group":"Hunter","opportunity_rating":"B","policy_score":0,"timing_score":5,"friction_score":0,"recent_application_count":"213","active_pipeline_count":"0","opportunity":5,"risk":0,"radius":13.297259759663213},{"precinct_name":"Bexley","council_name":"Bayside","region_group":"Greater Sydney","opportunity_rating":"B","policy_score":2,"timing_score":5,"friction_score":0,"recent_application_count":"201","active_pipeline_count":"1","opportunity":8.8,"risk":0,"radius":13.088723439378914},{"precinct_name":"Broadmeadow","council_name":"Newcastle","region_group":"Hunter","opportunity_rating":"B","policy_score":0,"timing_score":3,"friction_score":0,"recent_application_count":"28","active_pipeline_count":"0","opportunity":3,"risk":0,"radius":8.64575131106459},{"precinct_name":"Drummoyne","council_name":"Canada Bay","region_group":"Greater Sydney","opportunity_rating":"B","policy_score":3,"timing_score":5,"friction_score":0,"recent_application_count":"0","active_pipeline_count":"0","opportunity":9.2,"risk":0,"radius":6},{"precinct_name":"Gables","council_name":"The Hills Shire","region_group":"Greater Sydney","opportunity_rating":"B","policy_score":3,"timing_score":5,"friction_score":0,"recent_application_count":"0","active_pipeline_count":"0","opportunity":9.2,"risk":0,"radius":6},{"precinct_name":"Cronulla","council_name":"Sutherland Shire","region_group":"Greater Sydney","opportunity_rating":"B","policy_score":0,"timing_score":5,"friction_score":0,"recent_application_count":"0","active_pipeline_count":"0","opportunity":5,"risk":0,"radius":6},{"precinct_name":"Croydon","council_name":"Burwood","region_group":"Greater Sydney","opportunity_rating":"B","policy_score":2,"timing_score":5,"friction_score":1,"recent_application_count":"192","active_pipeline_count":"1","opportunity":8.8,"risk":1,"radius":12.928203230275509},{"precinct_name":"Double Bay","council_name":"Woollahra","region_group":"Greater Sydney","opportunity_rating":"B","policy_score":3,"timing_score":5,"friction_score":1,"recent_application_count":"182","active_pipeline_count":"1","opportunity":10.2,"risk":1,"radius":12.74536878161602},{"precinct_name":"Beverly Hills","council_name":"Georges River","region_group":"Greater Sydney","opportunity_rating":"B","policy_score":2,"timing_score":5,"friction_score":1,"recent_application_count":"64","active_pipeline_count":"1","opportunity":8.8,"risk":1,"radius":10},{"precinct_name":"Hurstville","council_name":"Georges River","region_group":"Greater Sydney","opportunity_rating":"B","policy_score":0,"timing_score":5,"friction_score":2,"recent_application_count":"280","active_pipeline_count":"0","opportunity":5,"risk":2,"radius":14.366600265340756},{"precinct_name":"Auburn","council_name":"Cumberland","region_group":"Greater Sydney","opportunity_rating":"B","policy_score":0,"timing_score":5,"friction_score":2,"recent_application_count":"260","active_pipeline_count":"0","opportunity":5,"risk":2,"radius":14.06225774829855},{"precinct_name":"Epping","council_name":"Ryde","region_group":"Greater Sydney","opportunity_rating":"B","policy_score":1,"timing_score":5,"friction_score":2,"recent_application_count":"250","active_pipeline_count":"0","opportunity":6.4,"risk":2,"radius":13.905694150420949},{"precinct_name":"Miranda","council_name":"Sutherland Shire","region_group":"Greater Sydney","opportunity_rating":"B","policy_score":3,"timing_score":5,"friction_score":2,"recent_application_count":"223","active_pipeline_count":"2","opportunity":11.2,"risk":2,"radius":13.46659226153404},{"precinct_name":"Smithfield","council_name":"Fairfield","region_group":"Greater Sydney","opportunity_rating":"B","policy_score":3,"timing_score":5,"friction_score":2,"recent_application_count":"219","active_pipeline_count":"1","opportunity":10.2,"risk":2,"radius":13.399324293474372},{"precinct_name":"St Marys","council_name":"Penrith","region_group":"Greater Sydney","opportunity_rating":"B","policy_score":3,"timing_score":5,"friction_score":2,"recent_application_count":"204","active_pipeline_count":"1","opportunity":10.2,"risk":2,"radius":13.14142842854285},{"precinct_name":"Lindfield","council_name":"Ku-ring-gai","region_group":"Greater Sydney","opportunity_rating":"B","policy_score":1,"timing_score":5,"friction_score":2,"recent_application_count":"196","active_pipeline_count":"0","opportunity":6.4,"risk":2,"radius":13},{"precinct_name":"Newcastle City Centre","council_name":"Newcastle","region_group":"Hunter","opportunity_rating":"B","policy_score":3,"timing_score":5,"friction_score":2,"recent_application_count":"190","active_pipeline_count":"1","opportunity":10.2,"risk":2,"radius":12.89202437604511},{"precinct_name":"Nelson Bay","council_name":"Port Stephens","region_group":"Hunter","opportunity_rating":"B","policy_score":2,"timing_score":5,"friction_score":2,"recent_application_count":"169","active_pipeline_count":"1","opportunity":8.8,"risk":2,"radius":12.5},{"precinct_name":"West Ryde","council_name":"Ryde","region_group":"Greater Sydney","opportunity_rating":"B","policy_score":0,"timing_score":5,"friction_score":2,"recent_application_count":"148","active_pipeline_count":"0","opportunity":5,"risk":2,"radius":12.082762530298218},{"precinct_name":"Mount Druitt","council_name":"Blacktown","region_group":"Greater Sydney","opportunity_rating":"B","policy_score":2,"timing_score":5,"friction_score":2,"recent_application_count":"147","active_pipeline_count":"1","opportunity":8.8,"risk":2,"radius":12.06217782649107},{"precinct_name":"Rutherford","council_name":"Maitland","region_group":"Hunter","opportunity_rating":"B","policy_score":0,"timing_score":5,"friction_score":2,"recent_application_count":"142","active_pipeline_count":"0","opportunity":5,"risk":2,"radius":11.958187643906491},{"precinct_name":"Thornton","council_name":"Maitland","region_group":"Hunter","opportunity_rating":"B","policy_score":2,"timing_score":5,"friction_score":2,"recent_application_count":"126","active_pipeline_count":"1","opportunity":8.8,"risk":2,"radius":11.612486080160913},{"precinct_name":"Kogarah","council_name":"Georges River","region_group":"Greater Sydney","opportunity_rating":"B","policy_score":1,"timing_score":5,"friction_score":2,"recent_application_count":"99","active_pipeline_count":"0","opportunity":6.4,"risk":2,"radius":10.9749371855331},{"precinct_name":"Kotara","council_name":"Newcastle","region_group":"Hunter","opportunity_rating":"B","policy_score":0,"timing_score":4,"friction_score":2,"recent_application_count":"94","active_pipeline_count":"0","opportunity":4,"risk":2,"radius":10.84767985741633},{"precinct_name":"Riverwood","council_name":"Georges River","region_group":"Greater Sydney","opportunity_rating":"B","policy_score":0,"timing_score":5,"friction_score":2,"recent_application_count":"63","active_pipeline_count":"0","opportunity":5,"risk":2,"radius":9.968626966596887}],"riskStack":{"labels":["Bankstown","Ingleburn","Liverpool","Campbelltown","Cessnock","Kurri Kurri","Glenfield","Chatswood","Penrith","Medowie"],"datasets":[{"label":"Flood","backgroundColor":"#ff5daa","data":[3,3,3,3,3,3,2,3,3,2]},{"label":"Bushfire","backgroundColor":"#ff6b6b","data":[0,3,3,3,3,3,3,3,3,3]},{"label":"Low Canopy","backgroundColor":"#ffb547","data":[3,3,3,3,0,0,3,0,0,0]},{"label":"Heat","backgroundColor":"#ffcf5a","data":[3,2,3,2,0,0,2,0,0,0]},{"label":"Biodiversity","backgroundColor":"#7ed957","data":[0,0,0,0,0,2,0,0,0,2]},{"label":"Withdrawal","backgroundColor":"#8b7bff","data":[2,0,2,0,2,0,0,0,0,0]}]},"takeaways":[{"title":"Leaders are selective, not noisy","body":"Gladesville currently leads because opportunity is high while friction remains low. This is very different from simply ranking by application volume."},{"title":"Risk is rewriting the shortlist","body":"Bankstown shows how a busy precinct can still become cautionary once flood, bushfire or process friction start stacking together."},{"title":"Sydney and Hunter are different markets","body":"Sydney currently has 4 A-rated precincts, while Hunter has 0. Hunter is viable, but it behaves more like a watchlist market than a clean conviction market."},{"title":"Flood and bushfire dominate current risk","body":"The current stack is being shaped much more by flood metadata and bushfire spatial hits than by biodiversity. That is where ranking changes are happening most often."}]};
+    const storageKey = 'radarestate-theme';
+    const currentTheme = document.documentElement.dataset.theme || 'dark';
+    const cssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    const themeButtons = [...document.querySelectorAll('[data-theme-option]')];
+    themeButtons.forEach((button) => {
+      const theme = button.dataset.themeOption;
+      button.setAttribute('aria-pressed', theme === currentTheme ? 'true' : 'false');
+      button.addEventListener('click', () => {
+        if (theme === currentTheme) return;
+        try { window.localStorage.setItem(storageKey, theme); } catch {}
+        document.documentElement.dataset.theme = theme;
+        window.location.reload();
+      });
+    });
+
+    const axisColor = cssVar('--muted');
+    const gridColor = cssVar('--grid');
+    Chart.defaults.color = axisColor;
+    Chart.defaults.borderColor = gridColor;
+    Chart.defaults.font.family = 'Inter, Arial, sans-serif';
+
+    const ratingColor = (rating) => {
+      if (rating === 'A') return '#b7ff3c';
+      if (rating === 'B') return '#33d1ff';
+      return '#ffb547';
+    };
+
+    const avgOpportunity = data.matrix.reduce((sum, row) => sum + row.opportunity, 0) / Math.max(data.matrix.length, 1);
+    const avgRisk = data.matrix.reduce((sum, row) => sum + row.risk, 0) / Math.max(data.matrix.length, 1);
+
+    const quadrantPlugin = {
+      id: 'quadrantPlugin',
+      beforeDatasetsDraw(chart) {
+        const { ctx, chartArea, scales } = chart;
+        const x = scales.x.getPixelForValue(avgOpportunity);
+        const y = scales.y.getPixelForValue(avgRisk);
+        ctx.save();
+        ctx.setLineDash([6, 6]);
+        ctx.strokeStyle = gridColor;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(x, chartArea.top);
+        ctx.lineTo(x, chartArea.bottom);
+        ctx.moveTo(chartArea.left, y);
+        ctx.lineTo(chartArea.right, y);
+        ctx.stroke();
+        ctx.restore();
+      }
+    };
+
+    new Chart(document.getElementById('matrixChart'), {
+      type: 'bubble',
+      data: {
+        datasets: [{
+          label: 'Precincts',
+          data: data.matrix.map((row) => ({
+            x: row.opportunity,
+            y: row.risk,
+            r: row.radius,
+            label: row.precinct_name,
+            council: row.council_name,
+            region: row.region_group,
+            rating: row.opportunity_rating,
+            recent: row.recent_application_count,
+            pipeline: row.active_pipeline_count
+          })),
+          backgroundColor: data.matrix.map((row) => ratingColor(row.opportunity_rating)),
+          borderColor: data.matrix.map((row) => row.risk >= 4 ? '#ff6b6b' : 'rgba(255,255,255,0.24)'),
+          borderWidth: data.matrix.map((row) => row.risk >= 4 ? 3 : 1.5)
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label(context) {
+                const raw = context.raw;
+                return [
+                  raw.label + ' (' + raw.council + ')',
+                  'Region: ' + raw.region,
+                  'Opportunity: ' + raw.x,
+                  'Risk: ' + raw.y,
+                  'Recent apps: ' + raw.recent,
+                  'Pipeline: ' + raw.pipeline,
+                  'Rating: ' + raw.rating
+                ];
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            title: { display: true, text: 'Opportunity Composite' },
+            beginAtZero: true
+          },
+          y: {
+            title: { display: true, text: 'Risk / Friction' },
+            beginAtZero: true,
+            suggestedMax: 6
+          }
+        }
+      },
+      plugins: [quadrantPlugin]
+    });
+
+    new Chart(document.getElementById('riskStackChart'), {
+      type: 'bar',
+      data: {
+        labels: data.riskStack.labels,
+        datasets: data.riskStack.datasets.map((dataset) => ({
+          ...dataset,
+          borderRadius: 6,
+          borderSkipped: false
+        }))
+      },
+      options: {
+        indexAxis: 'y',
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom' }
+        },
+        scales: {
+          x: {
+            stacked: true,
+            beginAtZero: true,
+            title: { display: true, text: 'Weighted Risk Load' }
+          },
+          y: {
+            stacked: true
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

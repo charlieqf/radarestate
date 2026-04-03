@@ -1,0 +1,1056 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sydney Planning And Activity Research Dashboard</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script>
+    (() => {
+      const storageKey = 'radarestate-theme';
+      let stored = null;
+      try {
+        stored = window.localStorage.getItem(storageKey);
+      } catch {
+      }
+      const preferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.dataset.theme = stored || preferred;
+    })();
+  </script>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg-accent: #132048;
+      --panel: #121932;
+      --panel-2: #171f3d;
+      --text: #e9eefc;
+      --muted: #92a0c4;
+      --line: #273154;
+      --cyan: #33d1ff;
+      --lime: #b7ff3c;
+      --pink: #ff5daa;
+      --amber: #ffb547;
+      --red: #ff6b6b;
+      --grid: rgba(146,160,196,0.12);
+      --panel-top: rgba(255,255,255,0.03);
+      --panel-bottom: rgba(255,255,255,0.01);
+      --shadow: rgba(0,0,0,0.18);
+      --button-bg: rgba(255,255,255,0.06);
+      --button-text: var(--text);
+      --map-bg: #0f1731;
+      --popup-bg: #ffffff;
+      --popup-text: #0b1020;
+      --popup-border: rgba(11,16,32,0.12);
+      --table-header: var(--muted);
+    }
+
+    html[data-theme="light"] {
+      --bg: #eef4ff;
+      --bg-accent: #d9e8ff;
+      --panel: #ffffff;
+      --panel-2: #f4f8ff;
+      --text: #11203f;
+      --muted: #597094;
+      --line: #d3def0;
+      --cyan: #0f84c9;
+      --lime: #6eab12;
+      --pink: #d64588;
+      --amber: #d6861b;
+      --red: #c94242;
+      --grid: rgba(89,112,148,0.16);
+      --panel-top: rgba(255,255,255,0.92);
+      --panel-bottom: rgba(240,246,255,0.92);
+      --shadow: rgba(45,72,117,0.12);
+      --button-bg: #ffffff;
+      --button-text: #11203f;
+      --map-bg: #dbe8f7;
+      --popup-bg: #ffffff;
+      --popup-text: #11203f;
+      --popup-border: rgba(17,32,63,0.12);
+      --table-header: #4f6485;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: radial-gradient(circle at top left, var(--bg-accent) 0, var(--bg) 40%);
+      color: var(--text);
+    }
+    .page {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 88px 28px 28px;
+    }
+    .theme-switcher {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 1200;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+      box-shadow: 0 12px 30px var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .theme-switcher-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .theme-switcher-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px;
+      border-radius: 999px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+    }
+    .theme-switcher-button {
+      appearance: none;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      min-width: 68px;
+    }
+    .theme-switcher-button[aria-pressed="true"] {
+      background: var(--button-bg);
+      color: var(--button-text);
+      box-shadow: inset 0 0 0 1px var(--line);
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .hero-card, .panel {
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 16px 40px var(--shadow);
+    }
+    .eyebrow {
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: 34px;
+      line-height: 1.1;
+    }
+    .lede {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .meta {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+    .meta-row {
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+    }
+    .meta-label {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .meta-value {
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 20px;
+    }
+    .span-6 { grid-column: span 6; }
+    .span-7 { grid-column: span 7; }
+    .span-5 { grid-column: span 5; }
+    .span-12 { grid-column: span 12; }
+    .panel h2 {
+      margin: 0 0 14px;
+      font-size: 18px;
+    }
+    .subtle {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: -4px;
+      margin-bottom: 16px;
+    }
+    canvas { width: 100% !important; height: 320px !important; }
+    #precinctMap {
+      height: 460px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+    .leaflet-container {
+      background: var(--map-bg);
+      font-family: Inter, Arial, sans-serif;
+    }
+    .map-popup {
+      color: var(--popup-text);
+      line-height: 1.5;
+      min-width: 220px;
+    }
+    .map-popup strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+    .legend {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin: 12px 0 18px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .legend-item {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      display: inline-block;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      padding: 12px 10px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      color: var(--table-header);
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .leaflet-popup-content-wrapper,
+    .leaflet-popup-tip {
+      background: var(--popup-bg);
+      color: var(--popup-text);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.16);
+      border: 1px solid var(--popup-border);
+    }
+    .tag {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      background: rgba(51, 209, 255, 0.14);
+      color: var(--cyan);
+    }
+    .footer-note {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 16px;
+    }
+    @media (max-width: 980px) {
+      .page { padding: 92px 18px 18px; }
+      .theme-switcher {
+        left: 18px;
+        right: 18px;
+        justify-content: space-between;
+      }
+      .hero { grid-template-columns: 1fr; }
+      .span-6, .span-7, .span-5, .span-12 { grid-column: span 12; }
+    }
+  </style>
+</head>
+<body>
+  <div class="theme-switcher" role="group" aria-label="Theme switcher">
+    <span class="theme-switcher-label">Theme</span>
+    <div class="theme-switcher-group">
+      <button class="theme-switcher-button" type="button" data-theme-option="dark">Dark</button>
+      <button class="theme-switcher-button" type="button" data-theme-option="light">Light</button>
+    </div>
+  </div>
+  <div class="page">
+    <section class="hero">
+      <div class="hero-card">
+        <div class="eyebrow">RadarEstate</div>
+        <h1>Sydney Planning And Activity Research Dashboard</h1>
+        <p class="lede">Public-data powered view across housing target pressure, planning proposal pipeline, recent development activity and first-pass risk signals for Sydney. This report is generated directly from Supabase views, not from mock sample JSON.</p>
+      </div>
+      <div class="meta">
+        <div class="meta-row">
+          <div class="meta-label">Planning Proposals</div>
+          <div class="meta-value">1,413</div>
+        </div>
+        <div class="meta-row">
+          <div class="meta-label">Application Signals</div>
+          <div class="meta-value">45,114</div>
+        </div>
+        <div class="meta-row">
+          <div class="meta-label">Precinct Shortlist</div>
+          <div class="meta-value">55</div>
+        </div>
+        <div class="meta-row">
+          <div class="meta-label">Derived Constraints</div>
+          <div class="meta-value">69</div>
+        </div>
+        <div class="meta-row">
+          <div class="meta-label">Generated</div>
+          <div class="meta-value" style="font-size:16px">03/04/2026, 16:13:50</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="panel span-12">
+        <h2>Precinct Opportunity Map</h2>
+        <p class="subtle">Map points are application-derived precinct centroids. Marker colour reflects current shortlist rating and marker size scales with recent application activity.</p>
+        <div class="legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#b7ff3c"></span>A-rated precinct</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#33d1ff"></span>B-rated precinct</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#ffb547"></span>C-rated precinct</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#ff6b6b"></span>High friction</span>
+        </div>
+        <div id="precinctMap"></div>
+      </div>
+
+      <div class="panel span-6">
+        <h2>Recent Activity Ranking</h2>
+        <p class="subtle">Recent applications from the current focus-council sync window.</p>
+        <canvas id="recentActivityChart"></canvas>
+      </div>
+      <div class="panel span-6">
+        <h2>Policy Pipeline</h2>
+        <p class="subtle">Planning proposal distribution by stage.</p>
+        <canvas id="pipelineChart"></canvas>
+      </div>
+
+      <div class="panel span-7">
+        <h2>Target Pressure Vs Recent Activity</h2>
+        <p class="subtle">Councils with both target pressure and current activity are strongest first-pass shortlist candidates.</p>
+        <canvas id="scatterChart"></canvas>
+      </div>
+
+      <div class="panel span-5">
+        <h2>High-Conviction Council Table</h2>
+        <p class="subtle">Top councils by active pipeline count with target and recent activity context.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Council</th>
+              <th>Pipeline</th>
+              <th>Target</th>
+              <th>Recent Apps</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>Woollahra</td>
+                <td>11</td>
+                <td>-</td>
+                <td>1,588</td>
+              </tr>
+            
+              <tr>
+                <td>The Hills Shire</td>
+                <td>10</td>
+                <td>-</td>
+                <td>3,603</td>
+              </tr>
+            
+              <tr>
+                <td>Sutherland Shire</td>
+                <td>9</td>
+                <td>-</td>
+                <td>2,476</td>
+              </tr>
+            
+              <tr>
+                <td>Blacktown</td>
+                <td>8</td>
+                <td>-</td>
+                <td>4,520</td>
+              </tr>
+            
+              <tr>
+                <td>Canada Bay</td>
+                <td>8</td>
+                <td>-</td>
+                <td>1,008</td>
+              </tr>
+            
+              <tr>
+                <td>Parramatta</td>
+                <td>6</td>
+                <td>19,500</td>
+                <td>2,253</td>
+              </tr>
+            
+              <tr>
+                <td>Inner West</td>
+                <td>6</td>
+                <td>7,800</td>
+                <td>2,593</td>
+              </tr>
+            
+              <tr>
+                <td>Strathfield</td>
+                <td>6</td>
+                <td>3,500</td>
+                <td>416</td>
+              </tr>
+            
+              <tr>
+                <td>Liverpool</td>
+                <td>5</td>
+                <td>16,700</td>
+                <td>3,320</td>
+              </tr>
+            
+              <tr>
+                <td>Campbelltown</td>
+                <td>5</td>
+                <td>10,500</td>
+                <td>2,591</td>
+              </tr>
+            
+              <tr>
+                <td>Penrith</td>
+                <td>5</td>
+                <td>-</td>
+                <td>2,294</td>
+              </tr>
+            
+              <tr>
+                <td>Ku-ring-gai</td>
+                <td>4</td>
+                <td>7,600</td>
+                <td>1,492</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel span-6">
+        <h2>Top Precinct Shortlist</h2>
+        <p class="subtle">First-pass precinct seed built from mapped proposal and application signals.</p>
+        <canvas id="precinctChart"></canvas>
+      </div>
+
+      <div class="panel span-6">
+        <h2>Precinct Shortlist Table</h2>
+        <p class="subtle">Heuristic shortlist only. Constraints and site assembly are not integrated yet.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Precinct</th>
+              <th>Rating</th>
+              <th>Risk</th>
+              <th>Recent Apps</th>
+              <th>Pipeline</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>Gladesville<br><span style="color:var(--muted);font-size:12px">No derived constraint hit</span></td>
+                <td><span class="tag">A</span></td>
+                <td>0</td>
+                <td>217</td>
+                <td>2</td>
+              </tr>
+            
+              <tr>
+                <td>Five Dock<br><span style="color:var(--muted);font-size:12px">No derived constraint hit</span></td>
+                <td><span class="tag">A</span></td>
+                <td>0</td>
+                <td>113</td>
+                <td>2</td>
+              </tr>
+            
+              <tr>
+                <td>Edgecliff<br><span style="color:var(--muted);font-size:12px">flood_metadata_signal (medium)</span></td>
+                <td><span class="tag">A</span></td>
+                <td>1</td>
+                <td>70</td>
+                <td>5</td>
+              </tr>
+            
+              <tr>
+                <td>Cabramatta<br><span style="color:var(--muted);font-size:12px">flood_metadata_signal (high)</span></td>
+                <td><span class="tag">A</span></td>
+                <td>2</td>
+                <td>257</td>
+                <td>2</td>
+              </tr>
+            
+              <tr>
+                <td>Seven Hills<br><span style="color:var(--muted);font-size:12px">No derived constraint hit</span></td>
+                <td><span class="tag">B</span></td>
+                <td>0</td>
+                <td>282</td>
+                <td>1</td>
+              </tr>
+            
+              <tr>
+                <td>Bexley<br><span style="color:var(--muted);font-size:12px">No derived constraint hit</span></td>
+                <td><span class="tag">B</span></td>
+                <td>0</td>
+                <td>201</td>
+                <td>1</td>
+              </tr>
+            
+              <tr>
+                <td>Gables<br><span style="color:var(--muted);font-size:12px">No derived constraint hit</span></td>
+                <td><span class="tag">B</span></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+              </tr>
+            
+              <tr>
+                <td>Cronulla<br><span style="color:var(--muted);font-size:12px">No derived constraint hit</span></td>
+                <td><span class="tag">B</span></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+              </tr>
+            
+              <tr>
+                <td>Drummoyne<br><span style="color:var(--muted);font-size:12px">No derived constraint hit</span></td>
+                <td><span class="tag">B</span></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+              </tr>
+            
+              <tr>
+                <td>Croydon<br><span style="color:var(--muted);font-size:12px">flood_metadata_signal (medium)</span></td>
+                <td><span class="tag">B</span></td>
+                <td>1</td>
+                <td>192</td>
+                <td>1</td>
+              </tr>
+            
+              <tr>
+                <td>Double Bay<br><span style="color:var(--muted);font-size:12px">flood_metadata_signal (medium)</span></td>
+                <td><span class="tag">B</span></td>
+                <td>1</td>
+                <td>182</td>
+                <td>1</td>
+              </tr>
+            
+              <tr>
+                <td>Beverly Hills<br><span style="color:var(--muted);font-size:12px">flood_metadata_signal (medium)</span></td>
+                <td><span class="tag">B</span></td>
+                <td>1</td>
+                <td>64</td>
+                <td>1</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel span-12">
+        <h2>Most Constrained Precincts</h2>
+        <p class="subtle">This panel surfaces where policy or activity may be real, but environmental or process friction is already visible in the first-pass proxy layer.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Precinct</th>
+              <th>Council</th>
+              <th>Risk</th>
+              <th>Summary</th>
+              <th>Recent Apps</th>
+              <th>Pipeline</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>Bankstown</td>
+                <td>Canterbury-Bankstown</td>
+                <td>5</td>
+                <td>flood_metadata_signal (high), heat_vulnerability_proxy (high), low_tree_canopy_proxy (high), policy_withdrawal_friction (medium)</td>
+                <td>238</td>
+                <td>1</td>
+              </tr>
+            
+              <tr>
+                <td>Ingleburn</td>
+                <td>Campbelltown</td>
+                <td>5</td>
+                <td>bushfire_spatial_sample (high), flood_metadata_signal (high), low_tree_canopy_proxy (high), heat_vulnerability_proxy (medium)</td>
+                <td>230</td>
+                <td>0</td>
+              </tr>
+            
+              <tr>
+                <td>Liverpool</td>
+                <td>Liverpool</td>
+                <td>5</td>
+                <td>bushfire_spatial_sample (high), flood_metadata_signal (high), heat_vulnerability_proxy (high), low_tree_canopy_proxy (high), policy_withdrawal_friction (medium)</td>
+                <td>220</td>
+                <td>2</td>
+              </tr>
+            
+              <tr>
+                <td>Campbelltown</td>
+                <td>Campbelltown</td>
+                <td>5</td>
+                <td>bushfire_spatial_sample (high), flood_metadata_signal (high), low_tree_canopy_proxy (high), heat_vulnerability_proxy (medium)</td>
+                <td>219</td>
+                <td>5</td>
+              </tr>
+            
+              <tr>
+                <td>Glenfield</td>
+                <td>Campbelltown</td>
+                <td>5</td>
+                <td>bushfire_spatial_sample (high), low_tree_canopy_proxy (high), flood_metadata_signal (medium), heat_vulnerability_proxy (medium)</td>
+                <td>72</td>
+                <td>0</td>
+              </tr>
+            
+              <tr>
+                <td>Chatswood</td>
+                <td>Willoughby</td>
+                <td>4</td>
+                <td>bushfire_spatial_sample (high), flood_metadata_signal (high)</td>
+                <td>505</td>
+                <td>2</td>
+              </tr>
+            
+              <tr>
+                <td>Penrith</td>
+                <td>Penrith</td>
+                <td>4</td>
+                <td>bushfire_spatial_sample (high), flood_metadata_signal (high)</td>
+                <td>351</td>
+                <td>4</td>
+              </tr>
+            
+              <tr>
+                <td>Tallawong</td>
+                <td>Blacktown</td>
+                <td>4</td>
+                <td>bushfire_spatial_sample (high), flood_metadata_signal (high)</td>
+                <td>209</td>
+                <td>1</td>
+              </tr>
+            
+              <tr>
+                <td>Homebush</td>
+                <td>Strathfield</td>
+                <td>4</td>
+                <td>flood_metadata_signal (high), low_tree_canopy_proxy (high)</td>
+                <td>121</td>
+                <td>0</td>
+              </tr>
+            
+              <tr>
+                <td>Lakemba</td>
+                <td>Canterbury-Bankstown</td>
+                <td>4</td>
+                <td>heat_vulnerability_proxy (high), low_tree_canopy_proxy (high)</td>
+                <td>91</td>
+                <td>0</td>
+              </tr>
+            
+              <tr>
+                <td>Gordon</td>
+                <td>Ku-ring-gai</td>
+                <td>4</td>
+                <td>bushfire_spatial_sample (high), flood_metadata_signal (high)</td>
+                <td>70</td>
+                <td>0</td>
+              </tr>
+            
+              <tr>
+                <td>Marrickville</td>
+                <td>Inner West</td>
+                <td>3</td>
+                <td>flood_metadata_signal (high), low_tree_canopy_proxy (medium)</td>
+                <td>360</td>
+                <td>2</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel span-12">
+        <h2>Sydney Proposal Watchlist</h2>
+        <p class="subtle">Current policy movement from the synced watchlist view.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Stage</th>
+              <th>Council</th>
+              <th>Title</th>
+              <th>Location</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td><span class="tag">under_assessment</span></td>
+                <td>The Hills Shire</td>
+                <td>Council Operations Centre 183-191 Maguires Road, Gables</td>
+                <td>191 Maguires Road Gables 2765 & more</td>
+              </tr>
+            
+              <tr>
+                <td><span class="tag">under_assessment</span></td>
+                <td>Sutherland Shire</td>
+                <td>Cronulla Special Entertainment Precinct</td>
+                <td>Sutherland Shire</td>
+              </tr>
+            
+              <tr>
+                <td><span class="tag">under_assessment</span></td>
+                <td>Woollahra</td>
+                <td>Double Bay Centre- Planning Proposal</td>
+                <td>Woollahra</td>
+              </tr>
+            
+              <tr>
+                <td><span class="tag">under_assessment</span></td>
+                <td>Woollahra</td>
+                <td>Edgecliff Commercial Centre Planning Proposal</td>
+                <td>Woollahra</td>
+              </tr>
+            
+              <tr>
+                <td><span class="tag">under_assessment</span></td>
+                <td>Woollahra</td>
+                <td>Heritage listing of eight sites and one HCA in the area of the Edgecliff Commercial Centre.</td>
+                <td>Woollahra</td>
+              </tr>
+            
+              <tr>
+                <td><span class="tag">under_assessment</span></td>
+                <td>The Hills Shire</td>
+                <td>Housekeeping and miscellaneous amendments to The Hills Local Environmental Plan 2019.</td>
+                <td>The Hills Shire</td>
+              </tr>
+            
+              <tr>
+                <td><span class="tag">under_assessment</span></td>
+                <td>Hunters Hill</td>
+                <td>LEP Review</td>
+                <td>Hunters Hill</td>
+              </tr>
+            
+              <tr>
+                <td><span class="tag">under_assessment</span></td>
+                <td>Woollahra</td>
+                <td>Local Heritage Listing: Woollahra Modern Buildings Priority Study</td>
+                <td>Woollahra</td>
+              </tr>
+            
+              <tr>
+                <td><span class="tag">under_assessment</span></td>
+                <td>Sutherland Shire</td>
+                <td>Miranda Planning Proposal</td>
+                <td>Sutherland Shire</td>
+              </tr>
+            
+              <tr>
+                <td><span class="tag">under_assessment</span></td>
+                <td>Penrith</td>
+                <td>Penrith Local Environmental Plan 2010 Review</td>
+                <td>Penrith</td>
+              </tr>
+            
+              <tr>
+                <td><span class="tag">under_assessment</span></td>
+                <td>Woollahra</td>
+                <td>Planning proposal request for 203-233 New South Head Road, Edgecliff</td>
+                <td>203-233 New South Head Road Edgecliff 2027</td>
+              </tr>
+            
+              <tr>
+                <td><span class="tag">under_assessment</span></td>
+                <td>Penrith</td>
+                <td>Planning Proposal to amend Part 8 Penrith City Centre of Penrith LEP 2010 and associated amendments</td>
+                <td>Penrith</td>
+              </tr>
+            
+              <tr>
+                <td><span class="tag">under_assessment</span></td>
+                <td>Fairfield</td>
+                <td>Rezoning from R2 to RE2 Private Recreation at 55 Cabramatta Road East, Cabramatta (Cabra Bowls Club)</td>
+                <td>55 Cabramatta Road East, Cabramatta & more</td>
+              </tr>
+            
+              <tr>
+                <td><span class="tag">under_assessment</span></td>
+                <td>Fairfield</td>
+                <td>Rezoning of 17-21 Longfield Street Cabramatta from R4 High Density Residential to E4 Gen Industrial</td>
+                <td>17 Longfield Street Cabramatta 2166</td>
+              </tr>
+            
+              <tr>
+                <td><span class="tag">under_assessment</span></td>
+                <td>Fairfield</td>
+                <td>Smithfield RSL Planning Proposal</td>
+                <td>Fairfield</td>
+              </tr>
+            
+              <tr>
+                <td><span class="tag">under_assessment</span></td>
+                <td>Sutherland Shire</td>
+                <td>Sutherland-Kirrawee Planning Proposal</td>
+                <td>Sutherland Shire</td>
+              </tr>
+            
+              <tr>
+                <td><span class="tag">under_assessment</span></td>
+                <td>Sutherland Shire</td>
+                <td>Waterways Planning Proposal</td>
+                <td>Sutherland Shire</td>
+              </tr>
+            
+              <tr>
+                <td><span class="tag">under_assessment</span></td>
+                <td>Woollahra</td>
+                <td>Woollahra Contemporary Buildings Study Review</td>
+                <td>Woollahra</td>
+              </tr>
+            
+              <tr>
+                <td><span class="tag">under_assessment</span></td>
+                <td>Liverpool</td>
+                <td>Amendment to the State Environmental Planning Policy (Precincts - Western Parkland City) 2021</td>
+                <td>495 Fourth Avenue Austral 2179</td>
+              </tr>
+            
+              <tr>
+                <td><span class="tag">under_assessment</span></td>
+                <td>Liverpool</td>
+                <td>Amendment to the State Environmental Planning Policy (Precincts - Western Parkland City) 2021</td>
+                <td>260 Eighth Avenue Austral 2179</td>
+              </tr>
+            
+          </tbody>
+        </table>
+        <div class="footer-note">This dashboard is intentionally council-level and policy-level first. Precinct and site-level mapping should only be pushed after tighter geography matching and constraints integration.</div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const reportData = {"reportTitle":"Sydney Planning And Activity Research Dashboard","reportLede":"Public-data powered view across housing target pressure, planning proposal pipeline, recent development activity and first-pass risk signals for Sydney. This report is generated directly from Supabase views, not from mock sample JSON.","meta":{"totalPlanningProposals":1413,"totalApplicationSignals":45114,"totalPrecinctShortlist":55,"totalConstraints":69},"recentRanking":[{"council_name":"Blacktown","recent_count":4520,"total_count":22667},{"council_name":"The Hills Shire","recent_count":3603,"total_count":19108},{"council_name":"Canterbury-Bankstown","recent_count":3423,"total_count":16201},{"council_name":"Liverpool","recent_count":3320,"total_count":15581},{"council_name":"Inner West","recent_count":2593,"total_count":14322},{"council_name":"Campbelltown","recent_count":2591,"total_count":9986},{"council_name":"Sutherland Shire","recent_count":2476,"total_count":15411},{"council_name":"Penrith","recent_count":2294,"total_count":11330},{"council_name":"Parramatta","recent_count":2253,"total_count":12524},{"council_name":"Cumberland","recent_count":2208,"total_count":10096}],"pipeline":[{"stage":"under_assessment","stage_rank":1,"proposal_count":34},{"stage":"pre_exhibition","stage_rank":2,"proposal_count":34},{"stage":"on_exhibition","stage_rank":3,"proposal_count":12},{"stage":"finalisation","stage_rank":5,"proposal_count":27},{"stage":"made","stage_rank":6,"proposal_count":1164},{"stage":"withdrawn","stage_rank":7,"proposal_count":142}],"scoreboard":[{"council_name":"Woollahra","target_value":null,"application_recent_count":1588,"active_pipeline_count":"11"},{"council_name":"The Hills Shire","target_value":null,"application_recent_count":3603,"active_pipeline_count":"10"},{"council_name":"Sutherland Shire","target_value":null,"application_recent_count":2476,"active_pipeline_count":"9"},{"council_name":"Blacktown","target_value":null,"application_recent_count":4520,"active_pipeline_count":"8"},{"council_name":"Canada Bay","target_value":null,"application_recent_count":1008,"active_pipeline_count":"8"},{"council_name":"Parramatta","target_value":19500,"application_recent_count":2253,"active_pipeline_count":"6"},{"council_name":"Inner West","target_value":7800,"application_recent_count":2593,"active_pipeline_count":"6"},{"council_name":"Strathfield","target_value":3500,"application_recent_count":416,"active_pipeline_count":"6"},{"council_name":"Liverpool","target_value":16700,"application_recent_count":3320,"active_pipeline_count":"5"},{"council_name":"Campbelltown","target_value":10500,"application_recent_count":2591,"active_pipeline_count":"5"},{"council_name":"Penrith","target_value":null,"application_recent_count":2294,"active_pipeline_count":"5"},{"council_name":"Ku-ring-gai","target_value":7600,"application_recent_count":1492,"active_pipeline_count":"4"}],"scatter":[{"council_name":"Parramatta","target_value":19500,"application_recent_count":2253},{"council_name":"Liverpool","target_value":16700,"application_recent_count":3320},{"council_name":"Canterbury-Bankstown","target_value":14500,"application_recent_count":3423},{"council_name":"Ryde","target_value":11600,"application_recent_count":1825},{"council_name":"Campbelltown","target_value":10500,"application_recent_count":2591},{"council_name":"Inner West","target_value":7800,"application_recent_count":2593},{"council_name":"Ku-ring-gai","target_value":7600,"application_recent_count":1492},{"council_name":"North Sydney","target_value":5900,"application_recent_count":889},{"council_name":"Strathfield","target_value":3500,"application_recent_count":416},{"council_name":"Willoughby","target_value":3400,"application_recent_count":1250}],"watchlist":[{"council_name":"The Hills Shire","stage":"under_assessment","title":"Council Operations Centre 183-191 Maguires Road, Gables","location_text":"191 Maguires Road Gables 2765 & more"},{"council_name":"Sutherland Shire","stage":"under_assessment","title":"Cronulla Special Entertainment Precinct","location_text":"Sutherland Shire"},{"council_name":"Woollahra","stage":"under_assessment","title":"Double Bay Centre- Planning Proposal","location_text":"Woollahra"},{"council_name":"Woollahra","stage":"under_assessment","title":"Edgecliff Commercial Centre Planning Proposal","location_text":"Woollahra"},{"council_name":"Woollahra","stage":"under_assessment","title":"Heritage listing of eight sites and one HCA in the area of the Edgecliff Commercial Centre.","location_text":"Woollahra"},{"council_name":"The Hills Shire","stage":"under_assessment","title":"Housekeeping and miscellaneous amendments to The Hills Local Environmental Plan 2019.","location_text":"The Hills Shire"},{"council_name":"Hunters Hill","stage":"under_assessment","title":"LEP Review","location_text":"Hunters Hill"},{"council_name":"Woollahra","stage":"under_assessment","title":"Local Heritage Listing: Woollahra Modern Buildings Priority Study","location_text":"Woollahra"},{"council_name":"Sutherland Shire","stage":"under_assessment","title":"Miranda Planning Proposal","location_text":"Sutherland Shire"},{"council_name":"Penrith","stage":"under_assessment","title":"Penrith Local Environmental Plan 2010 Review","location_text":"Penrith"},{"council_name":"Woollahra","stage":"under_assessment","title":"Planning proposal request for 203-233 New South Head Road, Edgecliff","location_text":"203-233 New South Head Road Edgecliff 2027"},{"council_name":"Penrith","stage":"under_assessment","title":"Planning Proposal to amend Part 8 Penrith City Centre of Penrith LEP 2010 and associated amendments","location_text":"Penrith"},{"council_name":"Fairfield","stage":"under_assessment","title":"Rezoning from R2 to RE2 Private Recreation at 55 Cabramatta Road East, Cabramatta (Cabra Bowls Club)","location_text":"55 Cabramatta Road East, Cabramatta & more"},{"council_name":"Fairfield","stage":"under_assessment","title":"Rezoning of 17-21 Longfield Street Cabramatta from R4 High Density Residential to E4 Gen Industrial","location_text":"17 Longfield Street Cabramatta 2166"},{"council_name":"Fairfield","stage":"under_assessment","title":"Smithfield RSL Planning Proposal","location_text":"Fairfield"},{"council_name":"Sutherland Shire","stage":"under_assessment","title":"Sutherland-Kirrawee Planning Proposal","location_text":"Sutherland Shire"},{"council_name":"Sutherland Shire","stage":"under_assessment","title":"Waterways Planning Proposal","location_text":"Sutherland Shire"},{"council_name":"Woollahra","stage":"under_assessment","title":"Woollahra Contemporary Buildings Study Review","location_text":"Woollahra"},{"council_name":"Liverpool","stage":"under_assessment","title":"Amendment to the State Environmental Planning Policy (Precincts - Western Parkland City) 2021","location_text":"495 Fourth Avenue Austral 2179"},{"council_name":"Liverpool","stage":"under_assessment","title":"Amendment to the State Environmental Planning Policy (Precincts - Western Parkland City) 2021","location_text":"260 Eighth Avenue Austral 2179"}],"precinctShortlist":[{"precinct_name":"Gladesville","council_name":"Hunters Hill","opportunity_rating":"A","friction_score":0,"recent_application_count":"217","active_pipeline_count":"2","constraint_summary":null},{"precinct_name":"Five Dock","council_name":"Canada Bay","opportunity_rating":"A","friction_score":0,"recent_application_count":"113","active_pipeline_count":"2","constraint_summary":null},{"precinct_name":"Edgecliff","council_name":"Woollahra","opportunity_rating":"A","friction_score":1,"recent_application_count":"70","active_pipeline_count":"5","constraint_summary":"flood_metadata_signal (medium)"},{"precinct_name":"Cabramatta","council_name":"Fairfield","opportunity_rating":"A","friction_score":2,"recent_application_count":"257","active_pipeline_count":"2","constraint_summary":"flood_metadata_signal (high)"},{"precinct_name":"Seven Hills","council_name":"Blacktown","opportunity_rating":"B","friction_score":0,"recent_application_count":"282","active_pipeline_count":"1","constraint_summary":null},{"precinct_name":"Bexley","council_name":"Bayside","opportunity_rating":"B","friction_score":0,"recent_application_count":"201","active_pipeline_count":"1","constraint_summary":null},{"precinct_name":"Gables","council_name":"The Hills Shire","opportunity_rating":"B","friction_score":0,"recent_application_count":"0","active_pipeline_count":"0","constraint_summary":null},{"precinct_name":"Cronulla","council_name":"Sutherland Shire","opportunity_rating":"B","friction_score":0,"recent_application_count":"0","active_pipeline_count":"0","constraint_summary":null},{"precinct_name":"Drummoyne","council_name":"Canada Bay","opportunity_rating":"B","friction_score":0,"recent_application_count":"0","active_pipeline_count":"0","constraint_summary":null},{"precinct_name":"Croydon","council_name":"Burwood","opportunity_rating":"B","friction_score":1,"recent_application_count":"192","active_pipeline_count":"1","constraint_summary":"flood_metadata_signal (medium)"},{"precinct_name":"Double Bay","council_name":"Woollahra","opportunity_rating":"B","friction_score":1,"recent_application_count":"182","active_pipeline_count":"1","constraint_summary":"flood_metadata_signal (medium)"},{"precinct_name":"Beverly Hills","council_name":"Georges River","opportunity_rating":"B","friction_score":1,"recent_application_count":"64","active_pipeline_count":"1","constraint_summary":"flood_metadata_signal (medium)"}],"constrainedPrecincts":[{"precinct_name":"Bankstown","council_name":"Canterbury-Bankstown","friction_score":5,"constraint_summary":"flood_metadata_signal (high), heat_vulnerability_proxy (high), low_tree_canopy_proxy (high), policy_withdrawal_friction (medium)","recent_application_count":"238","active_pipeline_count":"1"},{"precinct_name":"Ingleburn","council_name":"Campbelltown","friction_score":5,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high), low_tree_canopy_proxy (high), heat_vulnerability_proxy (medium)","recent_application_count":"230","active_pipeline_count":"0"},{"precinct_name":"Liverpool","council_name":"Liverpool","friction_score":5,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high), heat_vulnerability_proxy (high), low_tree_canopy_proxy (high), policy_withdrawal_friction (medium)","recent_application_count":"220","active_pipeline_count":"2"},{"precinct_name":"Campbelltown","council_name":"Campbelltown","friction_score":5,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high), low_tree_canopy_proxy (high), heat_vulnerability_proxy (medium)","recent_application_count":"219","active_pipeline_count":"5"},{"precinct_name":"Glenfield","council_name":"Campbelltown","friction_score":5,"constraint_summary":"bushfire_spatial_sample (high), low_tree_canopy_proxy (high), flood_metadata_signal (medium), heat_vulnerability_proxy (medium)","recent_application_count":"72","active_pipeline_count":"0"},{"precinct_name":"Chatswood","council_name":"Willoughby","friction_score":4,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","recent_application_count":"505","active_pipeline_count":"2"},{"precinct_name":"Penrith","council_name":"Penrith","friction_score":4,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","recent_application_count":"351","active_pipeline_count":"4"},{"precinct_name":"Tallawong","council_name":"Blacktown","friction_score":4,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","recent_application_count":"209","active_pipeline_count":"1"},{"precinct_name":"Homebush","council_name":"Strathfield","friction_score":4,"constraint_summary":"flood_metadata_signal (high), low_tree_canopy_proxy (high)","recent_application_count":"121","active_pipeline_count":"0"},{"precinct_name":"Lakemba","council_name":"Canterbury-Bankstown","friction_score":4,"constraint_summary":"heat_vulnerability_proxy (high), low_tree_canopy_proxy (high)","recent_application_count":"91","active_pipeline_count":"0"},{"precinct_name":"Gordon","council_name":"Ku-ring-gai","friction_score":4,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","recent_application_count":"70","active_pipeline_count":"0"},{"precinct_name":"Marrickville","council_name":"Inner West","friction_score":3,"constraint_summary":"flood_metadata_signal (high), low_tree_canopy_proxy (medium)","recent_application_count":"360","active_pipeline_count":"2"}],"precinctMapPoints":[{"precinct_name":"Gladesville","council_name":"Hunters Hill","opportunity_rating":"A","friction_score":0,"recent_application_count":"217","active_pipeline_count":"2","constraint_summary":null,"centroid_latitude":"-33.8274841269585253","centroid_longitude":"151.1265236048387097","point_count":"217"},{"precinct_name":"Five Dock","council_name":"Canada Bay","opportunity_rating":"A","friction_score":0,"recent_application_count":"113","active_pipeline_count":"2","constraint_summary":null,"centroid_latitude":"-33.8675747997345133","centroid_longitude":"151.1296528907079646","point_count":"113"},{"precinct_name":"Edgecliff","council_name":"Woollahra","opportunity_rating":"A","friction_score":1,"recent_application_count":"70","active_pipeline_count":"5","constraint_summary":"flood_metadata_signal (medium)","centroid_latitude":"-33.8827960638571429","centroid_longitude":"151.2413622368571429","point_count":"70"},{"precinct_name":"Cabramatta","council_name":"Fairfield","opportunity_rating":"A","friction_score":2,"recent_application_count":"257","active_pipeline_count":"2","constraint_summary":"flood_metadata_signal (high)","centroid_latitude":"-33.8960396852509653","centroid_longitude":"150.9270598767181467","point_count":"259"},{"precinct_name":"Seven Hills","council_name":"Blacktown","opportunity_rating":"B","friction_score":0,"recent_application_count":"282","active_pipeline_count":"1","constraint_summary":null,"centroid_latitude":"-33.7774879715901060","centroid_longitude":"150.9361147720848057","point_count":"283"},{"precinct_name":"Bexley","council_name":"Bayside","opportunity_rating":"B","friction_score":0,"recent_application_count":"201","active_pipeline_count":"1","constraint_summary":null,"centroid_latitude":"-33.9503348975124378","centroid_longitude":"151.1198103021890547","point_count":"201"},{"precinct_name":"Croydon","council_name":"Burwood","opportunity_rating":"B","friction_score":1,"recent_application_count":"192","active_pipeline_count":"1","constraint_summary":"flood_metadata_signal (medium)","centroid_latitude":"-33.8856375649484536","centroid_longitude":"151.1113052901030928","point_count":"194"},{"precinct_name":"Double Bay","council_name":"Woollahra","opportunity_rating":"B","friction_score":1,"recent_application_count":"182","active_pipeline_count":"1","constraint_summary":"flood_metadata_signal (medium)","centroid_latitude":"-33.8778028165384615","centroid_longitude":"151.2431965708791209","point_count":"182"},{"precinct_name":"Beverly Hills","council_name":"Georges River","opportunity_rating":"B","friction_score":1,"recent_application_count":"64","active_pipeline_count":"1","constraint_summary":"flood_metadata_signal (medium)","centroid_latitude":"-33.9504289510769231","centroid_longitude":"151.0803887589230769","point_count":"65"},{"precinct_name":"Hurstville","council_name":"Georges River","opportunity_rating":"B","friction_score":2,"recent_application_count":"280","active_pipeline_count":"0","constraint_summary":"flood_metadata_signal (high)","centroid_latitude":"-33.9657358717894737","centroid_longitude":"151.1009866880350877","point_count":"285"},{"precinct_name":"Auburn","council_name":"Cumberland","opportunity_rating":"B","friction_score":2,"recent_application_count":"260","active_pipeline_count":"0","constraint_summary":"flood_metadata_signal (high)","centroid_latitude":"-33.8548068481118881","centroid_longitude":"151.0280451683566434","point_count":"286"},{"precinct_name":"Epping","council_name":"Ryde","opportunity_rating":"B","friction_score":2,"recent_application_count":"250","active_pipeline_count":"0","constraint_summary":"flood_metadata_signal (high)","centroid_latitude":"-33.7734922172800000","centroid_longitude":"151.0779356395600000","point_count":"250"},{"precinct_name":"Miranda","council_name":"Sutherland Shire","opportunity_rating":"B","friction_score":2,"recent_application_count":"223","active_pipeline_count":"2","constraint_summary":"flood_metadata_signal (high)","centroid_latitude":"-34.0335024996929825","centroid_longitude":"151.1031507676315789","point_count":"228"},{"precinct_name":"Smithfield","council_name":"Fairfield","opportunity_rating":"B","friction_score":2,"recent_application_count":"219","active_pipeline_count":"1","constraint_summary":"flood_metadata_signal (high)","centroid_latitude":"-33.8559086608849558","centroid_longitude":"150.9316968360619469","point_count":"226"},{"precinct_name":"St Marys","council_name":"Penrith","opportunity_rating":"B","friction_score":2,"recent_application_count":"204","active_pipeline_count":"1","constraint_summary":"flood_metadata_signal (high)","centroid_latitude":"-33.7637150549553571","centroid_longitude":"150.7767172015625000","point_count":"224"},{"precinct_name":"Lindfield","council_name":"Ku-ring-gai","opportunity_rating":"B","friction_score":2,"recent_application_count":"196","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high)","centroid_latitude":"-33.7762870670192308","centroid_longitude":"151.1693499056730769","point_count":"208"},{"precinct_name":"West Ryde","council_name":"Ryde","opportunity_rating":"B","friction_score":2,"recent_application_count":"148","active_pipeline_count":"0","constraint_summary":"flood_metadata_signal (high)","centroid_latitude":"-33.8065470767567568","centroid_longitude":"151.0848140396621622","point_count":"148"},{"precinct_name":"Mount Druitt","council_name":"Blacktown","opportunity_rating":"B","friction_score":2,"recent_application_count":"147","active_pipeline_count":"1","constraint_summary":"bushfire_spatial_sample (high)","centroid_latitude":"-33.7696041993877551","centroid_longitude":"150.8171846868707483","point_count":"147"},{"precinct_name":"Kogarah","council_name":"Georges River","opportunity_rating":"B","friction_score":2,"recent_application_count":"99","active_pipeline_count":"0","constraint_summary":"flood_metadata_signal (high)","centroid_latitude":"-33.9706239379047619","centroid_longitude":"151.1323866312380952","point_count":"105"},{"precinct_name":"Riverwood","council_name":"Georges River","opportunity_rating":"B","friction_score":2,"recent_application_count":"63","active_pipeline_count":"0","constraint_summary":"flood_metadata_signal (high)","centroid_latitude":"-33.9492357373437500","centroid_longitude":"151.0543995148437500","point_count":"64"},{"precinct_name":"Westmead","council_name":"Parramatta","opportunity_rating":"B","friction_score":2,"recent_application_count":"51","active_pipeline_count":"2","constraint_summary":"flood_metadata_signal (high)","centroid_latitude":"-33.8133223050980392","centroid_longitude":"150.9852274609803922","point_count":"51"},{"precinct_name":"St Leonards","council_name":"North Sydney","opportunity_rating":"B","friction_score":2,"recent_application_count":"50","active_pipeline_count":"0","constraint_summary":"flood_metadata_signal (high)","centroid_latitude":"-33.8223096348214286","centroid_longitude":"151.1941564230357143","point_count":"56"},{"precinct_name":"Marrickville","council_name":"Inner West","opportunity_rating":"B","friction_score":3,"recent_application_count":"360","active_pipeline_count":"2","constraint_summary":"flood_metadata_signal (high), low_tree_canopy_proxy (medium)","centroid_latitude":"-33.9094285279889807","centroid_longitude":"151.1571289073553719","point_count":"363"},{"precinct_name":"Marsden Park","council_name":"Blacktown","opportunity_rating":"B","friction_score":3,"recent_application_count":"327","active_pipeline_count":"2","constraint_summary":"flood_metadata_signal (high), bushfire_spatial_sample (medium)","centroid_latitude":"-33.7049968811048159","centroid_longitude":"150.8235952484135977","point_count":"353"},{"precinct_name":"Macquarie Park","council_name":"Ryde","opportunity_rating":"B","friction_score":3,"recent_application_count":"215","active_pipeline_count":"0","constraint_summary":"flood_metadata_signal (high), bushfire_spatial_sample (medium)","centroid_latitude":"-33.7715908014418605","centroid_longitude":"151.1056868557674419","point_count":"215"},{"precinct_name":"Ashfield","council_name":"Inner West","opportunity_rating":"B","friction_score":3,"recent_application_count":"162","active_pipeline_count":"0","constraint_summary":"flood_metadata_signal (high), low_tree_canopy_proxy (medium)","centroid_latitude":"-33.8900963479166667","centroid_longitude":"151.1259538014880952","point_count":"168"},{"precinct_name":"Norwest","council_name":"The Hills Shire","opportunity_rating":"B","friction_score":3,"recent_application_count":"105","active_pipeline_count":"2","constraint_summary":"flood_metadata_signal (high), biodiversity_spatial_sample (medium)","centroid_latitude":"-33.7313012613636364","centroid_longitude":"150.9654155420000000","point_count":"110"},{"precinct_name":"Petersham","council_name":"Inner West","opportunity_rating":"B","friction_score":3,"recent_application_count":"105","active_pipeline_count":"0","constraint_summary":"flood_metadata_signal (high), low_tree_canopy_proxy (medium)","centroid_latitude":"-33.8941358458095238","centroid_longitude":"151.1551861280000000","point_count":"105"},{"precinct_name":"Schofields","council_name":"Blacktown","opportunity_rating":"B","friction_score":3,"recent_application_count":"103","active_pipeline_count":"1","constraint_summary":"flood_metadata_signal (high), bushfire_spatial_sample (medium)","centroid_latitude":"-33.7012738932758621","centroid_longitude":"150.8791524837931034","point_count":"116"},{"precinct_name":"Chatswood","council_name":"Willoughby","opportunity_rating":"B","friction_score":4,"recent_application_count":"505","active_pipeline_count":"2","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","centroid_latitude":"-33.7867827537425743","centroid_longitude":"151.1770543853267327","point_count":"505"},{"precinct_name":"Penrith","council_name":"Penrith","opportunity_rating":"B","friction_score":4,"recent_application_count":"351","active_pipeline_count":"4","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","centroid_latitude":"-33.7559248969565217","centroid_longitude":"150.6981404843989770","point_count":"391"},{"precinct_name":"Sandringham","council_name":"Bayside","opportunity_rating":"C","friction_score":0,"recent_application_count":"18","active_pipeline_count":"1","constraint_summary":null,"centroid_latitude":"-33.9985359694444444","centroid_longitude":"151.1393934222222222","point_count":"18"},{"precinct_name":"Victoria Cross","council_name":"North Sydney","opportunity_rating":"C","friction_score":0,"recent_application_count":"0","active_pipeline_count":"0","constraint_summary":null,"centroid_latitude":"-33.8403961250000000","centroid_longitude":"151.2068376250000000","point_count":"8"},{"precinct_name":"Meadowbank","council_name":"Ryde","opportunity_rating":"C","friction_score":2,"recent_application_count":"14","active_pipeline_count":"0","constraint_summary":"flood_metadata_signal (high)","centroid_latitude":"-33.8170541514285714","centroid_longitude":"151.0911430292857143","point_count":"14"},{"precinct_name":"Macarthur","council_name":"Campbelltown","opportunity_rating":"C","friction_score":3,"recent_application_count":"1","active_pipeline_count":"0","constraint_summary":"low_tree_canopy_proxy (high), heat_vulnerability_proxy (medium)","centroid_latitude":"-34.0610204500000000","centroid_longitude":"150.8473301200000000","point_count":"1"},{"precinct_name":"Tallawong","council_name":"Blacktown","opportunity_rating":"C","friction_score":4,"recent_application_count":"209","active_pipeline_count":"1","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","centroid_latitude":"-33.6871565600000000","centroid_longitude":"150.8882002619718310","point_count":"213"},{"precinct_name":"Homebush","council_name":"Strathfield","opportunity_rating":"C","friction_score":4,"recent_application_count":"121","active_pipeline_count":"0","constraint_summary":"flood_metadata_signal (high), low_tree_canopy_proxy (high)","centroid_latitude":"-33.8659875704285714","centroid_longitude":"151.0805971047142857","point_count":"140"},{"precinct_name":"Lakemba","council_name":"Canterbury-Bankstown","opportunity_rating":"C","friction_score":4,"recent_application_count":"91","active_pipeline_count":"0","constraint_summary":"heat_vulnerability_proxy (high), low_tree_canopy_proxy (high)","centroid_latitude":"-33.9184058242857143","centroid_longitude":"151.0774122370329670","point_count":"91"},{"precinct_name":"Gordon","council_name":"Ku-ring-gai","opportunity_rating":"C","friction_score":4,"recent_application_count":"70","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","centroid_latitude":"-33.7548090059036145","centroid_longitude":"151.1522618900000000","point_count":"83"},{"precinct_name":"Bankstown","council_name":"Canterbury-Bankstown","opportunity_rating":"C","friction_score":5,"recent_application_count":"238","active_pipeline_count":"1","constraint_summary":"flood_metadata_signal (high), heat_vulnerability_proxy (high), low_tree_canopy_proxy (high), policy_withdrawal_friction (medium)","centroid_latitude":"-33.9173254557198444","centroid_longitude":"151.0317208957587549","point_count":"257"},{"precinct_name":"Ingleburn","council_name":"Campbelltown","opportunity_rating":"C","friction_score":5,"recent_application_count":"230","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high), low_tree_canopy_proxy (high), heat_vulnerability_proxy (medium)","centroid_latitude":"-34.0056108937768240","centroid_longitude":"150.8701957357939914","point_count":"233"},{"precinct_name":"Liverpool","council_name":"Liverpool","opportunity_rating":"C","friction_score":5,"recent_application_count":"220","active_pipeline_count":"2","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high), heat_vulnerability_proxy (high), low_tree_canopy_proxy (high), policy_withdrawal_friction (medium)","centroid_latitude":"-33.9224759740909091","centroid_longitude":"150.9159780990909091","point_count":"220"},{"precinct_name":"Campbelltown","council_name":"Campbelltown","opportunity_rating":"C","friction_score":5,"recent_application_count":"219","active_pipeline_count":"5","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high), low_tree_canopy_proxy (high), heat_vulnerability_proxy (medium)","centroid_latitude":"-34.0641828139301310","centroid_longitude":"150.8125463731877729","point_count":"229"},{"precinct_name":"Glenfield","council_name":"Campbelltown","opportunity_rating":"C","friction_score":5,"recent_application_count":"72","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high), low_tree_canopy_proxy (high), flood_metadata_signal (medium), heat_vulnerability_proxy (medium)","centroid_latitude":"-33.9732907526027397","centroid_longitude":"150.8983596321917808","point_count":"73"}]};
+    const storageKey = 'radarestate-theme';
+    const currentTheme = document.documentElement.dataset.theme || 'dark';
+    const themeButtons = [...document.querySelectorAll('[data-theme-option]')];
+
+    const cssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    const axisColor = cssVar('--muted');
+    const gridColor = cssVar('--grid');
+
+    themeButtons.forEach((button) => {
+      const theme = button.dataset.themeOption;
+      button.setAttribute('aria-pressed', theme === currentTheme ? 'true' : 'false');
+      button.addEventListener('click', () => {
+        if (theme === currentTheme) return;
+        try {
+          window.localStorage.setItem(storageKey, theme);
+        } catch {
+        }
+        document.documentElement.dataset.theme = theme;
+        window.location.reload();
+      });
+    });
+
+    const ratingColor = (rating, friction) => {
+      if ((friction || 0) >= 5) return '#ff6b6b';
+      if (rating === 'A') return '#b7ff3c';
+      if (rating === 'B') return '#33d1ff';
+      return '#ffb547';
+    };
+
+    const precinctMap = L.map('precinctMap', { zoomControl: true, scrollWheelZoom: false });
+    const tileUrl = currentTheme === 'light'
+      ? 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+      : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+    L.tileLayer(tileUrl, {
+      attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(precinctMap);
+
+    const mapPoints = reportData.precinctMapPoints
+      .filter((row) => row.centroid_latitude !== null && row.centroid_longitude !== null)
+      .map((row) => {
+        const recent = Number(row.recent_application_count || 0);
+        const radius = Math.max(7, Math.min(22, 7 + Math.sqrt(recent) * 0.55));
+        const color = ratingColor(row.opportunity_rating, Number(row.friction_score || 0));
+        const marker = L.circleMarker([Number(row.centroid_latitude), Number(row.centroid_longitude)], {
+          radius,
+          color,
+          weight: 1,
+          fillColor: color,
+          fillOpacity: 0.75
+        });
+        marker.bindPopup(
+          '<div class="map-popup">' +
+            '<strong>' + row.precinct_name + '</strong>' +
+            'Council: ' + (row.council_name || '-') + '<br>' +
+            'Rating: ' + row.opportunity_rating + '<br>' +
+            'Recent apps: ' + recent + '<br>' +
+            'Active pipeline: ' + Number(row.active_pipeline_count || 0) + '<br>' +
+            'Risk score: ' + Number(row.friction_score || 0) + '<br>' +
+            'Constraints: ' + (row.constraint_summary || 'None') +
+          '</div>'
+        );
+        return marker;
+      });
+
+    const precinctLayer = L.featureGroup(mapPoints).addTo(precinctMap);
+    if (mapPoints.length) {
+      precinctMap.fitBounds(precinctLayer.getBounds().pad(0.12));
+    } else {
+      precinctMap.setView([-33.87, 151.05], 10);
+    }
+
+    Chart.defaults.color = axisColor;
+    Chart.defaults.borderColor = gridColor;
+    Chart.defaults.font.family = 'Inter, Arial, sans-serif';
+
+    new Chart(document.getElementById('recentActivityChart'), {
+      type: 'bar',
+      data: {
+        labels: reportData.recentRanking.map((row) => row.council_name),
+        datasets: [{
+          label: 'Recent Applications',
+          data: reportData.recentRanking.map((row) => Number(row.recent_count || 0)),
+          backgroundColor: '#33d1ff',
+          borderRadius: 8
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { maxRotation: 45, minRotation: 45 } },
+          y: { beginAtZero: true }
+        }
+      }
+    });
+
+    new Chart(document.getElementById('pipelineChart'), {
+      type: 'bar',
+      data: {
+        labels: reportData.pipeline.map((row) => row.stage),
+        datasets: [{
+          label: 'Proposal Count',
+          data: reportData.pipeline.map((row) => Number(row.proposal_count || 0)),
+          backgroundColor: ['#33d1ff', '#7dd3fc', '#b7ff3c', '#ffb547', '#ff5daa', '#ff6b6b'],
+          borderRadius: 8
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+
+    new Chart(document.getElementById('scatterChart'), {
+      type: 'scatter',
+      data: {
+        datasets: [{
+          label: 'Councils',
+          data: reportData.scatter
+            .filter((row) => row.target_value !== null && row.application_recent_count !== null)
+            .map((row) => ({
+              x: Number(row.target_value),
+              y: Number(row.application_recent_count),
+              label: row.council_name
+            })),
+          backgroundColor: '#b7ff3c',
+          pointRadius: 6,
+          pointHoverRadius: 8
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label(context) {
+                const label = context.raw.label ? context.raw.label + ': ' : '';
+                return label + 'target ' + context.raw.x + ', recent ' + context.raw.y;
+              }
+            }
+          }
+        },
+        scales: {
+          x: { title: { display: true, text: '5-year target' } },
+          y: { title: { display: true, text: 'Recent applications' }, beginAtZero: true }
+        }
+      }
+    });
+
+    new Chart(document.getElementById('precinctChart'), {
+      type: 'bar',
+      data: {
+        labels: reportData.precinctShortlist.map((row) => row.precinct_name),
+        datasets: [{
+          label: 'Recent Applications',
+          data: reportData.precinctShortlist.map((row) => Number(row.recent_application_count || 0)),
+          backgroundColor: reportData.precinctShortlist.map((row) => row.opportunity_rating === 'A' ? '#b7ff3c' : row.opportunity_rating === 'B' ? '#33d1ff' : '#ffb547'),
+          borderRadius: 8
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { maxRotation: 45, minRotation: 45 } },
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

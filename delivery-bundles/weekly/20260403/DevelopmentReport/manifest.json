@@ -1,6 +1,10 @@
 {
-  "generated_at": "2026-04-03T08:56:23.445Z",
+  "generated_at": "2026-04-03T10:14:36.991Z",
   "report_type": "DevelopmentReport",
-  "status": "standard-universe",
-  "notes": "Standard hotspot-universe report included. No additional site-level development feasibility reports bundled by default."
+  "notes": "Same structure as RadarReport, with added development-oriented hard-information content.",
+  "contents": [
+    "client-output/",
+    "dashboard/",
+    "reports/"
+  ]
 }

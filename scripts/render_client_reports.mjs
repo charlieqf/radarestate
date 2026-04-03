@@ -246,6 +246,7 @@ function pageTemplate({ title, bodyHtml, nav, currentHref, articleClass = 'artic
       background: radial-gradient(circle at top left, var(--bg-accent) 0, var(--bg) 45%);
       color: var(--text);
       font-family: Inter, Arial, sans-serif;
+      overflow-x: hidden;
     }
     .sidebar-toggle {
       position: fixed;
@@ -316,12 +317,12 @@ function pageTemplate({ title, bodyHtml, nav, currentHref, articleClass = 'artic
     }
     .shell {
       display: grid;
-      grid-template-columns: 300px 1fr;
+      grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
       min-height: 100vh;
       transition: grid-template-columns 180ms ease;
     }
     html[data-sidebar="collapsed"] .shell {
-      grid-template-columns: 0 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
     .sidebar {
       padding: 24px 18px;
@@ -334,10 +335,18 @@ function pageTemplate({ title, bodyHtml, nav, currentHref, articleClass = 'artic
       overscroll-behavior: contain;
       scrollbar-width: thin;
       min-width: 0;
+      width: 300px;
+      max-width: 300px;
       transition: opacity 150ms ease, transform 180ms ease;
     }
     html[data-sidebar="collapsed"] .sidebar {
-      display: none;
+      position: fixed;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-110%);
+      display: block;
     }
     .brand {
       margin-bottom: 22px;
@@ -420,8 +429,13 @@ function pageTemplate({ title, bodyHtml, nav, currentHref, articleClass = 'artic
       color: var(--muted);
       font-size: 12px;
     }
-    .main { padding: 88px 28px 28px; }
+    .main {
+      padding: 88px 28px 28px;
+      min-width: 0;
+      width: 100%;
+    }
     .article {
+      width: 100%;
       max-width: 920px;
       margin: 0 auto;
       background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
@@ -431,6 +445,7 @@ function pageTemplate({ title, bodyHtml, nav, currentHref, articleClass = 'artic
       box-shadow: 0 16px 40px var(--shadow);
     }
     .article.article-wide {
+      width: 100%;
       max-width: 1320px;
     }
     .article h1, .article h2, .article h3 {

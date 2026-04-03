@@ -1,10 +1,10 @@
 RadarEstate Delivery Bundle
 
-Generated: 2026-04-03T08:56:23.445Z
+Generated: 2026-04-03T10:14:36.991Z
 Week folder: 20260403
 
 Structure:
 - RadarReport/: current weekly radar, watchlist, dashboards and client portal
-- DevelopmentReport/: separately priced AI-generated site-level feasibility layer
+- DevelopmentReport/: same structure as RadarReport, with added development-oriented hard-information content
 
 Open index.html from this folder to start.

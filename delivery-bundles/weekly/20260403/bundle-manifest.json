@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-03T08:56:23.445Z",
+  "generated_at": "2026-04-03T10:14:36.991Z",
   "bundle_date": "20260403",
   "contents": {
     "RadarReport": [
@@ -11,10 +11,9 @@
     ],
     "DevelopmentReport": [
       "index.html",
-      "overview.html",
-      "overview.md",
-      "README.txt",
-      "sites/",
+      "client-output/",
+      "dashboard/",
+      "reports/",
       "manifest.json"
     ]
   }

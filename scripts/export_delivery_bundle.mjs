@@ -83,7 +83,7 @@ function rootIndexHtml(title, generatedAt) {
   <div class="card">
     <div class="eyebrow">RadarEstate</div>
     <h1>${title}</h1>
-    <p>This folder is structured as a formal client delivery package. Open the Radar report for the current intelligence layer, or the Development report folder for the separately priced site-level feasibility layer.</p>
+    <p>This folder is structured as a formal client delivery package. Both report folders now share the same top-level structure and navigation model.</p>
     <div class="actions">
       <a class="action" href="RadarReport/index.html">Open RadarReport</a>
       <a class="action" href="DevelopmentReport/index.html">Open DevelopmentReport</a>
@@ -112,7 +112,7 @@ function radarIndexHtml(generatedAt) {
 <body>
   <div class="card">
     <h1>RadarReport</h1>
-    <p>This is the weekly radar and watchlist package. It includes the client portal, dashboards, radar reports, insights, and active deep dives.</p>
+    <p>This is the weekly radar and watchlist package. It includes the client portal, dashboards, reports, insights and active deep dives.</p>
     <ul>
       <li><a href="client-output/index.html">Open Client Portal</a></li>
       <li><a href="dashboard/latest-report.html">Open Main Dashboard</a></li>
@@ -137,38 +137,22 @@ function developmentIndexHtml(generatedAt) {
     h1 { margin-top: 0; }
     p, li { color: #92a0c4; line-height: 1.7; }
     a { color: #7dd3fc; }
-    code { background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 6px; }
   </style>
 </head>
 <body>
   <div class="card">
     <h1>DevelopmentReport</h1>
-    <p>This folder is reserved for separately priced, AI-generated development reports. The standard mode tracks a fixed hotspot universe every week, and later versions can add client-tailored site universes.</p>
+    <p>This is the development-oriented layer. It uses the same bundle structure as RadarReport, but includes additional hard-information content inside the same portal, dashboard and reports folders.</p>
     <ul>
-      <li><a href="overview.html">Open Standard Universe Report</a></li>
+      <li><a href="client-output/index.html">Open Development Client Portal</a></li>
+      <li><a href="client-output/development-report-standard-universe.html">Open Main Development Report</a></li>
+      <li><a href="dashboard/latest-report.html">Open Main Dashboard</a></li>
+      <li><a href="dashboard/hero-visual-pack.html">Open Hero Visual Pack</a></li>
     </ul>
-    <p>If no additional site-level reports were generated this week, check <code>README.txt</code> in this folder.</p>
     <p>Generated: ${generatedAt}</p>
   </div>
 </body>
 </html>`
-}
-
-function developmentReadme(generatedAt) {
-  return [
-    'DevelopmentReport',
-    '',
-    `Generated: ${generatedAt}`,
-    '',
-    'This folder is reserved for separately priced AI-generated development reports.',
-    'Current status: the standard weekly hotspot-universe report is included, and no additional site-level reports were generated in this bundle.',
-    '',
-    'Included by default:',
-    '- overview.html / overview.md : standard hotspot-universe report',
-    '',
-    'When available, future site-specific outputs should be placed under:',
-    'sites/<site-slug>/'
-  ].join('\n')
 }
 
 function rootReadme(generatedAt, dateSlug) {
@@ -180,7 +164,7 @@ function rootReadme(generatedAt, dateSlug) {
     '',
     'Structure:',
     '- RadarReport/: current weekly radar, watchlist, dashboards and client portal',
-    '- DevelopmentReport/: separately priced AI-generated site-level feasibility layer',
+    '- DevelopmentReport/: same structure as RadarReport, with added development-oriented hard-information content',
     '',
     'Open index.html from this folder to start.'
   ].join('\n')
@@ -200,29 +184,20 @@ function bundleManifest(generatedAt, dateSlug) {
       ],
       DevelopmentReport: [
         'index.html',
-        'overview.html',
-        'overview.md',
-        'README.txt',
-        'sites/',
+        'client-output/',
+        'dashboard/',
+        'reports/',
         'manifest.json'
       ]
     }
   }
 }
 
-function developmentManifest(generatedAt) {
+function reportManifest(reportType, generatedAt, notes) {
   return {
     generated_at: generatedAt,
-    report_type: 'DevelopmentReport',
-    status: 'standard-universe',
-    notes: 'Standard hotspot-universe report included. No additional site-level development feasibility reports bundled by default.'
-  }
-}
-
-function radarManifest(generatedAt) {
-  return {
-    generated_at: generatedAt,
-    report_type: 'RadarReport',
+    report_type: reportType,
+    notes,
     contents: [
       'client-output/',
       'dashboard/',
@@ -250,27 +225,19 @@ function populateBundle(baseDir, generatedAt, dateSlug) {
   copyDir(path.join(root, 'dashboard'), path.join(paths.radar, 'dashboard'))
   copyDir(path.join(root, 'reports'), path.join(paths.radar, 'reports'))
 
-  const developmentMarkdown = path.join(root, 'reports', 'development-report-standard-universe.md')
-  const developmentHtml = path.join(root, 'client-output', 'development-report-standard-universe.html')
-  if (fs.existsSync(developmentMarkdown)) {
-    writeFile(path.join(paths.development, 'overview.md'), fs.readFileSync(developmentMarkdown, 'utf8'))
-  }
-  if (fs.existsSync(developmentHtml)) {
-    writeFile(path.join(paths.development, 'overview.html'), fs.readFileSync(developmentHtml, 'utf8'))
-  }
-
-  ensureDir(path.join(paths.development, 'sites'))
+  copyDir(path.join(root, 'client-output'), path.join(paths.development, 'client-output'))
+  copyDir(path.join(root, 'dashboard'), path.join(paths.development, 'dashboard'))
+  copyDir(path.join(root, 'reports'), path.join(paths.development, 'reports'))
 
   writeFile(path.join(paths.root, 'index.html'), rootIndexHtml('RadarEstate Delivery Bundle', generatedAt))
   writeFile(path.join(paths.root, 'README.txt'), rootReadme(generatedAt, dateSlug))
   writeFile(path.join(paths.root, 'bundle-manifest.json'), JSON.stringify(bundleManifest(generatedAt, dateSlug), null, 2))
 
   writeFile(path.join(paths.radar, 'index.html'), radarIndexHtml(generatedAt))
-  writeFile(path.join(paths.radar, 'manifest.json'), JSON.stringify(radarManifest(generatedAt), null, 2))
+  writeFile(path.join(paths.radar, 'manifest.json'), JSON.stringify(reportManifest('RadarReport', generatedAt, 'Weekly radar, watchlist and supporting visual/report outputs.'), null, 2))
 
   writeFile(path.join(paths.development, 'index.html'), developmentIndexHtml(generatedAt))
-  writeFile(path.join(paths.development, 'README.txt'), developmentReadme(generatedAt))
-  writeFile(path.join(paths.development, 'manifest.json'), JSON.stringify(developmentManifest(generatedAt), null, 2))
+  writeFile(path.join(paths.development, 'manifest.json'), JSON.stringify(reportManifest('DevelopmentReport', generatedAt, 'Same structure as RadarReport, with added development-oriented hard-information content.'), null, 2))
 }
 
 async function main() {
