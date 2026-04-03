@@ -103,25 +103,25 @@ function buildHeadline(topA, constrained, shortlist) {
   const risked = pickTopNames(constrained, 'precinct_name', 2)
 
   if (leaders.length && risked.length) {
-    return `${leaders.join('、')} 目前仍是最值得优先看的 precinct，而 ${risked.join('、')} 在 flood / bushfire / friction 叠加后应下调为高风险观察。`
+    return `${leaders.join(', ')} currently screen as the strongest priority precincts, while ${risked.join(', ')} should be downgraded to a high-risk watchlist because flood, bushfire and friction signals are now stacking together.`
   }
   if (leaders.length) {
-    return `${leaders.join('、')} 当前领跑本期 shortlist，属于政策与 activity 同时成立的重点 precinct。`
+    return `${leaders.join(', ')} currently lead the shortlist, with policy and activity both showing enough strength to justify immediate attention.`
   }
-  return '当前最值得看的不是单一 suburb 热度，而是同时具备 policy momentum、recent activity 和较低 friction 的 precinct。'
+  return 'The strongest places to watch are no longer just the loudest suburbs, but the precincts where policy momentum, recent activity and manageable friction line up together.'
 }
 
 function buildExecutiveSummary(topA, constrained, councilRanking, pipeline, constraintRows, shortlist) {
   const bullets = []
 
   if (topA.length || shortlist.length) {
-    const names = pickTopNames(topA.length ? topA : shortlist, 'precinct_name', 3).join('、')
-    bullets.push(`${names} 目前构成首批高优先级 precinct，特点是 active pipeline 和 recent applications 能同时成立，且 friction 仍可控。`)
+    const names = pickTopNames(topA.length ? topA : shortlist, 'precinct_name', 3).join(', ')
+    bullets.push(`${names} currently form the first priority tier because active pipeline and recent applications are both visible while friction is still manageable.`)
   }
 
   if (councilRanking.length) {
-    const names = pickTopNames(councilRanking, 'council_name', 3).join('、')
-    bullets.push(`${names} 仍是 council-level activity 最强的一组，适合继续向 precinct 和 street-level 深挖。`)
+    const names = pickTopNames(councilRanking, 'council_name', 3).join(', ')
+    bullets.push(`${names} remain the strongest council-level activity cluster and are the best candidates for further precinct and street-level work.`)
   }
 
   const floodHigh = constraintRows.find((row) => row.constraint_type === 'flood_metadata_signal' && row.severity === 'high')
@@ -130,8 +130,8 @@ function buildExecutiveSummary(topA, constrained, councilRanking, pipeline, cons
     const parts = []
     if (floodHigh) parts.push(`flood metadata high hits = ${floodHigh.total}`)
     if (bushfireHigh) parts.push(`bushfire spatial high hits = ${bushfireHigh.total}`)
-    const names = pickTopNames(constrained, 'precinct_name', 3).join('、')
-    bullets.push(`${names || '若干高活动 precinct'} 已出现明显风险叠加，当前更适合做 risk-adjusted watchlist，而不是直接升级成 acquisition priority。${parts.length ? ` 当前最强的风险来源包括 ${parts.join('，')}。` : ''}`)
+    const names = pickTopNames(constrained, 'precinct_name', 3).join(', ')
+    bullets.push(`${names || 'Several high-activity precincts'} are now showing obvious risk stacking and are better treated as a risk-adjusted watchlist instead of immediate acquisition priorities.${parts.length ? ` The strongest risk signals currently include ${parts.join(', ')}.` : ''}`)
   }
 
   if (pipeline.length) {
@@ -139,7 +139,7 @@ function buildExecutiveSummary(topA, constrained, councilRanking, pipeline, cons
       .filter((row) => ['under_assessment', 'pre_exhibition', 'on_exhibition', 'finalisation'].includes(row.stage))
       .reduce((sum, row) => sum + Number(row.proposal_count || 0), 0)
     const madeRow = pipeline.find((row) => row.stage === 'made')
-    bullets.push(`当前 proposal pipeline 中仍有 ${formatNumber(activeCount)} 条 active items，另有 ${formatNumber(madeRow?.proposal_count || 0)} 条已进入 made stage，说明政策主线已足够支撑持续型 radar 输出。`)
+    bullets.push(`There are still ${formatNumber(activeCount)} active proposal items in the pipeline, alongside ${formatNumber(madeRow?.proposal_count || 0)} items already in made stage, which is enough to support a sustained planning radar rather than a one-off hotspot view.`)
   }
 
   return bullets

@@ -75,9 +75,9 @@ Newcastle City Centre is best viewed as a medium-conviction precinct where polic
 
 Friction is present but not yet disqualifying. The main task is to keep risk visible rather than let strong activity numbers dominate the narrative.
 
-| Constraint Type | Severity | Notes |
-| --- | --- | --- |
-| flood_metadata_signal | high | Sample-based flood study/project coverage with 5 intersecting metadata records: Newcastle City-wide Floodplain Risk Management Study and Plan; Newcastle - City-wide Floodplain Risk Management Study and Plan; Newcastle City-wide Floodplain Risk Management Study and Plan - Miscellaneous |
+| Constraint Type | Severity | Source | Evidence | Source URL |
+| --- | --- | --- | --- | --- |
+| flood_metadata_signal | high | Flood Data Portal Metadata Signal | Matched flood records: Newcastle City-wide Floodplain Risk Management Study and Plan; Newcastle - City-wide Floodplain Risk Management Study and Plan; Newcastle City-wide Floodplain Risk Management Study and Plan - Miscellaneous | https://flooddata.ses.nsw.gov.au/api/3/action/package_search?q=Newcastle%20City%20Centre |
 
 ## Council Context
 
@@ -88,10 +88,10 @@ Friction is present but not yet disqualifying. The main task is to keep risk vis
 ## What To Do Next
 
 1. Keep `Newcastle City Centre` in the `B`-rated watchlist and treat `Investigate` as the current workflow state.
-2. Use `dashboard/newcastle-hunter-report.html` to inspect the surrounding precinct cluster before doing any street-level or owner-contact work.
+2. Use `dashboard/latest-report.html` to inspect the surrounding precinct cluster before doing any street-level or owner-contact work.
 3. Explicitly validate the current risk stack (flood_metadata_signal) before promoting this precinct into a transaction-facing shortlist.
 
 ## References
 
-- `dashboard/newcastle-hunter-report.html`
-- `reports/weekly-radar-newcastle-hunter.md`
+- `dashboard/latest-report.html`
+- `reports/weekly-radar-latest.md`

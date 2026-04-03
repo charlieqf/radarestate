@@ -6,6 +6,8 @@
 
 ## Included Deliverables
 
+- `dashboard/hero-visual-pack.html`
+- `reports/top-10-insights-latest.md`
 - `dashboard/latest-report.html`
 - `reports/weekly-radar-latest.md`
 - `reports/deep-dive-gladesville.md`
@@ -13,10 +15,12 @@
 
 ## Reading Order
 
-1. Open `dashboard/latest-report.html` for the visual scan.
-2. Read `reports/weekly-radar-latest.md` for the current market-level interpretation.
-3. Read `reports/deep-dive-gladesville.md` for precinct-level detail.
-4. Read `reports/deep-dive-bankstown.md` for precinct-level detail.
+1. Open `dashboard/hero-visual-pack.html` for the fastest visual read of opportunity vs risk.
+2. Read `reports/top-10-insights-latest.md` for the investment-committee style summary.
+3. Open `dashboard/latest-report.html` for the broader supporting dashboard.
+4. Read `reports/weekly-radar-latest.md` for the current market-level interpretation.
+5. Read `reports/deep-dive-gladesville.md` for precinct-level detail.
+6. Read `reports/deep-dive-bankstown.md` for precinct-level detail.
 
 ## This Pack Highlights
 

@@ -1,0 +1,12 @@
+{
+  "dashboardPath": "dashboard/latest-report.html",
+  "radarPath": "reports/weekly-radar-latest.md",
+  "precincts": [
+    "Gladesville",
+    "Bankstown",
+    "Five Dock",
+    "Mayfield",
+    "Newcastle City Centre",
+    "Cessnock"
+  ]
+}

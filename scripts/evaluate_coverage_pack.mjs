@@ -263,14 +263,14 @@ async function main() {
       '## Interpretation',
       '',
       gates.mappingReady
-        ? '- Mapping 已经从 council-level 走到了可用的 precinct-level，不再只是区域热度判断。'
-        : '- Mapping 仍需继续加密 precinct pack 或修正关键词，否则会有较多空 precinct。',
+        ? '- Mapping has moved beyond council-level heat and is now usable at precinct level.'
+        : '- Mapping still needs denser precinct coverage or better keyword quality, otherwise too many precincts will remain thin or empty.',
       gates.riskReady
-        ? '- 风险层已经能真实改变 shortlist 排序，说明 expanded pack 不会只输出“更热的地方”。'
-        : '- 风险层仍偏薄，扩区后 shortlist 可能会对 activity 过敏。',
+        ? '- The risk layer is already changing shortlist order, which means the expanded pack is doing more than just surfacing hotter places.'
+        : '- The risk layer is still too thin, so the expanded shortlist may overreact to activity alone.',
       gates.reportReady
-        ? '- 当前 expanded pack 已经能持续产出足够丰富的 shortlist 和报告内容。'
-        : '- 当前 expanded pack 还不适合稳定产出客户报告，需要先补足 mapping 或 risk。',
+        ? '- The current expanded pack can already produce a stable enough shortlist and report set.'
+        : '- The current expanded pack is not yet strong enough for stable client-facing reporting and still needs better mapping or risk coverage.',
       ''
     ].join('\n')
 

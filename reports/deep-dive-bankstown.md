@@ -75,12 +75,12 @@ Bankstown is worth tracking because activity and policy signals are real, but it
 
 Friction is very high. Treat this as a constrained or contested precinct until more specific site-level evidence proves otherwise.
 
-| Constraint Type | Severity | Notes |
-| --- | --- | --- |
-| flood_metadata_signal | high | Sample-based flood study/project coverage with 5 intersecting metadata records: Lansdowne Catchment Flood Study - Report; Villawood Drain Works-as-Executed Study - Report; Salt Pan Creek Floodplain Risk Management Study and Plan (Draft) |
-| heat_vulnerability_proxy | high | Council-level proxy based on high heat vulnerability 21.00% for Canterbury-Bankstown |
-| low_tree_canopy_proxy | high | Council-level proxy based on urban tree canopy 16.30% for Canterbury-Bankstown |
-| policy_withdrawal_friction | medium | Derived from 8 withdrawn / not proceeding proposals mapped to this precinct |
+| Constraint Type | Severity | Source | Evidence | Source URL |
+| --- | --- | --- | --- | --- |
+| flood_metadata_signal | high | Flood Data Portal Metadata Signal | Matched flood records: Lansdowne Catchment Flood Study - Report; Villawood Drain Works-as-Executed Study - Report; Salt Pan Creek Floodplain Risk Management Study and Plan (Draft) | https://flooddata.ses.nsw.gov.au/api/3/action/package_search?q=Bankstown |
+| heat_vulnerability_proxy | high | Housing Targets Council Snapshot | Council-level proxy based on high heat vulnerability 21.00% for Canterbury-Bankstown | https://www.planning.nsw.gov.au/policy-and-legislation/housing/housing-targets/canterbury-bankstown-councils-snapshot |
+| low_tree_canopy_proxy | high | Housing Targets Council Snapshot | Council-level proxy based on urban tree canopy 16.30% for Canterbury-Bankstown | https://www.planning.nsw.gov.au/policy-and-legislation/housing/housing-targets/canterbury-bankstown-councils-snapshot |
+| policy_withdrawal_friction | medium | Derived Planning Friction | Derived from 8 withdrawn / not proceeding proposals mapped to this precinct | https://www.planningportal.nsw.gov.au/ppr/withdrawn |
 
 ## Council Context
 

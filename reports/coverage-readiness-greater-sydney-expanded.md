@@ -19,53 +19,52 @@
 
 ## Mapping Coverage
 
-- Precincts with any signal: `55 / 56` (98%)
-- Precincts with mapped proposals: `50`
-- Precincts with mapped applications: `55`
-- Total mapped proposals: `696`
-- Total mapped applications: `10,505`
+- Precincts with any signal: `44 / 56` (79%)
+- Precincts with mapped proposals: `40`
+- Precincts with mapped applications: `44`
+- Total mapped proposals: `505`
+- Total mapped applications: `7,769`
 
 | Council | Precincts | With Signals | Recent Apps | Active Pipeline | With Constraints |
 | --- | --- | --- | --- | --- | --- |
-| The Hills Shire | 4 | 4 | 1,096 | 7 | 3 |
 | Blacktown | 5 | 5 | 1,068 | 6 | 4 |
-| Cumberland | 3 | 3 | 856 | 0 | 3 |
 | Inner West | 3 | 3 | 627 | 2 | 3 |
-| Ryde | 4 | 4 | 616 | 0 | 4 |
-| Sutherland Shire | 4 | 4 | 612 | 9 | 3 |
-| Parramatta | 3 | 3 | 600 | 4 | 3 |
+| Ryde | 4 | 4 | 627 | 0 | 4 |
 | Penrith | 2 | 2 | 555 | 5 | 2 |
 | Campbelltown | 4 | 4 | 522 | 5 | 4 |
 | Georges River | 4 | 4 | 506 | 1 | 4 |
 | Willoughby | 1 | 1 | 505 | 2 | 1 |
 | Fairfield | 2 | 2 | 476 | 3 | 2 |
 | Canterbury-Bankstown | 2 | 2 | 329 | 1 | 2 |
-| Canada Bay | 2 | 2 | 282 | 3 | 0 |
 | Ku-ring-gai | 2 | 2 | 266 | 0 | 2 |
+| Cumberland | 3 | 1 | 260 | 0 | 1 |
 | Woollahra | 2 | 2 | 252 | 6 | 2 |
+| Sutherland Shire | 4 | 1 | 223 | 2 | 1 |
 | Liverpool | 1 | 1 | 220 | 2 | 1 |
 | Bayside | 2 | 2 | 219 | 2 | 0 |
 | Hunters Hill | 1 | 1 | 217 | 2 | 0 |
 | Burwood | 1 | 1 | 192 | 1 | 1 |
 | Strathfield | 2 | 1 | 121 | 0 | 2 |
+| Canada Bay | 2 | 1 | 113 | 2 | 0 |
+| The Hills Shire | 4 | 1 | 105 | 2 | 1 |
+| Parramatta | 3 | 1 | 51 | 2 | 1 |
 | North Sydney | 2 | 1 | 50 | 0 | 1 |
 
 ## Risk Layer Availability
 
-- Precincts with at least one constraint: `47 / 56` (84%)
+- Precincts with at least one constraint: `39 / 56` (70%)
 
 | Constraint Type | Severity | Count |
 | --- | --- | --- |
-| biodiversity_spatial_sample | medium | 2 |
-| bushfire_spatial_sample | high | 14 |
+| biodiversity_spatial_sample | medium | 1 |
+| bushfire_spatial_sample | high | 10 |
 | bushfire_spatial_sample | medium | 3 |
-| flood_metadata_signal | high | 35 |
+| flood_metadata_signal | high | 29 |
 | flood_metadata_signal | medium | 5 |
 | heat_vulnerability_proxy | high | 3 |
 | heat_vulnerability_proxy | medium | 4 |
 | low_tree_canopy_proxy | high | 9 |
 | low_tree_canopy_proxy | medium | 3 |
-| policy_withdrawal_friction | high | 1 |
 | policy_withdrawal_friction | medium | 2 |
 
 ## Shortlist And Report Stability
@@ -79,20 +78,20 @@
 | 2 | Five Dock | Canada Bay | A | 0 | 113 | 2 |
 | 3 | Edgecliff | Woollahra | A | 1 | 70 | 5 |
 | 4 | Cabramatta | Fairfield | A | 2 | 257 | 2 |
-| 5 | Gables | The Hills Shire | B | 0 | 429 | 2 |
-| 6 | Seven Hills | Blacktown | B | 0 | 282 | 1 |
-| 7 | Bexley | Bayside | B | 0 | 201 | 1 |
-| 8 | Cronulla | Sutherland Shire | B | 0 | 191 | 0 |
-| 9 | Drummoyne | Canada Bay | B | 0 | 169 | 1 |
+| 5 | Seven Hills | Blacktown | B | 0 | 282 | 1 |
+| 6 | Bexley | Bayside | B | 0 | 201 | 1 |
+| 7 | Cronulla | Sutherland Shire | B | 0 | 0 | 0 |
+| 8 | Drummoyne | Canada Bay | B | 0 | 0 | 0 |
+| 9 | Gables | The Hills Shire | B | 0 | 0 | 0 |
 | 10 | Croydon | Burwood | B | 1 | 192 | 1 |
 | 11 | Double Bay | Woollahra | B | 1 | 182 | 1 |
 | 12 | Beverly Hills | Georges River | B | 1 | 64 | 1 |
-| 13 | Castle Hill | The Hills Shire | B | 2 | 483 | 2 |
-| 14 | Merrylands | Cumberland | B | 2 | 415 | 0 |
-| 15 | Hurstville | Georges River | B | 2 | 280 | 0 |
+| 13 | Hurstville | Georges River | B | 2 | 280 | 0 |
+| 14 | Auburn | Cumberland | B | 2 | 260 | 0 |
+| 15 | Epping | Ryde | B | 2 | 250 | 0 |
 
 ## Interpretation
 
-- Mapping 已经从 council-level 走到了可用的 precinct-level，不再只是区域热度判断。
-- 风险层已经能真实改变 shortlist 排序，说明 expanded pack 不会只输出“更热的地方”。
-- 当前 expanded pack 已经能持续产出足够丰富的 shortlist 和报告内容。
+- Mapping has moved beyond council-level heat and is now usable at precinct level.
+- The risk layer is already changing shortlist order, which means the expanded pack is doing more than just surfacing hotter places.
+- The current expanded pack can already produce a stable enough shortlist and report set.

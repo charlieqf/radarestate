@@ -136,6 +136,28 @@ function buildRiskInterpretation(row) {
   return 'No derived friction signal is currently dominant in the first-pass model. This does not mean risk is absent, only that it is not yet surfacing through the current layers.'
 }
 
+function constraintEvidence(item) {
+  if (!item?.raw_payload) return item.notes || '-'
+  const payload = item.raw_payload
+
+  if (item.constraint_type === 'flood_metadata_signal') {
+    const matched = Array.isArray(payload.matched) ? payload.matched : []
+    const titles = matched.map((row) => row.title).filter(Boolean).slice(0, 3)
+    return titles.length
+      ? `Matched flood records: ${titles.join('; ')}`
+      : item.notes || '-'
+  }
+
+  if (item.constraint_type === 'bushfire_spatial_sample' || item.constraint_type === 'biodiversity_spatial_sample') {
+    const categories = Array.isArray(payload.categories) ? payload.categories.filter(Boolean) : []
+    return categories.length
+      ? `Matched categories: ${categories.join(', ')}`
+      : item.notes || '-'
+  }
+
+  return item.notes || '-'
+}
+
 async function resolvePrecinctName(client, requestedPrecinct) {
   if (requestedPrecinct) return requestedPrecinct
   const { rows } = await client.query(
@@ -203,7 +225,7 @@ async function fetchDeepDiveData(client, precinctName) {
   )
 
   const constraints = await client.query(
-    `select c.constraint_type, c.severity, c.notes, c.source_name, c.source_url
+    `select c.constraint_type, c.severity, c.notes, c.source_name, c.source_url, c.raw_payload
      from public.constraints c
      join public.precincts p on p.id = c.precinct_id
      where p.name = $1
@@ -318,11 +340,13 @@ async function main() {
       '',
       constraints.length
         ? markdownTable(
-            ['Constraint Type', 'Severity', 'Notes'],
+            ['Constraint Type', 'Severity', 'Source', 'Evidence', 'Source URL'],
             constraints.map((item) => [
               item.constraint_type,
               item.severity,
-              item.notes || '-'
+              item.source_name || '-',
+              constraintEvidence(item),
+              item.source_url || '-'
             ])
           )
         : 'No derived constraint rows currently attached to this precinct.',

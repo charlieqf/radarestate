@@ -57,15 +57,15 @@ Five Dock currently screens as one of the strongest precinct-level candidates be
 | 2026-03-31 | Under Assessment | Modification to Complying Development Certificate | 4 HENRY STREET FIVE DOCK 2046 |
 | 2026-03-31 | Additional Information Requested | Complying Development Certificate Application | 2 JAMES STREET FIVE DOCK 2046 |
 | 2026-03-29 | Under Assessment | Complying Development Certificate Application | 285 GREAT NORTH ROAD FIVE DOCK 2046 |
-| 2026-03-26 | Under Assessment | Complying Development Certificate Application | 38 QUEENS ROAD FIVE DOCK 2046 |
 | 2026-03-26 | Additional Information Requested | Development Application | 49-51 QUEENS ROAD FIVE DOCK 2046 |
+| 2026-03-26 | Under Assessment | Complying Development Certificate Application | 38 QUEENS ROAD FIVE DOCK 2046 |
 | 2026-03-23 | Under Assessment | Development Application | PARK ROAD FIVE DOCK 2046 |
 | 2026-03-17 | Under Assessment | Complying Development Certificate Application | 124 INGHAM AVENUE FIVE DOCK 2046 |
-| 2026-03-12 | Approved | Complying Development Certificate Application | 16 YORK AVENUE FIVE DOCK 2046 |
 | 2026-03-12 | Approved | Complying Development Certificate Application | 14 GREAT NORTH ROAD FIVE DOCK 2046 |
+| 2026-03-12 | Approved | Complying Development Certificate Application | 16 YORK AVENUE FIVE DOCK 2046 |
 | 2026-03-08 | Approved | Complying Development Certificate Application | 126 INGHAM AVENUE FIVE DOCK 2046 |
-| 2026-02-26 | Approved | Complying Development Certificate Application | 119 GREAT NORTH ROAD FIVE DOCK 2046 |
 | 2026-02-26 | Approved | Complying Development Certificate Application | 141 GREAT NORTH ROAD FIVE DOCK 2046 |
+| 2026-02-26 | Approved | Complying Development Certificate Application | 119 GREAT NORTH ROAD FIVE DOCK 2046 |
 
 ## Risk And Friction
 

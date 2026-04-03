@@ -6,7 +6,7 @@ Companion visual dashboard: `dashboard/newcastle-hunter-report.html`
 
 ## Headline
 
-`Mayfield`、`Broadmeadow`、`Newcastle City Centre` 目前仍是最值得优先看的 precinct，而 `Cessnock`、`Kurri Kurri` 在 flood / bushfire / friction 叠加后应下调为高风险观察。
+`Mayfield`, `Broadmeadow`, `Newcastle City Centre` currently screen as the strongest priority precincts, while `Cessnock`, `Kurri Kurri` should be downgraded to a high-risk watchlist because flood, bushfire and friction signals are now stacking together.
 
 ## Snapshot
 
@@ -17,10 +17,10 @@ Companion visual dashboard: `dashboard/newcastle-hunter-report.html`
 
 ## Executive Summary
 
-- `Mayfield`、`Broadmeadow`、`Newcastle City Centre` 目前构成首批高优先级 precinct，特点是 active pipeline 和 recent applications 能同时成立，且 friction 仍可控。
-- `Lake Macquarie`、`Newcastle`、`Maitland` 仍是 council-level activity 最强的一组，适合继续向 precinct 和 street-level 深挖。
-- `Cessnock`、`Kurri Kurri`、`Medowie` 已出现明显风险叠加，当前更适合做 risk-adjusted watchlist，而不是直接升级成 acquisition priority。 当前最强的风险来源包括 flood metadata high hits = 11，bushfire spatial high hits = 15。
-- 当前 proposal pipeline 中仍有 10 条 active items，另有 373 条已进入 made stage，说明政策主线已足够支撑持续型 radar 输出。
+- `Mayfield`, `Broadmeadow`, `Newcastle City Centre` currently form the first priority tier because active pipeline and recent applications are both visible while friction is still manageable.
+- `Lake Macquarie`, `Newcastle`, `Maitland` remain the strongest council-level activity cluster and are the best candidates for further precinct and street-level work.
+- `Cessnock`, `Kurri Kurri`, `Medowie` are now showing obvious risk stacking and are better treated as a risk-adjusted watchlist instead of immediate acquisition priorities. The strongest risk signals currently include flood metadata high hits = 11, bushfire spatial high hits = 15.
+- There are still 10 active proposal items in the pipeline, alongside 373 items already in made stage, which is enough to support a sustained planning radar rather than a one-off hotspot view.
 
 ## Top Precinct Hotlist
 

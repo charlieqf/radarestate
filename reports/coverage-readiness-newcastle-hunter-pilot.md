@@ -70,6 +70,6 @@
 
 ## Interpretation
 
-- Mapping 已经从 council-level 走到了可用的 precinct-level，不再只是区域热度判断。
-- 风险层已经能真实改变 shortlist 排序，说明 expanded pack 不会只输出“更热的地方”。
-- 当前 expanded pack 已经能持续产出足够丰富的 shortlist 和报告内容。
+- Mapping has moved beyond council-level heat and is now usable at precinct level.
+- The risk layer is already changing shortlist order, which means the expanded pack is doing more than just surfacing hotter places.
+- The current expanded pack can already produce a stable enough shortlist and report set.

@@ -162,6 +162,41 @@ npm run report:dashboard
 
 - `dashboard/latest-report.html`
 
+## 4A. 生成 Hero Visual Pack
+
+```bash
+npm run report:hero
+```
+
+输出：
+
+- `dashboard/hero-visual-pack.html`
+
+主打：
+
+- `Opportunity vs Risk Matrix`
+- `Risk Stack`
+
+## 4B. 生成 Top 10 Insights Memo
+
+```bash
+npm run report:insights
+```
+
+输出：
+
+- `reports/top-10-insights-latest.md`
+
+运行完后再执行：
+
+```bash
+npm run report:html
+```
+
+即可得到：
+
+- `client-output/top-10-insights-latest.html`
+
 ## 5. 生成 Weekly Radar Memo
 
 ```bash
@@ -218,7 +253,7 @@ npm run report:deepdives -- --config=mvp/config/deep-dive-newcastle-hunter.json
 npm run report:hunter:deepdives
 ```
 
-默认会生成：
+当前手工配置默认会生成：
 
 - `Mayfield`
 - `Newcastle City Centre`
@@ -237,6 +272,12 @@ npm run report:hunter:pack
 - `reports/client-pack-newcastle-hunter.md`
 - `client-output/client-pack-newcastle-hunter.html`
 - 对应 Hunter deep dives HTML / markdown
+
+当前 Hunter client pack 的 deep dives 不再依赖固定配置，而是动态选择：
+
+- best current opportunity precinct
+- strongest additional core precinct
+- highest-friction precinct
 
 ## 7. 生成 Client Pack
 
@@ -279,6 +320,24 @@ npm run report:html
 - 读取 `reports/` 下当前 markdown 报告
 - 渲染为统一风格的 HTML memo
 - 生成一个带侧边导航的 client portal
+
+## 8A. 导出单一客户交付目录
+
+```bash
+npm run report:bundle
+```
+
+输出：
+
+- `delivery-bundles/latest/`
+
+其中包含：
+
+- `index.html`
+- `client-output/`
+- `dashboard/`
+
+这个目录可以直接整体发给客户使用。
 
 ## 9. 构建 Precinct Mapping 与 Shortlist
 

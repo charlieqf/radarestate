@@ -227,8 +227,7 @@ function buildSteps(options) {
           args: [
             '--region-group=Hunter',
             '--label=Newcastle-Hunter',
-            '--slug=newcastle-hunter',
-            '--deep-dive-config=mvp/config/deep-dive-newcastle-hunter.json'
+            '--slug=newcastle-hunter'
           ]
         })
       }

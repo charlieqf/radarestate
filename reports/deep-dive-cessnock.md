@@ -75,11 +75,11 @@ Cessnock is worth tracking because activity and policy signals are real, but it 
 
 Friction is very high. Treat this as a constrained or contested precinct until more specific site-level evidence proves otherwise.
 
-| Constraint Type | Severity | Notes |
-| --- | --- | --- |
-| bushfire_spatial_sample | high | Sample-based spatial hit rate 2/15 across mapped recent application points |
-| flood_metadata_signal | high | Sample-based flood study/project coverage with 5 intersecting metadata records: Floodplain Risk Management Study and Plan Report Cessnock City (Black Creek) - Report; Floodplain Risk Management Study and Plan Report Cessnock City (Black Creek Stage 1); Kurri Kurri Main Drain Flood Study (Revised Final Draft) - Report |
-| policy_withdrawal_friction | medium | Derived from 7 withdrawn / not proceeding proposals mapped to this precinct |
+| Constraint Type | Severity | Source | Evidence | Source URL |
+| --- | --- | --- | --- | --- |
+| bushfire_spatial_sample | high | BushFire Prone Land Spatial Sample | Matched categories: Vegetation Buffer | https://portal.spatial.nsw.gov.au/server/rest/services/Hosted/NSW_BushFire_Prone_Land/FeatureServer/0 |
+| flood_metadata_signal | high | Flood Data Portal Metadata Signal | Matched flood records: Floodplain Risk Management Study and Plan Report Cessnock City (Black Creek) - Report; Floodplain Risk Management Study and Plan Report Cessnock City (Black Creek Stage 1); Kurri Kurri Main Drain Flood Study (Revised Final Draft) - Report | https://flooddata.ses.nsw.gov.au/api/3/action/package_search?q=Cessnock |
+| policy_withdrawal_friction | medium | Derived Planning Friction | Derived from 7 withdrawn / not proceeding proposals mapped to this precinct | https://www.planningportal.nsw.gov.au/ppr/withdrawn |
 
 ## Council Context
 
@@ -90,10 +90,10 @@ Friction is very high. Treat this as a constrained or contested precinct until m
 ## What To Do Next
 
 1. Keep `Cessnock` in the `C`-rated watchlist and treat `Watch` as the current workflow state.
-2. Use `dashboard/newcastle-hunter-report.html` to inspect the surrounding precinct cluster before doing any street-level or owner-contact work.
+2. Use `dashboard/latest-report.html` to inspect the surrounding precinct cluster before doing any street-level or owner-contact work.
 3. Explicitly validate the current risk stack (bushfire_spatial_sample, flood_metadata_signal, policy_withdrawal_friction) before promoting this precinct into a transaction-facing shortlist.
 
 ## References
 
-- `dashboard/newcastle-hunter-report.html`
-- `reports/weekly-radar-newcastle-hunter.md`
+- `dashboard/latest-report.html`
+- `reports/weekly-radar-latest.md`

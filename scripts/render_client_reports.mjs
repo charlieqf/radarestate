@@ -5,6 +5,8 @@ import { marked } from 'marked'
 const root = process.cwd()
 const reportsDir = path.join(root, 'reports')
 const outputDir = path.join(root, 'client-output')
+const retiredDeepDiveReportsDir = path.join(root, 'archive', 'deep-dives', 'retired', 'reports')
+const retiredDeepDiveHtmlDir = path.join(root, 'archive', 'deep-dives', 'retired', 'client-output')
 
 function readFile(filePath) {
   return fs.readFileSync(filePath, 'utf8')
@@ -12,6 +14,10 @@ function readFile(filePath) {
 
 function ensureDir(dirPath) {
   fs.mkdirSync(dirPath, { recursive: true })
+}
+
+function unique(values) {
+  return [...new Set(values.filter(Boolean))]
 }
 
 function titleFromMarkdown(markdown, fallback) {
@@ -27,6 +33,9 @@ function slugToLabel(fileName) {
 }
 
 function markdownPathToHref(targetPath) {
+  if (targetPath === 'dashboard/hero-visual-pack.html') {
+    return 'hero-visual-pack.html'
+  }
   if (targetPath.startsWith('dashboard/')) {
     return `../${targetPath}`
   }
@@ -42,35 +51,118 @@ function preprocessMarkdown(markdown) {
   })
 }
 
-function navItems(files) {
-  const priority = new Map([
-    ['client-pack-latest.md', 1],
-    ['weekly-radar-latest.md', 2]
-  ])
-
-  return files
-    .slice()
-    .sort((a, b) => {
-      const pa = priority.get(path.basename(a)) || 10
-      const pb = priority.get(path.basename(b)) || 10
-      if (pa !== pb) return pa - pb
-      return path.basename(a).localeCompare(path.basename(b))
-    })
-    .map((filePath) => {
-      const fileName = path.basename(filePath)
-      return {
-        fileName,
-        href: fileName.replace(/\.md$/i, '.html'),
-        label: slugToLabel(fileName),
-        title: titleFromMarkdown(readFile(filePath), slugToLabel(fileName))
-      }
-    })
+function extractDeepDiveFilesFromPack(filePath) {
+  if (!fs.existsSync(filePath)) return []
+  const markdown = readFile(filePath)
+  const matches = [...markdown.matchAll(/reports\/(deep-dive-[a-z0-9-]+\.md)/gi)]
+  return [...new Set(matches.map((match) => match[1]))]
 }
 
-function pageTemplate({ title, bodyHtml, nav, currentHref }) {
-  const navHtml = nav.map((item) => {
-    const active = item.href === currentHref ? 'nav-link active' : 'nav-link'
-    return `<a class="${active}" href="${item.href}"><span class="nav-title">${item.title}</span><span class="nav-meta">${item.label}</span></a>`
+function moveFileIfPresent(sourcePath, targetPath) {
+  if (!fs.existsSync(sourcePath)) return false
+  ensureDir(path.dirname(targetPath))
+  if (fs.existsSync(targetPath)) fs.rmSync(targetPath, { force: true })
+  fs.renameSync(sourcePath, targetPath)
+  return true
+}
+
+function archiveRetiredDeepDives() {
+  const activeDeepDiveNames = unique([
+    ...extractDeepDiveFilesFromPack(path.join(reportsDir, 'client-pack-latest.md')),
+    ...extractDeepDiveFilesFromPack(path.join(reportsDir, 'client-pack-newcastle-hunter.md'))
+  ])
+
+  const reportFiles = fs.existsSync(reportsDir)
+    ? fs.readdirSync(reportsDir).filter((name) => /^deep-dive-.*\.md$/i.test(name))
+    : []
+
+  const retired = []
+  for (const fileName of reportFiles) {
+    if (activeDeepDiveNames.includes(fileName)) continue
+
+    const reportSource = path.join(reportsDir, fileName)
+    const reportTarget = path.join(retiredDeepDiveReportsDir, fileName)
+    const htmlFileName = fileName.replace(/\.md$/i, '.html')
+    const htmlSource = path.join(outputDir, htmlFileName)
+    const htmlTarget = path.join(retiredDeepDiveHtmlDir, htmlFileName)
+
+    const movedReport = moveFileIfPresent(reportSource, reportTarget)
+    const movedHtml = moveFileIfPresent(htmlSource, htmlTarget)
+    if (movedReport || movedHtml) {
+      retired.push(fileName)
+    }
+  }
+
+  return retired
+}
+
+function navGroups(files) {
+  const items = files.map((filePath) => {
+    const fileName = path.basename(filePath)
+    return {
+      fileName,
+      href: fileName.replace(/\.md$/i, '.html'),
+      label: slugToLabel(fileName),
+      title: titleFromMarkdown(readFile(filePath), slugToLabel(fileName))
+    }
+  })
+
+  const byName = new Map(items.map((item) => [item.fileName, item]))
+  const ordered = (names) => names.map((name) => byName.get(name)).filter(Boolean)
+  const remaining = new Set(items.map((item) => item.fileName))
+  const consume = (groupItems) => {
+    for (const item of groupItems) remaining.delete(item.fileName)
+    return groupItems
+  }
+
+  const activeDeepDiveNames = unique([
+    ...extractDeepDiveFilesFromPack(path.join(reportsDir, 'client-pack-latest.md')),
+    ...extractDeepDiveFilesFromPack(path.join(reportsDir, 'client-pack-newcastle-hunter.md'))
+  ])
+
+  const mainDeliverables = consume([
+    {
+      fileName: '__hero__',
+      href: 'hero-visual-pack.html',
+      label: 'Hero Visual Pack',
+      title: 'Hero Visual Pack'
+    },
+    ...ordered([
+      'client-pack-latest.md',
+      'top-10-insights-latest.md',
+      'weekly-radar-latest.md',
+      'client-pack-newcastle-hunter.md',
+      'weekly-radar-newcastle-hunter.md'
+    ])
+  ])
+
+  const deepDives = consume(ordered(activeDeepDiveNames))
+
+  const internal = consume(ordered([
+    'coverage-readiness-greater-sydney-expanded.md',
+    'coverage-readiness-newcastle-hunter-pilot.md'
+  ]))
+
+  const leftovers = [...remaining]
+    .map((name) => byName.get(name))
+    .filter(Boolean)
+    .sort((a, b) => a.fileName.localeCompare(b.fileName))
+
+  return [
+    { heading: 'Main Deliverables', items: mainDeliverables },
+    { heading: 'Deep Dives', items: deepDives },
+    { heading: 'Internal', items: internal },
+    ...(leftovers.length ? [{ heading: 'Other', items: leftovers }] : [])
+  ].filter((group) => group.items.length)
+}
+
+function pageTemplate({ title, bodyHtml, nav, currentHref, articleClass = 'article' }) {
+  const navHtml = nav.map((group) => {
+    const links = group.items.map((item) => {
+      const active = item.href === currentHref ? 'nav-link active' : 'nav-link'
+      return `<a class="${active}" href="${item.href}"><span class="nav-title">${item.title}</span><span class="nav-meta">${item.label}</span></a>`
+    }).join('')
+    return `<section class="nav-group"><div class="nav-heading">${group.heading}</div><div class="nav-group-links">${links}</div></section>`
   }).join('')
 
   return `<!doctype html>
@@ -82,13 +174,17 @@ function pageTemplate({ title, bodyHtml, nav, currentHref }) {
   <script>
     (() => {
       const storageKey = 'radarestate-theme';
+      const sidebarKey = 'radarestate-sidebar';
       let stored = null;
+      let storedSidebar = null;
       try {
         stored = window.localStorage.getItem(storageKey);
+        storedSidebar = window.localStorage.getItem(sidebarKey);
       } catch {
       }
       const preferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
       document.documentElement.dataset.theme = stored || preferred;
+      document.documentElement.dataset.sidebar = storedSidebar || 'expanded';
     })();
   </script>
   <style>
@@ -147,6 +243,25 @@ function pageTemplate({ title, bodyHtml, nav, currentHref }) {
       color: var(--text);
       font-family: Inter, Arial, sans-serif;
     }
+    .sidebar-toggle {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 1200;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+      box-shadow: 0 12px 30px var(--shadow);
+      color: var(--button-text);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+    }
     .theme-switcher {
       position: fixed;
       top: 18px;
@@ -199,6 +314,10 @@ function pageTemplate({ title, bodyHtml, nav, currentHref }) {
       display: grid;
       grid-template-columns: 300px 1fr;
       min-height: 100vh;
+      transition: grid-template-columns 180ms ease;
+    }
+    html[data-sidebar="collapsed"] .shell {
+      grid-template-columns: 0 1fr;
     }
     .sidebar {
       padding: 24px 18px;
@@ -207,6 +326,14 @@ function pageTemplate({ title, bodyHtml, nav, currentHref }) {
       position: sticky;
       top: 0;
       height: 100vh;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      min-width: 0;
+      transition: opacity 150ms ease, transform 180ms ease;
+    }
+    html[data-sidebar="collapsed"] .sidebar {
+      display: none;
     }
     .brand {
       margin-bottom: 22px;
@@ -246,6 +373,22 @@ function pageTemplate({ title, bodyHtml, nav, currentHref }) {
     }
     .nav {
       display: grid;
+      gap: 16px;
+    }
+    .nav-group {
+      display: grid;
+      gap: 8px;
+    }
+    .nav-heading {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0 4px;
+    }
+    .nav-group-links {
+      display: grid;
       gap: 10px;
     }
     .nav-link {
@@ -282,6 +425,9 @@ function pageTemplate({ title, bodyHtml, nav, currentHref }) {
       border-radius: 20px;
       padding: 28px 32px;
       box-shadow: 0 16px 40px var(--shadow);
+    }
+    .article.article-wide {
+      max-width: 1320px;
     }
     .article h1, .article h2, .article h3 {
       margin-top: 0;
@@ -356,11 +502,29 @@ function pageTemplate({ title, bodyHtml, nav, currentHref }) {
       border-radius: 12px;
       color: var(--text);
     }
+    .embed-frame {
+      width: 100%;
+      height: calc(100vh - 170px);
+      min-height: 980px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #ffffff;
+    }
+    .embed-note {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
     @media (max-width: 980px) {
+      .sidebar-toggle {
+        left: 18px;
+      }
       .theme-switcher {
         left: 18px;
         right: 18px;
         justify-content: space-between;
+        top: 64px;
       }
       .shell { grid-template-columns: 1fr; }
       .sidebar {
@@ -371,10 +535,12 @@ function pageTemplate({ title, bodyHtml, nav, currentHref }) {
       }
       .main { padding: 92px 18px 18px; }
       .article { padding: 22px 20px; }
+      .embed-frame { min-height: 760px; height: calc(100vh - 220px); }
     }
   </style>
 </head>
 <body>
+  <button class="sidebar-toggle" id="sidebarToggle" type="button" aria-expanded="true">Hide Navigation</button>
   <div class="theme-switcher" role="group" aria-label="Theme switcher">
     <span class="theme-switcher-label">Theme</span>
     <div class="theme-switcher-group">
@@ -391,19 +557,66 @@ function pageTemplate({ title, bodyHtml, nav, currentHref }) {
       </div>
       <div class="actions">
         <a class="action-link" href="../dashboard/latest-report.html">Open Visual Dashboard</a>
+        <a class="action-link" href="hero-visual-pack.html">Open Hero Visual Pack</a>
         <a class="action-link" href="index.html">Open Client Pack</a>
       </div>
       <nav class="nav">${navHtml}</nav>
     </aside>
     <main class="main">
-      <article class="article">${bodyHtml}</article>
+      <article class="${articleClass}">${bodyHtml}</article>
     </main>
   </div>
   <script>
     (() => {
+      const navScrollKey = 'radarestate-nav-scroll';
       const storageKey = 'radarestate-theme';
+      const sidebarKey = 'radarestate-sidebar';
       const currentTheme = document.documentElement.dataset.theme || 'dark';
+      const currentSidebarState = document.documentElement.dataset.sidebar || 'expanded';
+      const sidebar = document.querySelector('.sidebar');
+      const sidebarToggle = document.getElementById('sidebarToggle');
       const buttons = [...document.querySelectorAll('[data-theme-option]')];
+
+      const updateSidebarToggle = (state) => {
+        if (!sidebarToggle) return;
+        const expanded = state !== 'collapsed';
+        sidebarToggle.textContent = expanded ? 'Hide Navigation' : 'Show Navigation';
+        sidebarToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      };
+
+      updateSidebarToggle(currentSidebarState);
+
+      if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', () => {
+          const nextState = document.documentElement.dataset.sidebar === 'collapsed' ? 'expanded' : 'collapsed';
+          document.documentElement.dataset.sidebar = nextState;
+          updateSidebarToggle(nextState);
+          try {
+            window.localStorage.setItem(sidebarKey, nextState);
+          } catch {
+          }
+        });
+      }
+
+      if (sidebar) {
+        try {
+          const storedScroll = window.localStorage.getItem(navScrollKey);
+          if (storedScroll !== null) {
+            requestAnimationFrame(() => {
+              sidebar.scrollTop = Number(storedScroll) || 0;
+            });
+          }
+        } catch {
+        }
+
+        sidebar.addEventListener('scroll', () => {
+          try {
+            window.localStorage.setItem(navScrollKey, String(sidebar.scrollTop));
+          } catch {
+          }
+        }, { passive: true });
+      }
+
       if (!buttons.length) return;
       buttons.forEach((button) => {
         const theme = button.dataset.themeOption;
@@ -426,11 +639,15 @@ function pageTemplate({ title, bodyHtml, nav, currentHref }) {
 
 async function main() {
   ensureDir(outputDir)
+  const retired = archiveRetiredDeepDives()
+  for (const fileName of retired) {
+    console.log(`Archived retired deep dive ${fileName}`)
+  }
   const files = fs.readdirSync(reportsDir)
     .filter((name) => name.endsWith('.md'))
     .map((name) => path.join(reportsDir, name))
 
-  const nav = navItems(files)
+  const nav = navGroups(files)
   marked.setOptions({ gfm: true, breaks: false })
 
   for (const filePath of files) {
@@ -451,6 +668,21 @@ async function main() {
     }
     console.log(`Rendered ${outputFileName}`)
   }
+
+  const heroBody = [
+    '<h1>Hero Visual Pack</h1>',
+    '<p class="embed-note">This is the same hero visual pack, embedded inside the client portal so it behaves like the other right-panel pages. You can still open the standalone dashboard file if needed.</p>',
+    '<iframe class="embed-frame" src="../dashboard/hero-visual-pack.html?embedded=1" title="Hero Visual Pack"></iframe>'
+  ].join('')
+  const heroHtml = pageTemplate({
+    title: 'Hero Visual Pack',
+    bodyHtml: heroBody,
+    nav,
+    currentHref: 'hero-visual-pack.html',
+    articleClass: 'article article-wide'
+  })
+  fs.writeFileSync(path.join(outputDir, 'hero-visual-pack.html'), heroHtml, 'utf8')
+  console.log('Rendered hero-visual-pack.html')
 }
 
 main().catch((error) => {

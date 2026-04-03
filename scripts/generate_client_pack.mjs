@@ -81,6 +81,38 @@ function formatNumber(value) {
   return new Intl.NumberFormat('en-AU').format(Number(value))
 }
 
+function unique(values) {
+  return [...new Set(values.filter(Boolean))]
+}
+
+async function selectAutoDeepDivePrecincts(client, regionGroup, bestPrecinct, riskPrecinct) {
+  const selected = unique([bestPrecinct])
+
+  if (regionGroup !== 'Greater Sydney') {
+    const core = await client.query(
+      `select v.precinct_name
+       from public.v_precinct_shortlist v
+       join public.councils c on c.canonical_name = v.council_name
+       where c.region_group = $1
+         and v.precinct_type = 'centre'
+         and v.precinct_name <> all($2::text[])
+       order by case v.opportunity_rating when 'A' then 1 when 'B' then 2 else 3 end,
+                v.friction_score asc nulls last,
+                v.recent_application_count desc nulls last,
+                v.active_pipeline_count desc nulls last
+       limit 1`,
+      [regionGroup, selected]
+    )
+    if (core.rows.length) selected.push(core.rows[0].precinct_name)
+  }
+
+  if (riskPrecinct && !selected.includes(riskPrecinct)) {
+    selected.push(riskPrecinct)
+  }
+
+  return unique(selected)
+}
+
 async function main() {
   const options = parseArgs()
   const client = await connectWithFallback()
@@ -119,6 +151,11 @@ async function main() {
 
     const dashboardPath = options.dashboardPath || (options.slug === 'latest' ? 'dashboard/latest-report.html' : `dashboard/${options.slug}-report.html`)
     const radarPath = options.radarPath || (options.slug === 'latest' ? 'reports/weekly-radar-latest.md' : `reports/weekly-radar-${options.slug}.md`)
+    const heroPath = 'dashboard/hero-visual-pack.html'
+    const insightsPath = 'reports/top-10-insights-latest.md'
+
+    runNodeScript('scripts/generate_hero_visual_pack.mjs')
+    runNodeScript('scripts/generate_top10_insights_memo.mjs')
 
     runNodeScript('scripts/generate_dashboard_report.mjs', [
       `--region-group=${options.regionGroup}`,
@@ -138,17 +175,14 @@ async function main() {
       deepDivePrecincts = config.precincts || []
       runNodeScript('scripts/generate_deep_dive_batch.mjs', [`--config=${options.deepDiveConfig}`])
     } else {
-      deepDivePrecincts = [best.precinct_name, risk.precinct_name]
-      runNodeScript('scripts/generate_deep_dive_memo.mjs', [
-        `--precinct=${best.precinct_name}`,
-        `--dashboard-path=${dashboardPath}`,
-        `--radar-path=${radarPath}`
-      ])
-      runNodeScript('scripts/generate_deep_dive_memo.mjs', [
-        `--precinct=${risk.precinct_name}`,
-        `--dashboard-path=${dashboardPath}`,
-        `--radar-path=${radarPath}`
-      ])
+      deepDivePrecincts = await selectAutoDeepDivePrecincts(client, options.regionGroup, best.precinct_name, risk.precinct_name)
+      for (const precinct of deepDivePrecincts) {
+        runNodeScript('scripts/generate_deep_dive_memo.mjs', [
+          `--precinct=${precinct}`,
+          `--dashboard-path=${dashboardPath}`,
+          `--radar-path=${radarPath}`
+        ])
+      }
       runNodeScript('scripts/render_client_reports.mjs')
     }
 
@@ -164,15 +198,19 @@ async function main() {
       '',
       '## Included Deliverables',
       '',
+      `- \`${heroPath}\``,
+      `- \`${insightsPath}\``,
       `- \`${dashboardPath}\``,
       `- \`${radarPath}\``,
       ...deepDiveFiles.map((file) => `- \`${file}\``),
       '',
       '## Reading Order',
       '',
-      `1. Open \`${dashboardPath}\` for the visual scan.`,
-      `2. Read \`${radarPath}\` for the current market-level interpretation.`,
-      ...deepDiveFiles.map((file, index) => `${index + 3}. Read \`${file}\` for precinct-level detail.`),
+      `1. Open \`${heroPath}\` for the fastest visual read of opportunity vs risk.`,
+      `2. Read \`${insightsPath}\` for the investment-committee style summary.`,
+      `3. Open \`${dashboardPath}\` for the broader supporting dashboard.`,
+      `4. Read \`${radarPath}\` for the current market-level interpretation.`,
+      ...deepDiveFiles.map((file, index) => `${index + 5}. Read \`${file}\` for precinct-level detail.`),
       '',
       '## This Pack Highlights',
       '',
@@ -196,6 +234,7 @@ async function main() {
     console.log(`Wrote ${outPath}`)
 
     runNodeScript('scripts/render_client_reports.mjs')
+    runNodeScript('scripts/export_delivery_bundle.mjs')
   } finally {
     await client.end()
   }

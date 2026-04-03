@@ -77,10 +77,10 @@ No derived constraint rows currently attached to this precinct.
 ## What To Do Next
 
 1. Keep `Mayfield` in the `B`-rated watchlist and treat `Investigate` as the current workflow state.
-2. Use `dashboard/newcastle-hunter-report.html` to inspect the surrounding precinct cluster before doing any street-level or owner-contact work.
+2. Use `dashboard/latest-report.html` to inspect the surrounding precinct cluster before doing any street-level or owner-contact work.
 3. The next uplift in confidence will come from more detailed site-level and constraint work rather than more high-level policy scanning.
 
 ## References
 
-- `dashboard/newcastle-hunter-report.html`
-- `reports/weekly-radar-newcastle-hunter.md`
+- `dashboard/latest-report.html`
+- `reports/weekly-radar-latest.md`
