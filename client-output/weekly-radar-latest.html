@@ -4,9 +4,22 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sydney Planning Opportunity Radar</title>
+  <script>
+    (() => {
+      const storageKey = 'radarestate-theme';
+      let stored = null;
+      try {
+        stored = window.localStorage.getItem(storageKey);
+      } catch {
+      }
+      const preferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.dataset.theme = stored || preferred;
+    })();
+  </script>
   <style>
     :root {
       --bg: #0b1020;
+      --bg-accent: #132048;
       --panel: #121932;
       --panel-2: #171f3d;
       --text: #e9eefc;
@@ -17,12 +30,45 @@
       --amber: #ffb547;
       --red: #ff6b6b;
       --link: #7dd3fc;
+      --panel-top: rgba(255,255,255,0.03);
+      --panel-bottom: rgba(255,255,255,0.015);
+      --shadow: rgba(0,0,0,0.18);
+      --button-bg: rgba(255,255,255,0.06);
+      --button-text: var(--text);
+      --article-code-bg: rgba(255,255,255,0.06);
+      --article-code-border: rgba(255,255,255,0.08);
+      --pre-bg: #0f1731;
+      --blockquote-bg: rgba(51,209,255,0.06);
+    }
+
+    html[data-theme="light"] {
+      --bg: #eef4ff;
+      --bg-accent: #d9e8ff;
+      --panel: #ffffff;
+      --panel-2: #f4f8ff;
+      --text: #11203f;
+      --muted: #597094;
+      --line: #d3def0;
+      --cyan: #0f84c9;
+      --lime: #6eab12;
+      --amber: #d6861b;
+      --red: #c94242;
+      --link: #0f84c9;
+      --panel-top: rgba(255,255,255,0.94);
+      --panel-bottom: rgba(240,246,255,0.94);
+      --shadow: rgba(45,72,117,0.12);
+      --button-bg: #ffffff;
+      --button-text: #11203f;
+      --article-code-bg: rgba(17,32,63,0.06);
+      --article-code-border: rgba(17,32,63,0.08);
+      --pre-bg: #eef4ff;
+      --blockquote-bg: rgba(15,132,201,0.08);
     }
 
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      background: radial-gradient(circle at top left, #132048 0, var(--bg) 45%);
+      background: radial-gradient(circle at top left, var(--bg-accent) 0, var(--bg) 45%);
       color: var(--text);
       font-family: Inter, Arial, sans-serif;
     }
@@ -34,7 +80,7 @@
     .sidebar {
       padding: 24px 18px;
       border-right: 1px solid var(--line);
-      background: rgba(12,18,36,0.92);
+      background: var(--panel);
       position: sticky;
       top: 0;
       height: 100vh;
@@ -75,6 +121,18 @@
       padding: 10px 12px;
       font-size: 13px;
     }
+    .theme-toggle {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: var(--button-bg);
+      color: var(--button-text);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: left;
+    }
     .nav {
       display: grid;
       gap: 10px;
@@ -110,11 +168,11 @@
     .article {
       max-width: 920px;
       margin: 0 auto;
-      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
       border: 1px solid var(--line);
       border-radius: 20px;
       padding: 28px 32px;
-      box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+      box-shadow: 0 16px 40px var(--shadow);
     }
     .article h1, .article h2, .article h3 {
       margin-top: 0;
@@ -149,15 +207,15 @@
       color: var(--link);
     }
     .article code {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: var(--article-code-bg);
+      border: 1px solid var(--article-code-border);
       border-radius: 8px;
       padding: 2px 6px;
       font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
       font-size: 0.92em;
     }
     .article pre {
-      background: #0f1731;
+      background: var(--pre-bg);
       border: 1px solid var(--line);
       border-radius: 14px;
       padding: 16px;
@@ -185,7 +243,7 @@
       margin: 18px 0;
       padding: 14px 18px;
       border-left: 3px solid var(--cyan);
-      background: rgba(51,209,255,0.06);
+      background: var(--blockquote-bg);
       border-radius: 12px;
       color: var(--text);
     }
@@ -213,6 +271,7 @@
       <div class="actions">
         <a class="action-link" href="../dashboard/latest-report.html">Open Visual Dashboard</a>
         <a class="action-link" href="index.html">Open Client Pack</a>
+        <button class="theme-toggle" id="themeToggle" type="button">Toggle Theme</button>
       </div>
       <nav class="nav"><a class="nav-link" href="client-pack-latest.html"><span class="nav-title">Client Pack</span><span class="nav-meta">Client Pack Latest</span></a><a class="nav-link active" href="weekly-radar-latest.html"><span class="nav-title">Sydney Planning Opportunity Radar</span><span class="nav-meta">Weekly Radar Latest</span></a><a class="nav-link" href="deep-dive-bankstown.html"><span class="nav-title">Deep Dive: Bankstown</span><span class="nav-meta">Deep Dive Bankstown</span></a><a class="nav-link" href="deep-dive-five-dock.html"><span class="nav-title">Deep Dive: Five Dock</span><span class="nav-meta">Deep Dive Five Dock</span></a></nav>
     </aside>
@@ -724,5 +783,23 @@
 </article>
     </main>
   </div>
+  <script>
+    (() => {
+      const storageKey = 'radarestate-theme';
+      const currentTheme = document.documentElement.dataset.theme || 'dark';
+      const button = document.getElementById('themeToggle');
+      if (!button) return;
+      button.textContent = currentTheme === 'dark' ? 'Light Theme' : 'Dark Theme';
+      button.addEventListener('click', () => {
+        const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        try {
+          window.localStorage.setItem(storageKey, nextTheme);
+        } catch {
+        }
+        document.documentElement.dataset.theme = nextTheme;
+        window.location.reload();
+      });
+    })();
+  </script>
 </body>
 </html>

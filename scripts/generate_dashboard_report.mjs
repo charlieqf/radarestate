@@ -56,9 +56,22 @@ function htmlTemplate(data) {
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script>
+    (() => {
+      const storageKey = 'radarestate-theme';
+      let stored = null;
+      try {
+        stored = window.localStorage.getItem(storageKey);
+      } catch {
+      }
+      const preferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.dataset.theme = stored || preferred;
+    })();
+  </script>
   <style>
     :root {
       --bg: #0b1020;
+      --bg-accent: #132048;
       --panel: #121932;
       --panel-2: #171f3d;
       --text: #e9eefc;
@@ -69,13 +82,50 @@ function htmlTemplate(data) {
       --pink: #ff5daa;
       --amber: #ffb547;
       --red: #ff6b6b;
+      --grid: rgba(146,160,196,0.12);
+      --panel-top: rgba(255,255,255,0.03);
+      --panel-bottom: rgba(255,255,255,0.01);
+      --shadow: rgba(0,0,0,0.18);
+      --button-bg: rgba(255,255,255,0.06);
+      --button-text: var(--text);
+      --map-bg: #0f1731;
+      --popup-bg: #ffffff;
+      --popup-text: #0b1020;
+      --popup-border: rgba(11,16,32,0.12);
+      --table-header: var(--muted);
+    }
+
+    html[data-theme="light"] {
+      --bg: #eef4ff;
+      --bg-accent: #d9e8ff;
+      --panel: #ffffff;
+      --panel-2: #f4f8ff;
+      --text: #11203f;
+      --muted: #597094;
+      --line: #d3def0;
+      --cyan: #0f84c9;
+      --lime: #6eab12;
+      --pink: #d64588;
+      --amber: #d6861b;
+      --red: #c94242;
+      --grid: rgba(89,112,148,0.16);
+      --panel-top: rgba(255,255,255,0.92);
+      --panel-bottom: rgba(240,246,255,0.92);
+      --shadow: rgba(45,72,117,0.12);
+      --button-bg: #ffffff;
+      --button-text: #11203f;
+      --map-bg: #dbe8f7;
+      --popup-bg: #ffffff;
+      --popup-text: #11203f;
+      --popup-border: rgba(17,32,63,0.12);
+      --table-header: #4f6485;
     }
 
     * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: Inter, Arial, sans-serif;
-      background: radial-gradient(circle at top left, #132048 0, var(--bg) 40%);
+      background: radial-gradient(circle at top left, var(--bg-accent) 0, var(--bg) 40%);
       color: var(--text);
     }
     .page {
@@ -90,11 +140,18 @@ function htmlTemplate(data) {
       margin-bottom: 20px;
     }
     .hero-card, .panel {
-      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
       border: 1px solid var(--line);
       border-radius: 18px;
       padding: 22px;
-      box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+      box-shadow: 0 16px 40px var(--shadow);
+    }
+    .hero-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
     }
     .eyebrow {
       color: var(--cyan);
@@ -124,6 +181,17 @@ function htmlTemplate(data) {
       border-radius: 14px;
       background: var(--panel-2);
       border: 1px solid var(--line);
+    }
+    .theme-toggle {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: var(--button-bg);
+      color: var(--button-text);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
     }
     .meta-label {
       color: var(--muted);
@@ -163,11 +231,11 @@ function htmlTemplate(data) {
       border: 1px solid var(--line);
     }
     .leaflet-container {
-      background: #0f1731;
+      background: var(--map-bg);
       font-family: Inter, Arial, sans-serif;
     }
     .map-popup {
-      color: #0b1020;
+      color: var(--popup-text);
       line-height: 1.5;
       min-width: 220px;
     }
@@ -207,11 +275,18 @@ function htmlTemplate(data) {
       vertical-align: top;
     }
     th {
-      color: var(--muted);
+      color: var(--table-header);
       font-weight: 600;
       font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 0.08em;
+    }
+    .leaflet-popup-content-wrapper,
+    .leaflet-popup-tip {
+      background: var(--popup-bg);
+      color: var(--popup-text);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.16);
+      border: 1px solid var(--popup-border);
     }
     .tag {
       display: inline-block;
@@ -237,7 +312,10 @@ function htmlTemplate(data) {
   <div class="page">
     <section class="hero">
       <div class="hero-card">
-        <div class="eyebrow">RadarEstate</div>
+        <div class="hero-top">
+          <div class="eyebrow">RadarEstate</div>
+          <button class="theme-toggle" id="themeToggle" type="button">Toggle Theme</button>
+        </div>
         <h1>Sydney Planning And Activity Research Dashboard</h1>
         <p class="lede">Public-data powered council-level view across housing target pressure, planning proposal pipeline and recent development activity. This report is generated directly from Supabase views, not from mock sample JSON.</p>
       </div>
@@ -412,8 +490,24 @@ function htmlTemplate(data) {
 
   <script>
     const reportData = ${safeJson(data)};
-    const axisColor = '#92a0c4';
-    const gridColor = 'rgba(146,160,196,0.12)';
+    const storageKey = 'radarestate-theme';
+    const currentTheme = document.documentElement.dataset.theme || 'dark';
+    const themeToggle = document.getElementById('themeToggle');
+
+    const cssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    const axisColor = cssVar('--muted');
+    const gridColor = cssVar('--grid');
+
+    themeToggle.textContent = currentTheme === 'dark' ? 'Light Theme' : 'Dark Theme';
+    themeToggle.addEventListener('click', () => {
+      const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      try {
+        window.localStorage.setItem(storageKey, nextTheme);
+      } catch {
+      }
+      document.documentElement.dataset.theme = nextTheme;
+      window.location.reload();
+    });
 
     const ratingColor = (rating, friction) => {
       if ((friction || 0) >= 5) return '#ff6b6b';
@@ -423,7 +517,10 @@ function htmlTemplate(data) {
     };
 
     const precinctMap = L.map('precinctMap', { zoomControl: true, scrollWheelZoom: false });
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    const tileUrl = currentTheme === 'light'
+      ? 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+      : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+    L.tileLayer(tileUrl, {
       attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
       subdomains: 'abcd',
       maxZoom: 19
