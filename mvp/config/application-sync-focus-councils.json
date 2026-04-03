@@ -1,0 +1,62 @@
+{
+  "recentFrom": "2025-01-01",
+  "pageSize": 500,
+  "councils": [
+    {
+      "canonicalName": "Parramatta",
+      "trackerDisplayName": "City of Parramatta Council"
+    },
+    {
+      "canonicalName": "Cumberland",
+      "trackerDisplayName": "Cumberland Council"
+    },
+    {
+      "canonicalName": "Ryde",
+      "trackerDisplayName": "Ryde City Council"
+    },
+    {
+      "canonicalName": "Canterbury-Bankstown",
+      "trackerDisplayName": "Canterbury-Bankstown Council"
+    },
+    {
+      "canonicalName": "Georges River",
+      "trackerDisplayName": "Georges River Council"
+    },
+    {
+      "canonicalName": "Canada Bay",
+      "trackerDisplayName": "City of Canada Bay Council"
+    },
+    {
+      "canonicalName": "Inner West",
+      "trackerDisplayName": "Inner West Council"
+    },
+    {
+      "canonicalName": "Burwood",
+      "trackerDisplayName": "Burwood Council"
+    },
+    {
+      "canonicalName": "Strathfield",
+      "trackerDisplayName": "Strathfield Municipal Council"
+    },
+    {
+      "canonicalName": "Liverpool",
+      "trackerDisplayName": "Liverpool City Council"
+    },
+    {
+      "canonicalName": "Campbelltown",
+      "trackerDisplayName": "Campbelltown City Council"
+    },
+    {
+      "canonicalName": "Willoughby",
+      "trackerDisplayName": "Willoughby City Council"
+    },
+    {
+      "canonicalName": "Ku-ring-gai",
+      "trackerDisplayName": "Ku-ring-gai Council"
+    },
+    {
+      "canonicalName": "North Sydney",
+      "trackerDisplayName": "North Sydney Council"
+    }
+  ]
+}

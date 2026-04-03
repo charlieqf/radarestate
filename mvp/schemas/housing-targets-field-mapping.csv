@@ -1,0 +1,9 @@
+source_name,raw_field,normalised_field,target_table,required,notes
+Housing Targets,council_name_text,lga,housing_target_context,yes,Normalise to LGA naming standard
+Housing Targets,snapshot_url,source_url,housing_target_context,yes,Primary council snapshot URL
+Housing Targets,target_period_text,target_period,housing_target_context,yes,Keep raw period wording initially
+Housing Targets,target_value_text,target_value_raw,housing_target_context,yes,Preserve published target wording before numeric parsing
+Housing Targets,progress_text,completion_or_progress_raw,housing_target_context,no,Preserve published progress wording
+Housing Targets,region_group_text,region_group,housing_target_context,no,Useful for dashboard grouping
+Housing Targets,notes_text,notes,housing_target_context,no,Short context note or caveat
+Housing Targets,observed_at,last_reviewed_at,housing_target_context,yes,Observation date for comparison over time

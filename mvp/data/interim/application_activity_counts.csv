@@ -1,0 +1,11 @@
+council,total_count,recent_count_2025_01_01_onward,last_reviewed_at,notes
+Canterbury-Bankstown Council,16201,3423,2026-04-02,Counts derived from public DAApplicationTracker API with ApplicationStatus=ALL
+Liverpool City Council,15581,3320,2026-04-02,Counts derived from public DAApplicationTracker API with ApplicationStatus=ALL
+Inner West Council,14322,2593,2026-04-02,Counts derived from public DAApplicationTracker API with ApplicationStatus=ALL
+Campbelltown City Council,9986,2591,2026-04-02,Counts derived from public DAApplicationTracker API with ApplicationStatus=ALL
+City of Parramatta Council,12524,2253,2026-04-02,Counts derived from public DAApplicationTracker API with ApplicationStatus=ALL
+Ryde City Council,8710,1825,2026-04-02,Counts derived from public DAApplicationTracker API with ApplicationStatus=ALL
+Ku-ring-gai Council,7563,1492,2026-04-02,Counts derived from public DAApplicationTracker API with ApplicationStatus=ALL
+Willoughby City Council,5625,1250,2026-04-02,Counts derived from public DAApplicationTracker API with ApplicationStatus=ALL
+North Sydney Council,4729,889,2026-04-02,Counts derived from public DAApplicationTracker API with ApplicationStatus=ALL
+Strathfield Municipal Council,2278,416,2026-04-02,Counts derived from public DAApplicationTracker API with ApplicationStatus=ALL

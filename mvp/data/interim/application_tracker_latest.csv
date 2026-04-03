@@ -1,0 +1,5 @@
+app_id,source_name,tracker_scope,council,application_type,status,location_text,lodgement_date,source_url,precinct_id,observed_at
+CDC-100067,Application Tracker API,applications,City of Parramatta Council,Complying Development Certificate Application,Approved,"15 NIRVANA STREET PENDLE HILL 2145",2022-07-08,https://api.apps1.nsw.gov.au/eplanning/data/v0/DAApplicationTracker,,2026-04-02
+CDC-100055,Application Tracker API,applications,Canterbury-Bankstown Council,Complying Development Certificate Application,Approved,"37 ERNEST STREET LAKEMBA 2195",2022-07-28,https://api.apps1.nsw.gov.au/eplanning/data/v0/DAApplicationTracker,,2026-04-02
+CDC-100019,Application Tracker API,applications,Liverpool City Council,Complying Development Certificate Application,Withdrawn,"56 BOLAC ROAD AUSTRAL 2179",2022-07-12,https://api.apps1.nsw.gov.au/eplanning/data/v0/DAApplicationTracker,,2026-04-02
+SSD-9577613-Mod-3,State Significant Spatial Data,state_significant,Cumberland,SSD Modifications,Determination,"554-562 Reservoir Road, Prospect NSW 2148",,https://www.planningportal.nsw.gov.au/state-significant-projects-spatial-data,,2026-04-02

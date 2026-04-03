@@ -1,0 +1,325 @@
+{
+  "recentFrom": "2025-01-01",
+  "precincts": [
+    {
+      "code": "PRECINCT_WESTMEAD",
+      "name": "Westmead",
+      "type": "station",
+      "primaryCouncil": "Parramatta",
+      "allowedCouncils": ["Parramatta", "Cumberland"],
+      "policyTheme": "TOD;LMR",
+      "watchPriority": "high",
+      "keywords": ["Westmead"]
+    },
+    {
+      "code": "PRECINCT_EPPING",
+      "name": "Epping",
+      "type": "station",
+      "primaryCouncil": "Ryde",
+      "allowedCouncils": ["Ryde", "Parramatta"],
+      "policyTheme": "TOD;LMR",
+      "watchPriority": "high",
+      "keywords": ["Epping"]
+    },
+    {
+      "code": "PRECINCT_MEADOWBANK",
+      "name": "Meadowbank",
+      "type": "station",
+      "primaryCouncil": "Ryde",
+      "allowedCouncils": ["Ryde"],
+      "policyTheme": "LMR",
+      "watchPriority": "high",
+      "keywords": ["Meadowbank"]
+    },
+    {
+      "code": "PRECINCT_WEST_RYDE",
+      "name": "West Ryde",
+      "type": "station",
+      "primaryCouncil": "Ryde",
+      "allowedCouncils": ["Ryde"],
+      "policyTheme": "LMR",
+      "watchPriority": "high",
+      "keywords": ["West Ryde"]
+    },
+    {
+      "code": "PRECINCT_AUBURN",
+      "name": "Auburn",
+      "type": "centre",
+      "primaryCouncil": "Cumberland",
+      "allowedCouncils": ["Cumberland"],
+      "policyTheme": "LMR",
+      "watchPriority": "medium",
+      "keywords": ["Auburn"]
+    },
+    {
+      "code": "PRECINCT_BANKSTOWN",
+      "name": "Bankstown",
+      "type": "station",
+      "primaryCouncil": "Canterbury-Bankstown",
+      "allowedCouncils": ["Canterbury-Bankstown"],
+      "policyTheme": "TOD;LMR",
+      "watchPriority": "high",
+      "keywords": ["Bankstown"]
+    },
+    {
+      "code": "PRECINCT_RIVERWOOD",
+      "name": "Riverwood",
+      "type": "station",
+      "primaryCouncil": "Georges River",
+      "allowedCouncils": ["Georges River", "Canterbury-Bankstown"],
+      "policyTheme": "LMR",
+      "watchPriority": "medium",
+      "keywords": ["Riverwood"]
+    },
+    {
+      "code": "PRECINCT_BEVERLY_HILLS",
+      "name": "Beverly Hills",
+      "type": "centre",
+      "primaryCouncil": "Georges River",
+      "allowedCouncils": ["Georges River"],
+      "policyTheme": "LMR",
+      "watchPriority": "medium",
+      "keywords": ["Beverly Hills"]
+    },
+    {
+      "code": "PRECINCT_KOGARAH",
+      "name": "Kogarah",
+      "type": "centre",
+      "primaryCouncil": "Georges River",
+      "allowedCouncils": ["Georges River", "Bayside"],
+      "policyTheme": "TOD;LMR",
+      "watchPriority": "high",
+      "keywords": ["Kogarah"]
+    },
+    {
+      "code": "PRECINCT_HURSTVILLE",
+      "name": "Hurstville",
+      "type": "centre",
+      "primaryCouncil": "Georges River",
+      "allowedCouncils": ["Georges River"],
+      "policyTheme": "LMR",
+      "watchPriority": "high",
+      "keywords": ["Hurstville"]
+    },
+    {
+      "code": "PRECINCT_ASHFIELD",
+      "name": "Ashfield",
+      "type": "centre",
+      "primaryCouncil": "Inner West",
+      "allowedCouncils": ["Inner West"],
+      "policyTheme": "LMR",
+      "watchPriority": "medium",
+      "keywords": ["Ashfield", "Ashbury"]
+    },
+    {
+      "code": "PRECINCT_CROYDON",
+      "name": "Croydon",
+      "type": "centre",
+      "primaryCouncil": "Burwood",
+      "allowedCouncils": ["Burwood", "Inner West"],
+      "policyTheme": "LMR",
+      "watchPriority": "medium",
+      "keywords": ["Croydon"]
+    },
+    {
+      "code": "PRECINCT_HOMEBUSH",
+      "name": "Homebush",
+      "type": "centre",
+      "primaryCouncil": "Strathfield",
+      "allowedCouncils": ["Strathfield", "Burwood"],
+      "policyTheme": "TOD;LMR",
+      "watchPriority": "high",
+      "keywords": ["Homebush", "North Strathfield"]
+    },
+    {
+      "code": "PRECINCT_FLEMINGTON",
+      "name": "Flemington",
+      "type": "centre",
+      "primaryCouncil": "Strathfield",
+      "allowedCouncils": ["Strathfield"],
+      "policyTheme": "LMR",
+      "watchPriority": "medium",
+      "keywords": ["Flemington"]
+    },
+    {
+      "code": "PRECINCT_PETERSHAM",
+      "name": "Petersham",
+      "type": "centre",
+      "primaryCouncil": "Inner West",
+      "allowedCouncils": ["Inner West"],
+      "policyTheme": "LMR",
+      "watchPriority": "medium",
+      "keywords": ["Petersham"]
+    },
+    {
+      "code": "PRECINCT_LIVERPOOL",
+      "name": "Liverpool",
+      "type": "centre",
+      "primaryCouncil": "Liverpool",
+      "allowedCouncils": ["Liverpool"],
+      "policyTheme": "TOD;LMR",
+      "watchPriority": "high",
+      "keywords": ["Liverpool"]
+    },
+    {
+      "code": "PRECINCT_GLENFIELD",
+      "name": "Glenfield",
+      "type": "station",
+      "primaryCouncil": "Campbelltown",
+      "allowedCouncils": ["Campbelltown", "Liverpool"],
+      "policyTheme": "TOD;LMR",
+      "watchPriority": "high",
+      "keywords": ["Glenfield"]
+    },
+    {
+      "code": "PRECINCT_INGLEBURN",
+      "name": "Ingleburn",
+      "type": "station",
+      "primaryCouncil": "Campbelltown",
+      "allowedCouncils": ["Campbelltown"],
+      "policyTheme": "LMR",
+      "watchPriority": "medium",
+      "keywords": ["Ingleburn"]
+    },
+    {
+      "code": "PRECINCT_CAMPBELLTOWN",
+      "name": "Campbelltown",
+      "type": "centre",
+      "primaryCouncil": "Campbelltown",
+      "allowedCouncils": ["Campbelltown"],
+      "policyTheme": "TOD;LMR",
+      "watchPriority": "high",
+      "keywords": ["Campbelltown"]
+    },
+    {
+      "code": "PRECINCT_MACARTHUR",
+      "name": "Macarthur",
+      "type": "station",
+      "primaryCouncil": "Campbelltown",
+      "allowedCouncils": ["Campbelltown"],
+      "policyTheme": "TOD",
+      "watchPriority": "medium",
+      "keywords": ["Macarthur"]
+    },
+    {
+      "code": "PRECINCT_CHATSWOOD",
+      "name": "Chatswood",
+      "type": "centre",
+      "primaryCouncil": "Willoughby",
+      "allowedCouncils": ["Willoughby"],
+      "policyTheme": "TOD;LMR",
+      "watchPriority": "high",
+      "keywords": ["Chatswood"]
+    },
+    {
+      "code": "PRECINCT_ST_LEONARDS",
+      "name": "St Leonards",
+      "type": "station",
+      "primaryCouncil": "North Sydney",
+      "allowedCouncils": ["North Sydney", "Willoughby"],
+      "policyTheme": "TOD",
+      "watchPriority": "high",
+      "keywords": ["St Leonards", "St Leonard's"]
+    },
+    {
+      "code": "PRECINCT_GORDON",
+      "name": "Gordon",
+      "type": "centre",
+      "primaryCouncil": "Ku-ring-gai",
+      "allowedCouncils": ["Ku-ring-gai"],
+      "policyTheme": "LMR",
+      "watchPriority": "high",
+      "keywords": ["Gordon"]
+    },
+    {
+      "code": "PRECINCT_LINDFIELD",
+      "name": "Lindfield",
+      "type": "centre",
+      "primaryCouncil": "Ku-ring-gai",
+      "allowedCouncils": ["Ku-ring-gai"],
+      "policyTheme": "LMR",
+      "watchPriority": "medium",
+      "keywords": ["Lindfield"]
+    },
+    {
+      "code": "PRECINCT_VICTORIA_CROSS",
+      "name": "Victoria Cross",
+      "type": "station",
+      "primaryCouncil": "North Sydney",
+      "allowedCouncils": ["North Sydney"],
+      "policyTheme": "TOD",
+      "watchPriority": "high",
+      "keywords": ["Victoria Cross"]
+    },
+    {
+      "code": "PRECINCT_FIVE_DOCK",
+      "name": "Five Dock",
+      "type": "centre",
+      "primaryCouncil": "Canada Bay",
+      "allowedCouncils": ["Canada Bay"],
+      "policyTheme": "Observed",
+      "watchPriority": "medium",
+      "keywords": ["Five Dock"]
+    },
+    {
+      "code": "PRECINCT_GLADESVILLE",
+      "name": "Gladesville",
+      "type": "centre",
+      "primaryCouncil": "Hunters Hill",
+      "allowedCouncils": ["Hunters Hill", "Ryde"],
+      "policyTheme": "Observed",
+      "watchPriority": "medium",
+      "keywords": ["Gladesville"]
+    },
+    {
+      "code": "PRECINCT_MARRICKVILLE",
+      "name": "Marrickville",
+      "type": "centre",
+      "primaryCouncil": "Inner West",
+      "allowedCouncils": ["Inner West"],
+      "policyTheme": "Observed;LMR",
+      "watchPriority": "medium",
+      "keywords": ["Marrickville"]
+    },
+    {
+      "code": "PRECINCT_NORWEST",
+      "name": "Norwest",
+      "type": "centre",
+      "primaryCouncil": "The Hills Shire",
+      "allowedCouncils": ["The Hills Shire"],
+      "policyTheme": "Observed;TOD",
+      "watchPriority": "medium",
+      "keywords": ["Norwest"]
+    },
+    {
+      "code": "PRECINCT_MIRANDA",
+      "name": "Miranda",
+      "type": "centre",
+      "primaryCouncil": "Sutherland Shire",
+      "allowedCouncils": ["Sutherland Shire"],
+      "policyTheme": "Observed",
+      "watchPriority": "medium",
+      "keywords": ["Miranda"]
+    },
+    {
+      "code": "PRECINCT_LAKEMBA",
+      "name": "Lakemba",
+      "type": "centre",
+      "primaryCouncil": "Canterbury-Bankstown",
+      "allowedCouncils": ["Canterbury-Bankstown"],
+      "policyTheme": "Observed;LMR",
+      "watchPriority": "medium",
+      "keywords": ["Lakemba"]
+    },
+    {
+      "code": "PRECINCT_MACQUARIE_PARK",
+      "name": "Macquarie Park",
+      "type": "centre",
+      "primaryCouncil": "Ryde",
+      "allowedCouncils": ["Ryde"],
+      "policyTheme": "Observed;TOD",
+      "watchPriority": "medium",
+      "keywords": ["Macquarie Park"]
+    }
+  ]
+}

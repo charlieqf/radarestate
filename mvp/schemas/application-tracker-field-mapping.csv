@@ -1,0 +1,11 @@
+source_name,raw_field,normalised_field,target_table,required,notes
+Application Tracker,project_name,project_name,application_signals,yes,Primary display title from tracker
+Application Tracker,application_reference,app_id,application_signals,yes,Use official ref where available
+Application Tracker,status_text,status,application_signals,yes,Map to normalised status label
+Application Tracker,council_text,council,application_signals,yes,Normalise council naming
+Application Tracker,development_type_text,application_type,application_signals,yes,Preserve broad development category
+Application Tracker,address_text,location_text,application_signals,yes,Preserve raw address string first
+Application Tracker,lodged_date_text,lodgement_date,application_signals,no,Parse when available
+Application Tracker,detail_url,source_url,application_signals,yes,Primary verification URL
+Application Tracker,tracker_scope,tracker_scope,application_tracker_latest,yes,Keep raw scope in interim layer before curated transform
+Application Tracker,observed_at,observed_at,application_tracker_latest,yes,Observation timestamp for change detection

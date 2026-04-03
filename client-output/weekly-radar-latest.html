@@ -1,0 +1,728 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sydney Planning Opportunity Radar</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #121932;
+      --panel-2: #171f3d;
+      --text: #e9eefc;
+      --muted: #92a0c4;
+      --line: #273154;
+      --cyan: #33d1ff;
+      --lime: #b7ff3c;
+      --amber: #ffb547;
+      --red: #ff6b6b;
+      --link: #7dd3fc;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top left, #132048 0, var(--bg) 45%);
+      color: var(--text);
+      font-family: Inter, Arial, sans-serif;
+    }
+    .shell {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      min-height: 100vh;
+    }
+    .sidebar {
+      padding: 24px 18px;
+      border-right: 1px solid var(--line);
+      background: rgba(12,18,36,0.92);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+    .brand {
+      margin-bottom: 22px;
+    }
+    .eyebrow {
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    .brand h1 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.2;
+    }
+    .brand p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 10px 0 0;
+    }
+    .actions {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+    .action-link {
+      display: inline-block;
+      text-decoration: none;
+      color: var(--text);
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 13px;
+    }
+    .nav {
+      display: grid;
+      gap: 10px;
+    }
+    .nav-link {
+      display: block;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.02);
+      text-decoration: none;
+      color: var(--text);
+    }
+    .nav-link.active {
+      border-color: rgba(51,209,255,0.45);
+      box-shadow: inset 0 0 0 1px rgba(51,209,255,0.25);
+      background: rgba(51,209,255,0.08);
+    }
+    .nav-title {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .nav-meta {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .main {
+      padding: 28px;
+    }
+    .article {
+      max-width: 920px;
+      margin: 0 auto;
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 28px 32px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+    }
+    .article h1, .article h2, .article h3 {
+      margin-top: 0;
+    }
+    .article h1 {
+      font-size: 32px;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .article h2 {
+      font-size: 20px;
+      margin-top: 28px;
+      margin-bottom: 14px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+    .article h3 {
+      font-size: 16px;
+      margin-top: 22px;
+      margin-bottom: 10px;
+      color: var(--cyan);
+    }
+    .article p, .article li {
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+    .article ul, .article ol {
+      padding-left: 22px;
+    }
+    .article a {
+      color: var(--link);
+    }
+    .article code {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      padding: 2px 6px;
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 0.92em;
+    }
+    .article pre {
+      background: #0f1731;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      overflow: auto;
+    }
+    .article table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 20px;
+      font-size: 14px;
+    }
+    .article th, .article td {
+      border-bottom: 1px solid var(--line);
+      padding: 11px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .article th {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 12px;
+    }
+    .article blockquote {
+      margin: 18px 0;
+      padding: 14px 18px;
+      border-left: 3px solid var(--cyan);
+      background: rgba(51,209,255,0.06);
+      border-radius: 12px;
+      color: var(--text);
+    }
+    @media (max-width: 980px) {
+      .shell { grid-template-columns: 1fr; }
+      .sidebar {
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+      .main { padding: 18px; }
+      .article { padding: 22px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="eyebrow">RadarEstate</div>
+        <h1>Client Reports</h1>
+        <p>Styled HTML delivery layer for weekly radar, deep dives and client pack notes.</p>
+      </div>
+      <div class="actions">
+        <a class="action-link" href="../dashboard/latest-report.html">Open Visual Dashboard</a>
+        <a class="action-link" href="index.html">Open Client Pack</a>
+      </div>
+      <nav class="nav"><a class="nav-link" href="client-pack-latest.html"><span class="nav-title">Client Pack</span><span class="nav-meta">Client Pack Latest</span></a><a class="nav-link active" href="weekly-radar-latest.html"><span class="nav-title">Sydney Planning Opportunity Radar</span><span class="nav-meta">Weekly Radar Latest</span></a><a class="nav-link" href="deep-dive-bankstown.html"><span class="nav-title">Deep Dive: Bankstown</span><span class="nav-meta">Deep Dive Bankstown</span></a><a class="nav-link" href="deep-dive-five-dock.html"><span class="nav-title">Deep Dive: Five Dock</span><span class="nav-meta">Deep Dive Five Dock</span></a></nav>
+    </aside>
+    <main class="main">
+      <article class="article"><h1>Sydney Planning Opportunity Radar</h1>
+<h2>Week Of 2026-04-03</h2>
+<p>Companion visual dashboard: <a href="../dashboard/latest-report.html"><code>dashboard/latest-report.html</code></a></p>
+<h2>Headline</h2>
+<p><code>Five Dock</code>、<code>Gladesville</code> 目前仍是最值得优先看的 precinct，而 <code>Bankstown</code>、<code>Ingleburn</code> 在 flood / bushfire / friction 叠加后应下调为高风险观察。</p>
+<h2>Snapshot</h2>
+<ul>
+<li>Planning proposals tracked: <code>1,413</code></li>
+<li>Application signals tracked: <code>26,015</code></li>
+<li>Precinct shortlist items: <code>31</code></li>
+<li>Derived constraints: <code>53</code></li>
+</ul>
+<h2>Executive Summary</h2>
+<ul>
+<li><code>Five Dock</code>、<code>Gladesville</code> 目前构成首批高优先级 precinct，特点是 active pipeline 和 recent applications 能同时成立，且 friction 仍可控。</li>
+<li><code>Canterbury-Bankstown</code>、<code>Liverpool</code>、<code>Inner West</code> 仍是 council-level activity 最强的一组，适合继续向 precinct 和 street-level 深挖。</li>
+<li><code>Bankstown</code>、<code>Ingleburn</code>、<code>Liverpool</code> 已出现明显风险叠加，当前更适合做 risk-adjusted watchlist，而不是直接升级成 acquisition priority。 当前最强的风险来源包括 flood metadata high hits = 21，bushfire spatial high hits = 7。</li>
+<li>当前 proposal pipeline 中仍有 107 条 active items，另有 1,164 条已进入 made stage，说明政策主线已足够支撑持续型 radar 输出。</li>
+</ul>
+<h2>Top Precinct Hotlist</h2>
+<table>
+<thead>
+<tr>
+<th>Rank</th>
+<th>Precinct</th>
+<th>Council</th>
+<th>Rating</th>
+<th>Policy</th>
+<th>Timing</th>
+<th>Risk</th>
+<th>Recent Apps</th>
+<th>Pipeline</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Five Dock</td>
+<td>Canada Bay</td>
+<td>A</td>
+<td>4</td>
+<td>5</td>
+<td>0</td>
+<td>113</td>
+<td>2</td>
+<td>Prioritise</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Gladesville</td>
+<td>Hunters Hill</td>
+<td>A</td>
+<td>4</td>
+<td>5</td>
+<td>2</td>
+<td>175</td>
+<td>2</td>
+<td>Prioritise</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Norwest</td>
+<td>The Hills Shire</td>
+<td>B</td>
+<td>4</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>Investigate</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Miranda</td>
+<td>Sutherland Shire</td>
+<td>B</td>
+<td>3</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>Investigate</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Beverly Hills</td>
+<td>Georges River</td>
+<td>B</td>
+<td>2</td>
+<td>5</td>
+<td>1</td>
+<td>64</td>
+<td>1</td>
+<td>Investigate</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Croydon</td>
+<td>Burwood</td>
+<td>B</td>
+<td>2</td>
+<td>5</td>
+<td>1</td>
+<td>192</td>
+<td>1</td>
+<td>Investigate</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Epping</td>
+<td>Ryde</td>
+<td>B</td>
+<td>1</td>
+<td>5</td>
+<td>2</td>
+<td>250</td>
+<td>0</td>
+<td>Investigate</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Lindfield</td>
+<td>Ku-ring-gai</td>
+<td>B</td>
+<td>1</td>
+<td>5</td>
+<td>2</td>
+<td>196</td>
+<td>0</td>
+<td>Investigate</td>
+</tr>
+<tr>
+<td>9</td>
+<td>St Leonards</td>
+<td>North Sydney</td>
+<td>B</td>
+<td>1</td>
+<td>5</td>
+<td>2</td>
+<td>50</td>
+<td>0</td>
+<td>Investigate</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Auburn</td>
+<td>Cumberland</td>
+<td>B</td>
+<td>0</td>
+<td>5</td>
+<td>2</td>
+<td>260</td>
+<td>0</td>
+<td>Investigate</td>
+</tr>
+</tbody></table>
+<h2>Highest Friction Precincts</h2>
+<table>
+<thead>
+<tr>
+<th>Precinct</th>
+<th>Council</th>
+<th>Risk</th>
+<th>Recent Apps</th>
+<th>Pipeline</th>
+<th>Constraint Summary</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Bankstown</td>
+<td>Canterbury-Bankstown</td>
+<td>5</td>
+<td>238</td>
+<td>1</td>
+<td>flood_metadata_signal (high), heat_vulnerability_proxy (high), low_tree_canopy_proxy (high), policy_withdrawal_friction (medium)</td>
+</tr>
+<tr>
+<td>Ingleburn</td>
+<td>Campbelltown</td>
+<td>5</td>
+<td>230</td>
+<td>0</td>
+<td>bushfire_spatial_sample (high), flood_metadata_signal (high), low_tree_canopy_proxy (high), heat_vulnerability_proxy (medium)</td>
+</tr>
+<tr>
+<td>Liverpool</td>
+<td>Liverpool</td>
+<td>5</td>
+<td>220</td>
+<td>2</td>
+<td>bushfire_spatial_sample (high), flood_metadata_signal (high), heat_vulnerability_proxy (high), low_tree_canopy_proxy (high), policy_withdrawal_friction (medium)</td>
+</tr>
+<tr>
+<td>Campbelltown</td>
+<td>Campbelltown</td>
+<td>5</td>
+<td>219</td>
+<td>5</td>
+<td>bushfire_spatial_sample (high), flood_metadata_signal (high), low_tree_canopy_proxy (high), heat_vulnerability_proxy (medium)</td>
+</tr>
+<tr>
+<td>Glenfield</td>
+<td>Campbelltown</td>
+<td>5</td>
+<td>72</td>
+<td>0</td>
+<td>bushfire_spatial_sample (high), low_tree_canopy_proxy (high), flood_metadata_signal (medium), heat_vulnerability_proxy (medium)</td>
+</tr>
+<tr>
+<td>Chatswood</td>
+<td>Willoughby</td>
+<td>4</td>
+<td>505</td>
+<td>2</td>
+<td>bushfire_spatial_sample (high), flood_metadata_signal (high)</td>
+</tr>
+<tr>
+<td>Homebush</td>
+<td>Strathfield</td>
+<td>4</td>
+<td>121</td>
+<td>0</td>
+<td>flood_metadata_signal (high), low_tree_canopy_proxy (high)</td>
+</tr>
+<tr>
+<td>Lakemba</td>
+<td>Canterbury-Bankstown</td>
+<td>4</td>
+<td>91</td>
+<td>0</td>
+<td>heat_vulnerability_proxy (high), low_tree_canopy_proxy (high)</td>
+</tr>
+<tr>
+<td>Gordon</td>
+<td>Ku-ring-gai</td>
+<td>4</td>
+<td>70</td>
+<td>0</td>
+<td>bushfire_spatial_sample (high), flood_metadata_signal (high)</td>
+</tr>
+<tr>
+<td>Marrickville</td>
+<td>Inner West</td>
+<td>3</td>
+<td>360</td>
+<td>2</td>
+<td>flood_metadata_signal (high), low_tree_canopy_proxy (medium)</td>
+</tr>
+</tbody></table>
+<h2>Council Scoreboard</h2>
+<table>
+<thead>
+<tr>
+<th>Council</th>
+<th>Target</th>
+<th>Recent Apps</th>
+<th>Active Pipeline</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Canterbury-Bankstown</td>
+<td>14,500</td>
+<td>3,423</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Liverpool</td>
+<td>16,700</td>
+<td>3,320</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Inner West</td>
+<td>7,800</td>
+<td>2,593</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Campbelltown</td>
+<td>10,500</td>
+<td>2,591</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Parramatta</td>
+<td>19,500</td>
+<td>2,253</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Cumberland</td>
+<td>-</td>
+<td>2,208</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Ryde</td>
+<td>11,600</td>
+<td>1,825</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Ku-ring-gai</td>
+<td>7,600</td>
+<td>1,492</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Georges River</td>
+<td>-</td>
+<td>1,380</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Willoughby</td>
+<td>3,400</td>
+<td>1,250</td>
+<td>4</td>
+</tr>
+</tbody></table>
+<h2>Policy Pipeline</h2>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Proposal Count</th>
+<th>Council Count</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Under Assessment</td>
+<td>34</td>
+<td>14</td>
+</tr>
+<tr>
+<td>Pre-Exhibition</td>
+<td>34</td>
+<td>16</td>
+</tr>
+<tr>
+<td>On Exhibition</td>
+<td>12</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Finalisation</td>
+<td>27</td>
+<td>13</td>
+</tr>
+<tr>
+<td>Made</td>
+<td>1,164</td>
+<td>22</td>
+</tr>
+<tr>
+<td>Withdrawn</td>
+<td>142</td>
+<td>19</td>
+</tr>
+</tbody></table>
+<h2>Proposal Watchlist</h2>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Council</th>
+<th>Title</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Under Assessment</td>
+<td>Liverpool</td>
+<td>Amendment to the State Environmental Planning Policy (Precincts - Western Parkland City) 2021</td>
+<td>260 Eighth Avenue Austral 2179</td>
+</tr>
+<tr>
+<td>Under Assessment</td>
+<td>Liverpool</td>
+<td>Amendment to the State Environmental Planning Policy (Precincts - Western Parkland City) 2021</td>
+<td>495 Fourth Avenue Austral 2179</td>
+</tr>
+<tr>
+<td>Under Assessment</td>
+<td>Burwood</td>
+<td>Burwood Town Centre Special Entertainment Precinct</td>
+<td>Burwood</td>
+</tr>
+<tr>
+<td>Under Assessment</td>
+<td>The Hills Shire</td>
+<td>Council Operations Centre 183-191 Maguires Road, Gables</td>
+<td>191 Maguires Road Gables 2765 &amp; more</td>
+</tr>
+<tr>
+<td>Under Assessment</td>
+<td>Sutherland Shire</td>
+<td>Cronulla Special Entertainment Precinct</td>
+<td>Sutherland Shire</td>
+</tr>
+<tr>
+<td>Under Assessment</td>
+<td>Strathfield</td>
+<td>Delisting of Welfare Street Heritage Conservation Area</td>
+<td>Strathfield</td>
+</tr>
+<tr>
+<td>Under Assessment</td>
+<td>Woollahra</td>
+<td>Double Bay Centre- Planning Proposal</td>
+<td>Woollahra</td>
+</tr>
+<tr>
+<td>Under Assessment</td>
+<td>Campbelltown</td>
+<td>East Village Menangle Park Planning Proposal</td>
+<td>Campbelltown</td>
+</tr>
+<tr>
+<td>Under Assessment</td>
+<td>Woollahra</td>
+<td>Edgecliff Commercial Centre Planning Proposal</td>
+<td>Woollahra</td>
+</tr>
+<tr>
+<td>Under Assessment</td>
+<td>Canada Bay</td>
+<td>Five Dock Precinct</td>
+<td>Canada Bay</td>
+</tr>
+<tr>
+<td>Under Assessment</td>
+<td>Campbelltown</td>
+<td>Glenfield Industrial Precinct</td>
+<td>Campbelltown</td>
+</tr>
+<tr>
+<td>Under Assessment</td>
+<td>Woollahra</td>
+<td>Heritage listing of eight sites and one HCA in the area of the Edgecliff Commercial Centre.</td>
+<td>Woollahra</td>
+</tr>
+</tbody></table>
+<h2>Derived Risk Mix</h2>
+<table>
+<thead>
+<tr>
+<th>Constraint Type</th>
+<th>Severity</th>
+<th>Count</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>bushfire_spatial_sample</td>
+<td>high</td>
+<td>7</td>
+</tr>
+<tr>
+<td>bushfire_spatial_sample</td>
+<td>medium</td>
+<td>1</td>
+</tr>
+<tr>
+<td>flood_metadata_signal</td>
+<td>high</td>
+<td>21</td>
+</tr>
+<tr>
+<td>flood_metadata_signal</td>
+<td>medium</td>
+<td>3</td>
+</tr>
+<tr>
+<td>heat_vulnerability_proxy</td>
+<td>high</td>
+<td>3</td>
+</tr>
+<tr>
+<td>heat_vulnerability_proxy</td>
+<td>medium</td>
+<td>4</td>
+</tr>
+<tr>
+<td>low_tree_canopy_proxy</td>
+<td>high</td>
+<td>9</td>
+</tr>
+<tr>
+<td>low_tree_canopy_proxy</td>
+<td>medium</td>
+<td>3</td>
+</tr>
+<tr>
+<td>policy_withdrawal_friction</td>
+<td>medium</td>
+<td>2</td>
+</tr>
+</tbody></table>
+<h2>Suggested Next Actions</h2>
+<ol>
+<li>Prioritise <code>A</code>-rated precincts with low friction for deeper street-level or owner-contact research.</li>
+<li>Keep high-activity but high-friction precincts in a separate risk-adjusted watchlist rather than the main acquisition shortlist.</li>
+<li>Use <a href="../dashboard/latest-report.html"><code>dashboard/latest-report.html</code></a> to visually inspect clusters before writing the next deep-dive memo.</li>
+</ol>
+</article>
+    </main>
+  </div>
+</body>
+</html>

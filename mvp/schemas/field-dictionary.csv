@@ -1,0 +1,57 @@
+table,field_name,type,required,example,source_priority,description
+precincts,precinct_id,text,yes,PRECINCT_STLEONARDS,high,Unique precinct identifier
+precincts,name,text,yes,St Leonards,high,Display name for precinct
+precincts,type,text,yes,station,high,Precinct type such as station town_centre corridor suburb
+precincts,lga,text,yes,North Sydney; Lane Cove; Willoughby,high,Associated LGA or LGAs
+precincts,policy_theme,text,yes,TOD;LMR,high,Main policy themes associated with precinct
+precincts,geometry_ref,text,no,geom_stleonards_800m,medium,Reference to geometry asset or layer id
+precincts,source_url,url,yes,https://www.planning.nsw.gov.au/policy-and-legislation/housing/low-and-mid-rise-housing-policy,high,Primary source URL
+precincts,watch_priority,text,yes,high,high,Manual watchlist priority
+policy_signals,signal_id,text,yes,SIGNAL_PP_20260402_001,high,Unique policy signal identifier
+policy_signals,source_name,text,yes,Planning Proposals Online,high,Human-readable source name
+policy_signals,signal_type,text,yes,planning_proposal,high,Signal category such as planning_proposal TOD LMR LHS target_pressure
+policy_signals,title,text,yes,Example Planning Proposal Title,high,Public title of signal
+policy_signals,stage,text,yes,on_exhibition,high,Normalised stage label
+policy_signals,stage_rank,integer,yes,3,high,Numeric stage ordering for filtering and sorting
+policy_signals,lga,text,yes,Parramatta,high,Associated LGA
+policy_signals,precinct_id,text,no,PRECINCT_WESTMEAD,medium,Linked precinct if matched
+policy_signals,location_text,text,yes,Westmead station precinct,high,Source location string
+policy_signals,published_date,date,no,2026-04-02,medium,Original publication date if available
+policy_signals,updated_date,date,no,2026-04-02,medium,Last observed update date
+policy_signals,source_url,url,yes,https://www.planningportal.nsw.gov.au/ppr,high,Source URL for verification
+policy_signals,summary,text,yes,Proposal stage moved into exhibition,high,Short summary of why signal matters
+policy_signals,analyst_note,text,no,Strong timing signal due to adjacent activity,low,Optional human note
+application_signals,app_id,text,yes,APP_SIGNAL_20260402_001,high,Unique application activity identifier
+application_signals,source_name,text,yes,Council Tracker,high,Source tracker name
+application_signals,council,text,yes,City of Parramatta,high,Origin council
+application_signals,application_type,text,yes,DA,high,Application category
+application_signals,status,text,yes,lodged,high,Normalised application status
+application_signals,location_text,text,yes,123 Example Street Westmead,high,Source location string
+application_signals,lodgement_date,date,no,2026-03-28,medium,Lodgement or publication date
+application_signals,source_url,url,yes,https://www.planningportal.nsw.gov.au/map,high,Source URL
+application_signals,precinct_id,text,no,PRECINCT_WESTMEAD,medium,Linked precinct if matched
+application_signals,signal_weight,integer,no,2,low,Optional weighting for local activity aggregation
+constraints,constraint_id,text,yes,CONSTRAINT_20260402_001,high,Unique constraint identifier
+constraints,constraint_type,text,yes,heritage,high,Constraint category
+constraints,severity,text,yes,high,high,Normalised severity level
+constraints,location_text,text,yes,Example Street frontage,high,Location description
+constraints,precinct_id,text,no,PRECINCT_GORDON,medium,Linked precinct if matched
+constraints,source_url,url,yes,https://data.nsw.gov.au/,high,Source URL
+constraints,notes,text,no,Within indicative area but affected by heritage item,low,Optional analyst note
+opportunity_items,item_id,text,yes,OPP_20260402_001,high,Unique opportunity record identifier
+opportunity_items,item_name,text,yes,Westmead station fringe,high,Display name for opportunity
+opportunity_items,geography_level,text,yes,precinct,high,precinct or site
+opportunity_items,lga,text,yes,Parramatta; Cumberland,high,Associated LGA or LGAs
+opportunity_items,precinct_id,text,no,PRECINCT_WESTMEAD,high,Linked precinct identifier
+opportunity_items,trigger_summary,text,yes,LMR eligibility plus nearby planning movement,high,Primary reason item surfaced
+opportunity_items,policy_score,integer,yes,4,high,Policy catalyst score
+opportunity_items,capacity_score,integer,yes,3,high,Development capacity score
+opportunity_items,friction_score,integer,yes,2,high,Execution friction score where higher means more friction
+opportunity_items,timing_score,integer,yes,4,high,Timing score
+opportunity_items,opportunity_rating,text,yes,A,high,A B or C rating
+opportunity_items,analyst_confidence,text,yes,medium,high,Confidence level after review
+opportunity_items,recommended_action,text,yes,Investigate,high,Recommended next action
+opportunity_items,status,text,yes,active,high,Workflow status
+opportunity_items,source_bundle,text,yes,ppr|lmr|da,medium,Compact list of sources backing the opportunity
+opportunity_items,last_reviewed_at,date,yes,2026-04-02,high,Latest analyst review date
+opportunity_items,memo_link,text,no,reports/weekly-radar-sample.md,low,Optional memo or report reference

@@ -1,0 +1,58 @@
+{
+  "stages": [
+    {
+      "stage": "under_assessment",
+      "path": "under%20assessment",
+      "terminal": false
+    },
+    {
+      "stage": "pre_exhibition",
+      "path": "pre-exhibition",
+      "terminal": false
+    },
+    {
+      "stage": "on_exhibition",
+      "path": "under%20exhibition",
+      "terminal": false
+    },
+    {
+      "stage": "finalisation",
+      "path": "finalisation",
+      "terminal": false
+    },
+    {
+      "stage": "made",
+      "path": "lep%20decision",
+      "terminal": true
+    },
+    {
+      "stage": "withdrawn",
+      "path": "withdrawn",
+      "terminal": true
+    }
+  ],
+  "councils": [
+    { "canonicalName": "Parramatta", "filterValue": "CITY OF PARRAMATTA" },
+    { "canonicalName": "Cumberland", "filterValue": "CUMBERLAND" },
+    { "canonicalName": "Ryde", "filterValue": "RYDE" },
+    { "canonicalName": "Canterbury-Bankstown", "filterValue": "CANTERBURY-BANKSTOWN" },
+    { "canonicalName": "Georges River", "filterValue": "GEORGES RIVER" },
+    { "canonicalName": "Canada Bay", "filterValue": "CANADA BAY" },
+    { "canonicalName": "Inner West", "filterValue": "INNER WEST" },
+    { "canonicalName": "Burwood", "filterValue": "BURWOOD" },
+    { "canonicalName": "Strathfield", "filterValue": "STRATHFIELD" },
+    { "canonicalName": "Liverpool", "filterValue": "LIVERPOOL" },
+    { "canonicalName": "Campbelltown", "filterValue": "CAMPBELLTOWN" },
+    { "canonicalName": "Willoughby", "filterValue": "WILLOUGHBY" },
+    { "canonicalName": "Ku-ring-gai", "filterValue": "KU-RING-GAI" },
+    { "canonicalName": "North Sydney", "filterValue": "NORTH SYDNEY" },
+    { "canonicalName": "Sutherland Shire", "filterValue": "SUTHERLAND SHIRE" },
+    { "canonicalName": "Hunters Hill", "filterValue": "HUNTERS HILL" },
+    { "canonicalName": "Woollahra", "filterValue": "WOOLLAHRA" },
+    { "canonicalName": "Fairfield", "filterValue": "FAIRFIELD" },
+    { "canonicalName": "The Hills Shire", "filterValue": "THE HILLS SHIRE" },
+    { "canonicalName": "Penrith", "filterValue": "PENRITH" },
+    { "canonicalName": "Bayside", "filterValue": "BAYSIDE" },
+    { "canonicalName": "Blacktown", "filterValue": "BLACKTOWN" }
+  ]
+}

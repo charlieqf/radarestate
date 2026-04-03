@@ -1,0 +1,4 @@
+run_date,source_name,stage_scope,raw_snapshot_saved,detail_pages_checked,new_items_found,stage_changes_found,errors_or_notes,reviewer
+2026-04-02,Planning Proposals Online,all,yes,0,0,0,initial template,charles
+2026-04-02,Planning Proposals Online,under-assessment+under-exhibition+finalisation,no,0,7,0,"Verified server-rendered stage lists and recorded 7 Sydney-relevant sample rows into interim table",opencode
+2026-04-02,Planning Proposals Online,pre-exhibition+lep-decision+withdrawn,no,0,8,0,"Verified additional Sydney-relevant sample rows from these stage pages and appended to interim + curated policy signal tables",opencode

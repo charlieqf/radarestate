@@ -1,0 +1,55 @@
+悉尼（Greater Sydney）有完整的council列表，所有council都有官网，且官网上均公开区域规划和发展信息，这正是挖掘房地产投资“价值洼地”的核心数据源之一。
+1. 悉尼council列表（Greater Sydney共33个LGA）
+悉尼地区（Greater Sydney）目前有33个Local Government Area (LGA)，即我们常说的council。这些council覆盖从CBD到外西、外南、外北等区域，是房地产规划和开发的最直接层级。
+官方完整列表和官网可通过以下两个NSW政府/行业门户一键获取（推荐直接收藏）：
+
+NSW Office of Local Government (OLG) 官方目录：https://www.olg.nsw.gov.au/public/local-government-directory
+（可搜索任意council，显示官网、电话、地址等，最权威。）
+Local Government NSW (LGNSW) council链接页：https://lgnsw.org.au/Public/public/NSW-Councils/NSW-Council-Links.aspx
+（直接列出所有128个NSW council的官网超链接，包括悉尼全部33个。）
+
+常见悉尼主要council示例（按区域大致分组，便于你快速定位）：
+
+Inner/Central：City of Sydney、Inner West、Bayside、Canada Bay、Strathfield、Burwood、Waverley、Woollahra、Randwick 等。
+Western/Central City：Blacktown、Cumberland、Parramatta、Fairfield、Liverpool、Penrith、The Hills、Hawkesbury 等。
+Eastern/Northern：Northern Beaches、North Sydney、Willoughby、Ku-ring-gai、Hornsby、Lane Cove、Mosman、Hunters Hill 等。
+Southern：Georges River、Canterbury-Bankstown、Sutherland Shire、Camden、Campbelltown、Wollondilly 等。
+
+（想看完整边界地图，可参考下方可视化地图，帮助你直观了解哪些区域属于哪个council，便于针对性监控。）
+community.citystrides.comSydney City / Suburbs - Support - The CityStrides Community
+2. 每个council是否都有官网？答案：100%都有
+
+所有NSW council（包括悉尼33个）均有官方独立网站（域名通常为xxx.nsw.gov.au，如cityofsydney.nsw.gov.au、blacktown.nsw.gov.au等）。
+OLG和LGNSW目录中已100%收录，无一例外。
+
+3. 官网上是否有公开的区域规划发展消息？答案：都有，且非常详尽
+每个council官网都必须公开以下规划信息（这是NSW《Environmental Planning and Assessment Act》法定要求，公众可免费查看、下载、评论）：
+
+住宅密度规划：Local Environmental Plan (LEP)、Development Control Plan (DCP)、zoning地图、楼高/密度控制（FSR/Floor Space Ratio）、住宅区划（R1-R4等）。
+规划提案（Planning Proposals）：正在进行的rezoning（重新分区）、upzoning（提高密度）、土地用途变更申请。这是发现“洼地”最直接的信号！
+新的道路、商场、社区规划：基础设施贡献计划（Section 7.11/7.12）、Major Projects、Local Strategic Planning Statement (LSPS)、社区设施/开放空间规划、商业中心（mall/precinct）发展计划。
+开发申请（DA）：所有Development Applications的公开搜索、文件、进展跟踪（很多council有在线地图或列表）。
+其他：公共展览（public exhibition）、Have Your Say咨询、战略规划文件等。
+
+这些信息通常放在官网的 “Planning & Development”、“Strategic Planning”、“Development Applications” 或 “Plans & Policies” 栏目下。
+更高效的监控方式（强烈推荐，不要一个个council网站刷）：
+
+NSW Planning Portal（全NSW统一平台，https://www.planningportal.nsw.gov.au/）：这是你投资分析的“神器”。
+Spatial Viewer：输入任意地址，立刻看到zoning、规划控制、发展机会。
+Planning Proposals：全州所有rezoning提案，可按LGA（如Sydney、Parramatta等）过滤，查看最新住宅密度变化。
+Rezoning Review：专门追踪LEP修改提案。
+Development Applications：全州DA数据。
+还能看到州级政策落地，如Low and Mid-Rise Housing政策、Transport Oriented Development (TOD)加速区等，这些直接影响多个council的密度规划。
+
+
+这些数据公开透明、实时更新，提前几个月甚至几年就能捕捉到新道路、商场、社区设施或密度提升的信号，而市场往往在正式施工或DA获批后才充分price in——这就是典型的“价值洼地”机会。
+4. 如何用这些数据挖掘房地产投资价值洼地（实用建议）
+
+监控重点：优先看Planning Proposals中“住房增长”“密度提升”“基础设施升级”的区域，尤其靠近地铁/火车站的TOD区，或新商场/社区中心周边。
+操作技巧：
+每周/每月查一次NSW Planning Portal的Planning Proposals（按Greater Sydney过滤）。
+收藏重点council的“Planning”页面，或用Google Alerts设置关键词（如“[council name] planning proposal”）。
+结合州政府大政策（如最近的住房加速计划），锁定早期公告区。
+交叉验证房产数据（Domain/Realestate.com.au历史成交价），找“公告早但价格还没起”的区域。
+
+潜在机会信号示例：新道路开通、商场 rezoning、住宅密度从R2低密度升到R3/R4中高密度、社区设施（如学校/公园）扩建等。

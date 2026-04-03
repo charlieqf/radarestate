@@ -1,0 +1,4 @@
+run_date,source_name,councils_checked,raw_snapshot_saved,target_updates_found,context_notes_added,errors_or_notes,reviewer
+2026-04-02,Housing Targets,0,yes,0,0,initial template,charles
+2026-04-02,Housing Targets,4,no,4,4,"Verified Parramatta, Canterbury-Bankstown, Inner West and Liverpool snapshot pages via public web pages; source appears stronger than expected for contextual indicators",opencode
+2026-04-02,Housing Targets,10,no,10,10,"Expanded sample with Ryde, North Sydney, Willoughby, Ku-ring-gai, Campbelltown and Strathfield; fields stay highly consistent across pages",opencode

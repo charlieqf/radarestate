@@ -1,0 +1,11 @@
+source_name,raw_field,normalised_field,target_table,required,notes
+Planning Proposals Online,title,title,policy_signals,yes,Public title shown on list or detail page
+Planning Proposals Online,stage_text,stage,policy_signals,yes,Map to normalised stage label
+Planning Proposals Online,stage_text,stage_rank,policy_signals,yes,Map stage to numeric ordering
+Planning Proposals Online,lga_text,lga,policy_signals,yes,Normalise council/LGA naming
+Planning Proposals Online,location_text,location_text,policy_signals,yes,Preserve source wording first
+Planning Proposals Online,proposal_url,source_url,policy_signals,yes,Primary verification URL
+Planning Proposals Online,published_date_text,published_date,policy_signals,no,Parse when available
+Planning Proposals Online,observed_at,updated_date,policy_signals,yes,Use observation date if no update date available
+Planning Proposals Online,summary_text,summary,policy_signals,no,Short raw summary if visible
+Planning Proposals Online,document_urls,analyst_note,policy_signals,no,Can be referenced in note until separate document table exists

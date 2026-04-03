@@ -1,0 +1,22 @@
+{
+  "name": "radarestate",
+  "private": true,
+  "scripts": {
+    "supabase:apply": "node scripts/supabase_apply_and_load.mjs",
+    "sync:applications": "node scripts/sync_application_tracker.mjs",
+    "sync:proposals": "node scripts/sync_planning_proposals.mjs",
+    "build:constraints": "node scripts/build_constraints_layer.mjs",
+    "build:precincts": "node scripts/build_precinct_shortlist.mjs",
+    "report:dashboard": "node scripts/generate_dashboard_report.mjs",
+    "report:weekly": "node scripts/generate_weekly_radar.mjs",
+    "report:deepdive": "node scripts/generate_deep_dive_memo.mjs",
+    "report:pack": "node scripts/generate_client_pack.mjs",
+    "report:html": "node scripts/render_client_reports.mjs"
+  },
+  "dependencies": {
+    "cheerio": "^1.1.2",
+    "csv-parse": "^6.2.1",
+    "marked": "^15.0.12",
+    "pg": "^8.20.0"
+  }
+}
