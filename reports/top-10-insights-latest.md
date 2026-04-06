@@ -35,7 +35,7 @@
 ## 4. The inner east is showing more policy motion than intuition would suggest
 
 - Finding: Woollahra is no longer just a prestige residential story. It is now a visible planning watchlist cluster.
-- Evidence: Edgecliff Commercial Centre Planning Proposal [under_assessment]; Planning proposal request for 203-233 New South Head Road, Edgecliff [under_assessment]; Double Bay Centre- Planning Proposal [under_assessment]; Local Heritage Listing: Woollahra Modern Buildings Priority Study [under_assessment]; Woollahra Contemporary Buildings Study Review [under_assessment]; Heritage listing of eight sites and one HCA in the area of the Edgecliff Commercial Centre. [under_assessment]; Edgecliff Woollahra Precinct [pre_exhibition]; 8-10 New Mclean Street, Edgecliff [finalisation]
+- Evidence: Local Heritage Listing: Woollahra Modern Buildings Priority Study [under_assessment]; Heritage listing of eight sites and one HCA in the area of the Edgecliff Commercial Centre. [under_assessment]; Double Bay Centre- Planning Proposal [under_assessment]; Woollahra Contemporary Buildings Study Review [under_assessment]; Edgecliff Commercial Centre Planning Proposal [under_assessment]; Planning proposal request for 203-233 New South Head Road, Edgecliff [under_assessment]; Edgecliff Woollahra Precinct [pre_exhibition]; Net Dwelling Loss [finalisation]
 - Why it matters: This is a useful reminder that policy-led opportunity can emerge in places that traditional “developer hotspot” lists often underweight.
 - Action: Keep Edgecliff / Double Bay in the “serious but selective” category rather than dismissing them as premium residential only.
 

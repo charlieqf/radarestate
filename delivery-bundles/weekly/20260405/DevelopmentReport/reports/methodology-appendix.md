@@ -17,7 +17,7 @@
 - Precinct rows are read from the saved weekly precinct snapshot rather than re-queried live when the report is rendered.
 - The rating stack combines policy signal strength, timing signal strength, and approval risk. In the current saved snapshot these appear as `policy_score`, `timing_score`, and `friction_score`.
 - `policy_score` is positive evidence from the current proposal pipeline and planning direction. `timing_score` reflects current DA-led development tempo with CDC activity deliberately down-weighted. `friction_score` is a penalty layer for planning and environmental red flags.
-- Current rated precinct mix: **A**: 3, **B**: 28, **C**: 12.
+- Current rated precinct mix: **A**: 4, **B**: 40, **C**: 26.
 
 ## Precinct Rating Formula
 
@@ -34,7 +34,7 @@
 - Site rows are read from the saved weekly site snapshot rather than from a live latest-state view.
 - Site screening now uses a default small-mid developer lens, with a slight preference toward townhouse / small subdivision fit over larger-format high-rise or assembly-style parcels.
 - Candidate lots are still ranked by planning fit, local precinct strength, matched signal count, and current red-flag burden, but supersites and large-format high-rise envelopes are intentionally de-emphasised in this default view.
-- Current site screening band mix: **Advance** 76, **Review** 155, **Caution** 76.
+- Current site screening band mix: **Advance** 75, **Review** 359, **Caution** 160.
 - `Advance` means the screening layer currently supports moving into street-level diligence. `Review` means there is enough signal to keep on the working list but not enough to promote immediately. `Caution` means the current signal-to-risk balance is weak or blocked.
 
 ## Site Score Formula
@@ -60,9 +60,9 @@ These are empirical ranges from the currently saved snapshot, not universal plan
 
 | Rating | Precinct Count | Policy Score Range | Timing Score Range | Risk Range |
 | --- | --- | --- | --- | --- |
-| A | 3 | 4 to 4 | 4 to 5 | 0 to 0 |
-| B | 28 | 0 to 4 | 2 to 5 | 0 to 4 |
-| C | 12 | 0 to 3 | 1 to 5 | 0 to 5 |
+| A | 4 | 4 to 4 | 4 to 5 | 0 to 2 |
+| B | 40 | 0 to 4 | 3 to 5 | 0 to 5 |
+| C | 26 | 0 to 3 | 1 to 5 | 0 to 5 |
 
 ## Cross-Council Comparability
 
@@ -72,8 +72,9 @@ These are empirical ranges from the currently saved snapshot, not universal plan
 
 ## Metric Scope Notes
 
-- Customer-facing application totals are derived from mutually exclusive DA / CDC / Modification / Other buckets. In the current snapshot that sums to 43,191 application signals since 2025-01-01.
-- State-significant signals are tracked separately. In the current snapshot that count is 1,920.
+- Customer-facing application totals are derived from mutually exclusive DA / CDC / Modification / Other buckets. In the current snapshot that sums to 52,847 application signals since 2025-01-01.
+- State-significant signals are tracked separately. In the current snapshot that count is 3,210.
+- Housing target context is complete within the current Sydney target-council scope used in this pack (28/28 councils in the saved snapshot). This should be read as full coverage of that configured scope, not as a claim that every broader Greater Sydney LGA definition is included in this layer.
 - The default site ranking is not trying to maximise supersite or high-rise assembly potential. It is trying to surface small-mid developer opportunities first, with townhouse / small subdivision fit slightly ahead of boutique apartment / mixed-use infill.
 - Site bands in the current product vocabulary are `Advance`, `Review`, and `Caution`.
 
@@ -81,8 +82,8 @@ These are empirical ranges from the currently saved snapshot, not universal plan
 
 | Source Layer | Current Min Date | Current Max Date | Previous Min Date | Previous Max Date |
 | --- | --- | --- | --- | --- |
-| Planning proposals | 2026-04-01 | 2026-04-02 | - | - |
-| Application signals | 2022-07-07 | 2026-04-02 | 2022-07-07 | 2026-03-28 |
+| Planning proposals | 2026-04-01 | 2026-04-05 | - | - |
+| Application signals | 2022-07-07 | 2026-04-05 | 2022-07-07 | 2026-03-28 |
 | Site screening layers | 2026-04-04 | 2026-04-05 | - | - |
 
 ## Known Gaps

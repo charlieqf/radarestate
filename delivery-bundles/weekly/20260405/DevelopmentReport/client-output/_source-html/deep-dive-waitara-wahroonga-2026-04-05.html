@@ -1,0 +1,781 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Deep Dive: Waitara / Wahroonga</title>
+  <script>
+    (() => {
+      const storageKey = 'radarestate-theme';
+      const sidebarKey = 'radarestate-sidebar';
+      let stored = null;
+      let storedSidebar = null;
+      try {
+        stored = window.localStorage.getItem(storageKey);
+        storedSidebar = window.localStorage.getItem(sidebarKey);
+      } catch {
+      }
+      const preferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.dataset.theme = stored || preferred;
+      document.documentElement.dataset.sidebar = storedSidebar || 'expanded';
+    })();
+  </script>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg-accent: #132048;
+      --panel: #121932;
+      --panel-2: #171f3d;
+      --text: #e9eefc;
+      --muted: #92a0c4;
+      --line: #273154;
+      --cyan: #33d1ff;
+      --lime: #b7ff3c;
+      --amber: #ffb547;
+      --red: #ff6b6b;
+      --link: #7dd3fc;
+      --panel-top: rgba(255,255,255,0.03);
+      --panel-bottom: rgba(255,255,255,0.015);
+      --shadow: rgba(0,0,0,0.18);
+      --button-bg: rgba(255,255,255,0.06);
+      --button-text: var(--text);
+      --article-code-bg: rgba(255,255,255,0.06);
+      --article-code-border: rgba(255,255,255,0.08);
+      --pre-bg: #0f1731;
+      --blockquote-bg: rgba(51,209,255,0.06);
+    }
+
+    html[data-theme="light"] {
+      --bg: #eef4ff;
+      --bg-accent: #d9e8ff;
+      --panel: #ffffff;
+      --panel-2: #f4f8ff;
+      --text: #11203f;
+      --muted: #597094;
+      --line: #d3def0;
+      --cyan: #0f84c9;
+      --lime: #6eab12;
+      --amber: #d6861b;
+      --red: #c94242;
+      --link: #0f84c9;
+      --panel-top: rgba(255,255,255,0.94);
+      --panel-bottom: rgba(240,246,255,0.94);
+      --shadow: rgba(45,72,117,0.12);
+      --button-bg: #ffffff;
+      --button-text: #11203f;
+      --article-code-bg: rgba(17,32,63,0.06);
+      --article-code-border: rgba(17,32,63,0.08);
+      --pre-bg: #eef4ff;
+      --blockquote-bg: rgba(15,132,201,0.08);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top left, var(--bg-accent) 0, var(--bg) 45%);
+      color: var(--text);
+      font-family: Inter, Arial, sans-serif;
+      overflow-x: hidden;
+    }
+    .sidebar-toggle {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 1200;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+      box-shadow: 0 12px 30px var(--shadow);
+      color: var(--button-text);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+    }
+    .theme-switcher {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 1200;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+      box-shadow: 0 12px 30px var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .theme-switcher-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .theme-switcher-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px;
+      border-radius: 999px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+    }
+    .theme-switcher-button {
+      appearance: none;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      min-width: 68px;
+    }
+    .theme-switcher-button[aria-pressed="true"] {
+      background: var(--button-bg);
+      color: var(--button-text);
+      box-shadow: inset 0 0 0 1px var(--line);
+    }
+    .shell {
+      display: grid;
+      grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+      min-height: 100vh;
+      transition: grid-template-columns 180ms ease;
+    }
+    html[data-sidebar="collapsed"] .shell {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .sidebar {
+      padding: 24px 18px;
+      border-right: 1px solid var(--line);
+      background: var(--panel);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      min-width: 0;
+      width: 300px;
+      max-width: 300px;
+      transition: opacity 150ms ease, transform 180ms ease;
+    }
+    html[data-sidebar="collapsed"] .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-110%);
+      display: block;
+    }
+    .brand {
+      margin-bottom: 22px;
+    }
+    .eyebrow {
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    .brand h1 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.2;
+    }
+    .brand p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 10px 0 0;
+    }
+    .actions {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+    .action-link {
+      display: inline-block;
+      text-decoration: none;
+      color: var(--text);
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 13px;
+    }
+    .nav {
+      display: grid;
+      gap: 16px;
+    }
+    .nav-group {
+      display: grid;
+      gap: 8px;
+    }
+    .nav-heading {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0 4px;
+    }
+    .nav-group-links {
+      display: grid;
+      gap: 10px;
+    }
+    .nav-link {
+      display: block;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.02);
+      text-decoration: none;
+      color: var(--text);
+    }
+    .nav-link.active {
+      border-color: rgba(51,209,255,0.45);
+      box-shadow: inset 0 0 0 1px rgba(51,209,255,0.25);
+      background: rgba(51,209,255,0.08);
+    }
+    .nav-title {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .nav-meta {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .main {
+      padding: 88px 28px 28px;
+      min-width: 0;
+      width: 100%;
+    }
+    .article {
+      width: 100%;
+      max-width: 920px;
+      margin: 0 auto;
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 28px 32px;
+      box-shadow: 0 16px 40px var(--shadow);
+    }
+    .article.article-wide {
+      width: 100%;
+      max-width: 1320px;
+    }
+    .article h1, .article h2, .article h3 {
+      margin-top: 0;
+    }
+    .article h1 {
+      font-size: 32px;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .article h2 {
+      font-size: 20px;
+      margin-top: 28px;
+      margin-bottom: 14px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+    .article h3 {
+      font-size: 16px;
+      margin-top: 22px;
+      margin-bottom: 10px;
+      color: var(--cyan);
+    }
+    .article p, .article li {
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+    .article ul, .article ol {
+      padding-left: 22px;
+    }
+    .article a {
+      color: var(--link);
+    }
+    .article code {
+      background: var(--article-code-bg);
+      border: 1px solid var(--article-code-border);
+      border-radius: 8px;
+      padding: 2px 6px;
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 0.92em;
+    }
+    .article pre {
+      background: var(--pre-bg);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      overflow: auto;
+    }
+    .article table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 20px;
+      font-size: 14px;
+    }
+    .article th, .article td {
+      border-bottom: 1px solid var(--line);
+      padding: 11px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .article th {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 12px;
+    }
+    .article blockquote {
+      margin: 18px 0;
+      padding: 14px 18px;
+      border-left: 3px solid var(--cyan);
+      background: var(--blockquote-bg);
+      border-radius: 12px;
+      color: var(--text);
+    }
+    .embed-frame {
+      width: 100%;
+      height: calc(100vh - 170px);
+      min-height: 980px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #ffffff;
+    }
+    .embed-note {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 980px) {
+      .sidebar-toggle {
+        left: 18px;
+      }
+      .theme-switcher {
+        left: 18px;
+        right: 18px;
+        justify-content: space-between;
+        top: 64px;
+      }
+      .shell { grid-template-columns: 1fr; }
+      .sidebar {
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+      .main { padding: 92px 18px 18px; }
+      .article { padding: 22px 20px; }
+      .embed-frame { min-height: 760px; height: calc(100vh - 220px); }
+    }
+  </style>
+</head>
+<body>
+  <button class="sidebar-toggle" id="sidebarToggle" type="button" aria-expanded="true">Hide Navigation</button>
+  <div class="theme-switcher" role="group" aria-label="Theme switcher">
+    <span class="theme-switcher-label">Theme</span>
+    <div class="theme-switcher-group">
+      <button class="theme-switcher-button" type="button" data-theme-option="dark">Dark</button>
+      <button class="theme-switcher-button" type="button" data-theme-option="light">Light</button>
+    </div>
+  </div>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="eyebrow">RadarEstate</div>
+        <h1>Client Reports</h1>
+        <p>Customer detail page inside the grouped DevelopmentReport bundle.</p>
+      </div>
+      <div class="actions">
+        <a class="action-link" href="../index.html">Back to Development Client Portal</a>
+        <a class="action-link" href="../02-this-weeks-actions/index.html">Open This Week's Actions</a>
+        <a class="action-link" href="../05-visual-summary/index.html">Open Visual Summary</a>
+      </div>
+      <nav class="nav"><section class="nav-group"><div class="nav-heading">Grouped Navigation</div><div class="nav-group-links"><a class="nav-link" href="../01-core/index.html"><span class="nav-title">Core</span><span class="nav-meta">Start here. These are the two files that should be read first in every weekly cycle.</span></a><a class="nav-link" href="../02-this-weeks-actions/index.html"><span class="nav-title">This Week's Actions</span><span class="nav-meta">Use this folder to move from conclusions into immediate follow-up work.</span></a><a class="nav-link" href="../03-site-cards/index.html"><span class="nav-title">Site Cards</span><span class="nav-meta">Detailed lot-level follow-up material for the shortlisted sites.</span></a><a class="nav-link active" href="../04-precinct-deep-dives/index.html"><span class="nav-title">Precinct Deep Dives</span><span class="nav-meta">Supporting precinct evidence once a location is already in active review.</span></a><a class="nav-link" href="../05-visual-summary/index.html"><span class="nav-title">Visual Summary And Methodology</span><span class="nav-meta">Visual context and methodology for customers who want maps, broader pattern recognition, or scoring boundaries.</span></a></div></section></nav>
+    </aside>
+    <main class="main">
+      <article class="article"><h1>Deep Dive: Waitara / Wahroonga</h1>
+<h2>Date</h2>
+<p>2026-04-05</p>
+<h2>Executive Summary</h2>
+<p>Waitara / Wahroonga is best viewed as a medium-conviction precinct where policy and activity are present, but the case still needs more targeted diligence before it can move into top-tier priority.</p>
+<h2>Quick Scorecard</h2>
+<ul>
+<li>Council: <code>Hornsby</code></li>
+<li>Current rating: <code>B</code></li>
+<li>Policy score: <code>0</code></li>
+<li>Timing score: <code>4</code></li>
+<li>Friction score: <code>0</code></li>
+<li>Recent applications: <code>66</code></li>
+<li>Recent application window start: <code>2025-01-01</code></li>
+<li>Active planning proposals: <code>0</code></li>
+<li>State significant projects: <code>5</code></li>
+<li>Recommended action: <code>Investigate</code></li>
+<li>Map centroid: <code>-33.713952, 151.107396</code></li>
+</ul>
+<h2>Why This Precinct Surfaced</h2>
+<ul>
+<li>Trigger summary: 0 active proposals, 66 recent applications (30 DA, 32 CDC), 5 state significant projects</li>
+<li>Recent development activity is sufficiently strong to justify immediate attention.</li>
+</ul>
+<h2>Policy And Planning Context</h2>
+<ul>
+<li>Current score uses <code>0</code> active planning proposal items.</li>
+<li>Current mapped source rows at active stages: <code>0</code>. Distinct rows shown below after de-duplication / evidence cleanup: <code>0</code>.</li>
+<li>Rows below show the currently mapped active proposals behind that count. When a row is not precinct-explicit in its wording, it is still shown and labeled so the score can be audited rather than hidden.</li>
+</ul>
+<p>No active mapped proposal records currently surfaced for this precinct.</p>
+<table>
+<thead>
+<tr>
+<th>Historical Stage</th>
+<th>Title</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Made</td>
+<td>Wahroonga (North) Heritage Conservation Area</td>
+<td>Edgeworth David Hornsby Wahroonga 2076</td>
+</tr>
+</tbody></table>
+<p>Related council policy context is shown below because current precinct-explicit policy rows are thin; these rows are background context, not direct precinct-scoring evidence.</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Related Council Policy Context</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Pre-Exhibition</td>
+<td>Employment Lands Study - Short Term Recommendations 2025</td>
+<td>Hornsby</td>
+</tr>
+<tr>
+<td>Made</td>
+<td>Hornsby LEP 2013 - 62 Manor Road, Hornsby</td>
+<td>62 Manor Road Hornsby 2077</td>
+</tr>
+<tr>
+<td>Made</td>
+<td>Hornsby LEP 2013 - Design excellence for tall buildings</td>
+<td>Hornsby</td>
+</tr>
+<tr>
+<td>Made</td>
+<td>Hornsby LEP 2013 (Amendment No 8) - Rectify a number of anomalies (mapping, heritage) and reclassification at 111X New Line Road, Cherrybrook (0 dwellings)</td>
+<td>Whole Of Lga &amp; more</td>
+</tr>
+<tr>
+<td>Made</td>
+<td>Hornsby Townhouse Planning Proposal</td>
+<td>Hornsby 2127 &amp; more</td>
+</tr>
+<tr>
+<td>Made</td>
+<td>Hornsby West Precinct</td>
+<td>Hornsby</td>
+</tr>
+</tbody></table>
+<h2>Parcel-Level Planning Signals</h2>
+<p>Current open-data control readings for representative screened sites are shown below so the precinct thesis can be anchored to parcel-level planning settings rather than council-wide policy alone.</p>
+<table>
+<thead>
+<tr>
+<th>Representative Site</th>
+<th>Zoning</th>
+<th>Height</th>
+<th>FSR</th>
+<th>Minimum Lot Size</th>
+<th>Jurisdiction</th>
+<th>Sources</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>25 BALMORAL STREET WAITARA</td>
+<td>R4 (High Density Residential)</td>
+<td>16.5m</td>
+<td>-</td>
+<td>-</td>
+<td>Hornsby</td>
+<td><a href="https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/2">Zoning</a> / <a href="https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/1">FSR</a> / <a href="https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/5">Height</a> / <a href="https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/4">Lot size</a></td>
+</tr>
+<tr>
+<td>52 UNWIN ROAD WAHROONGA</td>
+<td>R2 (Low Density Residential)</td>
+<td>8.5m</td>
+<td>-</td>
+<td>500 m²</td>
+<td>Hornsby</td>
+<td><a href="https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/2">Zoning</a> / <a href="https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/1">FSR</a> / <a href="https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/5">Height</a> / <a href="https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/4">Lot size</a></td>
+</tr>
+<tr>
+<td>49 HEWITT AVENUE WAHROONGA</td>
+<td>R2 (Low Density Residential)</td>
+<td>8.5m</td>
+<td>-</td>
+<td>500 m²</td>
+<td>Hornsby</td>
+<td><a href="https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/2">Zoning</a> / <a href="https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/1">FSR</a> / <a href="https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/5">Height</a> / <a href="https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/4">Lot size</a></td>
+</tr>
+</tbody></table>
+<h2>Development Activity Context</h2>
+<p>Recent applications below are screening signals with lodgement date on or after <code>2025-01-01</code>. The application-type table is shown as mutually exclusive DA / CDC / Modification / Other buckets so it stays consistent with the <code>Recent applications</code> count above. State-significant signals stay separate in the quick scorecard.
+Current mix note: this precinct is presently <strong>CDC-led</strong> (32 CDC vs 30 DA), so raw activity volume should not be read as pure acquisition-quality momentum.</p>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Count</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Approved</td>
+<td>26</td>
+</tr>
+<tr>
+<td>Determined</td>
+<td>24</td>
+</tr>
+<tr>
+<td>Under Assessment</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Withdrawn</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Additional Information Requested</td>
+<td>3</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Application Type</th>
+<th>Count</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DA</td>
+<td>30</td>
+</tr>
+<tr>
+<td>CDC</td>
+<td>32</td>
+</tr>
+<tr>
+<td>Modification</td>
+<td>4</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Lodgement</th>
+<th>Status</th>
+<th>Type</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2026-04-01</td>
+<td>Under Assessment</td>
+<td>Complying Development Certificate Application</td>
+<td>40 RUSSELL AVENUE WAHROONGA 2076</td>
+</tr>
+<tr>
+<td>2026-04-01</td>
+<td>Under Assessment</td>
+<td>Development Application</td>
+<td>59A RUSSELL AVENUE WAHROONGA 2076</td>
+</tr>
+<tr>
+<td>2026-03-31</td>
+<td>Under Assessment</td>
+<td>Complying Development Certificate Application</td>
+<td>31 JUBILEE STREET WAHROONGA 2076</td>
+</tr>
+<tr>
+<td>2026-03-26</td>
+<td>Under Assessment</td>
+<td>Complying Development Certificate Application</td>
+<td>52 UNWIN ROAD WAHROONGA 2076</td>
+</tr>
+<tr>
+<td>2026-03-26</td>
+<td>Under Assessment</td>
+<td>Development Application</td>
+<td>49 HEWITT AVENUE WAHROONGA 2076</td>
+</tr>
+<tr>
+<td>2026-03-18</td>
+<td>Under Assessment</td>
+<td>Complying Development Certificate Application</td>
+<td>4 SPURGIN STREET WAHROONGA 2076</td>
+</tr>
+<tr>
+<td>2026-03-11</td>
+<td>Under Assessment</td>
+<td>Complying Development Certificate Application</td>
+<td>11 HERBERT AVENUE WAHROONGA 2076</td>
+</tr>
+<tr>
+<td>2026-02-25</td>
+<td>Under Assessment</td>
+<td>Development Application</td>
+<td>27 BALMORAL STREET WAITARA 2077</td>
+</tr>
+<tr>
+<td>2026-02-11</td>
+<td>Approved</td>
+<td>Complying Development Certificate Application</td>
+<td>25 BALMORAL STREET WAITARA 2077</td>
+</tr>
+<tr>
+<td>2026-02-02</td>
+<td>Determined</td>
+<td>Development Application</td>
+<td>23 MYRA STREET WAHROONGA 2076</td>
+</tr>
+<tr>
+<td>2026-01-26</td>
+<td>Approved</td>
+<td>Complying Development Certificate Application</td>
+<td>10 HAVILAH AVENUE WAHROONGA 2076</td>
+</tr>
+<tr>
+<td>2026-01-22</td>
+<td>Determined</td>
+<td>Development Application</td>
+<td>1 AARON PLACE WAHROONGA 2076</td>
+</tr>
+</tbody></table>
+<h2>Risk And Friction</h2>
+<p>No derived friction signal is currently dominant in the first-pass model. This does not mean risk is absent, only that it is not yet surfacing through the current layers.</p>
+<p>Context proxies can help explain why a precinct is ranked up or down, but they should not be mistaken for parcel-level blockers on their own.</p>
+<p>No derived constraint rows currently attached to this precinct. Treat this as missing current signal, not proof of zero site risk.</p>
+<h2>Council Context</h2>
+<table>
+<thead>
+<tr>
+<th>Council</th>
+<th>5-year Target</th>
+<th>Recent Apps</th>
+<th>Active Pipeline</th>
+<th>Tree Canopy %</th>
+<th>High Heat Vulnerability %</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Hornsby</td>
+<td>5,500</td>
+<td>1,392</td>
+<td>1</td>
+<td>42.5</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<h2>What To Do Next</h2>
+<ol>
+<li>Keep <code>Waitara / Wahroonga</code> in the <code>B</code>-rated watchlist and treat <code>Investigate</code> as the current workflow state.</li>
+<li>Use the <a href="../../dashboard/2026-04-05-report.html">Opportunity Map</a> to inspect the surrounding precinct cluster before doing any street-level or owner-contact work.</li>
+<li>Treat the current derived risk gap as incomplete coverage rather than parcel-level clearance, and use more detailed site-level constraint work before promotion.</li>
+</ol>
+<h2>References</h2>
+<ul>
+<li><a href="../../dashboard/2026-04-05-report.html">Opportunity Map</a></li>
+<li><a href="weekly-radar-2026-04-05.html">Market Context Radar</a></li>
+</ul>
+</article>
+    </main>
+  </div>
+  <script>
+    (() => {
+      const navScrollKey = 'radarestate-nav-scroll';
+      const storageKey = 'radarestate-theme';
+      const sidebarKey = 'radarestate-sidebar';
+      const currentTheme = document.documentElement.dataset.theme || 'dark';
+      const currentSidebarState = document.documentElement.dataset.sidebar || 'expanded';
+      const sidebar = document.querySelector('.sidebar');
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const buttons = [...document.querySelectorAll('[data-theme-option]')];
+
+      const updateSidebarToggle = (state) => {
+        if (!sidebarToggle) return;
+        const expanded = state !== 'collapsed';
+        sidebarToggle.textContent = expanded ? 'Hide Navigation' : 'Show Navigation';
+        sidebarToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      };
+
+      updateSidebarToggle(currentSidebarState);
+
+      if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', () => {
+          const nextState = document.documentElement.dataset.sidebar === 'collapsed' ? 'expanded' : 'collapsed';
+          document.documentElement.dataset.sidebar = nextState;
+          updateSidebarToggle(nextState);
+          try {
+            window.localStorage.setItem(sidebarKey, nextState);
+          } catch {
+          }
+        });
+      }
+
+      if (sidebar) {
+        try {
+          const storedScroll = window.localStorage.getItem(navScrollKey);
+          if (storedScroll !== null) {
+            requestAnimationFrame(() => {
+              sidebar.scrollTop = Number(storedScroll) || 0;
+            });
+          }
+        } catch {
+        }
+
+        sidebar.addEventListener('scroll', () => {
+          try {
+            window.localStorage.setItem(navScrollKey, String(sidebar.scrollTop));
+          } catch {
+          }
+        }, { passive: true });
+      }
+
+      if (!buttons.length) return;
+      buttons.forEach((button) => {
+        const theme = button.dataset.themeOption;
+        button.setAttribute('aria-pressed', theme === currentTheme ? 'true' : 'false');
+        button.addEventListener('click', () => {
+          if (theme === currentTheme) return;
+          try {
+            window.localStorage.setItem(storageKey, theme);
+          } catch {
+          }
+          document.documentElement.dataset.theme = theme;
+          window.location.reload();
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

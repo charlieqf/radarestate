@@ -76,6 +76,15 @@ function stateSignificantTotal(activity) {
   return Number(buckets.SSD || 0)
 }
 
+function housingTargetCoverageNote(regionGroup, currentSnapshot) {
+  if (regionGroup !== 'Greater Sydney') return null
+  const councilRows = Array.isArray(currentSnapshot?.activity?.council_rows) ? currentSnapshot.activity.council_rows : []
+  const coveredCouncils = councilRows.filter((row) => row.target_value !== null && row.target_value !== undefined).length
+  const totalCouncils = councilRows.length
+  if (!totalCouncils) return 'Housing target context is present in the current Sydney pack, but the current saved snapshot does not expose a council-count denominator for this note.'
+  return `Housing target context is complete within the current Sydney target-council scope used in this pack (${coveredCouncils}/${totalCouncils} councils in the saved snapshot). This should be read as full coverage of that configured scope, not as a claim that every broader Greater Sydney LGA definition is included in this layer.`
+}
+
 function snapshotRoot(snapshotDate) {
   return path.join(root, 'snapshots', 'weekly', snapshotDate)
 }
@@ -179,6 +188,7 @@ function buildMarkdown(options, currentSnapshot, previousSnapshot) {
   const activityBuckets = activityBucketMap(activity)
   const coverageRows = buildCoverageRows(currentSnapshot, previousSnapshot)
   const knownGaps = buildKnownGaps(currentSnapshot, previousSnapshot)
+  const targetCoverageNote = housingTargetCoverageNote(options.regionGroup, currentSnapshot)
 
   return [
     `# ${options.label} Development Report Methodology`,
@@ -266,6 +276,7 @@ function buildMarkdown(options, currentSnapshot, previousSnapshot) {
     '',
     `- Customer-facing application totals are derived from mutually exclusive DA / CDC / Modification / Other buckets. In the current snapshot that sums to ${formatNumber(applicationSignalTotal(activity))} application signals since ${activity.window_start}.`,
     `- State-significant signals are tracked separately. In the current snapshot that count is ${formatNumber(stateSignificantTotal(activity))}.`,
+    targetCoverageNote ? `- ${targetCoverageNote}` : null,
     '- The default site ranking is not trying to maximise supersite or high-rise assembly potential. It is trying to surface small-mid developer opportunities first, with townhouse / small subdivision fit slightly ahead of boutique apartment / mixed-use infill.',
     '- Site bands in the current product vocabulary are `Advance`, `Review`, and `Caution`.',
     '',

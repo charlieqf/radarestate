@@ -55,11 +55,13 @@ function parseArgs() {
   const args = process.argv.slice(2)
   const options = {
     precinctConfig: 'mvp/config/precinct-focus-map.json',
-    name: 'coverage-pack'
+    name: 'coverage-pack',
+    snapshotDate: null
   }
   for (const arg of args) {
     if (arg.startsWith('--precinct-config=')) options.precinctConfig = arg.split('=')[1].trim()
     if (arg.startsWith('--name=')) options.name = arg.split('=')[1].trim()
+    if (arg.startsWith('--snapshot-date=')) options.snapshotDate = arg.split('=')[1].trim()
   }
   return options
 }
@@ -101,11 +103,21 @@ function readiness(summary, riskSummary, shortlistRows) {
   const mix = ratingMix(shortlistRows)
   const reportReady = shortlistRows.length >= 12 && (mix.A + mix.B) >= 5
 
+  const productionScopedReady = mappingReady
+    && riskReady
+    && reportReady
+    && Number(summary.precincts_with_any_signal || 0) >= Math.ceil(Number(summary.precinct_count || 0) * 0.95)
+    && Number(summary.precincts_with_proposals || 0) >= Math.ceil(Number(summary.precinct_count || 0) * 0.85)
+    && Number(summary.precincts_with_applications || 0) >= Math.ceil(Number(summary.precinct_count || 0) * 0.95)
+    && Number(summary.mapped_proposals || 0) >= 500
+    && Number(summary.mapped_applications || 0) >= 10000
+
   return {
     mappingReady,
     riskReady,
     reportReady,
     overallReady: mappingReady && riskReady && reportReady,
+    productionScopedReady,
     mix
   }
 }
@@ -190,7 +202,7 @@ async function main() {
 
     const summary = overview.rows[0]
     const gates = readiness(summary, riskSummary.rows, shortlist.rows)
-    const today = new Date().toISOString().slice(0, 10)
+    const reportDate = options.snapshotDate || new Date().toISOString().slice(0, 10)
     const outPath = path.join(root, 'reports', `coverage-readiness-${options.name}.md`)
 
     const markdown = [
@@ -198,7 +210,7 @@ async function main() {
       '',
       `## Date`,
       '',
-      today,
+       reportDate,
       '',
       '## Scope',
       '',
@@ -211,10 +223,11 @@ async function main() {
       `- Precinct mapping: \`${gates.mappingReady ? 'PASS' : 'REVIEW'}\``,
       `- Risk layer availability: \`${gates.riskReady ? 'PASS' : 'REVIEW'}\``,
       `- Stable shortlist and report output: \`${gates.reportReady ? 'PASS' : 'REVIEW'}\``,
-      `- Overall: \`${gates.overallReady ? 'READY TO EXPAND' : 'NOT YET FULLY READY'}\``,
+       `- Overall: \`${gates.productionScopedReady ? 'PRODUCTION-STABLE WITHIN CONFIGURED SCOPE' : gates.overallReady ? 'SELECTIVE EXPANSION ONLY' : 'NOT YET FULLY READY'}\``,
       '',
       '## Mapping Coverage',
       '',
+      '- Scope note: this page describes only the configured precinct universe in the named focus map. These counts are not full-region totals for every proposal or application in Sydney.',
       `- Precincts with any signal: \`${formatNumber(summary.precincts_with_any_signal)} / ${formatNumber(summary.precinct_count)}\` (${pct(summary.precincts_with_any_signal, summary.precinct_count)}%)`,
       `- Precincts with mapped proposals: \`${formatNumber(summary.precincts_with_proposals)}\``,
       `- Precincts with mapped applications: \`${formatNumber(summary.precincts_with_applications)}\``,
@@ -262,15 +275,19 @@ async function main() {
       '',
       '## Interpretation',
       '',
-      gates.mappingReady
-        ? '- Mapping has moved beyond council-level heat and is now usable at precinct level.'
-        : '- Mapping still needs denser precinct coverage or better keyword quality, otherwise too many precincts will remain thin or empty.',
-      gates.riskReady
-        ? '- The risk layer is already changing shortlist order, which means the expanded pack is doing more than just surfacing hotter places.'
-        : '- The risk layer is still too thin, so the expanded shortlist may overreact to activity alone.',
-      gates.reportReady
-        ? '- The current expanded pack can already produce a stable enough shortlist and report set.'
-        : '- The current expanded pack is not yet strong enough for stable client-facing reporting and still needs better mapping or risk coverage.',
+       gates.mappingReady
+         ? gates.productionScopedReady
+           ? '- Mapping is now dense enough to support production client reporting across the configured precinct universe, with only marginal residual gaps.'
+           : '- Mapping has moved beyond council-level heat and is now usable for selective precinct screening, but coverage gaps still remain.'
+         : '- Mapping still needs denser precinct coverage or better keyword quality, otherwise too many precincts will remain thin or empty.',
+       gates.riskReady
+         ? '- The risk layer is already changing shortlist order, which means the expanded pack is doing more than just surfacing hotter places, but it is still a first-pass proxy layer.'
+         : '- The risk layer is still too thin, so the expanded shortlist may overreact to activity alone.',
+       gates.reportReady
+         ? gates.productionScopedReady
+           ? '- The current expanded pack is stable for client-facing reporting inside the configured precinct scope, but it should still be described as configured-scope coverage rather than full metro-complete market coverage.'
+           : '- The current expanded pack can support selective corridor-by-corridor reporting, but it should still be treated as beta coverage rather than broad market-grade maturity.'
+         : '- The current expanded pack is not yet strong enough for stable client-facing reporting and still needs better mapping or risk coverage.',
       ''
     ].join('\n')
 

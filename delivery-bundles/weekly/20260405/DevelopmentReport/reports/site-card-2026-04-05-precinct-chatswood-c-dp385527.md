@@ -2,7 +2,7 @@
 
 ## Rank
 
-6 in the current Sydney automated site-screening cut.
+1 in the current Sydney automated site-screening cut.
 
 ## Snapshot
 
@@ -11,7 +11,7 @@
 - Current precinct grouping: **Willoughby**
 - Apparent site jurisdiction from governing EPI: **Willoughby**
 - Screening band: **Advance**
-- Screening score: **50**
+- Screening score: **56**
 - Recommended action: **Advance to site review**
 - Address signal: 2A BLAKESLEY STREET CHATSWOOD
 - Lot reference: C//DP385527 / DP385527
@@ -52,7 +52,7 @@
 
 | Component | Value |
 | --- | --- |
-| Precinct score | 12 |
+| Precinct score | 18 |
 | Area score | 12 |
 | Frontage score | 8 |
 | FSR score | 8 |
@@ -62,7 +62,7 @@
 | Large-format penalty | 0 |
 | Constraint penalty | 0 |
 | Title complexity penalty | 0 |
-| Total screening score | 50 |
+| Total screening score | 56 |
 
 ## Constraint Stack
 

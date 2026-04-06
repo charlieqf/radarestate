@@ -193,6 +193,7 @@ function developmentBundleGroups(snapshotDate, previousSnapshotDate, refs) {
     : null
   const insights = refs.find((value) => /reports\/top-10-insights-.*\.md$/i.test(value)) || null
   const siteScreening = refs.find((value) => /reports\/top-site-screening-.*\.md$/i.test(value)) || null
+  const coverageReadiness = refs.find((value) => /reports\/coverage-readiness-.*\.md$/i.test(value)) || null
   const methodology = refs.find((value) => value === 'reports/methodology-appendix.md') || null
   const weeklyRadar = refs.find((value) => /reports\/weekly-radar-.*\.md$/i.test(value)) || null
   const siteCards = refs
@@ -296,6 +297,11 @@ function developmentBundleGroups(snapshotDate, previousSnapshotDate, refs) {
           title: 'Market Context Radar',
           href: `../_source-html/${htmlNameFromReport(weeklyRadar)}`,
           description: 'Broader precinct and market interpretation.'
+        } : null,
+        coverageReadiness ? {
+          title: 'Coverage Readiness',
+          href: `../_source-html/${htmlNameFromReport(coverageReadiness)}`,
+          description: 'Configured-scope readiness and data-coverage note for this pack.'
         } : null,
         methodology ? {
           title: 'Methodology And Boundaries',

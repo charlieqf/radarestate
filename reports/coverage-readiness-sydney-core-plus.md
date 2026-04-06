@@ -2,7 +2,7 @@
 
 ## Date
 
-2026-04-06
+2026-04-05
 
 ## Scope
 
@@ -15,7 +15,7 @@
 - Precinct mapping: `PASS`
 - Risk layer availability: `PASS`
 - Stable shortlist and report output: `PASS`
-- Overall: `SELECTIVE EXPANSION ONLY`
+- Overall: `PRODUCTION-STABLE WITHIN CONFIGURED SCOPE`
 
 ## Mapping Coverage
 
@@ -100,6 +100,6 @@
 
 ## Interpretation
 
-- Mapping has moved beyond council-level heat and is now usable for selective precinct screening, but coverage gaps still remain.
+- Mapping is now dense enough to support production client reporting across the configured precinct universe, with only marginal residual gaps.
 - The risk layer is already changing shortlist order, which means the expanded pack is doing more than just surfacing hotter places, but it is still a first-pass proxy layer.
-- The current expanded pack can support selective corridor-by-corridor reporting, but it should still be treated as beta coverage rather than broad market-grade maturity.
+- The current expanded pack is stable for client-facing reporting inside the configured precinct scope, but it should still be described as configured-scope coverage rather than full metro-complete market coverage.

@@ -199,6 +199,24 @@ async function selectPrecincts(client, regionGroup) {
       [emergingCorridorCouncil, selected.length ? selected : null]
     )
     if (companionStation.rows.length) selected.push(companionStation.rows[0].precinct_name)
+
+    const corridorSupports = await client.query(
+      `select v.precinct_name
+       from public.v_precinct_shortlist v
+       where v.council_name = $1
+         and coalesce(v.recent_application_count, 0) > 0
+         and ($2::text[] is null or v.precinct_name <> all($2::text[]))
+       order by case v.opportunity_rating when 'A' then 1 when 'B' then 2 else 3 end,
+                coalesce(v.active_pipeline_count, 0) desc,
+                v.timing_score desc nulls last,
+                v.recent_da_count desc nulls last,
+                v.recent_application_count desc nulls last,
+                v.friction_score asc nulls last,
+                v.precinct_name
+       limit 2`,
+      [emergingCorridorCouncil, selected.length ? selected : null]
+    )
+    for (const row of corridorSupports.rows) selected.push(row.precinct_name)
   }
 
   return unique(selected)

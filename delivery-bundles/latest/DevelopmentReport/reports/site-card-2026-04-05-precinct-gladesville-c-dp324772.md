@@ -2,7 +2,7 @@
 
 ## Rank
 
-2 in the current Sydney automated site-screening cut.
+5 in the current Sydney automated site-screening cut.
 
 ## Snapshot
 

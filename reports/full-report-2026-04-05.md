@@ -111,8 +111,8 @@ These are cumulative activity counts within the retained application window star
 | Stage | Council | Precinct | Title | Location |
 | --- | --- | --- | --- | --- |
 | Under Assessment | Sydney | Ultimo / Broadway | 41-49 Mountain Street, Ultimo | 41-49 Mountain Street Ultimo 2007 |
-| Under Assessment | Liverpool | - | Amendment to the State Environmental Planning Policy (Precincts - Western Parkland City) 2021 | 495 Fourth Avenue Austral 2179 |
 | Under Assessment | Liverpool | - | Amendment to the State Environmental Planning Policy (Precincts - Western Parkland City) 2021 | 260 Eighth Avenue Austral 2179 |
+| Under Assessment | Liverpool | - | Amendment to the State Environmental Planning Policy (Precincts - Western Parkland City) 2021 | 495 Fourth Avenue Austral 2179 |
 | Under Assessment | Burwood | - | Burwood Town Centre Special Entertainment Precinct | Burwood |
 | Under Assessment | Sydney | - | City of Sydney Special Entertainment Precincts | Sydney |
 | Under Assessment | The Hills Shire | Gables | Council Operations Centre 183-191 Maguires Road, Gables | 191 Maguires Road Gables 2765 & more |

@@ -302,6 +302,7 @@ function buildSteps(options) {
           script: 'scripts/generate_top10_insights_memo.mjs',
           args: ['--dashboard-path=dashboard/latest-report.html', '--radar-path=reports/weekly-radar-latest.md', '--site-screening-path=reports/top-site-screening-latest.md']
         },
+        { name: 'generate_hero_visual_pack', script: 'scripts/generate_hero_visual_pack.mjs' },
         { name: 'generate_site_card_batch', script: 'scripts/generate_site_card_batch.mjs' },
         { name: 'render_client_reports', script: 'scripts/render_client_reports.mjs' }
       )
@@ -349,6 +350,10 @@ function buildSteps(options) {
             `--radar-path=reports/weekly-radar-${options.snapshotDate}.md`,
             `--site-screening-path=reports/top-site-screening-${options.snapshotDate}.md`
           ]
+        },
+        {
+          name: 'generate_hero_visual_pack',
+          script: 'scripts/generate_hero_visual_pack.mjs'
         },
         {
           name: 'generate_deep_dives_dated',
@@ -400,6 +405,24 @@ function buildSteps(options) {
         name: 'generate_methodology_appendix',
         script: 'scripts/generate_methodology_appendix.mjs',
         args: methodologyArgs
+      })
+      steps.push({
+        name: 'evaluate_coverage_pack_greater_sydney',
+        script: 'scripts/evaluate_coverage_pack.mjs',
+        args: [
+          '--precinct-config=mvp/config/precinct-focus-map-greater-sydney-expanded.json',
+          '--name=greater-sydney-expanded',
+          `--snapshot-date=${options.snapshotDate}`
+        ]
+      })
+      steps.push({
+        name: 'evaluate_coverage_pack_sydney_core_plus',
+        script: 'scripts/evaluate_coverage_pack.mjs',
+        args: [
+          '--precinct-config=mvp/config/precinct-focus-map-sydney-core-plus.json',
+          '--name=sydney-core-plus',
+          `--snapshot-date=${options.snapshotDate}`
+        ]
       })
 
       const clientPackArgs = [`--snapshot-date=${options.snapshotDate}`]

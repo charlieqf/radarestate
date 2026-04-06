@@ -291,8 +291,9 @@ function diffActivity(previousActivity, currentActivity) {
 
 function buildHeadline(options, previousSnapshot, currentSnapshot, diffs) {
   const parts = []
+  const currentRatedCount = currentSnapshot.precinct.rows.filter((row) => row.opportunity_rating).length
   if (diffs.precinct.ratingChanges.length) parts.push(`${formatNumber(diffs.precinct.ratingChanges.length)} precinct rating changes`)
-  if (diffs.precinct.newlyScoredRows.length) parts.push(`${formatNumber(diffs.precinct.newlyScoredRows.length)} precincts now carry formal ratings`) 
+  if (currentRatedCount) parts.push(`${formatNumber(currentRatedCount)} precincts currently carry formal ratings`)
   if (diffs.site.newRows.length) parts.push(`${formatNumber(diffs.site.newRows.length)} new shortlisted sites`)
   if (diffs.proposal.stageChanges.length) parts.push(`${formatNumber(diffs.proposal.stageChanges.length)} policy stage changes`)
   const appDelta = compareNumber(applicationSignalTotal(previousSnapshot.activity), applicationSignalTotal(currentSnapshot.activity))
@@ -386,7 +387,8 @@ function buildMarkdown(options, previousSnapshot, currentSnapshot, diffs) {
     `- Precinct additions: **${formatNumber(diffs.precinct.newRows.length)}**`,
     `- Precinct removals: **${formatNumber(diffs.precinct.removedRows.length)}**`,
     `- Precinct rating changes: **${formatNumber(diffs.precinct.ratingChanges.length)}**`,
-    `- Newly scored precincts: **${formatNumber(diffs.precinct.newlyScoredRows.length)}**`,
+    `- Currently rated precincts: **${formatNumber(currentSnapshot.precinct.rows.filter((row) => row.opportunity_rating).length)}**`,
+    `- Precincts newly scored this week: **${formatNumber(diffs.precinct.newlyScoredRows.length)}**`,
     `- Site shortlist additions: **${formatNumber(diffs.site.newRows.length)}**`,
     `- Site shortlist removals: **${formatNumber(diffs.site.removedRows.length)}**`,
     `- Site band or score changes: **${formatNumber(diffs.site.bandChanges.length)}**`,

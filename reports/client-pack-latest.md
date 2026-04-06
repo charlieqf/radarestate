@@ -39,7 +39,9 @@
 - `reports/site-card-2026-04-05-precinct-lane-cove-d-dp15678.md`
 - `reports/site-card-2026-04-05-precinct-lane-cove-d-dp408643.md`
 - `reports/site-card-2026-04-05-precinct-merrylands-2-dp15979.md`
+- `reports/site-card-2026-04-05-precinct-pennant-hills-51-dp1284389.md`
 - `reports/site-card-2026-04-05-precinct-spit-junction-c-dp319194.md`
+- `reports/site-card-2026-04-05-precinct-thornleigh-47-dp9791.md`
 - `reports/site-card-2026-04-05-precinct-waitara-wahroonga-1-dp843067.md`
 - `reports/site-card-2026-04-05-precinct-westmead-31-dp12067.md`
 
@@ -50,6 +52,8 @@
 - `reports/deep-dive-gladesville-2026-04-05.md`
 - `reports/deep-dive-merrylands-2026-04-05.md`
 - `reports/deep-dive-mosman-spit-junction-2026-04-05.md`
+- `reports/deep-dive-pennant-hills-2026-04-05.md`
+- `reports/deep-dive-thornleigh-2026-04-05.md`
 - `reports/deep-dive-waitara-wahroonga-2026-04-05.md`
 
 ### 05 Visual Summary And Method
@@ -57,15 +61,17 @@
 - Visual Summary: `dashboard/hero-visual-pack.html`
 - Opportunity Map: `dashboard/2026-04-05-report.html`
 - Market Context Radar: `reports/weekly-radar-2026-04-05.md`
+- Coverage Readiness: `reports/coverage-readiness-greater-sydney-expanded.md`
 - Methodology And Boundaries: `reports/methodology-appendix.md`
 
 ## This Pack Highlights
 
 - Dated full report: `reports/full-report-2026-04-05.md`
 - Dated delta report: `reports/delta-report-2026-04-05-vs-2026-03-29.md`
+- Coverage readiness memo: `reports/coverage-readiness-greater-sydney-expanded.md`
 - Methodology appendix: `reports/methodology-appendix.md`
 - Full report lead takeaway: Strongest current precinct signal: **Gladesville** (Hunters Hill) is rated **A** with policy **4**, timing **4** and risk **0**.
-- Delta report summary: **2026-03-29 -> 2026-04-05**. 65 precincts now carry formal ratings, 594 new shortlisted sites, +634 application signals versus prior snapshot.
+- Delta report summary: **2026-03-29 -> 2026-04-05**. 70 precincts currently carry formal ratings, 594 new shortlisted sites, +634 application signals versus prior snapshot.
 
 ## Notes
 

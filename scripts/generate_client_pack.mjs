@@ -63,6 +63,19 @@ function firstExisting(relativePaths) {
   return null
 }
 
+function coverageReadinessPath(options) {
+  if (options.regionGroup === 'Greater Sydney') {
+    return firstExisting([
+      'reports/coverage-readiness-greater-sydney-expanded.md',
+      'reports/coverage-readiness-sydney-core-plus.md'
+    ])
+  }
+  if (options.regionGroup === 'Hunter') {
+    return firstExisting(['reports/coverage-readiness-newcastle-hunter-pilot.md'])
+  }
+  return null
+}
+
 function readFile(relativePath) {
   return fs.readFileSync(path.join(root, relativePath), 'utf8')
 }
@@ -134,6 +147,7 @@ async function main() {
   const methodologyPath = options.regionGroup === 'Greater Sydney'
     ? firstExisting(['reports/methodology-appendix.md'])
     : null
+  const readinessPath = coverageReadinessPath(options)
   const fullReportPath = firstExisting([
     `reports/full-report-${options.snapshotDate}.md`,
     `reports/reconstructed-baseline-${options.snapshotDate}.md`
@@ -156,6 +170,7 @@ async function main() {
     bullet('Visual Summary', heroPath),
     bullet('Opportunity Map', dashboardPath),
     bullet('Market Context Radar', radarPath),
+    bullet('Coverage Readiness', readinessPath),
     bullet('Methodology And Boundaries', methodologyPath)
   ].filter(Boolean)
 
@@ -211,6 +226,7 @@ async function main() {
     '',
     ...(fullReportPath ? [`- Dated full report: \`${fullReportPath}\``] : []),
     ...(deltaReportPath ? [`- Dated delta report: \`${deltaReportPath}\``] : []),
+    ...(readinessPath ? [`- Coverage readiness memo: \`${readinessPath}\``] : []),
     ...(methodologyPath ? [`- Methodology appendix: \`${methodologyPath}\``] : []),
     ...highlights,
     '',

@@ -74,7 +74,7 @@ These are empirical ranges from the currently saved snapshot, not universal plan
 
 - Customer-facing application totals are derived from mutually exclusive DA / CDC / Modification / Other buckets. In the current snapshot that sums to 52,847 application signals since 2025-01-01.
 - State-significant signals are tracked separately. In the current snapshot that count is 3,210.
-- Housing target context is complete within the current Sydney target-council scope used in this pack (22 councils). This should be read as full coverage of that configured scope, not as a claim that every broader Greater Sydney LGA definition is included in this layer.
+- Housing target context is complete within the current Sydney target-council scope used in this pack (28/28 councils in the saved snapshot). This should be read as full coverage of that configured scope, not as a claim that every broader Greater Sydney LGA definition is included in this layer.
 - The default site ranking is not trying to maximise supersite or high-rise assembly potential. It is trying to surface small-mid developer opportunities first, with townhouse / small subdivision fit slightly ahead of boutique apartment / mixed-use infill.
 - Site bands in the current product vocabulary are `Advance`, `Review`, and `Caution`.
 
