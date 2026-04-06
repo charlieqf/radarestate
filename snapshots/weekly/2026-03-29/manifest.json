@@ -1,0 +1,33 @@
+{
+  "snapshot_date": "2026-03-29",
+  "captured_at": "2026-04-06T01:08:46.940Z",
+  "region_group": "Greater Sydney",
+  "label": "Sydney",
+  "baseline_type": "reconstructed",
+  "reconstruction_method": "Built from retained application history up to the requested cutoff date, with limited policy reconstruction and no pre-April site-screening history.",
+  "known_gaps": [
+    "No true historical precinct shortlist snapshot was retained for this date.",
+    "No true site-screening layer was retained before 2026-04-03.",
+    "Policy coverage before 2026-04-01 is not retained in the current database state."
+  ],
+  "files": [
+    "precinct-shortlist.json",
+    "site-screening.json",
+    "proposals.json",
+    "activity.json"
+  ],
+  "source_ranges": {
+    "planning_proposals": {
+      "min_date": null,
+      "max_date": null
+    },
+    "application_signals": {
+      "min_date": "2022-07-07T14:00:00.000Z",
+      "max_date": "2026-03-28T13:00:00.000Z"
+    },
+    "site_screening_layers": {
+      "min_date": null,
+      "max_date": null
+    }
+  }
+}

@@ -294,6 +294,98 @@ create table if not exists public.property_contexts (
 create index if not exists property_contexts_precinct_idx
   on public.property_contexts (precinct_id, observed_at desc);
 
+create table if not exists public.site_candidates (
+  id uuid primary key default gen_random_uuid(),
+  site_key text unique not null,
+  precinct_id uuid not null references public.precincts(id) on delete cascade,
+  council_id uuid references public.councils(id) on delete set null,
+  source_name text not null,
+  source_url text,
+  observed_at date not null,
+  matched_signal_count integer,
+  latest_lodgement_date date,
+  sample_location_example text,
+  latitude double precision,
+  longitude double precision,
+  lot_id text,
+  lot_number text,
+  plan_number text,
+  plan_label text,
+  propid integer,
+  address text,
+  plan_area_sqm numeric(14,2),
+  geometry_area_sqm numeric(14,2),
+  perimeter_m numeric(14,2),
+  bbox_width_m numeric(14,2),
+  bbox_height_m numeric(14,2),
+  frontage_candidate_m numeric(14,2),
+  property_type text,
+  valnet_status text,
+  valnet_type text,
+  dissolve_parcel_count integer,
+  valnet_lot_count integer,
+  notes text,
+  raw_payload jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists site_candidates_precinct_idx
+  on public.site_candidates (precinct_id, observed_at desc);
+
+create index if not exists site_candidates_council_idx
+  on public.site_candidates (council_id, observed_at desc);
+
+create table if not exists public.site_controls (
+  id uuid primary key default gen_random_uuid(),
+  control_key text unique not null,
+  site_candidate_id uuid not null references public.site_candidates(id) on delete cascade,
+  source_name text not null,
+  zoning_source_url text,
+  fsr_source_url text,
+  height_source_url text,
+  minimum_lot_size_source_url text,
+  observed_at date not null,
+  zoning_code text,
+  zoning_label text,
+  zoning_epi_name text,
+  fsr numeric(12,4),
+  fsr_clause text,
+  fsr_epi_name text,
+  height_m numeric(12,4),
+  height_clause text,
+  height_epi_name text,
+  minimum_lot_size_sqm numeric(14,2),
+  minimum_lot_size_units text,
+  minimum_lot_size_clause text,
+  minimum_lot_size_epi_name text,
+  notes text,
+  raw_payload jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists site_controls_candidate_idx
+  on public.site_controls (site_candidate_id, observed_at desc);
+
+create table if not exists public.site_constraints (
+  id uuid primary key default gen_random_uuid(),
+  constraint_key text unique not null,
+  site_candidate_id uuid not null references public.site_candidates(id) on delete cascade,
+  constraint_type text not null,
+  severity text not null,
+  source_name text not null,
+  source_url text,
+  observed_at date not null,
+  notes text,
+  raw_payload jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists site_constraints_candidate_idx
+  on public.site_constraints (site_candidate_id, severity, constraint_type);
+
 create table if not exists public.opportunity_items (
   id uuid primary key default gen_random_uuid(),
   item_key text unique,
@@ -370,6 +462,21 @@ for each row execute function public.set_updated_at();
 drop trigger if exists trg_property_contexts_updated_at on public.property_contexts;
 create trigger trg_property_contexts_updated_at
 before update on public.property_contexts
+for each row execute function public.set_updated_at();
+
+drop trigger if exists trg_site_candidates_updated_at on public.site_candidates;
+create trigger trg_site_candidates_updated_at
+before update on public.site_candidates
+for each row execute function public.set_updated_at();
+
+drop trigger if exists trg_site_controls_updated_at on public.site_controls;
+create trigger trg_site_controls_updated_at
+before update on public.site_controls
+for each row execute function public.set_updated_at();
+
+drop trigger if exists trg_site_constraints_updated_at on public.site_constraints;
+create trigger trg_site_constraints_updated_at
+before update on public.site_constraints
 for each row execute function public.set_updated_at();
 
 drop trigger if exists trg_opportunity_items_updated_at on public.opportunity_items;

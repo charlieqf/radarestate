@@ -36,6 +36,26 @@ async function connectWithFallback() {
   throw lastError || new Error('Unable to connect to Supabase')
 }
 
+function parseArgs() {
+  const snapshotDate = new Date().toISOString().slice(0, 10)
+  const args = process.argv.slice(2)
+  const options = {
+    snapshotDate,
+    regionGroup: 'Greater Sydney',
+    dashboardPath: `dashboard/${snapshotDate}-report.html`,
+    radarPath: `reports/weekly-radar-${snapshotDate}.md`,
+    siteScreeningPath: `reports/top-site-screening-${snapshotDate}.md`
+  }
+  for (const arg of args) {
+    if (arg.startsWith('--snapshot-date=')) options.snapshotDate = arg.split('=')[1].trim()
+    if (arg.startsWith('--region-group=')) options.regionGroup = arg.split('=')[1].trim()
+    if (arg.startsWith('--dashboard-path=')) options.dashboardPath = arg.split('=')[1].trim()
+    if (arg.startsWith('--radar-path=')) options.radarPath = arg.split('=')[1].trim()
+    if (arg.startsWith('--site-screening-path=')) options.siteScreeningPath = arg.split('=')[1].trim()
+  }
+  return options
+}
+
 function formatNumber(value) {
   if (value === null || value === undefined || value === '') return '-'
   return new Intl.NumberFormat('en-AU').format(Number(value))
@@ -47,7 +67,7 @@ function clean(value) {
 }
 
 function toList(items, formatter = (value) => `\`${value}\``) {
-  return items.filter(Boolean).map(formatter).join('、')
+  return items.filter(Boolean).map(formatter).join(', ')
 }
 
 function insightBlock(index, title, finding, evidence, whyItMatters, action) {
@@ -63,6 +83,7 @@ function insightBlock(index, title, finding, evidence, whyItMatters, action) {
 }
 
 async function main() {
+  const options = parseArgs()
   const client = await connectWithFallback()
   try {
     const regionSummary = await client.query(`
@@ -97,6 +118,7 @@ async function main() {
              v.recent_application_count, v.active_pipeline_count
       from public.v_precinct_shortlist v
       join public.councils c on c.canonical_name = v.council_name
+      where c.region_group = 'Greater Sydney'
       order by case v.opportunity_rating when 'A' then 1 when 'B' then 2 else 3 end,
                v.friction_score asc nulls last,
                v.recent_application_count desc nulls last
@@ -109,6 +131,7 @@ async function main() {
       from public.v_precinct_shortlist v
       join public.councils c on c.canonical_name = v.council_name
       where v.constraint_count > 0
+        and c.region_group = 'Greater Sydney'
       order by v.friction_score desc, v.recent_application_count desc
       limit 10
     `)
@@ -116,6 +139,7 @@ async function main() {
     const councilCluster = await client.query(`
       select council_name, region_group, target_value, application_recent_count, active_pipeline_count
       from public.v_council_scoreboard
+      where region_group = 'Greater Sydney'
       order by application_recent_count desc nulls last, active_pipeline_count desc nulls last
       limit 8
     `)
@@ -125,7 +149,8 @@ async function main() {
              v.policy_score, v.opportunity_rating, v.friction_score
       from public.v_precinct_shortlist v
       join public.councils c on c.canonical_name = v.council_name
-      where v.recent_application_count >= 150 and coalesce(v.active_pipeline_count,0)=0
+      where c.region_group = 'Greater Sydney'
+        and v.recent_application_count >= 150 and coalesce(v.active_pipeline_count,0)=0
       order by v.recent_application_count desc
       limit 8
     `)
@@ -135,14 +160,18 @@ async function main() {
              v.policy_score, v.opportunity_rating, v.friction_score
       from public.v_precinct_shortlist v
       join public.councils c on c.canonical_name = v.council_name
-      where coalesce(v.active_pipeline_count,0) >= 2 and coalesce(v.recent_application_count,0) < 100
+      where c.region_group = 'Greater Sydney'
+        and coalesce(v.active_pipeline_count,0) >= 2 and coalesce(v.recent_application_count,0) < 100
       order by v.active_pipeline_count desc, v.recent_application_count desc
       limit 8
     `)
 
     const riskMix = await client.query(`
-      select constraint_type, severity, count(*)::int as total
-      from public.constraints
+      select ct.constraint_type, ct.severity, count(*)::int as total
+      from public.constraints ct
+      join public.precincts p on p.id = ct.precinct_id
+      join public.councils c on c.id = p.primary_council_id
+      where c.region_group = 'Greater Sydney'
       group by constraint_type, severity
       order by total desc, constraint_type, severity
     `)
@@ -157,18 +186,27 @@ async function main() {
       limit 8
     `)
 
-    const today = new Date().toISOString().slice(0, 10)
+    const topSites = await client.query(
+      `select site_label
+       from public.v_site_screening_latest
+       where ($1::text is null or region_group = $1)
+       order by screening_score desc,
+                matched_signal_count desc,
+                coalesce(geometry_area_sqm, plan_area_sqm) desc nulls last,
+                site_label
+       limit 5`,
+      [options.regionGroup || null]
+    )
+
+    const today = options.snapshotDate
     const summaryByRegion = Object.fromEntries(regionSummary.rows.map((row) => [row.region_group, row]))
     const sydney = summaryByRegion['Greater Sydney']
-    const hunter = summaryByRegion['Hunter']
     const aLeaders = topShortlist.rows.filter((row) => row.opportunity_rating === 'A').slice(0, 4)
-    const hunterLeaders = topShortlist.rows.filter((row) => row.region_group === 'Hunter').slice(0, 4)
     const highRisk = highestFriction.rows.slice(0, 4)
     const topCouncils = councilCluster.rows.slice(0, 4)
     const floodRow = riskMix.rows.find((row) => row.constraint_type === 'flood_metadata_signal' && row.severity === 'high')
     const bushfireRow = riskMix.rows.find((row) => row.constraint_type === 'bushfire_spatial_sample' && row.severity === 'high')
     const targetCoverageSydney = `${sydney.councils_with_targets}/${sydney.councils}`
-    const targetCoverageHunter = `${hunter.councils_with_targets}/${hunter.councils}`
 
     const markdown = [
       '# Top 10 Insights',
@@ -180,9 +218,9 @@ async function main() {
       '## Companion Outputs',
       '',
       '- `dashboard/hero-visual-pack.html`',
-      '- `dashboard/latest-report.html`',
-      '- `reports/weekly-radar-latest.md`',
-      '- `reports/weekly-radar-newcastle-hunter.md`',
+      `- \`${options.dashboardPath}\``,
+      `- \`${options.radarPath}\``,
+      `- \`${options.siteScreeningPath}\``,
       '',
       insightBlock(
         1,
@@ -236,37 +274,37 @@ async function main() {
         7,
         'Flood and bushfire dominate the current risk stack',
         'The most common risk signals in the current system are flood metadata hits and bushfire spatial hits, not biodiversity or heritage-style constraints.',
-        `Flood high hits: ${formatNumber(floodRow?.total)}; bushfire high hits: ${formatNumber(bushfireRow?.total)}.`,
+        `Sydney only: flood high hits ${formatNumber(floodRow?.total)}; bushfire high hits ${formatNumber(bushfireRow?.total)}.`,
         'That tells us the current shortlist is being shaped much more by environmental and implementation exposure than by abstract planning complexity alone.',
         'Keep prioritising better flood and bushfire data quality, because that is where ranking changes are happening most often.'
       ),
       insightBlock(
         8,
-        'Hunter is viable, but it is not a Sydney clone',
-        'Hunter now clearly supports a real radar product, but the output profile is lower-conviction and more risk-adjusted than Sydney.',
-        `Sydney: A=${sydney.a_count}, B=${sydney.b_count}, C=${sydney.c_count}, avg friction=${sydney.avg_friction}. Hunter: A=${hunter.a_count}, B=${hunter.b_count}, C=${hunter.c_count}, avg friction=${hunter.avg_friction}.`,
-        'The Hunter pack is real and usable, but it should be sold and interpreted as a regional watchlist rather than a high-certainty acquisition engine.',
-        'Frame Hunter outputs as “where to investigate next” instead of “where to move first with highest conviction”.'
+        'Target pressure is still only partially visible across Sydney',
+        'Housing target coverage exists in the current Sydney stack, but it is still incomplete and should be treated as directional rather than metro-complete.',
+        `Target coverage across Greater Sydney councils currently sits at ${targetCoverageSydney}.`,
+        'That means target pressure is useful as a framing signal, but it should not be mistaken for a full metro-wide target model.',
+        'Use target pressure as one lens alongside policy, activity and risk, not as a standalone ranking driver.'
       ),
       insightBlock(
         9,
-        'Newcastle core looks stronger than the broader Hunter fringe',
-        `${toList(hunterLeaders.map((row) => row.precinct_name))} currently form the most compelling part of the Hunter shortlist.`,
-        hunterLeaders.map((row) => `${row.precinct_name}: rating ${row.opportunity_rating}, recent apps ${formatNumber(row.recent_application_count)}, risk ${row.friction_score}`).join('; '),
-        'This suggests the Hunter story is not evenly distributed. Newcastle core and selected Lake Macquarie / Maitland / Port Stephens nodes are more investable than the region-wide average.',
-        'Focus deep-dive effort on Newcastle core and the strongest submarkets before widening the regional watchlist.'
+        'Site screening is now surfacing lot-level follow-up candidates',
+        'The Sydney pack no longer stops at precinct ranking. It now carries a site-screening layer that identifies specific lots for follow-up review.',
+        `Top current sites include ${topSites.rows.map((row) => row.site_label).join(', ')}.`,
+        'This matters because precinct conviction and site conviction are not the same thing. The extra lot-level layer is where watchlist output becomes more actionable.',
+        'Use the site-screening report and linked site cards as the next step after precinct triage, not as a substitute for parcel-level diligence.'
       ),
       insightBlock(
         10,
-        'Data asymmetry is shaping the quality and tone of the output',
-        'Sydney can support target-pressure narratives; Hunter currently cannot, because housing-target coverage is absent there.',
-        `Target coverage: Greater Sydney ${targetCoverageSydney}; Hunter ${targetCoverageHunter}.`,
-        'That means the system should not pretend both regions support the same style of argument. Sydney can be framed around target pressure plus policy plus activity; Hunter is currently better framed around activity plus proposal plus risk.',
-        'Keep report language region-specific rather than forcing one national narrative onto very different data environments.'
+        'Metric scope needs to stay explicit to keep the pack credible',
+        'The pack now combines full-region counts, configured-precinct watchlists and lot-level screening outputs. Those are related, but they are not the same universe.',
+        'Region totals describe the broader Sydney source layer; shortlist and coverage pages describe the configured precinct universe; site-screening pages describe ranked lot candidates only.',
+        'If those scopes are not stated clearly, the output becomes harder to trust even when the underlying numbers are correct.',
+        'Keep every major metric labeled by scope so clients can see whether a number refers to the whole region, the configured precinct universe or the top ranked site cut.'
       ),
       '## Bottom Line',
       '',
-      'The most meaningful discovery is that the system now consistently separates `clean opportunity`, `busy but risky`, and `regionally viable but lower-conviction` precincts. That is much more useful than a generic hotspot list.',
+      'The most meaningful discovery is that the current Sydney stack now consistently separates `clean opportunity`, `busy but risky`, and `early-but-still-needs-validation` precincts. That is much more useful than a generic hotspot list.',
       ''
     ].join('\n')
 

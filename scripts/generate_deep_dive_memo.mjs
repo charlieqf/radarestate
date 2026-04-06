@@ -4,6 +4,7 @@ import { Client } from 'pg'
 
 const root = process.cwd()
 const RECENT_FROM = '2025-01-01'
+const ACTIVE_POLICY_STAGES = ['under_assessment', 'pre_exhibition', 'on_exhibition', 'finalisation']
 
 function readFile(relativePath) {
   return fs.readFileSync(path.join(root, relativePath), 'utf8')
@@ -41,12 +42,20 @@ function parseArgs() {
   const args = process.argv.slice(2)
   const options = {
     precinct: null,
+    outputName: null,
+    snapshotDate: new Date().toISOString().slice(0, 10),
     dashboardPath: 'dashboard/latest-report.html',
     radarPath: 'reports/weekly-radar-latest.md'
   }
   for (const arg of args) {
     if (arg.startsWith('--precinct=')) {
       options.precinct = arg.split('=')[1].trim()
+    }
+    if (arg.startsWith('--output-name=')) {
+      options.outputName = arg.split('=')[1].trim()
+    }
+    if (arg.startsWith('--snapshot-date=')) {
+      options.snapshotDate = arg.split('=')[1].trim()
     }
     if (arg.startsWith('--dashboard-path=')) {
       options.dashboardPath = arg.split('=')[1].trim()
@@ -60,7 +69,32 @@ function parseArgs() {
 
 function clean(value) {
   if (value === null || value === undefined) return ''
-  return String(value).replace(/\s+/g, ' ').trim()
+  return String(value)
+    .replace(/&amp;/gi, '&')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+function normalisePlace(value) {
+  return clean(value).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
+}
+
+function mentionsPlace(text, place) {
+  const textValue = normalisePlace(text)
+  const placeValue = normalisePlace(place)
+  return Boolean(textValue && placeValue && textValue.includes(placeValue))
+}
+
+function isPrecinctPurePolicyRow(item, precinctName) {
+  const location = clean(item.location_text)
+  if (!location) return mentionsPlace(item.title, precinctName)
+  const normalisedLocation = normalisePlace(location)
+  const normalisedPrecinct = normalisePlace(precinctName)
+  if (normalisedLocation === normalisedPrecinct) return true
+  return mentionsPlace(location, precinctName) && /\d/.test(location)
 }
 
 function formatNumber(value) {
@@ -121,10 +155,10 @@ function buildThesis(row) {
 
 function buildWhyNow(row) {
   const parts = []
-  if (Number(row.policy_score || 0) >= 4) parts.push('policy momentum is already visible in the current pipeline')
-  if (Number(row.timing_score || 0) >= 4) parts.push('recent development activity is sufficiently strong to justify immediate attention')
-  if (Number(row.made_count || 0) >= 3) parts.push('there is already a meaningful stock of made-stage planning history in this precinct')
-  if (!parts.length) parts.push('the precinct sits inside the current radar universe and still warrants structured monitoring')
+  if (Number(row.policy_score || 0) >= 4) parts.push('Policy momentum is already visible in the current pipeline')
+  if (Number(row.timing_score || 0) >= 4) parts.push('Recent development activity is sufficiently strong to justify immediate attention')
+  if (Number(row.made_count || 0) >= 3) parts.push('There is already a meaningful stock of made-stage planning history in this precinct')
+  if (!parts.length) parts.push('The precinct sits inside the current radar universe and still warrants structured monitoring')
   return parts
 }
 
@@ -158,6 +192,23 @@ function constraintEvidence(item) {
   return item.notes || '-'
 }
 
+function policyEvidenceScopeLabel(item, precinctName) {
+  return isPrecinctPurePolicyRow(item, precinctName)
+    ? 'Precinct-explicit'
+    : 'Mapped to precinct via broader or council reference'
+}
+
+function constraintUseLabel(constraintType) {
+  const contextProxyTypes = new Set(['heat_vulnerability_proxy', 'low_tree_canopy_proxy'])
+  const planningProcessTypes = new Set(['policy_withdrawal_friction'])
+  const spatialScreeningTypes = new Set(['flood_metadata_signal', 'bushfire_spatial_sample', 'biodiversity_spatial_sample'])
+
+  if (contextProxyTypes.has(constraintType)) return 'Precinct / council context proxy'
+  if (planningProcessTypes.has(constraintType)) return 'Planning process signal'
+  if (spatialScreeningTypes.has(constraintType)) return 'Transaction-facing screening signal'
+  return 'Current screening signal'
+}
+
 async function resolvePrecinctName(client, requestedPrecinct) {
   if (requestedPrecinct) return requestedPrecinct
   const { rows } = await client.query(
@@ -186,12 +237,10 @@ async function fetchDeepDiveData(client, precinctName) {
 
   const proposals = await client.query(
     `select pp.title, pp.stage, pp.stage_rank, pp.location_text, pp.summary, pp.source_url, pp.last_seen_at
-     from public.planning_proposals pp
-     left join public.precincts p on p.id = pp.precinct_id
-     where p.name = $1
-        or pp.location_text ilike '%' || $1 || '%'
-     order by pp.stage_rank nulls last, pp.last_seen_at desc, pp.title`,
-    [precinctName]
+      from public.planning_proposals pp
+      where pp.precinct_id = $1
+      order by pp.stage_rank nulls last, pp.last_seen_at desc, pp.title`,
+    [row.precinct_id]
   )
 
   const apps = await client.query(
@@ -202,26 +251,50 @@ async function fetchDeepDiveData(client, precinctName) {
        lodgement_date,
        source_name,
        tracker_scope
-     from public.application_signals a
-     join public.precincts p on p.id = a.precinct_id
-     where p.name = $1
-       and a.tracker_scope = 'applications'
-       and coalesce(a.lodgement_date, a.observed_at) >= $2::date
-     order by a.lodgement_date desc nulls last, a.observed_at desc
-     limit 25`,
-    [precinctName, RECENT_FROM]
+      from public.application_signals a
+      where a.precinct_id = $1
+        and a.tracker_scope = 'applications'
+        and coalesce(a.lodgement_date, a.observed_at) >= $2::date
+      order by a.lodgement_date desc nulls last, a.observed_at desc
+      limit 25`,
+    [row.precinct_id, RECENT_FROM]
   )
 
   const appStatus = await client.query(
     `select status, count(*)::int as total
-     from public.application_signals a
-     join public.precincts p on p.id = a.precinct_id
-     where p.name = $1
-       and a.tracker_scope = 'applications'
-       and coalesce(a.lodgement_date, a.observed_at) >= $2::date
-     group by status
-     order by total desc, status`,
-    [precinctName, RECENT_FROM]
+      from public.application_signals a
+      where a.precinct_id = $1
+        and a.tracker_scope = 'applications'
+        and coalesce(a.lodgement_date, a.observed_at) >= $2::date
+      group by status
+      order by total desc, status`,
+    [row.precinct_id, RECENT_FROM]
+  )
+
+    const appTypeMix = await client.query(
+      `with grouped as (
+        select
+          case
+            when a.tracker_scope = 'state_significant' then 'SSD'
+           when lower(coalesce(a.application_type, '')) like '%complying development certificate%' or lower(coalesce(a.application_type, '')) like '%cdc%' then 'CDC'
+           when lower(coalesce(a.application_type, '')) like '%modification%' then 'Modification'
+           when lower(coalesce(a.application_type, '')) like '%state significant%' or lower(coalesce(a.application_type, '')) like '%ssd%' then 'SSD'
+           when lower(coalesce(a.application_type, '')) like '%development application%' then 'DA'
+           else 'Other'
+         end as application_bucket,
+         count(*)::int as total
+        from public.application_signals a
+        where a.precinct_id = $1
+          and a.tracker_scope in ('applications', 'state_significant')
+          and coalesce(a.lodgement_date, a.observed_at) >= $2::date
+        group by 1
+      )
+     select application_bucket, total
+     from grouped
+     order by case application_bucket when 'DA' then 1 when 'CDC' then 2 when 'SSD' then 3 when 'Modification' then 4 else 5 end,
+              total desc,
+              application_bucket`,
+    [row.precinct_id, RECENT_FROM]
   )
 
   const constraints = await client.query(
@@ -249,11 +322,19 @@ async function fetchDeepDiveData(client, precinctName) {
     [precinctName]
   )
 
-  return {
-    row,
-    proposals: dedupeRows(proposals.rows, (item) => `${item.stage}|${item.title}|${item.location_text}`),
-    apps: dedupeRows(apps.rows, (item) => `${item.lodgement_date}|${item.location_text}|${item.status}`).slice(0, 12),
-    appStatus: appStatus.rows,
+    const rawActiveProposalCount = proposals.rows.filter((item) => ACTIVE_POLICY_STAGES.includes(item.stage)).length
+    const dedupedProposals = dedupeRows(proposals.rows, (item) => `${item.stage}|${item.title}|${item.location_text}`)
+    const activeProposals = dedupedProposals.filter((item) => ACTIVE_POLICY_STAGES.includes(item.stage))
+    const historicalProposals = dedupedProposals.filter((item) => !ACTIVE_POLICY_STAGES.includes(item.stage) && isPrecinctPurePolicyRow(item, precinctName))
+
+    return {
+      row,
+      rawActiveProposalCount,
+      activeProposals,
+      historicalProposals,
+      apps: dedupeRows(apps.rows, (item) => `${item.lodgement_date}|${item.location_text}|${item.status}`).slice(0, 12),
+      appStatus: appStatus.rows,
+      appTypeMix: appTypeMix.rows,
     constraints: constraints.rows,
     council: council.rows[0] || null,
     mapPoint: mapPoint.rows[0] || null
@@ -266,8 +347,9 @@ async function main() {
   try {
     const precinctName = await resolvePrecinctName(client, options.precinct)
     const data = await fetchDeepDiveData(client, precinctName)
-    const { row, proposals, apps, appStatus, constraints, council, mapPoint } = data
-    const today = new Date().toISOString().slice(0, 10)
+    const { row, rawActiveProposalCount, activeProposals, historicalProposals, apps, appStatus, appTypeMix, constraints, council, mapPoint } = data
+    const applicationTypeRows = appTypeMix.filter((item) => item.application_bucket !== 'SSD')
+    const today = options.snapshotDate
 
     const markdown = [
       `# Deep Dive: ${row.precinct_name}`,
@@ -288,6 +370,7 @@ async function main() {
       `- Timing score: \`${row.timing_score ?? '-'}\``,
       `- Friction score: \`${row.friction_score ?? '-'}\``,
       `- Recent applications: \`${formatNumber(row.recent_application_count)}\``,
+      `- Recent application window start: \`${RECENT_FROM}\``,
       `- Active planning proposals: \`${formatNumber(row.active_pipeline_count)}\``,
       `- State significant projects: \`${formatNumber(row.state_significant_count)}\``,
       `- Recommended action: \`${row.recommended_action}\``,
@@ -302,18 +385,36 @@ async function main() {
       '',
       '## Policy And Planning Context',
       '',
-      proposals.length
+      `- Current score uses \`${formatNumber(row.active_pipeline_count)}\` active planning proposal items.`,
+      `- Current mapped source rows at active stages: \`${formatNumber(rawActiveProposalCount)}\`. Distinct rows shown below after de-duplication / evidence cleanup: \`${formatNumber(activeProposals.length)}\`.`,
+      '- Rows below show the currently mapped active proposals behind that count. When a row is not precinct-explicit in its wording, it is still shown and labeled so the score can be audited rather than hidden.',
+      '',
+      activeProposals.length
         ? markdownTable(
-            ['Stage', 'Title', 'Location'],
-            proposals.slice(0, 12).map((item) => [
+            ['Stage', 'Title', 'Location', 'Evidence Scope'],
+            activeProposals.slice(0, 12).map((item) => [
+              stageLabel(item.stage),
+              item.title,
+              item.location_text || '-',
+              policyEvidenceScopeLabel(item, row.precinct_name)
+            ])
+          )
+        : 'No active mapped proposal records currently surfaced for this precinct.',
+      '',
+      historicalProposals.length
+        ? markdownTable(
+            ['Historical Stage', 'Title', 'Location'],
+            historicalProposals.slice(0, 8).map((item) => [
               stageLabel(item.stage),
               item.title,
               item.location_text || '-'
             ])
           )
-        : 'No mapped proposal records currently surfaced for this precinct.',
+        : 'No precinct-explicit made / withdrawn policy rows are currently shown in this deep dive.',
       '',
       '## Development Activity Context',
+      '',
+      `Recent applications below are screening signals with lodgement date on or after \`${RECENT_FROM}\`. The application-type table is shown as mutually exclusive DA / CDC / Modification / Other buckets so it stays consistent with the \`Recent applications\` count above. State-significant signals stay separate in the quick scorecard.`,
       '',
       appStatus.length
         ? markdownTable(
@@ -321,6 +422,13 @@ async function main() {
             appStatus.map((item) => [item.status || '-', formatNumber(item.total)])
           )
         : 'No recent mapped application records currently surfaced for this precinct.',
+      '',
+      applicationTypeRows.length
+        ? markdownTable(
+            ['Application Type', 'Count'],
+            applicationTypeRows.map((item) => [item.application_bucket, formatNumber(item.total)])
+          )
+        : 'No recent application-type mix currently surfaced for this precinct.',
       '',
       apps.length
         ? markdownTable(
@@ -338,18 +446,21 @@ async function main() {
       '',
       buildRiskInterpretation(row),
       '',
+      'Context proxies can help explain why a precinct is ranked up or down, but they should not be mistaken for parcel-level blockers on their own.',
+      '',
       constraints.length
         ? markdownTable(
-            ['Constraint Type', 'Severity', 'Source', 'Evidence', 'Source URL'],
+            ['Constraint Type', 'Severity', 'Signal Use', 'Source', 'Evidence', 'Source URL'],
             constraints.map((item) => [
               item.constraint_type,
               item.severity,
+              constraintUseLabel(item.constraint_type),
               item.source_name || '-',
               constraintEvidence(item),
               item.source_url || '-'
             ])
           )
-        : 'No derived constraint rows currently attached to this precinct.',
+        : 'No derived constraint rows currently attached to this precinct. Treat this as missing current signal, not proof of zero site risk.',
       '',
       '## Council Context',
       '',
@@ -373,7 +484,7 @@ async function main() {
       `2. Use \`${options.dashboardPath}\` to inspect the surrounding precinct cluster before doing any street-level or owner-contact work.`,
       constraints.length
         ? `3. Explicitly validate the current risk stack (${constraints.map((item) => item.constraint_type).join(', ')}) before promoting this precinct into a transaction-facing shortlist.`
-        : '3. The next uplift in confidence will come from more detailed site-level and constraint work rather than more high-level policy scanning.',
+        : '3. Treat the current derived risk gap as incomplete coverage rather than parcel-level clearance, and use more detailed site-level constraint work before promotion.',
       '',
       '## References',
       '',
@@ -384,7 +495,10 @@ async function main() {
 
     const reportsDir = path.join(root, 'reports')
     fs.mkdirSync(reportsDir, { recursive: true })
-    const outPath = path.join(reportsDir, `deep-dive-${slugify(row.precinct_name)}.md`)
+    const fileName = options.outputName
+      ? `deep-dive-${slugify(row.precinct_name)}-${slugify(options.outputName)}.md`
+      : `deep-dive-${slugify(row.precinct_name)}.md`
+    const outPath = path.join(reportsDir, fileName)
     fs.writeFileSync(outPath, markdown, 'utf8')
     console.log(`Wrote ${outPath}`)
   } finally {

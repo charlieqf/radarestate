@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sydney Development Report Methodology</title>
+  <script>
+    (() => {
+      const storageKey = 'radarestate-theme';
+      const sidebarKey = 'radarestate-sidebar';
+      let stored = null;
+      let storedSidebar = null;
+      try {
+        stored = window.localStorage.getItem(storageKey);
+        storedSidebar = window.localStorage.getItem(sidebarKey);
+      } catch {
+      }
+      const preferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.dataset.theme = stored || preferred;
+      document.documentElement.dataset.sidebar = storedSidebar || 'expanded';
+    })();
+  </script>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg-accent: #132048;
+      --panel: #121932;
+      --panel-2: #171f3d;
+      --text: #e9eefc;
+      --muted: #92a0c4;
+      --line: #273154;
+      --cyan: #33d1ff;
+      --lime: #b7ff3c;
+      --amber: #ffb547;
+      --red: #ff6b6b;
+      --link: #7dd3fc;
+      --panel-top: rgba(255,255,255,0.03);
+      --panel-bottom: rgba(255,255,255,0.015);
+      --shadow: rgba(0,0,0,0.18);
+      --button-bg: rgba(255,255,255,0.06);
+      --button-text: var(--text);
+      --article-code-bg: rgba(255,255,255,0.06);
+      --article-code-border: rgba(255,255,255,0.08);
+      --pre-bg: #0f1731;
+      --blockquote-bg: rgba(51,209,255,0.06);
+    }
+
+    html[data-theme="light"] {
+      --bg: #eef4ff;
+      --bg-accent: #d9e8ff;
+      --panel: #ffffff;
+      --panel-2: #f4f8ff;
+      --text: #11203f;
+      --muted: #597094;
+      --line: #d3def0;
+      --cyan: #0f84c9;
+      --lime: #6eab12;
+      --amber: #d6861b;
+      --red: #c94242;
+      --link: #0f84c9;
+      --panel-top: rgba(255,255,255,0.94);
+      --panel-bottom: rgba(240,246,255,0.94);
+      --shadow: rgba(45,72,117,0.12);
+      --button-bg: #ffffff;
+      --button-text: #11203f;
+      --article-code-bg: rgba(17,32,63,0.06);
+      --article-code-border: rgba(17,32,63,0.08);
+      --pre-bg: #eef4ff;
+      --blockquote-bg: rgba(15,132,201,0.08);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top left, var(--bg-accent) 0, var(--bg) 45%);
+      color: var(--text);
+      font-family: Inter, Arial, sans-serif;
+      overflow-x: hidden;
+    }
+    .sidebar-toggle {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 1200;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+      box-shadow: 0 12px 30px var(--shadow);
+      color: var(--button-text);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+    }
+    .theme-switcher {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 1200;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+      box-shadow: 0 12px 30px var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .theme-switcher-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .theme-switcher-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px;
+      border-radius: 999px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+    }
+    .theme-switcher-button {
+      appearance: none;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      min-width: 68px;
+    }
+    .theme-switcher-button[aria-pressed="true"] {
+      background: var(--button-bg);
+      color: var(--button-text);
+      box-shadow: inset 0 0 0 1px var(--line);
+    }
+    .shell {
+      display: grid;
+      grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+      min-height: 100vh;
+      transition: grid-template-columns 180ms ease;
+    }
+    html[data-sidebar="collapsed"] .shell {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .sidebar {
+      padding: 24px 18px;
+      border-right: 1px solid var(--line);
+      background: var(--panel);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      min-width: 0;
+      width: 300px;
+      max-width: 300px;
+      transition: opacity 150ms ease, transform 180ms ease;
+    }
+    html[data-sidebar="collapsed"] .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-110%);
+      display: block;
+    }
+    .brand {
+      margin-bottom: 22px;
+    }
+    .eyebrow {
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    .brand h1 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.2;
+    }
+    .brand p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 10px 0 0;
+    }
+    .actions {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+    .action-link {
+      display: inline-block;
+      text-decoration: none;
+      color: var(--text);
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 13px;
+    }
+    .nav {
+      display: grid;
+      gap: 16px;
+    }
+    .nav-group {
+      display: grid;
+      gap: 8px;
+    }
+    .nav-heading {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0 4px;
+    }
+    .nav-group-links {
+      display: grid;
+      gap: 10px;
+    }
+    .nav-link {
+      display: block;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.02);
+      text-decoration: none;
+      color: var(--text);
+    }
+    .nav-link.active {
+      border-color: rgba(51,209,255,0.45);
+      box-shadow: inset 0 0 0 1px rgba(51,209,255,0.25);
+      background: rgba(51,209,255,0.08);
+    }
+    .nav-title {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .nav-meta {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .main {
+      padding: 88px 28px 28px;
+      min-width: 0;
+      width: 100%;
+    }
+    .article {
+      width: 100%;
+      max-width: 920px;
+      margin: 0 auto;
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 28px 32px;
+      box-shadow: 0 16px 40px var(--shadow);
+    }
+    .article.article-wide {
+      width: 100%;
+      max-width: 1320px;
+    }
+    .article h1, .article h2, .article h3 {
+      margin-top: 0;
+    }
+    .article h1 {
+      font-size: 32px;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .article h2 {
+      font-size: 20px;
+      margin-top: 28px;
+      margin-bottom: 14px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+    .article h3 {
+      font-size: 16px;
+      margin-top: 22px;
+      margin-bottom: 10px;
+      color: var(--cyan);
+    }
+    .article p, .article li {
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+    .article ul, .article ol {
+      padding-left: 22px;
+    }
+    .article a {
+      color: var(--link);
+    }
+    .article code {
+      background: var(--article-code-bg);
+      border: 1px solid var(--article-code-border);
+      border-radius: 8px;
+      padding: 2px 6px;
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 0.92em;
+    }
+    .article pre {
+      background: var(--pre-bg);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      overflow: auto;
+    }
+    .article table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 20px;
+      font-size: 14px;
+    }
+    .article th, .article td {
+      border-bottom: 1px solid var(--line);
+      padding: 11px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .article th {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 12px;
+    }
+    .article blockquote {
+      margin: 18px 0;
+      padding: 14px 18px;
+      border-left: 3px solid var(--cyan);
+      background: var(--blockquote-bg);
+      border-radius: 12px;
+      color: var(--text);
+    }
+    .embed-frame {
+      width: 100%;
+      height: calc(100vh - 170px);
+      min-height: 980px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #ffffff;
+    }
+    .embed-note {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 980px) {
+      .sidebar-toggle {
+        left: 18px;
+      }
+      .theme-switcher {
+        left: 18px;
+        right: 18px;
+        justify-content: space-between;
+        top: 64px;
+      }
+      .shell { grid-template-columns: 1fr; }
+      .sidebar {
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+      .main { padding: 92px 18px 18px; }
+      .article { padding: 22px 20px; }
+      .embed-frame { min-height: 760px; height: calc(100vh - 220px); }
+    }
+  </style>
+</head>
+<body>
+  <button class="sidebar-toggle" id="sidebarToggle" type="button" aria-expanded="true">Hide Navigation</button>
+  <div class="theme-switcher" role="group" aria-label="Theme switcher">
+    <span class="theme-switcher-label">Theme</span>
+    <div class="theme-switcher-group">
+      <button class="theme-switcher-button" type="button" data-theme-option="dark">Dark</button>
+      <button class="theme-switcher-button" type="button" data-theme-option="light">Light</button>
+    </div>
+  </div>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="eyebrow">RadarEstate</div>
+        <h1>Client Reports</h1>
+        <p>Customer detail page inside the grouped DevelopmentReport bundle.</p>
+      </div>
+      <div class="actions">
+        <a class="action-link" href="../index.html">Back to Development Client Portal</a>
+        <a class="action-link" href="../02-this-weeks-actions/index.html">Open This Week's Actions</a>
+        <a class="action-link" href="../05-visual-summary/index.html">Open Visual Summary</a>
+      </div>
+      <nav class="nav"><section class="nav-group"><div class="nav-heading">Grouped Navigation</div><div class="nav-group-links"><a class="nav-link" href="../01-core/index.html"><span class="nav-title">Core</span><span class="nav-meta">Start here. These are the two files that should be read first in every weekly cycle.</span></a><a class="nav-link" href="../02-this-weeks-actions/index.html"><span class="nav-title">This Week's Actions</span><span class="nav-meta">Use this folder to move from conclusions into immediate follow-up work.</span></a><a class="nav-link" href="../03-site-cards/index.html"><span class="nav-title">Site Cards</span><span class="nav-meta">Detailed lot-level follow-up material for the shortlisted sites.</span></a><a class="nav-link" href="../04-precinct-deep-dives/index.html"><span class="nav-title">Precinct Deep Dives</span><span class="nav-meta">Supporting precinct evidence once a location is already in active review.</span></a><a class="nav-link active" href="../05-visual-summary/index.html"><span class="nav-title">Visual Summary And Methodology</span><span class="nav-meta">Visual context and methodology for customers who want maps, broader pattern recognition, or scoring boundaries.</span></a></div></section></nav>
+    </aside>
+    <main class="main">
+      <article class="article"><h1>Sydney Development Report Methodology</h1>
+<h2>Time Windows</h2>
+<ul>
+<li>Current snapshot date: 2026-04-05</li>
+<li>Previous comparison snapshot: 2026-03-29 (reconstructed)</li>
+<li>Activity totals in the full report use a retained cumulative window starting 2025-01-01.</li>
+<li>The delta report is the weekly change layer. It should answer what is new, removed, upgraded, or downgraded since the prior saved snapshot.</li>
+</ul>
+<h2>Archive Integrity</h2>
+<ul>
+<li>The previous comparison point is reconstructed rather than formally archived. This should be read as a transition delta, not as a clean week-over-week archived comparison.</li>
+<li>Once both current and previous manifests are <code>formal</code>, the same full-plus-delta structure becomes a true archived week-over-week comparison path.</li>
+</ul>
+<h2>Precinct Scoring Logic</h2>
+<ul>
+<li>Precinct rows are read from the saved weekly precinct snapshot rather than re-queried live when the report is rendered.</li>
+<li>The rating stack combines policy signal strength, timing signal strength, and approval risk. In the current saved snapshot these appear as <code>policy_score</code>, <code>timing_score</code>, and <code>friction_score</code>.</li>
+<li><code>policy_score</code> is positive evidence from the current proposal pipeline and planning direction. <code>timing_score</code> reflects current activity tempo and near-term development momentum. <code>friction_score</code> is a penalty layer for planning and environmental red flags.</li>
+<li>Current rated precinct mix: <strong>A</strong>: 5, <strong>B</strong>: 26, <strong>C</strong>: 12.</li>
+</ul>
+<h2>Precinct Rating Formula</h2>
+<ul>
+<li><code>policy_score</code> starts at 0, then adds <code>+2</code> when active pipeline count is at least 1, <code>+1</code> more when active pipeline count is at least 2, <code>+1</code> when made count is at least 5, and <code>-1</code> when withdrawn count is at least 3. The final result is clamped between 0 and 5.</li>
+<li><code>timing_score</code> is <code>5</code> at 100+ recent applications, <code>4</code> at 50-99, <code>3</code> at 20-49, <code>2</code> at 5-19, otherwise <code>1</code>. It then gets <code>+1</code> when state-significant count is above 0, capped at 5. If active pipeline is above 0 and timing would otherwise be below 2, it is lifted to 2.</li>
+<li><code>friction_score</code> is <code>2 x high constraints + 1 x medium constraints + 1 if any low constraint exists</code>, then clamped between 0 and 5.</li>
+<li>Rating rule: <code>A</code> requires policy score at least 4 and timing score at least 4. <code>B</code> requires policy score at least 3 or timing score at least 3. Otherwise the row is <code>C</code>.</li>
+<li>Risk downgrade rule: friction score 3 downgrades <code>A</code> to <code>B</code>. Friction score 4 downgrades <code>A</code> to <code>B</code> and <code>B</code> to <code>C</code>. If there is no live signal from active pipeline, recent applications, or state-significant projects, the row is forced to <code>C</code>.</li>
+<li><code>capacity_score</code> is also calculated and stored, but it is not currently used inside the A/B/C assignment rule.</li>
+</ul>
+<h2>Site Screening Logic</h2>
+<ul>
+<li>Site rows are read from the saved weekly site snapshot rather than from a live latest-state view.</li>
+<li>Site screening ranks candidate lots by current planning fit, local precinct strength, matched signal count, and current red-flag burden.</li>
+<li>Current site screening band mix: <strong>Advance</strong> 31, <strong>Review</strong> 130, <strong>Caution</strong> 146.</li>
+<li><code>Advance</code> means the screening layer currently supports moving into street-level diligence. <code>Review</code> means there is enough signal to keep on the working list but not enough to promote immediately. <code>Caution</code> means the current signal-to-risk balance is weak or blocked.</li>
+</ul>
+<h2>Site Score Formula</h2>
+<ul>
+<li><code>screening_score = precinct_score + area_score + frontage_score + fsr_score + height_score + signal_score - constraint_penalty - title_complexity_penalty</code>.</li>
+<li><code>precinct_score</code> is <code>18</code> for an A-rated precinct, <code>12</code> for B, <code>6</code> for C, otherwise <code>2</code>.</li>
+<li><code>area_score</code> is <code>14</code> at 2,000+ sqm, <code>11</code> at 1,200-1,999 sqm, <code>8</code> at 800-1,199 sqm, <code>4</code> at 450-799 sqm, otherwise <code>0</code>.</li>
+<li><code>frontage_score</code> is <code>8</code> at 30m+, <code>6</code> at 20-29.9m, <code>3</code> at 12-19.9m, otherwise <code>0</code>.</li>
+<li><code>fsr_score</code> is <code>12</code> at FSR 3+, <code>9</code> at 2-2.99, <code>6</code> at 1.5-1.99, <code>3</code> at 1-1.49, otherwise <code>0</code>.</li>
+<li><code>height_score</code> is <code>12</code> at 45m+, <code>9</code> at 28-44.9m, <code>6</code> at 18-27.9m, <code>3</code> at 12-17.9m, otherwise <code>0</code>.</li>
+<li><code>signal_score</code> is <code>2 x matched_signal_count</code>, capped at 10. <code>constraint_penalty</code> is <code>10 x high constraints + 5 x medium constraints</code>. <code>title_complexity_penalty</code> is capped at 24 and rises with strata / under strata title complexity plus lot-count and parcel-complexity signals.</li>
+</ul>
+<h2>Site Band Thresholds</h2>
+<ul>
+<li><code>Advance</code>: screening score at least 45, with no high constraint and no title complexity penalty.</li>
+<li><code>Review</code>: screening score at least 28 but not qualifying for <code>Advance</code>.</li>
+<li><code>Caution</code>: screening score below 28.</li>
+</ul>
+<h2>A/B/C Thresholds</h2>
+<p>These are empirical ranges from the currently saved snapshot, not universal planning-law thresholds.</p>
+<table>
+<thead>
+<tr>
+<th>Rating</th>
+<th>Precinct Count</th>
+<th>Policy Score Range</th>
+<th>Timing Score Range</th>
+<th>Risk Range</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>5</td>
+<td>4 to 4</td>
+<td>4 to 5</td>
+<td>0 to 0</td>
+</tr>
+<tr>
+<td>B</td>
+<td>26</td>
+<td>0 to 4</td>
+<td>4 to 5</td>
+<td>0 to 4</td>
+</tr>
+<tr>
+<td>C</td>
+<td>12</td>
+<td>0 to 3</td>
+<td>2 to 5</td>
+<td>0 to 5</td>
+</tr>
+</tbody></table>
+<h2>Cross-Council Comparability</h2>
+<ul>
+<li>Ratings are best used for prioritisation inside the saved shortlist universe, not as a literal statement that one council is always directly interchangeable with another.</li>
+<li>Cross-council comparisons are directionally useful because the same scoring fields are applied across the saved region snapshot, but council-specific planning regimes and data depth still matter.</li>
+<li>In practice, the strongest customer-safe use is: compare relative priority, then validate with site-level diligence before acting.</li>
+</ul>
+<h2>Metric Scope Notes</h2>
+<ul>
+<li>Customer-facing application totals are derived from mutually exclusive DA / CDC / Modification / Other buckets. In the current snapshot that sums to 43,191 application signals since 2025-01-01.</li>
+<li>State-significant signals are tracked separately. In the current snapshot that count is 1,920.</li>
+<li>Site bands in the current product vocabulary are <code>Advance</code>, <code>Review</code>, and <code>Caution</code>.</li>
+</ul>
+<h2>Data Coverage</h2>
+<table>
+<thead>
+<tr>
+<th>Source Layer</th>
+<th>Current Min Date</th>
+<th>Current Max Date</th>
+<th>Previous Min Date</th>
+<th>Previous Max Date</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Planning proposals</td>
+<td>2026-04-01</td>
+<td>2026-04-02</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Application signals</td>
+<td>2022-07-07</td>
+<td>2026-04-02</td>
+<td>2022-07-07</td>
+<td>2026-03-28</td>
+</tr>
+<tr>
+<td>Site screening layers</td>
+<td>2026-04-04</td>
+<td>2026-04-05</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody></table>
+<h2>Known Gaps</h2>
+<ul>
+<li>The full report is a point-in-time picture, but activity totals still use the retained cumulative application window beginning 2025-01-01. Weekly net-new change should be read from the delta report, not inferred from the full report totals alone.</li>
+<li>No owner-contact list, title outreach pack, residual feasibility model, or comparable-sales layer is included in these weekly outputs.</li>
+<li>Site shortlist rows are screening outputs for prioritisation, not acquisition-ready approvals.</li>
+<li>No current open-data red flag surfaced is not the same as parcel-safe. Site rows still need title, servicing, deal, and detailed planning diligence before transaction use.</li>
+<li>The previous comparison point is reconstructed rather than formally archived, so the first transition delta should be treated as approximate at the historical baseline edge.</li>
+<li>Previous baseline gap: No true historical precinct shortlist snapshot was retained for this date.</li>
+<li>Previous baseline gap: No true site-screening layer was retained before 2026-04-03.</li>
+<li>Previous baseline gap: Policy coverage before 2026-04-01 is not retained in the current database state.</li>
+</ul>
+</article>
+    </main>
+  </div>
+  <script>
+    (() => {
+      const navScrollKey = 'radarestate-nav-scroll';
+      const storageKey = 'radarestate-theme';
+      const sidebarKey = 'radarestate-sidebar';
+      const currentTheme = document.documentElement.dataset.theme || 'dark';
+      const currentSidebarState = document.documentElement.dataset.sidebar || 'expanded';
+      const sidebar = document.querySelector('.sidebar');
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const buttons = [...document.querySelectorAll('[data-theme-option]')];
+
+      const updateSidebarToggle = (state) => {
+        if (!sidebarToggle) return;
+        const expanded = state !== 'collapsed';
+        sidebarToggle.textContent = expanded ? 'Hide Navigation' : 'Show Navigation';
+        sidebarToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      };
+
+      updateSidebarToggle(currentSidebarState);
+
+      if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', () => {
+          const nextState = document.documentElement.dataset.sidebar === 'collapsed' ? 'expanded' : 'collapsed';
+          document.documentElement.dataset.sidebar = nextState;
+          updateSidebarToggle(nextState);
+          try {
+            window.localStorage.setItem(sidebarKey, nextState);
+          } catch {
+          }
+        });
+      }
+
+      if (sidebar) {
+        try {
+          const storedScroll = window.localStorage.getItem(navScrollKey);
+          if (storedScroll !== null) {
+            requestAnimationFrame(() => {
+              sidebar.scrollTop = Number(storedScroll) || 0;
+            });
+          }
+        } catch {
+        }
+
+        sidebar.addEventListener('scroll', () => {
+          try {
+            window.localStorage.setItem(navScrollKey, String(sidebar.scrollTop));
+          } catch {
+          }
+        }, { passive: true });
+      }
+
+      if (!buttons.length) return;
+      buttons.forEach((button) => {
+        const theme = button.dataset.themeOption;
+        button.setAttribute('aria-pressed', theme === currentTheme ? 'true' : 'false');
+        button.addEventListener('click', () => {
+          if (theme === currentTheme) return;
+          try {
+            window.localStorage.setItem(storageKey, theme);
+          } catch {
+          }
+          document.documentElement.dataset.theme = theme;
+          window.location.reload();
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sydney Client Pack</title>
+  <script>
+    (() => {
+      const storageKey = 'radarestate-theme';
+      const sidebarKey = 'radarestate-sidebar';
+      let stored = null;
+      let storedSidebar = null;
+      try {
+        stored = window.localStorage.getItem(storageKey);
+        storedSidebar = window.localStorage.getItem(sidebarKey);
+      } catch {
+      }
+      const preferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.dataset.theme = stored || preferred;
+      document.documentElement.dataset.sidebar = storedSidebar || 'expanded';
+    })();
+  </script>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg-accent: #132048;
+      --panel: #121932;
+      --panel-2: #171f3d;
+      --text: #e9eefc;
+      --muted: #92a0c4;
+      --line: #273154;
+      --cyan: #33d1ff;
+      --lime: #b7ff3c;
+      --amber: #ffb547;
+      --red: #ff6b6b;
+      --link: #7dd3fc;
+      --panel-top: rgba(255,255,255,0.03);
+      --panel-bottom: rgba(255,255,255,0.015);
+      --shadow: rgba(0,0,0,0.18);
+      --button-bg: rgba(255,255,255,0.06);
+      --button-text: var(--text);
+      --article-code-bg: rgba(255,255,255,0.06);
+      --article-code-border: rgba(255,255,255,0.08);
+      --pre-bg: #0f1731;
+      --blockquote-bg: rgba(51,209,255,0.06);
+    }
+
+    html[data-theme="light"] {
+      --bg: #eef4ff;
+      --bg-accent: #d9e8ff;
+      --panel: #ffffff;
+      --panel-2: #f4f8ff;
+      --text: #11203f;
+      --muted: #597094;
+      --line: #d3def0;
+      --cyan: #0f84c9;
+      --lime: #6eab12;
+      --amber: #d6861b;
+      --red: #c94242;
+      --link: #0f84c9;
+      --panel-top: rgba(255,255,255,0.94);
+      --panel-bottom: rgba(240,246,255,0.94);
+      --shadow: rgba(45,72,117,0.12);
+      --button-bg: #ffffff;
+      --button-text: #11203f;
+      --article-code-bg: rgba(17,32,63,0.06);
+      --article-code-border: rgba(17,32,63,0.08);
+      --pre-bg: #eef4ff;
+      --blockquote-bg: rgba(15,132,201,0.08);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top left, var(--bg-accent) 0, var(--bg) 45%);
+      color: var(--text);
+      font-family: Inter, Arial, sans-serif;
+      overflow-x: hidden;
+    }
+    .sidebar-toggle {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 1200;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+      box-shadow: 0 12px 30px var(--shadow);
+      color: var(--button-text);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+    }
+    .theme-switcher {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 1200;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+      box-shadow: 0 12px 30px var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .theme-switcher-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .theme-switcher-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px;
+      border-radius: 999px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+    }
+    .theme-switcher-button {
+      appearance: none;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      min-width: 68px;
+    }
+    .theme-switcher-button[aria-pressed="true"] {
+      background: var(--button-bg);
+      color: var(--button-text);
+      box-shadow: inset 0 0 0 1px var(--line);
+    }
+    .shell {
+      display: grid;
+      grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+      min-height: 100vh;
+      transition: grid-template-columns 180ms ease;
+    }
+    html[data-sidebar="collapsed"] .shell {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .sidebar {
+      padding: 24px 18px;
+      border-right: 1px solid var(--line);
+      background: var(--panel);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      min-width: 0;
+      width: 300px;
+      max-width: 300px;
+      transition: opacity 150ms ease, transform 180ms ease;
+    }
+    html[data-sidebar="collapsed"] .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-110%);
+      display: block;
+    }
+    .brand {
+      margin-bottom: 22px;
+    }
+    .eyebrow {
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    .brand h1 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.2;
+    }
+    .brand p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 10px 0 0;
+    }
+    .actions {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+    .action-link {
+      display: inline-block;
+      text-decoration: none;
+      color: var(--text);
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 13px;
+    }
+    .nav {
+      display: grid;
+      gap: 16px;
+    }
+    .nav-group {
+      display: grid;
+      gap: 8px;
+    }
+    .nav-heading {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0 4px;
+    }
+    .nav-group-links {
+      display: grid;
+      gap: 10px;
+    }
+    .nav-link {
+      display: block;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.02);
+      text-decoration: none;
+      color: var(--text);
+    }
+    .nav-link.active {
+      border-color: rgba(51,209,255,0.45);
+      box-shadow: inset 0 0 0 1px rgba(51,209,255,0.25);
+      background: rgba(51,209,255,0.08);
+    }
+    .nav-title {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .nav-meta {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .main {
+      padding: 88px 28px 28px;
+      min-width: 0;
+      width: 100%;
+    }
+    .article {
+      width: 100%;
+      max-width: 920px;
+      margin: 0 auto;
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 28px 32px;
+      box-shadow: 0 16px 40px var(--shadow);
+    }
+    .article.article-wide {
+      width: 100%;
+      max-width: 1320px;
+    }
+    .article h1, .article h2, .article h3 {
+      margin-top: 0;
+    }
+    .article h1 {
+      font-size: 32px;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .article h2 {
+      font-size: 20px;
+      margin-top: 28px;
+      margin-bottom: 14px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+    .article h3 {
+      font-size: 16px;
+      margin-top: 22px;
+      margin-bottom: 10px;
+      color: var(--cyan);
+    }
+    .article p, .article li {
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+    .article ul, .article ol {
+      padding-left: 22px;
+    }
+    .article a {
+      color: var(--link);
+    }
+    .article code {
+      background: var(--article-code-bg);
+      border: 1px solid var(--article-code-border);
+      border-radius: 8px;
+      padding: 2px 6px;
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 0.92em;
+    }
+    .article pre {
+      background: var(--pre-bg);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      overflow: auto;
+    }
+    .article table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 20px;
+      font-size: 14px;
+    }
+    .article th, .article td {
+      border-bottom: 1px solid var(--line);
+      padding: 11px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .article th {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 12px;
+    }
+    .article blockquote {
+      margin: 18px 0;
+      padding: 14px 18px;
+      border-left: 3px solid var(--cyan);
+      background: var(--blockquote-bg);
+      border-radius: 12px;
+      color: var(--text);
+    }
+    .embed-frame {
+      width: 100%;
+      height: calc(100vh - 170px);
+      min-height: 980px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #ffffff;
+    }
+    .embed-note {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 980px) {
+      .sidebar-toggle {
+        left: 18px;
+      }
+      .theme-switcher {
+        left: 18px;
+        right: 18px;
+        justify-content: space-between;
+        top: 64px;
+      }
+      .shell { grid-template-columns: 1fr; }
+      .sidebar {
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+      .main { padding: 92px 18px 18px; }
+      .article { padding: 22px 20px; }
+      .embed-frame { min-height: 760px; height: calc(100vh - 220px); }
+    }
+  </style>
+</head>
+<body>
+  <button class="sidebar-toggle" id="sidebarToggle" type="button" aria-expanded="true">Hide Navigation</button>
+  <div class="theme-switcher" role="group" aria-label="Theme switcher">
+    <span class="theme-switcher-label">Theme</span>
+    <div class="theme-switcher-group">
+      <button class="theme-switcher-button" type="button" data-theme-option="dark">Dark</button>
+      <button class="theme-switcher-button" type="button" data-theme-option="light">Light</button>
+    </div>
+  </div>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="eyebrow">RadarEstate</div>
+        <h1>Client Reports</h1>
+        <p>Customer detail page inside the grouped DevelopmentReport bundle.</p>
+      </div>
+      <div class="actions">
+        <a class="action-link" href="../index.html">Back to Development Client Portal</a>
+        <a class="action-link" href="../02-this-weeks-actions/index.html">Open This Week's Actions</a>
+        <a class="action-link" href="../05-visual-summary/index.html">Open Visual Summary</a>
+      </div>
+      <nav class="nav"><section class="nav-group"><div class="nav-heading">Grouped Navigation</div><div class="nav-group-links"><a class="nav-link active" href="../01-core/index.html"><span class="nav-title">Core</span><span class="nav-meta">Start here. These are the two files that should be read first in every weekly cycle.</span></a><a class="nav-link" href="../02-this-weeks-actions/index.html"><span class="nav-title">This Week's Actions</span><span class="nav-meta">Use this folder to move from conclusions into immediate follow-up work.</span></a><a class="nav-link" href="../03-site-cards/index.html"><span class="nav-title">Site Cards</span><span class="nav-meta">Detailed lot-level follow-up material for the shortlisted sites.</span></a><a class="nav-link" href="../04-precinct-deep-dives/index.html"><span class="nav-title">Precinct Deep Dives</span><span class="nav-meta">Supporting precinct evidence once a location is already in active review.</span></a><a class="nav-link" href="../05-visual-summary/index.html"><span class="nav-title">Visual Summary And Methodology</span><span class="nav-meta">Visual context and methodology for customers who want maps, broader pattern recognition, or scoring boundaries.</span></a></div></section></nav>
+    </aside>
+    <main class="main">
+      <article class="article"><h1>Sydney Client Pack</h1>
+<h2>Date</h2>
+<p>2026-04-05</p>
+<h2>5-Step Reading Path</h2>
+<ol>
+<li>Read <a href="full-report-2026-04-05.html"><code>reports/full-report-2026-04-05.md</code></a> first for the current-week conclusion and the complete dated point-in-time view.</li>
+<li>Read <a href="delta-report-2026-04-05-vs-2026-03-29.html"><code>reports/delta-report-2026-04-05-vs-2026-03-29.md</code></a> second for what changed since the prior comparison point.</li>
+<li>Use <a href="top-10-insights-latest.html"><code>reports/top-10-insights-latest.md</code></a> and <a href="top-site-screening-2026-04-05.html"><code>reports/top-site-screening-2026-04-05.md</code></a> for this week&#39;s actions, follow-up targets, and screening priorities.</li>
+<li>Use the site cards and the precinct deep dives only as supporting evidence once a target has already made the shortlist.</li>
+<li>Leave the visual summary and methodology layer until last: <a href="hero-visual-pack.html"><code>dashboard/hero-visual-pack.html</code></a>, <a href="../../dashboard/2026-04-05-report.html"><code>dashboard/2026-04-05-report.html</code></a>, <a href="weekly-radar-2026-04-05.html"><code>reports/weekly-radar-2026-04-05.md</code></a>, <a href="methodology-appendix.html"><code>reports/methodology-appendix.md</code></a>.</li>
+</ol>
+<h2>Deliverables By Use</h2>
+<h3>01 Core</h3>
+<ul>
+<li>Weekly Full Report: <a href="full-report-2026-04-05.html"><code>reports/full-report-2026-04-05.md</code></a></li>
+<li>Weekly Delta Report: <a href="delta-report-2026-04-05-vs-2026-03-29.html"><code>reports/delta-report-2026-04-05-vs-2026-03-29.md</code></a></li>
+</ul>
+<h3>02 This Week&#39;s Actions</h3>
+<ul>
+<li>Weekly Priority Brief: <a href="top-10-insights-latest.html"><code>reports/top-10-insights-latest.md</code></a></li>
+<li>Priority Site Screening: <a href="top-site-screening-2026-04-05.html"><code>reports/top-site-screening-2026-04-05.md</code></a></li>
+</ul>
+<h3>03 Site Cards</h3>
+<ul>
+<li><a href="site-card-2026-04-05-precinct-chatswood-10-dp1143909.html"><code>reports/site-card-2026-04-05-precinct-chatswood-10-dp1143909.md</code></a></li>
+<li><a href="site-card-2026-04-05-precinct-chatswood-3-dp1295867.html"><code>reports/site-card-2026-04-05-precinct-chatswood-3-dp1295867.md</code></a></li>
+<li><a href="site-card-2026-04-05-precinct-epping-14-dp876736.html"><code>reports/site-card-2026-04-05-precinct-epping-14-dp876736.md</code></a></li>
+<li><a href="site-card-2026-04-05-precinct-epping-2-dp1205413.html"><code>reports/site-card-2026-04-05-precinct-epping-2-dp1205413.md</code></a></li>
+<li><a href="site-card-2026-04-05-precinct-hurstville-100-dp1036230.html"><code>reports/site-card-2026-04-05-precinct-hurstville-100-dp1036230.md</code></a></li>
+<li><a href="site-card-2026-04-05-precinct-macquarie-park-1-dp1317213.html"><code>reports/site-card-2026-04-05-precinct-macquarie-park-1-dp1317213.md</code></a></li>
+<li><a href="site-card-2026-04-05-precinct-miranda-1-dp865839.html"><code>reports/site-card-2026-04-05-precinct-miranda-1-dp865839.md</code></a></li>
+<li><a href="site-card-2026-04-05-precinct-norwest-4054-dp1070487.html"><code>reports/site-card-2026-04-05-precinct-norwest-4054-dp1070487.md</code></a></li>
+<li><a href="site-card-2026-04-05-precinct-st-leonards-11-dp1013030.html"><code>reports/site-card-2026-04-05-precinct-st-leonards-11-dp1013030.md</code></a></li>
+<li><a href="site-card-2026-04-05-precinct-st-leonards-2-dp879307.html"><code>reports/site-card-2026-04-05-precinct-st-leonards-2-dp879307.md</code></a></li>
+<li><a href="site-card-2026-04-05-precinct-st-leonards-71-dp749690.html"><code>reports/site-card-2026-04-05-precinct-st-leonards-71-dp749690.md</code></a></li>
+<li><a href="site-card-2026-04-05-precinct-westmead-2-dp1227281.html"><code>reports/site-card-2026-04-05-precinct-westmead-2-dp1227281.md</code></a></li>
+</ul>
+<h3>04 Precinct Deep Dives</h3>
+<ul>
+<li><a href="deep-dive-bankstown-2026-04-05.html"><code>reports/deep-dive-bankstown-2026-04-05.md</code></a></li>
+<li><a href="deep-dive-cabramatta-2026-04-05.html"><code>reports/deep-dive-cabramatta-2026-04-05.md</code></a></li>
+<li><a href="deep-dive-gladesville-2026-04-05.html"><code>reports/deep-dive-gladesville-2026-04-05.md</code></a></li>
+<li><a href="deep-dive-penrith-2026-04-05.html"><code>reports/deep-dive-penrith-2026-04-05.md</code></a></li>
+</ul>
+<h3>05 Visual Summary And Method</h3>
+<ul>
+<li>Visual Summary: <a href="hero-visual-pack.html"><code>dashboard/hero-visual-pack.html</code></a></li>
+<li>Opportunity Map: <a href="../../dashboard/2026-04-05-report.html"><code>dashboard/2026-04-05-report.html</code></a></li>
+<li>Market Context Radar: <a href="weekly-radar-2026-04-05.html"><code>reports/weekly-radar-2026-04-05.md</code></a></li>
+<li>Methodology And Boundaries: <a href="methodology-appendix.html"><code>reports/methodology-appendix.md</code></a></li>
+</ul>
+<h2>This Pack Highlights</h2>
+<ul>
+<li>Dated full report: <a href="full-report-2026-04-05.html"><code>reports/full-report-2026-04-05.md</code></a></li>
+<li>Dated delta report: <a href="delta-report-2026-04-05-vs-2026-03-29.html"><code>reports/delta-report-2026-04-05-vs-2026-03-29.md</code></a></li>
+<li>Methodology appendix: <a href="methodology-appendix.html"><code>reports/methodology-appendix.md</code></a></li>
+<li>Full report lead takeaway: Strongest current precinct signal: <strong>Penrith</strong> (Penrith) is rated <strong>A</strong> with policy <strong>4</strong>, timing <strong>5</strong> and risk <strong>0</strong>.</li>
+<li>Delta report summary: <strong>2026-03-29 -&gt; 2026-04-05</strong>. 42 precincts now carry formal ratings, 307 new shortlisted sites, +429 application signals versus prior snapshot.</li>
+</ul>
+<h2>Notes</h2>
+<ul>
+<li>This client pack is now a lightweight assembly layer. It does not regenerate reports; it aggregates already-produced dated outputs.</li>
+<li>The dated full report is the primary entry point. The dated delta report should be read second.</li>
+<li><code>reports/</code> remains the source text layer, but the customer-facing bundle should be navigated from the HTML portal first.</li>
+<li>Files that still contain <code>latest</code> in their internal file name are current-cycle supporting memos aligned to the dated snapshot above; they are not a separate competing reporting cycle.</li>
+</ul>
+</article>
+    </main>
+  </div>
+  <script>
+    (() => {
+      const navScrollKey = 'radarestate-nav-scroll';
+      const storageKey = 'radarestate-theme';
+      const sidebarKey = 'radarestate-sidebar';
+      const currentTheme = document.documentElement.dataset.theme || 'dark';
+      const currentSidebarState = document.documentElement.dataset.sidebar || 'expanded';
+      const sidebar = document.querySelector('.sidebar');
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const buttons = [...document.querySelectorAll('[data-theme-option]')];
+
+      const updateSidebarToggle = (state) => {
+        if (!sidebarToggle) return;
+        const expanded = state !== 'collapsed';
+        sidebarToggle.textContent = expanded ? 'Hide Navigation' : 'Show Navigation';
+        sidebarToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      };
+
+      updateSidebarToggle(currentSidebarState);
+
+      if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', () => {
+          const nextState = document.documentElement.dataset.sidebar === 'collapsed' ? 'expanded' : 'collapsed';
+          document.documentElement.dataset.sidebar = nextState;
+          updateSidebarToggle(nextState);
+          try {
+            window.localStorage.setItem(sidebarKey, nextState);
+          } catch {
+          }
+        });
+      }
+
+      if (sidebar) {
+        try {
+          const storedScroll = window.localStorage.getItem(navScrollKey);
+          if (storedScroll !== null) {
+            requestAnimationFrame(() => {
+              sidebar.scrollTop = Number(storedScroll) || 0;
+            });
+          }
+        } catch {
+        }
+
+        sidebar.addEventListener('scroll', () => {
+          try {
+            window.localStorage.setItem(navScrollKey, String(sidebar.scrollTop));
+          } catch {
+          }
+        }, { passive: true });
+      }
+
+      if (!buttons.length) return;
+      buttons.forEach((button) => {
+        const theme = button.dataset.themeOption;
+        button.setAttribute('aria-pressed', theme === currentTheme ? 'true' : 'false');
+        button.addEventListener('click', () => {
+          if (theme === currentTheme) return;
+          try {
+            window.localStorage.setItem(storageKey, theme);
+          } catch {
+          }
+          document.documentElement.dataset.theme = theme;
+          window.location.reload();
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

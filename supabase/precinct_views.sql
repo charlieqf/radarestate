@@ -1,3 +1,7 @@
+drop view if exists public.v_site_screening_latest;
+drop view if exists public.v_site_constraints_latest;
+drop view if exists public.v_site_controls_latest;
+drop view if exists public.v_site_candidates_latest;
 drop view if exists public.v_precinct_map_points;
 drop view if exists public.v_precinct_shortlist;
 drop view if exists public.v_precinct_signal_summary;
@@ -43,8 +47,47 @@ with latest_targets as (
 ), application_counts as (
   select
     a.precinct_id,
+    date '2025-01-01' as recent_application_window_start,
     count(*) filter (where a.tracker_scope = 'applications') as mapped_application_count,
-    count(*) filter (where a.tracker_scope = 'applications' and a.lodgement_date >= date '2025-01-01') as recent_application_count,
+    count(*) filter (where a.tracker_scope = 'applications' and coalesce(a.lodgement_date, a.observed_at) >= date '2025-01-01') as recent_application_count,
+    count(*) filter (
+      where coalesce(a.lodgement_date, a.observed_at) >= date '2025-01-01'
+        and (
+          a.tracker_scope = 'state_significant'
+          or lower(coalesce(a.application_type, '')) like '%state significant%'
+          or lower(coalesce(a.application_type, '')) like '%ssd%'
+        )
+    ) as recent_ssd_count,
+    count(*) filter (
+      where a.tracker_scope = 'applications'
+        and coalesce(a.lodgement_date, a.observed_at) >= date '2025-01-01'
+        and (
+          lower(coalesce(a.application_type, '')) like '%complying development certificate%'
+          or lower(coalesce(a.application_type, '')) like '%cdc%'
+        )
+    ) as recent_cdc_count,
+    count(*) filter (
+      where a.tracker_scope = 'applications'
+        and coalesce(a.lodgement_date, a.observed_at) >= date '2025-01-01'
+        and lower(coalesce(a.application_type, '')) like '%modification%'
+    ) as recent_modification_count,
+    count(*) filter (
+      where a.tracker_scope = 'applications'
+        and coalesce(a.lodgement_date, a.observed_at) >= date '2025-01-01'
+        and lower(coalesce(a.application_type, '')) like '%development application%'
+        and lower(coalesce(a.application_type, '')) not like '%complying development certificate%'
+        and lower(coalesce(a.application_type, '')) not like '%state significant%'
+    ) as recent_da_count,
+    count(*) filter (
+      where a.tracker_scope = 'applications'
+        and coalesce(a.lodgement_date, a.observed_at) >= date '2025-01-01'
+        and lower(coalesce(a.application_type, '')) not like '%development application%'
+        and lower(coalesce(a.application_type, '')) not like '%complying development certificate%'
+        and lower(coalesce(a.application_type, '')) not like '%cdc%'
+        and lower(coalesce(a.application_type, '')) not like '%modification%'
+        and lower(coalesce(a.application_type, '')) not like '%state significant%'
+        and lower(coalesce(a.application_type, '')) not like '%ssd%'
+    ) as recent_other_count,
     count(*) filter (where a.tracker_scope = 'state_significant') as state_significant_count,
     max(a.observed_at) as latest_activity_seen_at
   from public.application_signals a
@@ -67,7 +110,13 @@ select
   coalesce(pc.made_count, 0) as made_count,
   coalesce(pc.withdrawn_count, 0) as withdrawn_count,
   coalesce(ac.mapped_application_count, 0) as mapped_application_count,
+  ac.recent_application_window_start,
   coalesce(ac.recent_application_count, 0) as recent_application_count,
+  coalesce(ac.recent_da_count, 0) as recent_da_count,
+  coalesce(ac.recent_cdc_count, 0) as recent_cdc_count,
+  coalesce(ac.recent_ssd_count, 0) as recent_ssd_count,
+  coalesce(ac.recent_modification_count, 0) as recent_modification_count,
+  coalesce(ac.recent_other_count, 0) as recent_other_count,
   coalesce(ac.state_significant_count, 0) as state_significant_count,
   coalesce(cc.constraint_count, 0) as constraint_count,
   coalesce(cc.high_constraint_count, 0) as high_constraint_count,
@@ -107,7 +156,13 @@ select
   vpss.active_pipeline_count,
   vpss.made_count,
   vpss.withdrawn_count,
+  vpss.recent_application_window_start,
   vpss.recent_application_count,
+  vpss.recent_da_count,
+  vpss.recent_cdc_count,
+  vpss.recent_ssd_count,
+  vpss.recent_modification_count,
+  vpss.recent_other_count,
   vpss.state_significant_count,
   vpss.constraint_count,
   vpss.high_constraint_count,
@@ -122,8 +177,15 @@ left join public.precincts p on p.id = oi.precinct_id
 left join public.councils c on c.id = oi.council_id
 left join public.v_precinct_signal_summary vpss on vpss.precinct_id = oi.precinct_id
 where oi.geography_level = 'precinct'
+  and oi.workflow_status = 'active'
 order by
   case oi.opportunity_rating when 'A' then 1 when 'B' then 2 else 3 end,
+  case
+    when coalesce(vpss.active_pipeline_count, 0) > 0
+      or coalesce(vpss.recent_application_count, 0) > 0
+      or coalesce(vpss.state_significant_count, 0) > 0 then 0
+    else 1
+  end,
   oi.friction_score asc nulls last,
   oi.timing_score desc nulls last,
   oi.policy_score desc nulls last,

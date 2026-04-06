@@ -62,6 +62,13 @@ function extractDeepDiveFilesFromPack(filePath) {
   return [...new Set(matches.map((match) => match[1]))]
 }
 
+function extractReportFilesFromPack(filePath) {
+  if (!fs.existsSync(filePath)) return []
+  const markdown = readFile(filePath)
+  const matches = [...markdown.matchAll(/reports\/([a-z0-9-]+\.md)/gi)]
+  return [...new Set(matches.map((match) => match[1]))]
+}
+
 function moveFileIfPresent(sourcePath, targetPath) {
   if (!fs.existsSync(sourcePath)) return false
   ensureDir(path.dirname(targetPath))
@@ -113,6 +120,17 @@ function navGroups(files) {
 
   const byName = new Map(items.map((item) => [item.fileName, item]))
   const ordered = (names) => names.map((name) => byName.get(name)).filter(Boolean)
+  const orderedMatching = (patterns) => {
+    const matched = []
+    for (const pattern of patterns) {
+      matched.push(
+        ...[...items]
+          .filter((item) => pattern.test(item.fileName))
+          .sort((a, b) => a.fileName.localeCompare(b.fileName))
+      )
+    }
+    return unique(matched.map((item) => item.fileName)).map((name) => byName.get(name)).filter(Boolean)
+  }
   const remaining = new Set(items.map((item) => item.fileName))
   const consume = (groupItems) => {
     for (const item of groupItems) remaining.delete(item.fileName)
@@ -123,6 +141,14 @@ function navGroups(files) {
     ...extractDeepDiveFilesFromPack(path.join(reportsDir, 'client-pack-latest.md')),
     ...extractDeepDiveFilesFromPack(path.join(reportsDir, 'client-pack-newcastle-hunter.md'))
   ])
+  const developmentPackNames = unique([
+    'client-pack-latest.md',
+    ...extractReportFilesFromPack(path.join(reportsDir, 'client-pack-latest.md'))
+  ])
+  const regionalPackNames = unique([
+    'client-pack-newcastle-hunter.md',
+    ...extractReportFilesFromPack(path.join(reportsDir, 'client-pack-newcastle-hunter.md'))
+  ])
 
   const mainDeliverables = consume([
     {
@@ -131,32 +157,22 @@ function navGroups(files) {
       label: 'Hero Visual Pack',
       title: 'Hero Visual Pack'
     },
-    ...ordered([
-      'client-pack-latest.md',
-      'top-10-insights-latest.md',
-      'weekly-radar-latest.md',
-      'client-pack-newcastle-hunter.md',
-      'weekly-radar-newcastle-hunter.md'
-    ])
+    ...ordered(developmentPackNames)
   ])
+
+  const regionalDeliverables = consume(ordered(regionalPackNames))
+
+  const siteCards = consume(
+    ordered(developmentPackNames.filter((name) => /^site-card-.*\.md$/i.test(name)))
+  )
 
   const deepDives = consume(ordered(activeDeepDiveNames))
 
-  const internal = consume(ordered([
-    'coverage-readiness-greater-sydney-expanded.md',
-    'coverage-readiness-newcastle-hunter-pilot.md'
-  ]))
-
-  const leftovers = [...remaining]
-    .map((name) => byName.get(name))
-    .filter(Boolean)
-    .sort((a, b) => a.fileName.localeCompare(b.fileName))
-
   return [
     { heading: 'Main Deliverables', items: mainDeliverables },
-    { heading: 'Deep Dives', items: deepDives },
-    { heading: 'Internal', items: internal },
-    ...(leftovers.length ? [{ heading: 'Other', items: leftovers }] : [])
+    ...(regionalDeliverables.length ? [{ heading: 'Regional', items: regionalDeliverables }] : []),
+    { heading: 'Site Cards', items: siteCards },
+    { heading: 'Deep Dives', items: deepDives }
   ].filter((group) => group.items.length)
 }
 

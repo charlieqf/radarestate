@@ -3,6 +3,7 @@ import path from 'node:path'
 import { Client } from 'pg'
 
 const root = process.cwd()
+const RECENT_APPLICATION_WINDOW_START = '2025-01-01'
 
 function readFile(relativePath) {
   return fs.readFileSync(path.join(root, relativePath), 'utf8')
@@ -42,12 +43,14 @@ function parseArgs() {
     regionGroup: 'Greater Sydney',
     label: 'Sydney',
     outputName: 'latest',
+    snapshotDate: new Date().toISOString().slice(0, 10),
     dashboardPath: 'dashboard/latest-report.html'
   }
   for (const arg of args) {
     if (arg.startsWith('--region-group=')) options.regionGroup = arg.split('=')[1].trim()
     if (arg.startsWith('--label=')) options.label = arg.split('=')[1].trim()
     if (arg.startsWith('--output-name=')) options.outputName = arg.split('=')[1].trim()
+    if (arg.startsWith('--snapshot-date=')) options.snapshotDate = arg.split('=')[1].trim()
     if (arg.startsWith('--dashboard-path=')) options.dashboardPath = arg.split('=')[1].trim()
   }
   return options
@@ -159,8 +162,32 @@ async function main() {
     const constrained = await client.query(`select v.precinct_name, v.council_name, v.opportunity_rating, v.friction_score, v.constraint_summary, v.recent_application_count, v.active_pipeline_count from public.v_precinct_shortlist v join public.councils c on c.canonical_name = v.council_name where c.region_group = $1 and v.constraint_count > 0 order by v.friction_score desc, v.recent_application_count desc limit 10`, [options.regionGroup])
     const watchlist = await client.query(`select c.canonical_name as council_name, pp.stage, pp.title, pp.location_text from public.planning_proposals pp join public.councils c on c.id = pp.council_id where c.region_group = $1 and pp.stage in ('under_assessment','pre_exhibition','on_exhibition','finalisation') order by pp.stage_rank nulls last, pp.last_seen_at desc, pp.title limit 20`, [options.regionGroup])
     const constraintRows = await client.query(`select ct.constraint_type, ct.severity, count(*)::int as total from public.constraints ct join public.precincts p on p.id = ct.precinct_id join public.councils c on c.id = p.primary_council_id where c.region_group = $1 group by ct.constraint_type, ct.severity order by ct.constraint_type, ct.severity`, [options.regionGroup])
+    const applicationTypeMix = await client.query(
+      `with grouped as (
+         select
+           case
+             when a.tracker_scope = 'state_significant' then 'SSD'
+             when lower(coalesce(a.application_type, '')) like '%complying development certificate%' or lower(coalesce(a.application_type, '')) like '%cdc%' then 'CDC'
+             when lower(coalesce(a.application_type, '')) like '%modification%' then 'Modification'
+             when lower(coalesce(a.application_type, '')) like '%state significant%' or lower(coalesce(a.application_type, '')) like '%ssd%' then 'SSD'
+             when lower(coalesce(a.application_type, '')) like '%development application%' then 'DA'
+             else 'Other'
+           end as application_bucket,
+           count(*)::int as total
+         from public.application_signals a
+         join public.councils c on c.id = a.council_id
+         where c.region_group = $1
+           and coalesce(a.lodgement_date, a.observed_at) >= $2::date
+         group by 1
+       )
+       select application_bucket, total
+       from grouped
+       order by case application_bucket when 'DA' then 1 when 'CDC' then 2 when 'SSD' then 3 when 'Modification' then 4 else 5 end,
+                total desc,
+                application_bucket`,
+      [options.regionGroup, RECENT_APPLICATION_WINDOW_START]
+    )
 
-    const today = new Date().toISOString().slice(0, 10)
     const topA = shortlist.rows.filter((row) => row.opportunity_rating === 'A')
     const headline = buildHeadline(topA, constrained.rows, shortlist.rows)
     const summaryBullets = buildExecutiveSummary(topA, constrained.rows, councilRanking.rows, pipeline.rows, constraintRows.rows, shortlist.rows)
@@ -169,7 +196,7 @@ async function main() {
     const markdown = [
       `# ${options.label} Planning Opportunity Radar`,
       '',
-      `## Week Of ${today}`,
+      `## Week Of ${options.snapshotDate}`,
       '',
       `Companion visual dashboard: \`${options.dashboardPath}\``,
       '',
@@ -184,9 +211,19 @@ async function main() {
       `- Precinct shortlist items: \`${formatNumber(metaPrecinct.rows[0].total)}\``,
       `- Derived constraints: \`${formatNumber(metaConstraints.rows[0].total)}\``,
       '',
+      'Scope note: the four snapshot numbers above are full region totals for the current source layer, not counts limited to the configured precinct watchlist.',
+      '',
       '## Executive Summary',
       '',
       ...summaryBullets.map((item) => `- ${item}`),
+      '',
+      '## Scoring Method',
+      '',
+      '- This is a first-pass weekly watchlist, not a parcel-level feasibility, pricing or acquisition report.',
+      '- Rating combines policy score and timing score, then downgrades precincts when friction stacks.',
+      '- Precincts with no current active proposals, mapped recent applications or state-significant projects are forced into `Watch` rather than `Investigate`.',
+      `- \`Recent Apps\` means mapped application signals with lodgement date on or after \`${RECENT_APPLICATION_WINDOW_START}\`.`,
+      '- Region totals, configured-precinct watchlists and ranked site-screening outputs do not use the same universe. Read each section by its stated scope.',
       '',
       '## Top Precinct Hotlist',
       '',
@@ -230,6 +267,15 @@ async function main() {
           formatNumber(row.application_recent_count),
           formatNumber(row.active_pipeline_count)
         ])
+      ),
+      '',
+      '## Recent Application Mix',
+      '',
+      `Current screen window: \`${RECENT_APPLICATION_WINDOW_START}\`. DA, CDC, SSD and Modification are shown separately because they do not carry the same deal-screening meaning.`,
+      '',
+      markdownTable(
+        ['Application Type', 'Count'],
+        applicationTypeMix.rows.map((row) => [row.application_bucket, formatNumber(row.total)])
       ),
       '',
       '## Policy Pipeline',

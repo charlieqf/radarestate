@@ -129,6 +129,23 @@ function buildSearchText(row) {
     .toLowerCase()
 }
 
+function normaliseText(value) {
+  return clean(value)?.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim() || ''
+}
+
+function proposalKeywordIsExplicit(row, keyword) {
+  const title = clean(row.title)?.toLowerCase() || ''
+  const location = clean(row.location_text)?.toLowerCase() || ''
+  const keywordPattern = keywordRegex(keyword)
+  if (keywordPattern.test(title)) return true
+  if (!location || !keywordPattern.test(location)) return false
+
+  const normalisedLocation = normaliseText(location)
+  const normalisedKeyword = normaliseText(keyword)
+  if (normalisedLocation === normalisedKeyword) return true
+  return /\d/.test(location)
+}
+
 async function connectWithFallback() {
   let lastError = null
   for (const connectionString of getConnectionStrings()) {
@@ -243,6 +260,27 @@ function matchPrecinct(row, precinctsByCouncil) {
   return bestMatch
 }
 
+function matchProposalPrecinct(row, precinctsByCouncil) {
+  const canonical = canonicalCouncil(row.council_name)
+  if (!canonical) return null
+  const candidates = precinctsByCouncil.get(canonical) || []
+  let bestMatch = null
+  let bestLength = -1
+
+  for (const precinct of candidates) {
+    for (const keyword of precinct.keywords) {
+      if (proposalKeywordIsExplicit(row, keyword)) {
+        if (keyword.length > bestLength) {
+          bestMatch = precinct
+          bestLength = keyword.length
+        }
+      }
+    }
+  }
+
+  return bestMatch
+}
+
 async function resetMappings(client, councilIds) {
   await client.query(
     `update public.planning_proposals
@@ -310,6 +348,7 @@ function scorePrecinct(row) {
   const withdrawn = Number(row.withdrawn_count || 0)
   const recentApps = Number(row.recent_application_count || 0)
   const stateSig = Number(row.state_significant_count || 0)
+  const hasLiveSignal = active > 0 || recentApps > 0 || stateSig > 0
   const target = Number(row.council_target_value || 0)
   const policyTheme = clean(row.policy_theme) || ''
   const highConstraints = Number(row.high_constraint_count || 0)
@@ -352,15 +391,18 @@ function scorePrecinct(row) {
   if (frictionScore >= 4 && rating === 'A') rating = 'B'
   else if (frictionScore >= 4 && rating === 'B') rating = 'C'
   else if (frictionScore >= 3 && rating === 'A') rating = 'B'
+  if (!hasLiveSignal) rating = 'C'
 
   let confidence = 'low'
   if (active >= 2 && recentApps >= 20) confidence = 'high'
   else if (active >= 1 || recentApps >= 10 || stateSig > 0) confidence = 'medium'
   if (frictionScore >= 4) confidence = 'medium'
   if (frictionScore >= 5) confidence = 'low'
+  if (!hasLiveSignal) confidence = 'low'
 
   let action = rating === 'A' ? 'Prioritise' : rating === 'B' ? 'Investigate' : 'Watch'
   if (frictionScore >= 4 && action === 'Prioritise') action = 'Investigate'
+  if (!hasLiveSignal) action = 'Watch'
   const triggerSummary = constraintSummary
     ? `${active} active proposals, ${recentApps} recent applications, ${stateSig} state significant projects. Risks: ${constraintSummary}`
     : `${active} active proposals, ${recentApps} recent applications, ${stateSig} state significant projects`
@@ -468,7 +510,7 @@ async function main() {
     const { proposals, applications } = await fetchRowsForMapping(client, councilIds)
     const mappedProposals = []
     for (const row of proposals) {
-      const match = matchPrecinct(row, precinctsByCouncil)
+      const match = matchProposalPrecinct(row, precinctsByCouncil)
       if (match) mappedProposals.push({ id: row.id, precinctId: match.id })
     }
 

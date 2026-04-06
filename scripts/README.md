@@ -34,13 +34,67 @@ npm run pipeline:weekly
 
 默认 weekly pipeline 现在会同时生成：
 
+- Sydney weekly snapshot
+- Sydney dated full report
+- Sydney dated delta report if an earlier formal snapshot exists
+- Sydney methodology appendix
 - Sydney client pack
 - Newcastle-Hunter client pack
+
+Greater Sydney weekly flow is now split into two layers:
+
+1. Production layer
+- `create_weekly_snapshot.mjs`
+- `generate_full_report.mjs`
+- `generate_delta_report.mjs`
+- `generate_methodology_appendix.mjs`
+
+2. Assembly layer
+- `generate_client_pack.mjs`
+- `export_delivery_bundle.mjs`
+
+`generate_client_pack.mjs` is now a lightweight pack assembler. It should aggregate already-generated dated outputs rather than regenerate the full reporting stack.
 
 如果只想跑 Sydney weekly pack：
 
 ```bash
 node scripts/run_pipeline.mjs --mode=weekly --skip-hunter-pack
+```
+
+指定 dated snapshot：
+
+```bash
+node scripts/run_pipeline.mjs --mode=weekly --skip-hunter-pack --snapshot-date=2026-04-05 --previous-snapshot-date=2026-03-29
+```
+
+如果不传 `--previous-snapshot-date`，weekly pipeline 会自动从 `snapshots/weekly/` 里寻找比当前日期更早的最近一份 `formal` snapshot。
+
+如果只存在 `reconstructed` 历史点，默认不会自动拿它做 delta 基线。
+
+如果你明确要生成过渡期 delta，必须显式允许：
+
+```bash
+node scripts/run_pipeline.mjs --mode=weekly --skip-hunter-pack --snapshot-date=2026-04-05 --previous-snapshot-date=2026-03-29 --allow-reconstructed-previous
+```
+
+过渡期的 `2026-03-29` 这类基线不应被称为正式 full report。应使用 reconstructed baseline 口径。
+
+直接生成 reconstructed baseline snapshot：
+
+```bash
+node scripts/create_reconstructed_baseline_snapshot.mjs --snapshot-date=2026-03-29 --region-group="Greater Sydney" --label="Sydney"
+```
+
+直接生成 dated full report：
+
+```bash
+node scripts/generate_full_report.mjs --snapshot-date=2026-04-05 --region-group="Greater Sydney" --label="Sydney"
+```
+
+直接生成 dated delta report：
+
+```bash
+node scripts/generate_delta_report.mjs --current-date=2026-04-05 --previous-date=2026-03-29 --region-group="Greater Sydney" --label="Sydney"
 ```
 
 这两个命令会把同步、构建和报告串起来，并把运行清单写到 `runs/`。
