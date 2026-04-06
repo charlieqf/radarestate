@@ -1,3 +1,11 @@
 {
-  "extends": "planning-proposal-sync.json"
+  "extends": "planning-proposal-sync.json",
+  "councils": [
+    { "canonicalName": "Sydney", "filterValue": "SYDNEY" },
+    { "canonicalName": "Randwick", "filterValue": "RANDWICK" },
+    { "canonicalName": "Waverley", "filterValue": "WAVERLEY" },
+    { "canonicalName": "Lane Cove", "filterValue": "LANE COVE" },
+    { "canonicalName": "Mosman", "filterValue": "MOSMAN" },
+    { "canonicalName": "Hornsby", "filterValue": "HORNSBY" }
+  ]
 }

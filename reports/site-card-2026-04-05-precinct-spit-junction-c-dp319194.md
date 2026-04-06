@@ -1,33 +1,33 @@
-# Site Card: 18 GERRISH STREET GLADESVILLE
+# Site Card: 31 THE GROVE MOSMAN
 
 ## Rank
 
-6 in the current Sydney automated site-screening cut.
+15 in the current Sydney automated site-screening cut.
 
 ## Snapshot
 
-- Watchlist bucket: **Gladesville - Ryde**
-- Watchlist precinct: **Gladesville**
-- Current precinct grouping: **Hunters Hill**
-- Apparent site jurisdiction from governing EPI: **Ryde**
+- Watchlist bucket: **Mosman / Spit Junction**
+- Watchlist precinct: **Mosman / Spit Junction**
+- Current precinct grouping: **Mosman**
+- Apparent site jurisdiction from governing EPI: **Mosman**
 - Screening band: **Advance**
-- Screening score: **51**
+- Screening score: **46**
 - Recommended action: **Advance to site review**
-- Address signal: 18 GERRISH STREET GLADESVILLE
-- Lot reference: G//DP410094 / DP410094
-- Latest mapped signal date: 2026-03-26
+- Address signal: 31 THE GROVE MOSMAN
+- Lot reference: C//DP319194 / DP319194
+- Latest mapped signal date: 2026-03-18
 - Matched recent signals: 1
 
 ## Control Envelope
 
 | Field | Value | Source |
 | --- | --- | --- |
-| Zoning | R2 (Low Density Residential) | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/2) |
+| Zoning | C4 (Environmental Living) | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/2) |
 | FSR | 0.50 | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/1) |
-| Height | 9.5m | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/5) |
-| Minimum lot size | 580 m² | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/4) |
-| Apparent site jurisdiction | Ryde | - |
-| Zoning EPI | Ryde Local Environmental Plan 2014 | - |
+| Height | 8.5m | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/5) |
+| Minimum lot size | 700 m² | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/4) |
+| Apparent site jurisdiction | Mosman | - |
+| Zoning EPI | Mosman Local Environmental Plan 2012 | - |
 | FSR clause | Clause 4.4 | - |
 | Height clause | Clause 4.3 | - |
 | Minimum lot size clause | Clause 4.1 | - |
@@ -37,11 +37,11 @@
 | Metric | Value |
 | --- | --- |
 | Plan area | - |
-| Geometry area | 854 sqm |
-| Perimeter | 120.2 m |
-| BBox width | 43.9 m |
-| BBox height | 32.5 m |
-| Frontage candidate | 23.9 m |
+| Geometry area | 861 sqm |
+| Perimeter | 122.0 m |
+| BBox width | 42.0 m |
+| BBox height | 28.4 m |
+| Frontage candidate | 22.2 m |
 | Property type | Property |
 | ValNet status | CURRENT |
 | ValNet type | NORMAL |
@@ -56,13 +56,13 @@
 | Area score | 12 |
 | Frontage score | 8 |
 | FSR score | 3 |
-| Height score | 8 |
+| Height score | 3 |
 | Signal score | 2 |
 | Oversize penalty | 0 |
 | Large-format penalty | 0 |
 | Constraint penalty | 0 |
 | Title complexity penalty | 0 |
-| Total screening score | 51 |
+| Total screening score | 46 |
 
 ## Constraint Stack
 

@@ -43,6 +43,7 @@ function parseArgs() {
     label: 'Sydney',
     outputName: 'latest',
     limit: 12,
+    includeDeepDiveOutputName: null,
     dashboardPath: 'dashboard/latest-report.html',
     radarPath: 'reports/weekly-radar-latest.md',
     screeningPath: 'reports/top-site-screening-latest.md'
@@ -52,6 +53,7 @@ function parseArgs() {
     if (arg.startsWith('--label=')) options.label = arg.split('=')[1].trim()
     if (arg.startsWith('--output-name=')) options.outputName = arg.split('=')[1].trim()
     if (arg.startsWith('--limit=')) options.limit = Number(arg.split('=')[1].trim())
+    if (arg.startsWith('--include-deep-dive-output-name=')) options.includeDeepDiveOutputName = arg.split('=')[1].trim()
     if (arg.startsWith('--dashboard-path=')) options.dashboardPath = arg.split('=')[1].trim()
     if (arg.startsWith('--radar-path=')) options.radarPath = arg.split('=')[1].trim()
     if (arg.startsWith('--screening-path=')) options.screeningPath = arg.split('=')[1].trim()
@@ -134,6 +136,21 @@ function apparentJurisdiction(epiName) {
   return value
 }
 
+function collectDeepDivePrecincts(outputName) {
+  if (!outputName) return []
+  const reportsDir = path.join(root, 'reports')
+  if (!fs.existsSync(reportsDir)) return []
+  const suffix = `-${slugify(outputName)}.md`
+  const precincts = []
+  for (const fileName of fs.readdirSync(reportsDir)) {
+    if (!fileName.startsWith('deep-dive-') || !fileName.endsWith(suffix)) continue
+    const content = fs.readFileSync(path.join(reportsDir, fileName), 'utf8')
+    const match = content.match(/^# Deep Dive:\s+(.+)$/m)
+    if (match?.[1]) precincts.push(match[1].trim())
+  }
+  return [...new Set(precincts)]
+}
+
 async function applyArtifacts(client) {
   await client.query(readFile('supabase/development_views.sql'))
 }
@@ -204,16 +221,15 @@ async function main() {
   const client = await connectWithFallback()
   try {
     await applyArtifacts(client)
-    const sites = await client.query(
-      `select
+    const siteSelect = `select
          s.site_candidate_id,
          s.site_key,
          s.site_label,
          s.precinct_name,
          s.council_name,
-          s.watchlist_bucket_name,
-          s.apparent_site_jurisdiction,
-          s.region_group,
+         s.watchlist_bucket_name,
+         s.apparent_site_jurisdiction,
+         s.region_group,
          s.address,
          s.sample_location_example,
          s.lot_id,
@@ -264,28 +280,53 @@ async function main() {
          s.constraint_penalty,
          s.title_complexity_penalty,
          s.screening_score,
-          s.screening_band,
-          s.recommended_site_action,
+         s.screening_band,
+         s.recommended_site_action,
          cand.source_url as candidate_source_url,
          ctl.zoning_source_url,
          ctl.fsr_source_url,
          ctl.height_source_url,
          ctl.minimum_lot_size_source_url
-       from public.v_site_screening_latest s
-       left join public.v_site_candidates_latest cand on cand.site_candidate_id = s.site_candidate_id
-        left join public.v_site_controls_latest ctl on ctl.site_candidate_id = s.site_candidate_id
+        from public.v_site_screening_latest s
+        left join public.v_site_candidates_latest cand on cand.site_candidate_id = s.site_candidate_id
+        left join public.v_site_controls_latest ctl on ctl.site_candidate_id = s.site_candidate_id`
+    const siteOrder = `s.screening_score desc,
+                  s.title_complexity_penalty asc nulls last,
+                  s.high_constraint_count asc nulls last,
+                  abs(coalesce(s.geometry_area_sqm, s.plan_area_sqm, 0) - 1200) asc nulls last,
+                  s.matched_signal_count desc,
+                  s.site_label`
+
+    const topSites = await client.query(
+      `${siteSelect}
         where ($1::text is null or s.region_group = $1)
-        order by s.screening_score desc,
-                 s.title_complexity_penalty asc nulls last,
-                 s.high_constraint_count asc nulls last,
-                 abs(coalesce(s.geometry_area_sqm, s.plan_area_sqm, 0) - 1200) asc nulls last,
-                 s.matched_signal_count desc,
-                 s.site_label
+        order by ${siteOrder}
         limit $2`,
       [options.regionGroup || null, options.limit]
     )
 
-    if (!sites.rows.length) throw new Error(`No site candidates found for ${options.regionGroup || 'all regions'}`)
+    const siteRows = [...topSites.rows]
+    const includedPrecincts = collectDeepDivePrecincts(options.includeDeepDiveOutputName)
+    if (includedPrecincts.length) {
+      const representativeSites = await client.query(
+        `${siteSelect}
+          where ($1::text is null or s.region_group = $1)
+            and s.precinct_name = any($2::text[])
+          order by s.precinct_name, ${siteOrder}`,
+        [options.regionGroup || null, includedPrecincts]
+      )
+      const seen = new Set(siteRows.map((row) => row.site_key))
+      const seenPrecincts = new Set()
+      for (const row of representativeSites.rows) {
+        if (seenPrecincts.has(row.precinct_name)) continue
+        seenPrecincts.add(row.precinct_name)
+        if (seen.has(row.site_key)) continue
+        seen.add(row.site_key)
+        siteRows.push(row)
+      }
+    }
+
+    if (!siteRows.length) throw new Error(`No site candidates found for ${options.regionGroup || 'all regions'}`)
 
     const constraints = await client.query(
       `select site_key, constraint_type, severity, source_name, source_url, notes
@@ -294,7 +335,7 @@ async function main() {
        order by site_key,
                 case severity when 'high' then 1 when 'medium' then 2 else 3 end,
                 constraint_type`,
-      [sites.rows.map((row) => row.site_key)]
+      [siteRows.map((row) => row.site_key)]
     )
 
     const constraintsBySite = new Map()
@@ -321,8 +362,8 @@ async function main() {
       }
     }
 
-    for (let index = 0; index < sites.rows.length; index += 1) {
-      const row = sites.rows[index]
+    for (let index = 0; index < siteRows.length; index += 1) {
+      const row = siteRows[index]
       const siteConstraints = constraintsBySite.get(row.site_key) || []
       const markdown = [
         `# Site Card: ${row.site_label}`,

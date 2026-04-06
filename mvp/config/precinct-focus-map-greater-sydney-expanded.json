@@ -240,6 +240,166 @@
       "policyTheme": "Expanded;Observed",
       "watchPriority": "medium",
       "keywords": ["Smithfield"]
+    },
+    {
+      "code": "PRECINCT_REDFERN",
+      "name": "Redfern",
+      "type": "station",
+      "primaryCouncil": "Sydney",
+      "allowedCouncils": ["Sydney"],
+      "policyTheme": "Expanded;TOD;LMR",
+      "watchPriority": "high",
+      "keywords": ["Redfern"]
+    },
+    {
+      "code": "PRECINCT_WATERLOO",
+      "name": "Waterloo",
+      "type": "centre",
+      "primaryCouncil": "Sydney",
+      "allowedCouncils": ["Sydney"],
+      "policyTheme": "Expanded;LMR;Observed",
+      "watchPriority": "high",
+      "keywords": ["Waterloo"]
+    },
+    {
+      "code": "PRECINCT_DARLINGHURST",
+      "name": "Darlinghurst",
+      "type": "centre",
+      "primaryCouncil": "Sydney",
+      "allowedCouncils": ["Sydney"],
+      "policyTheme": "Expanded;Observed",
+      "watchPriority": "high",
+      "keywords": ["Darlinghurst"]
+    },
+    {
+      "code": "PRECINCT_SURRY_HILLS",
+      "name": "Surry Hills",
+      "type": "centre",
+      "primaryCouncil": "Sydney",
+      "allowedCouncils": ["Sydney"],
+      "policyTheme": "Expanded;LMR;Observed",
+      "watchPriority": "high",
+      "keywords": ["Surry Hills", "Crown Street", "Cleveland Street", "Foveaux Street"]
+    },
+    {
+      "code": "PRECINCT_ULTIMO_BROADWAY",
+      "name": "Ultimo / Broadway",
+      "type": "centre",
+      "primaryCouncil": "Sydney",
+      "allowedCouncils": ["Sydney"],
+      "policyTheme": "Expanded;LMR;Observed",
+      "watchPriority": "high",
+      "keywords": ["Ultimo", "Broadway", "Harris Street", "Mountain Street"]
+    },
+    {
+      "code": "PRECINCT_KINGS_CROSS",
+      "name": "Potts Point / Kings Cross",
+      "type": "centre",
+      "primaryCouncil": "Sydney",
+      "allowedCouncils": ["Sydney"],
+      "policyTheme": "Expanded;Observed",
+      "watchPriority": "medium",
+      "keywords": ["Kings Cross", "Potts Point", "Darlinghurst Road"]
+    },
+    {
+      "code": "PRECINCT_RANDWICK",
+      "name": "Randwick",
+      "type": "centre",
+      "primaryCouncil": "Randwick",
+      "allowedCouncils": ["Randwick"],
+      "policyTheme": "Expanded;LMR;Observed",
+      "watchPriority": "high",
+      "keywords": ["Randwick"]
+    },
+    {
+      "code": "PRECINCT_KINGSFORD",
+      "name": "Kingsford",
+      "type": "centre",
+      "primaryCouncil": "Randwick",
+      "allowedCouncils": ["Randwick"],
+      "policyTheme": "Expanded;LMR;Observed",
+      "watchPriority": "high",
+      "keywords": ["Kingsford"]
+    },
+    {
+      "code": "PRECINCT_KENSINGTON",
+      "name": "Kensington",
+      "type": "centre",
+      "primaryCouncil": "Randwick",
+      "allowedCouncils": ["Randwick"],
+      "policyTheme": "Expanded;Observed",
+      "watchPriority": "medium",
+      "keywords": ["Kensington"]
+    },
+    {
+      "code": "PRECINCT_BONDI_JUNCTION",
+      "name": "Bondi Junction",
+      "type": "centre",
+      "primaryCouncil": "Waverley",
+      "allowedCouncils": ["Waverley"],
+      "policyTheme": "Expanded;TOD;LMR;Observed",
+      "watchPriority": "high",
+      "keywords": ["Bondi Junction"]
+    },
+    {
+      "code": "PRECINCT_LANE_COVE",
+      "name": "Lane Cove",
+      "type": "centre",
+      "primaryCouncil": "Lane Cove",
+      "allowedCouncils": ["Lane Cove"],
+      "policyTheme": "Expanded;LMR;Observed",
+      "watchPriority": "high",
+      "keywords": ["Lane Cove"]
+    },
+    {
+      "code": "PRECINCT_SPIT_JUNCTION",
+      "name": "Mosman / Spit Junction",
+      "type": "centre",
+      "primaryCouncil": "Mosman",
+      "allowedCouncils": ["Mosman"],
+      "policyTheme": "Expanded;Observed",
+      "watchPriority": "high",
+      "keywords": ["Spit Junction", "Mosman", "Spit Road", "Military Road"]
+    },
+    {
+      "code": "PRECINCT_PENNANT_HILLS",
+      "name": "Pennant Hills",
+      "type": "centre",
+      "primaryCouncil": "Hornsby",
+      "allowedCouncils": ["Hornsby"],
+      "policyTheme": "Expanded;Observed",
+      "watchPriority": "medium",
+      "keywords": ["Pennant Hills"]
+    },
+    {
+      "code": "PRECINCT_THORNLEIGH",
+      "name": "Thornleigh",
+      "type": "centre",
+      "primaryCouncil": "Hornsby",
+      "allowedCouncils": ["Hornsby"],
+      "policyTheme": "Expanded;Observed",
+      "watchPriority": "medium",
+      "keywords": ["Thornleigh"]
+    },
+    {
+      "code": "PRECINCT_ASQUITH_NORMANHURST",
+      "name": "Asquith / Normanhurst",
+      "type": "station",
+      "primaryCouncil": "Hornsby",
+      "allowedCouncils": ["Hornsby"],
+      "policyTheme": "Expanded;LMR;Observed",
+      "watchPriority": "medium",
+      "keywords": ["Asquith", "Normanhurst"]
+    },
+    {
+      "code": "PRECINCT_WAITARA_WAHROONGA",
+      "name": "Waitara / Wahroonga",
+      "type": "station",
+      "primaryCouncil": "Hornsby",
+      "allowedCouncils": ["Hornsby"],
+      "policyTheme": "Expanded;LMR;Observed",
+      "watchPriority": "medium",
+      "keywords": ["Waitara", "Wahroonga"]
     }
   ]
 }

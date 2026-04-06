@@ -32,6 +32,30 @@
     {
       "canonicalName": "Blacktown",
       "trackerDisplayName": "Blacktown City Council"
+    },
+    {
+      "canonicalName": "Sydney",
+      "trackerDisplayName": "Council of the City of Sydney"
+    },
+    {
+      "canonicalName": "Randwick",
+      "trackerDisplayName": "Randwick City Council"
+    },
+    {
+      "canonicalName": "Waverley",
+      "trackerDisplayName": "Waverley Council"
+    },
+    {
+      "canonicalName": "Lane Cove",
+      "trackerDisplayName": "Lane Cove Municipal Council"
+    },
+    {
+      "canonicalName": "Mosman",
+      "trackerDisplayName": "Mosman Municipal Council"
+    },
+    {
+      "canonicalName": "Hornsby",
+      "trackerDisplayName": "The Council of the Shire of Hornsby"
     }
   ]
 }

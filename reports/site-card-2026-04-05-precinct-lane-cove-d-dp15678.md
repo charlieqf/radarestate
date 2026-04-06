@@ -1,21 +1,21 @@
-# Site Card: 18 GERRISH STREET GLADESVILLE
+# Site Card: 45 BARWON ROAD LANE COVE WEST
 
 ## Rank
 
-6 in the current Sydney automated site-screening cut.
+8 in the current Sydney automated site-screening cut.
 
 ## Snapshot
 
-- Watchlist bucket: **Gladesville - Ryde**
-- Watchlist precinct: **Gladesville**
-- Current precinct grouping: **Hunters Hill**
-- Apparent site jurisdiction from governing EPI: **Ryde**
+- Watchlist bucket: **Lane Cove**
+- Watchlist precinct: **Lane Cove**
+- Current precinct grouping: **Lane Cove**
+- Apparent site jurisdiction from governing EPI: **Lane Cove**
 - Screening band: **Advance**
 - Screening score: **51**
 - Recommended action: **Advance to site review**
-- Address signal: 18 GERRISH STREET GLADESVILLE
-- Lot reference: G//DP410094 / DP410094
-- Latest mapped signal date: 2026-03-26
+- Address signal: 45 BARWON ROAD LANE COVE WEST
+- Lot reference: D//DP15678 / DP15678
+- Latest mapped signal date: 2026-03-30
 - Matched recent signals: 1
 
 ## Control Envelope
@@ -23,25 +23,25 @@
 | Field | Value | Source |
 | --- | --- | --- |
 | Zoning | R2 (Low Density Residential) | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/2) |
-| FSR | 0.50 | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/1) |
+| FSR | 0.60 | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/1) |
 | Height | 9.5m | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/5) |
-| Minimum lot size | 580 m² | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/4) |
-| Apparent site jurisdiction | Ryde | - |
-| Zoning EPI | Ryde Local Environmental Plan 2014 | - |
+| Minimum lot size | - | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/4) |
+| Apparent site jurisdiction | Lane Cove | - |
+| Zoning EPI | Lane Cove Local Environmental Plan 2009 | - |
 | FSR clause | Clause 4.4 | - |
 | Height clause | Clause 4.3 | - |
-| Minimum lot size clause | Clause 4.1 | - |
+| Minimum lot size clause | - | - |
 
 ## Site Metrics
 
 | Metric | Value |
 | --- | --- |
 | Plan area | - |
-| Geometry area | 854 sqm |
-| Perimeter | 120.2 m |
-| BBox width | 43.9 m |
-| BBox height | 32.5 m |
-| Frontage candidate | 23.9 m |
+| Geometry area | 799 sqm |
+| Perimeter | 131.5 m |
+| BBox width | 45.0 m |
+| BBox height | 41.8 m |
+| Frontage candidate | 21.3 m |
 | Property type | Property |
 | ValNet status | CURRENT |
 | ValNet type | NORMAL |

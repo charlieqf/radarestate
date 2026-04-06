@@ -82,6 +82,15 @@ function normalisePlace(value) {
   return clean(value).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
 }
 
+function precinctPlaceCandidates(precinctName) {
+  const base = clean(precinctName)
+  const parts = base
+    .split('/')
+    .map((part) => clean(part))
+    .filter(Boolean)
+  return [...new Set([base, ...parts])]
+}
+
 function mentionsPlace(text, place) {
   const textValue = normalisePlace(text)
   const placeValue = normalisePlace(place)
@@ -90,16 +99,31 @@ function mentionsPlace(text, place) {
 
 function isPrecinctPurePolicyRow(item, precinctName) {
   const location = clean(item.location_text)
-  if (!location) return mentionsPlace(item.title, precinctName)
+  const candidates = precinctPlaceCandidates(precinctName)
+  if (!location) return candidates.some((candidate) => mentionsPlace(item.title, candidate))
   const normalisedLocation = normalisePlace(location)
-  const normalisedPrecinct = normalisePlace(precinctName)
-  if (normalisedLocation === normalisedPrecinct) return true
-  return mentionsPlace(location, precinctName) && /\d/.test(location)
+  if (candidates.some((candidate) => normalisePlace(candidate) === normalisedLocation)) return true
+  return candidates.some((candidate) => mentionsPlace(location, candidate) && /\d/.test(location))
 }
 
 function formatNumber(value) {
   if (value === null || value === undefined || value === '') return '-'
   return new Intl.NumberFormat('en-AU').format(Number(value))
+}
+
+function formatMeasure(value, suffix, digits = 0) {
+  if (value === null || value === undefined || value === '') return '-'
+  return `${Number(value).toFixed(digits)}${suffix}`
+}
+
+function formatLotSize(value, units) {
+  if (value === null || value === undefined || value === '') return '-'
+  return `${formatNumber(value)} ${units || 'sqm'}`
+}
+
+function markdownLink(label, href) {
+  if (!href) return label
+  return `[${label}](${href})`
 }
 
 function stageLabel(stage) {
@@ -207,6 +231,15 @@ function constraintUseLabel(constraintType) {
   if (planningProcessTypes.has(constraintType)) return 'Planning process signal'
   if (spatialScreeningTypes.has(constraintType)) return 'Transaction-facing screening signal'
   return 'Current screening signal'
+}
+
+function controlSourceLinks(row) {
+  return [
+    row.zoning_source_url ? markdownLink('Zoning', row.zoning_source_url) : null,
+    row.fsr_source_url ? markdownLink('FSR', row.fsr_source_url) : null,
+    row.height_source_url ? markdownLink('Height', row.height_source_url) : null,
+    row.minimum_lot_size_source_url ? markdownLink('Lot size', row.minimum_lot_size_source_url) : null
+  ].filter(Boolean).join(' / ') || '-'
 }
 
 async function resolvePrecinctName(client, requestedPrecinct) {
@@ -322,16 +355,79 @@ async function fetchDeepDiveData(client, precinctName) {
     [precinctName]
   )
 
+  const representativeSites = await client.query(
+    `select
+       s.site_label,
+       s.address,
+       s.site_key,
+       s.screening_score,
+       s.apparent_site_jurisdiction,
+       s.zoning_code,
+       s.zoning_label,
+       s.fsr,
+       s.height_m,
+       s.minimum_lot_size_sqm,
+       s.minimum_lot_size_units,
+       ctl.zoning_source_url,
+       ctl.fsr_source_url,
+       ctl.height_source_url,
+       ctl.minimum_lot_size_source_url
+     from public.v_site_screening_latest s
+     left join public.v_site_controls_latest ctl on ctl.site_candidate_id = s.site_candidate_id
+     where s.precinct_name = $1
+       and s.council_name = $2
+     order by s.screening_score desc,
+              s.title_complexity_penalty asc nulls last,
+              s.high_constraint_count asc nulls last,
+              abs(coalesce(s.geometry_area_sqm, s.plan_area_sqm, 0) - 1200) asc nulls last,
+              s.matched_signal_count desc,
+              s.site_label
+     limit 3`,
+    [precinctName, row.council_name]
+  )
+
+  const councilPolicyContext = await client.query(
+    `select pp.title, pp.stage, pp.stage_rank, pp.location_text, pp.last_seen_at
+     from public.planning_proposals pp
+     join public.councils c on c.id = pp.council_id
+     where c.canonical_name = $1
+       and (pp.precinct_id is null or pp.precinct_id <> $2)
+       and (
+         lower(coalesce(pp.title, '')) similar to '%(housing|strategy|precinct|lep|height|fsr|townhouse|design|employment|heritage|amendment|housekeeping)%'
+         or lower(coalesce(pp.location_text, '')) like '%' || lower($1) || '%'
+       )
+     order by case pp.stage
+                when 'under_assessment' then 1
+                when 'pre_exhibition' then 2
+                when 'on_exhibition' then 3
+                when 'finalisation' then 4
+                when 'made' then 5
+                when 'withdrawn' then 6
+                else 7
+              end,
+              case
+                when lower(coalesce(pp.title, '')) similar to '%(housing|strategy|precinct|lep|height|fsr|townhouse|design|employment)%' then 0
+                else 1
+              end,
+              pp.last_seen_at desc nulls last,
+              pp.title
+     limit 6`,
+    [row.council_name, row.precinct_id]
+  )
+
     const rawActiveProposalCount = proposals.rows.filter((item) => ACTIVE_POLICY_STAGES.includes(item.stage)).length
     const dedupedProposals = dedupeRows(proposals.rows, (item) => `${item.stage}|${item.title}|${item.location_text}`)
     const activeProposals = dedupedProposals.filter((item) => ACTIVE_POLICY_STAGES.includes(item.stage))
     const historicalProposals = dedupedProposals.filter((item) => !ACTIVE_POLICY_STAGES.includes(item.stage) && isPrecinctPurePolicyRow(item, precinctName))
+    const dedupedCouncilPolicyContext = dedupeRows(councilPolicyContext.rows, (item) => `${item.stage}|${item.title}|${item.location_text}`)
 
     return {
       row,
       rawActiveProposalCount,
       activeProposals,
       historicalProposals,
+      councilPolicyContext: dedupedCouncilPolicyContext,
+      representativeSites: representativeSites.rows,
       apps: dedupeRows(apps.rows, (item) => `${item.lodgement_date}|${item.location_text}|${item.status}`).slice(0, 12),
       appStatus: appStatus.rows,
       appTypeMix: appTypeMix.rows,
@@ -347,7 +443,7 @@ async function main() {
   try {
     const precinctName = await resolvePrecinctName(client, options.precinct)
     const data = await fetchDeepDiveData(client, precinctName)
-    const { row, rawActiveProposalCount, activeProposals, historicalProposals, apps, appStatus, appTypeMix, constraints, council, mapPoint } = data
+    const { row, rawActiveProposalCount, activeProposals, historicalProposals, councilPolicyContext, representativeSites, apps, appStatus, appTypeMix, constraints, council, mapPoint } = data
     const applicationTypeRows = appTypeMix.filter((item) => item.application_bucket !== 'SSD')
     const applicationTypeMap = Object.fromEntries(applicationTypeRows.map((item) => [item.application_bucket, Number(item.total || 0)]))
     const cdcCount = Number(applicationTypeMap.CDC || 0)
@@ -414,6 +510,40 @@ async function main() {
             ])
           )
         : 'No precinct-explicit made / withdrawn policy rows are currently shown in this deep dive.',
+      '',
+      councilPolicyContext.length && activeProposals.length === 0
+        ? 'Related council policy context is shown below because current precinct-explicit policy rows are thin; these rows are background context, not direct precinct-scoring evidence.'
+        : '',
+      councilPolicyContext.length && activeProposals.length === 0
+        ? markdownTable(
+            ['Stage', 'Related Council Policy Context', 'Location'],
+            councilPolicyContext.slice(0, 6).map((item) => [
+              stageLabel(item.stage),
+              item.title,
+              item.location_text || '-'
+            ])
+          )
+        : '',
+      '',
+      '## Parcel-Level Planning Signals',
+      '',
+      representativeSites.length
+        ? 'Current open-data control readings for representative screened sites are shown below so the precinct thesis can be anchored to parcel-level planning settings rather than council-wide policy alone.'
+        : 'No representative site-control rows are currently surfaced for this precinct.',
+      representativeSites.length
+        ? markdownTable(
+            ['Representative Site', 'Zoning', 'Height', 'FSR', 'Minimum Lot Size', 'Jurisdiction', 'Sources'],
+            representativeSites.map((item) => [
+              item.address || item.site_label,
+              `${item.zoning_code || '-'}${item.zoning_label ? ` (${item.zoning_label})` : ''}`,
+              formatMeasure(item.height_m, 'm', 1),
+              item.fsr === null || item.fsr === undefined || item.fsr === '' ? '-' : String(item.fsr),
+              formatLotSize(item.minimum_lot_size_sqm, item.minimum_lot_size_units),
+              item.apparent_site_jurisdiction || '-',
+              controlSourceLinks(item)
+            ])
+          )
+        : '',
       '',
       '## Development Activity Context',
       '',

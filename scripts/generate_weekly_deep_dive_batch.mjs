@@ -96,6 +96,7 @@ function removeOutdatedDatedDeepDives(outputName, precincts) {
 
 async function selectPrecincts(client, regionGroup) {
   const selected = []
+  let emergingCorridorCouncil = null
 
   const topOpportunity = await client.query(
     `select v.precinct_name
@@ -158,6 +159,47 @@ async function selectPrecincts(client, regionGroup) {
     [regionGroup, selected.length ? selected : null]
   )
   if (extraPriority.rows.length) selected.push(extraPriority.rows[0].precinct_name)
+
+  const emergingCorridor = await client.query(
+    `select v.precinct_name, v.council_name
+     from public.v_precinct_shortlist v
+     join public.councils c on c.canonical_name = v.council_name
+     where c.region_group = $1
+       and v.opportunity_rating = 'B'
+       and coalesce(v.friction_score, 99) <= 1
+       and coalesce(v.active_pipeline_count, 0) = 0
+       and ($2::text[] is null or v.precinct_name <> all($2::text[]))
+     order by v.friction_score asc nulls last,
+              v.timing_score desc nulls last,
+              v.recent_da_count desc nulls last,
+              v.recent_application_count desc nulls last,
+              v.precinct_name
+     limit 1`,
+    [regionGroup, selected.length ? selected : null]
+  )
+  if (emergingCorridor.rows.length) {
+    selected.push(emergingCorridor.rows[0].precinct_name)
+    emergingCorridorCouncil = emergingCorridor.rows[0].council_name
+  }
+
+  if (emergingCorridorCouncil) {
+    const companionStation = await client.query(
+      `select v.precinct_name
+       from public.v_precinct_shortlist v
+       where v.council_name = $1
+         and v.precinct_type = 'station'
+         and ($2::text[] is null or v.precinct_name <> all($2::text[]))
+       order by case v.opportunity_rating when 'A' then 1 when 'B' then 2 else 3 end,
+                v.timing_score desc nulls last,
+                v.recent_da_count desc nulls last,
+                v.recent_application_count desc nulls last,
+                v.friction_score asc nulls last,
+                v.precinct_name
+       limit 1`,
+      [emergingCorridorCouncil, selected.length ? selected : null]
+    )
+    if (companionStation.rows.length) selected.push(companionStation.rows[0].precinct_name)
+  }
 
   return unique(selected)
 }

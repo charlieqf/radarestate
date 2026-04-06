@@ -1,4 +1,4 @@
-# Coverage Readiness: greater-sydney-expanded
+# Coverage Readiness: sydney-core-plus
 
 ## Date
 
@@ -6,7 +6,7 @@
 
 ## Scope
 
-- Precinct config: `mvp/config/precinct-focus-map-greater-sydney-expanded.json`
+- Precinct config: `mvp/config/precinct-focus-map-sydney-core-plus.json`
 - Configured councils: `28`
 - Configured precincts: `72`
 

@@ -5,6 +5,9 @@ import { execFileSync } from 'node:child_process'
 const root = process.cwd()
 const runsDir = path.join(root, 'runs')
 const archiveDir = path.join(root, 'archive')
+const DEFAULT_SYDNEY_APPLICATION_CONFIG = 'mvp/config/application-sync-greater-sydney-expanded.json'
+const DEFAULT_SYDNEY_PROPOSAL_CONFIG = 'mvp/config/planning-proposal-sync-greater-sydney-expanded.json'
+const DEFAULT_SYDNEY_PRECINCT_CONFIG = 'mvp/config/precinct-focus-map-greater-sydney-expanded.json'
 
 function ensureDir(dirPath) {
   fs.mkdirSync(dirPath, { recursive: true })
@@ -24,7 +27,8 @@ function parseArgs() {
     precinctConfig: null,
     snapshotDate: new Date().toISOString().slice(0, 10),
     previousSnapshotDate: null,
-    allowReconstructedPrevious: false
+    allowReconstructedPrevious: false,
+    overwriteSnapshot: false
   }
 
   for (const arg of args) {
@@ -40,6 +44,7 @@ function parseArgs() {
     if (arg.startsWith('--snapshot-date=')) options.snapshotDate = arg.split('=')[1]
     if (arg.startsWith('--previous-snapshot-date=')) options.previousSnapshotDate = arg.split('=')[1]
     if (arg === '--allow-reconstructed-previous') options.allowReconstructedPrevious = true
+    if (arg === '--overwrite-snapshot') options.overwriteSnapshot = true
   }
 
   if (!['daily', 'weekly'].includes(options.mode)) {
@@ -195,8 +200,12 @@ async function postNotification(status, manifest, runPath, archivedPath) {
 
 function buildSteps(options) {
   const steps = []
-  const primaryPrecinctArgs = options.precinctConfig ? [`--config=${options.precinctConfig}`] : []
+  const applicationConfig = options.applicationConfig || DEFAULT_SYDNEY_APPLICATION_CONFIG
+  const proposalConfig = options.proposalConfig || DEFAULT_SYDNEY_PROPOSAL_CONFIG
+  const precinctConfig = options.precinctConfig || DEFAULT_SYDNEY_PRECINCT_CONFIG
+  const primaryPrecinctArgs = [`--config=${precinctConfig}`]
   const snapshotArgs = [`--snapshot-date=${options.snapshotDate}`, `--region-group=Greater Sydney`, '--label=Sydney']
+  if (options.overwriteSnapshot) snapshotArgs.push('--overwrite')
   const previousSnapshotDate = options.mode === 'weekly' ? resolvePreviousSnapshotDate(options) : null
   const hunterProposalArgs = ['--config=mvp/config/planning-proposal-sync-newcastle.json']
   const hunterApplicationArgs = ['--config=mvp/config/application-sync-newcastle.json']
@@ -204,17 +213,17 @@ function buildSteps(options) {
 
   if (!options.skipSync) {
     steps.push(
-      {
-        name: 'sync_planning_proposals',
-        script: 'scripts/sync_planning_proposals.mjs',
-        args: options.proposalConfig ? [`--config=${options.proposalConfig}`] : []
-      },
-      {
-        name: 'sync_application_tracker',
-        script: 'scripts/sync_application_tracker.mjs',
-        args: options.applicationConfig ? [`--config=${options.applicationConfig}`] : []
-      }
-    )
+        {
+          name: 'sync_planning_proposals',
+          script: 'scripts/sync_planning_proposals.mjs',
+          args: [`--config=${proposalConfig}`]
+        },
+        {
+          name: 'sync_application_tracker',
+          script: 'scripts/sync_application_tracker.mjs',
+          args: [`--config=${applicationConfig}`]
+        }
+      )
 
     if (options.mode === 'weekly' && !options.skipHunterPack) {
       steps.push(
@@ -342,18 +351,6 @@ function buildSteps(options) {
           ]
         },
         {
-          name: 'generate_site_cards_dated',
-          script: 'scripts/generate_site_card_batch.mjs',
-          args: [
-            '--region-group=Greater Sydney',
-            '--label=Sydney',
-            `--output-name=${options.snapshotDate}`,
-            `--dashboard-path=dashboard/${options.snapshotDate}-report.html`,
-            `--radar-path=reports/weekly-radar-${options.snapshotDate}.md`,
-            `--screening-path=reports/top-site-screening-${options.snapshotDate}.md`
-          ]
-        },
-        {
           name: 'generate_deep_dives_dated',
           script: 'scripts/generate_weekly_deep_dive_batch.mjs',
           args: [
@@ -363,6 +360,19 @@ function buildSteps(options) {
             `--snapshot-date=${options.snapshotDate}`,
             `--dashboard-path=dashboard/${options.snapshotDate}-report.html`,
             `--radar-path=reports/weekly-radar-${options.snapshotDate}.md`
+          ]
+        },
+        {
+          name: 'generate_site_cards_dated',
+          script: 'scripts/generate_site_card_batch.mjs',
+          args: [
+            '--region-group=Greater Sydney',
+            '--label=Sydney',
+            `--output-name=${options.snapshotDate}`,
+            `--include-deep-dive-output-name=${options.snapshotDate}`,
+            `--dashboard-path=dashboard/${options.snapshotDate}-report.html`,
+            `--radar-path=reports/weekly-radar-${options.snapshotDate}.md`,
+            `--screening-path=reports/top-site-screening-${options.snapshotDate}.md`
           ]
         }
       )

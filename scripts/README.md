@@ -41,6 +41,14 @@ npm run pipeline:weekly
 - Sydney client pack
 - Newcastle-Hunter client pack
 
+默认 Sydney mainline pipeline 当前使用：
+
+- `mvp/config/application-sync-greater-sydney-expanded.json`
+- `mvp/config/planning-proposal-sync-greater-sydney-expanded.json`
+- `mvp/config/precinct-focus-map-greater-sydney-expanded.json`
+
+也就是说，`npm run pipeline:daily` 和 `npm run pipeline:weekly` 默认跑的是扩展后的 Sydney production scope，而不是最早的 focus-only 基础包。
+
 Greater Sydney weekly flow is now split into two layers:
 
 1. Production layer
@@ -59,6 +67,12 @@ Greater Sydney weekly flow is now split into two layers:
 
 ```bash
 node scripts/run_pipeline.mjs --mode=weekly --skip-hunter-pack
+```
+
+如果同一天的 snapshot 已经存在、需要覆盖重跑：
+
+```bash
+node scripts/run_pipeline.mjs --mode=weekly --skip-hunter-pack --overwrite-snapshot
 ```
 
 指定 dated snapshot：
@@ -175,6 +189,7 @@ node scripts/sync_application_tracker.mjs "--councils=Inner West,North Sydney,Ca
 - `Application Tracker` 的 ordinary applications 使用公开 POST API
 - `State Significant` 使用公开 JSON 端点
 - 配置文件支持 `extends`，可用 `--config=` 传入 coverage pack
+- 直接单跑 `sync_application_tracker.mjs` 时，默认仍读取 `mvp/config/application-sync-focus-councils.json`；但 `run_pipeline.mjs` 的 Sydney 主线默认会传入 expanded config
 
 ## 3. 同步 Planning Proposals 到 Supabase
 
@@ -205,6 +220,8 @@ node scripts/sync_planning_proposals.mjs "--councils=Canada Bay,Inner West,Suthe
 ```bash
 node scripts/sync_planning_proposals.mjs --config=mvp/config/planning-proposal-sync-greater-sydney-expanded.json
 ```
+
+`run_pipeline.mjs` 的 Sydney 主线默认会使用 `mvp/config/planning-proposal-sync-greater-sydney-expanded.json`。
 
 ## 4. 生成研究 Dashboard
 
@@ -419,6 +436,8 @@ npm run build:precincts
 ```bash
 node scripts/build_precinct_shortlist.mjs --config=mvp/config/precinct-focus-map-greater-sydney-expanded.json
 ```
+
+`run_pipeline.mjs` 的 Sydney 主线默认会使用 `mvp/config/precinct-focus-map-greater-sydney-expanded.json`。
 
 ## 10. 构建第一版 Constraints Layer
 

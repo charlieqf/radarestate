@@ -1,47 +1,47 @@
-# Site Card: 18 GERRISH STREET GLADESVILLE
+# Site Card: 25 BALMORAL STREET WAITARA
 
 ## Rank
 
-6 in the current Sydney automated site-screening cut.
+16 in the current Sydney automated site-screening cut.
 
 ## Snapshot
 
-- Watchlist bucket: **Gladesville - Ryde**
-- Watchlist precinct: **Gladesville**
-- Current precinct grouping: **Hunters Hill**
-- Apparent site jurisdiction from governing EPI: **Ryde**
-- Screening band: **Advance**
-- Screening score: **51**
-- Recommended action: **Advance to site review**
-- Address signal: 18 GERRISH STREET GLADESVILLE
-- Lot reference: G//DP410094 / DP410094
-- Latest mapped signal date: 2026-03-26
+- Watchlist bucket: **Waitara / Wahroonga**
+- Watchlist precinct: **Waitara / Wahroonga**
+- Current precinct grouping: **Hornsby**
+- Apparent site jurisdiction from governing EPI: **Hornsby**
+- Screening band: **Review**
+- Screening score: **40**
+- Recommended action: **Validate controls and constraints**
+- Address signal: 25 BALMORAL STREET WAITARA
+- Lot reference: 1//DP843067 / DP843067
+- Latest mapped signal date: 2026-02-11
 - Matched recent signals: 1
 
 ## Control Envelope
 
 | Field | Value | Source |
 | --- | --- | --- |
-| Zoning | R2 (Low Density Residential) | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/2) |
-| FSR | 0.50 | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/1) |
-| Height | 9.5m | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/5) |
-| Minimum lot size | 580 m² | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/4) |
-| Apparent site jurisdiction | Ryde | - |
-| Zoning EPI | Ryde Local Environmental Plan 2014 | - |
-| FSR clause | Clause 4.4 | - |
+| Zoning | R4 (High Density Residential) | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/2) |
+| FSR | - | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/1) |
+| Height | 16.5m | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/5) |
+| Minimum lot size | - | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/4) |
+| Apparent site jurisdiction | Hornsby | - |
+| Zoning EPI | Hornsby Local Environmental Plan 2013 | - |
+| FSR clause | - | - |
 | Height clause | Clause 4.3 | - |
-| Minimum lot size clause | Clause 4.1 | - |
+| Minimum lot size clause | - | - |
 
 ## Site Metrics
 
 | Metric | Value |
 | --- | --- |
 | Plan area | - |
-| Geometry area | 854 sqm |
-| Perimeter | 120.2 m |
-| BBox width | 43.9 m |
-| BBox height | 32.5 m |
-| Frontage candidate | 23.9 m |
+| Geometry area | 852 sqm |
+| Perimeter | 129.0 m |
+| BBox width | 48.5 m |
+| BBox height | 25.8 m |
+| Frontage candidate | 18.5 m |
 | Property type | Property |
 | ValNet status | CURRENT |
 | ValNet type | NORMAL |
@@ -52,17 +52,17 @@
 
 | Component | Value |
 | --- | --- |
-| Precinct score | 18 |
+| Precinct score | 12 |
 | Area score | 12 |
 | Frontage score | 8 |
-| FSR score | 3 |
-| Height score | 8 |
+| FSR score | 0 |
+| Height score | 6 |
 | Signal score | 2 |
 | Oversize penalty | 0 |
 | Large-format penalty | 0 |
 | Constraint penalty | 0 |
 | Title complexity penalty | 0 |
-| Total screening score | 51 |
+| Total screening score | 40 |
 
 ## Constraint Stack
 
@@ -70,7 +70,7 @@ No current site-level derived constraint hit is surfaced in the present open-dat
 
 ## Go
 
-- Current score is in the `Advance` band, so precinct backdrop, controls and site geometry are aligned strongly enough for immediate review.
+- The site still screens positively on size, control envelope or precinct context, even though it is not in the top `Advance` band.
 - Site scale and frontage fit the current small-mid buy box well enough to justify the next automated diligence pass.
 - No current high-severity open-data constraint is attached to this site.
 
