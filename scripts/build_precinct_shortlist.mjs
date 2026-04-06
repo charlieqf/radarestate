@@ -347,6 +347,10 @@ function scorePrecinct(row) {
   const made = Number(row.made_count || 0)
   const withdrawn = Number(row.withdrawn_count || 0)
   const recentApps = Number(row.recent_application_count || 0)
+  const recentDa = Number(row.recent_da_count || 0)
+  const recentCdc = Number(row.recent_cdc_count || 0)
+  const recentMod = Number(row.recent_modification_count || 0)
+  const recentOther = Number(row.recent_other_count || 0)
   const stateSig = Number(row.state_significant_count || 0)
   const hasLiveSignal = active > 0 || recentApps > 0 || stateSig > 0
   const target = Number(row.council_target_value || 0)
@@ -370,11 +374,14 @@ function scorePrecinct(row) {
   if (policyTheme.includes('LMR')) capacityScore += 1
   capacityScore = clamp(capacityScore, 1, 5)
 
+  const developmentWeightedActivity = recentDa + (recentMod * 0.35) + (recentCdc * 0.1) + (recentOther * 0.15)
+
   let timingScore = 1
-  if (recentApps >= 100) timingScore = 5
-  else if (recentApps >= 50) timingScore = 4
-  else if (recentApps >= 20) timingScore = 3
-  else if (recentApps >= 5) timingScore = 2
+  if (developmentWeightedActivity >= 120) timingScore = 5
+  else if (developmentWeightedActivity >= 60) timingScore = 4
+  else if (developmentWeightedActivity >= 25) timingScore = 3
+  else if (developmentWeightedActivity >= 8) timingScore = 2
+  if (recentDa >= 20 && timingScore < 3) timingScore = 3
   if (stateSig > 0) timingScore = clamp(timingScore + 1, 1, 5)
   if (active > 0 && timingScore < 2) timingScore = 2
 
@@ -394,8 +401,8 @@ function scorePrecinct(row) {
   if (!hasLiveSignal) rating = 'C'
 
   let confidence = 'low'
-  if (active >= 2 && recentApps >= 20) confidence = 'high'
-  else if (active >= 1 || recentApps >= 10 || stateSig > 0) confidence = 'medium'
+  if (active >= 2 && (developmentWeightedActivity >= 25 || recentDa >= 20)) confidence = 'high'
+  else if (active >= 1 || developmentWeightedActivity >= 10 || recentDa >= 8 || stateSig > 0) confidence = 'medium'
   if (frictionScore >= 4) confidence = 'medium'
   if (frictionScore >= 5) confidence = 'low'
   if (!hasLiveSignal) confidence = 'low'
@@ -404,8 +411,8 @@ function scorePrecinct(row) {
   if (frictionScore >= 4 && action === 'Prioritise') action = 'Investigate'
   if (!hasLiveSignal) action = 'Watch'
   const triggerSummary = constraintSummary
-    ? `${active} active proposals, ${recentApps} recent applications, ${stateSig} state significant projects. Risks: ${constraintSummary}`
-    : `${active} active proposals, ${recentApps} recent applications, ${stateSig} state significant projects`
+    ? `${active} active proposals, ${recentApps} recent applications (${recentDa} DA, ${recentCdc} CDC), ${stateSig} state significant projects. Risks: ${constraintSummary}`
+    : `${active} active proposals, ${recentApps} recent applications (${recentDa} DA, ${recentCdc} CDC), ${stateSig} state significant projects`
   const sourceBundle = ['ppr', recentApps > 0 ? 'applications' : null, stateSig > 0 ? 'state-significant' : null].filter(Boolean).join('|')
 
   return {
@@ -524,13 +531,14 @@ async function main() {
     const appUpdated = await applyMappings(client, 'application_signals', mappedApplications)
 
     const summary = await client.query(
-      `select p.id as precinct_id, p.precinct_code, p.name as precinct_name, p.primary_council_id as council_id,
-              vpss.council_name, vpss.policy_theme, vpss.active_pipeline_count, vpss.made_count,
-              vpss.withdrawn_count, vpss.recent_application_count, vpss.state_significant_count,
-              vpss.council_target_value, vpss.high_constraint_count, vpss.medium_constraint_count,
-              vpss.low_constraint_count, vpss.constraint_summary
-       from public.v_precinct_signal_summary vpss
-       join public.precincts p on p.id = vpss.precinct_id`
+       `select p.id as precinct_id, p.precinct_code, p.name as precinct_name, p.primary_council_id as council_id,
+               vpss.council_name, vpss.policy_theme, vpss.active_pipeline_count, vpss.made_count,
+               vpss.withdrawn_count, vpss.recent_application_count, vpss.recent_da_count,
+               vpss.recent_cdc_count, vpss.recent_modification_count, vpss.recent_other_count, vpss.state_significant_count,
+               vpss.council_target_value, vpss.high_constraint_count, vpss.medium_constraint_count,
+               vpss.low_constraint_count, vpss.constraint_summary
+        from public.v_precinct_signal_summary vpss
+        join public.precincts p on p.id = vpss.precinct_id`
     )
 
     const opportunities = await rebuildOpportunityItems(client, summary.rows, observedAt)

@@ -13,7 +13,7 @@ Gladesville currently screens as one of the strongest precinct-level candidates 
 - Council: `Hunters Hill`
 - Current rating: `A`
 - Policy score: `4`
-- Timing score: `5`
+- Timing score: `4`
 - Friction score: `0`
 - Recent applications: `217`
 - Recent application window start: `2025-01-01`
@@ -24,7 +24,7 @@ Gladesville currently screens as one of the strongest precinct-level candidates 
 
 ## Why This Precinct Surfaced
 
-- Trigger summary: 2 active proposals, 217 recent applications, 0 state significant projects
+- Trigger summary: 2 active proposals, 217 recent applications (58 DA, 132 CDC), 0 state significant projects
 - Policy momentum is already visible in the current pipeline.
 - Recent development activity is sufficiently strong to justify immediate attention.
 - There is already a meaningful stock of made-stage planning history in this precinct.
@@ -52,6 +52,7 @@ Gladesville currently screens as one of the strongest precinct-level candidates 
 ## Development Activity Context
 
 Recent applications below are screening signals with lodgement date on or after `2025-01-01`. The application-type table is shown as mutually exclusive DA / CDC / Modification / Other buckets so it stays consistent with the `Recent applications` count above. State-significant signals stay separate in the quick scorecard.
+Current mix note: this precinct is presently **CDC-led** (132 CDC vs 58 DA), so raw activity volume should not be read as pure acquisition-quality momentum.
 
 | Status | Count |
 | --- | --- |
@@ -79,8 +80,8 @@ Recent applications below are screening signals with lodgement date on or after 
 | 2026-03-18 | Approved | Complying Development Certificate Application | 19 STANBURY STREET GLADESVILLE 2111 |
 | 2026-03-18 | Under Assessment | Development Application | 53 AMIENS STREET GLADESVILLE 2111 |
 | 2026-03-18 | Under Assessment | Complying Development Certificate Application | 18 HIGH STREET GLADESVILLE 2111 |
-| 2026-03-17 | Under Assessment | Development Application | 2/10 Earnshaw St, Gladesville NSW 2111 |
 | 2026-03-17 | Under Assessment | Development Application | 5 BATEMANS ROAD GLADESVILLE 2111 |
+| 2026-03-17 | Under Assessment | Development Application | 2/10 Earnshaw St, Gladesville NSW 2111 |
 | 2026-03-17 | Additional Information Requested | Modification Application | 1 STANSELL STREET GLADESVILLE 2111 |
 
 ## Risk And Friction

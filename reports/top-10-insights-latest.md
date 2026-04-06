@@ -13,15 +13,15 @@
 
 ## 1. Risk-adjusted leaders are not the loudest precincts
 
-- Finding: `Penrith`, `Cabramatta`, `Gladesville`, `Five Dock` currently lead the shortlist because policy and activity are both visible while friction remains low.
-- Evidence: Penrith: recent apps 351, active pipeline 4, risk 0; Cabramatta: recent apps 257, active pipeline 2, risk 0; Gladesville: recent apps 217, active pipeline 2, risk 0; Five Dock: recent apps 113, active pipeline 2, risk 0
+- Finding: `Penrith`, `Cabramatta`, `Gladesville` currently lead the shortlist because policy and activity are both visible while friction remains low.
+- Evidence: Penrith: recent apps 351, active pipeline 4, risk 0; Cabramatta: recent apps 257, active pipeline 2, risk 0; Gladesville: recent apps 217, active pipeline 2, risk 0
 - Why it matters: This is the clearest evidence that the system is not just surfacing noisy, high-volume markets. It is already separating cleaner opportunity precincts from merely busy ones.
 - Action: Use these names as the first layer for committee discussion and street-level follow-up.
 
 ## 2. The biggest opportunity trap is “high activity but structurally dirty”
 
-- Finding: `Bankstown`, `Ingleburn`, `Liverpool`, `Campbelltown` are active enough to look attractive, but current risk stacking pushes them into caution territory.
-- Evidence: Bankstown: risk 5, recent apps 238, constraints flood_metadata_signal (high), heat_vulnerability_proxy (high), low_tree_canopy_proxy (high), policy_withdrawal_friction (medium); Ingleburn: risk 5, recent apps 230, constraints bushfire_spatial_sample (high), flood_metadata_signal (high), low_tree_canopy_proxy (high), heat_vulnerability_proxy (medium); Liverpool: risk 5, recent apps 220, constraints bushfire_spatial_sample (high), flood_metadata_signal (high), heat_vulnerability_proxy (high), low_tree_canopy_proxy (high), policy_withdrawal_friction (medium); Campbelltown: risk 5, recent apps 219, constraints bushfire_spatial_sample (high), flood_metadata_signal (high), low_tree_canopy_proxy (high), heat_vulnerability_proxy (medium)
+- Finding: `Campbelltown`, `Ingleburn`, `Bankstown`, `Liverpool` are active enough to look attractive, but current risk stacking pushes them into caution territory.
+- Evidence: Campbelltown: risk 5, recent apps 219, constraints bushfire_spatial_sample (high), flood_metadata_signal (high), low_tree_canopy_proxy (high), heat_vulnerability_proxy (medium); Ingleburn: risk 5, recent apps 230, constraints bushfire_spatial_sample (high), flood_metadata_signal (high), low_tree_canopy_proxy (high), heat_vulnerability_proxy (medium); Bankstown: risk 5, recent apps 238, constraints flood_metadata_signal (high), heat_vulnerability_proxy (high), low_tree_canopy_proxy (high), policy_withdrawal_friction (medium); Liverpool: risk 5, recent apps 220, constraints bushfire_spatial_sample (high), flood_metadata_signal (high), heat_vulnerability_proxy (high), low_tree_canopy_proxy (high), policy_withdrawal_friction (medium)
 - Why it matters: These are exactly the precincts where a simplistic heat-map or activity-only product would be misleading.
 - Action: Keep them in a separate risk-adjusted watchlist rather than promoting them into the main acquisition shortlist.
 
@@ -69,8 +69,8 @@
 
 ## 9. Site screening is now surfacing lot-level follow-up candidates
 
-- Finding: The Sydney pack no longer stops at precinct ranking. It now carries a site-screening layer that identifies specific lots for follow-up review.
-- Evidence: Top current sites include 207 PACIFIC HIGHWAY ST LEONARDS, 345 VICTORIA AVENUE CHATSWOOD, 37-41 OXFORD STREET EPPING, 601 PACIFIC HIGHWAY ST LEONARDS, 284 VICTORIA AVENUE CHATSWOOD.
+- Finding: The Sydney pack no longer stops at precinct ranking. It now carries a site-screening layer that identifies specific lots for follow-up review under a small-mid developer lens, with townhouse / small subdivision fit slightly ahead of larger-format high-rise sites.
+- Evidence: Top current sites include 19 STANBURY STREET GLADESVILLE, 53 AMIENS STREET GLADESVILLE, 18 GERRISH STREET GLADESVILLE, 160 BRIDGE ROAD WESTMEAD, 33 NORMAN AVENUE AUBURN.
 - Why it matters: This matters because precinct conviction and site conviction are not the same thing. The extra lot-level layer is where watchlist output becomes more actionable.
 - Action: Use the site-screening report and linked site cards as the next step after precinct triage, not as a substitute for parcel-level diligence.
 

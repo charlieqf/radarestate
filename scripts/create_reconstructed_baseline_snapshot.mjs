@@ -184,7 +184,7 @@ async function queryPrecinctSnapshot(client, regionGroup, snapshotDate) {
      join public.precincts p on p.id = ac.precinct_id
      left join public.councils c on c.id = p.primary_council_id
      left join proposal_counts pc on pc.precinct_id = ac.precinct_id
-     order by ac.recent_application_count desc, p.name`,
+      order by ac.recent_da_count desc, ac.recent_application_count desc, p.name`,
     [regionGroup, snapshotDate, ACTIVE_PROPOSAL_STAGES, RECENT_APPLICATION_WINDOW_START]
   )
 
@@ -359,7 +359,7 @@ async function queryActivitySnapshot(client, regionGroup, snapshotDate) {
        and a.precinct_id is not null
        and coalesce(a.lodgement_date, a.observed_at) <= $2::date
      group by p.name, c.canonical_name
-     order by recent_application_count desc, p.name`,
+      order by recent_da_count desc, recent_application_count desc, p.name`,
     [regionGroup, snapshotDate, RECENT_APPLICATION_WINDOW_START]
   )
 

@@ -345,13 +345,14 @@ async function fetchTargetPrecincts(client, config, regionGroup) {
      from public.v_precinct_shortlist v
      join public.precincts p on p.id = v.precinct_id
      join public.councils c on c.id = p.primary_council_id
-     where ($1::text is null or c.region_group = $1)
-       and v.opportunity_rating in ('A', 'B')
-     order by case v.opportunity_rating when 'A' then 1 when 'B' then 2 else 3 end,
-              v.friction_score asc nulls last,
-              v.recent_application_count desc nulls last,
-              v.active_pipeline_count desc nulls last,
-              p.name`,
+      where ($1::text is null or c.region_group = $1)
+        and v.opportunity_rating in ('A', 'B')
+      order by case v.opportunity_rating when 'A' then 1 when 'B' then 2 else 3 end,
+               v.friction_score asc nulls last,
+               v.timing_score desc nulls last,
+               v.recent_da_count desc nulls last,
+               v.active_pipeline_count desc nulls last,
+               p.name`,
     [regionGroup || null]
   )
   return rows

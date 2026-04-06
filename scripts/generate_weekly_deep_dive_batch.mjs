@@ -103,9 +103,10 @@ async function selectPrecincts(client, regionGroup) {
      join public.councils c on c.canonical_name = v.council_name
      where c.region_group = $1
      order by case v.opportunity_rating when 'A' then 1 when 'B' then 2 else 3 end,
-              v.friction_score asc nulls last,
-              v.recent_application_count desc nulls last,
-              v.active_pipeline_count desc nulls last
+               v.friction_score asc nulls last,
+               v.timing_score desc nulls last,
+               v.recent_da_count desc nulls last,
+               v.active_pipeline_count desc nulls last
      limit 1`,
     [regionGroup]
   )
@@ -118,8 +119,9 @@ async function selectPrecincts(client, regionGroup) {
      where c.region_group = $1
        and v.constraint_count > 0
      order by v.friction_score desc nulls last,
-              v.recent_application_count desc nulls last,
-              v.active_pipeline_count desc nulls last
+               v.timing_score desc nulls last,
+               v.recent_da_count desc nulls last,
+               v.active_pipeline_count desc nulls last
      limit 1`,
     [regionGroup]
   )
@@ -132,9 +134,10 @@ async function selectPrecincts(client, regionGroup) {
      where c.region_group = $1
        and ($2::text[] is null or v.precinct_name <> all($2::text[]))
      order by case v.opportunity_rating when 'A' then 1 when 'B' then 2 else 3 end,
-              v.recent_application_count desc nulls last,
-              v.active_pipeline_count desc nulls last,
-              v.friction_score asc nulls last
+               v.timing_score desc nulls last,
+               v.recent_da_count desc nulls last,
+               v.active_pipeline_count desc nulls last,
+               v.friction_score asc nulls last
      limit 1`,
     [regionGroup, selected.length ? selected : null]
   )
@@ -147,9 +150,10 @@ async function selectPrecincts(client, regionGroup) {
      where c.region_group = $1
        and ($2::text[] is null or v.precinct_name <> all($2::text[]))
      order by case v.opportunity_rating when 'A' then 1 when 'B' then 2 else 3 end,
-              v.recent_application_count desc nulls last,
-              v.active_pipeline_count desc nulls last,
-              v.friction_score asc nulls last
+               v.timing_score desc nulls last,
+               v.recent_da_count desc nulls last,
+               v.active_pipeline_count desc nulls last,
+               v.friction_score asc nulls last
      limit 1`,
     [regionGroup, selected.length ? selected : null]
   )

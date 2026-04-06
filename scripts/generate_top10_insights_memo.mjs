@@ -121,7 +121,8 @@ async function main() {
       where c.region_group = 'Greater Sydney'
       order by case v.opportunity_rating when 'A' then 1 when 'B' then 2 else 3 end,
                v.friction_score asc nulls last,
-               v.recent_application_count desc nulls last
+               v.timing_score desc nulls last,
+               v.recent_da_count desc nulls last
       limit 12
     `)
 
@@ -132,7 +133,7 @@ async function main() {
       join public.councils c on c.canonical_name = v.council_name
       where v.constraint_count > 0
         and c.region_group = 'Greater Sydney'
-      order by v.friction_score desc, v.recent_application_count desc
+      order by v.friction_score desc, v.timing_score desc nulls last, v.recent_da_count desc nulls last
       limit 10
     `)
 
@@ -191,10 +192,12 @@ async function main() {
        from public.v_site_screening_latest
        where ($1::text is null or region_group = $1)
        order by screening_score desc,
-                matched_signal_count desc,
-                coalesce(geometry_area_sqm, plan_area_sqm) desc nulls last,
-                site_label
-       limit 5`,
+                 title_complexity_penalty asc nulls last,
+                 high_constraint_count asc nulls last,
+                 abs(coalesce(geometry_area_sqm, plan_area_sqm, 0) - 1200) asc nulls last,
+                 matched_signal_count desc,
+                 site_label
+        limit 5`,
       [options.regionGroup || null]
     )
 
@@ -289,7 +292,7 @@ async function main() {
       insightBlock(
         9,
         'Site screening is now surfacing lot-level follow-up candidates',
-        'The Sydney pack no longer stops at precinct ranking. It now carries a site-screening layer that identifies specific lots for follow-up review.',
+        'The Sydney pack no longer stops at precinct ranking. It now carries a site-screening layer that identifies specific lots for follow-up review under a small-mid developer lens, with townhouse / small subdivision fit slightly ahead of larger-format high-rise sites.',
         `Top current sites include ${topSites.rows.map((row) => row.site_label).join(', ')}.`,
         'This matters because precinct conviction and site conviction are not the same thing. The extra lot-level layer is where watchlist output becomes more actionable.',
         'Use the site-screening report and linked site cards as the next step after precinct triage, not as a substitute for parcel-level diligence.'

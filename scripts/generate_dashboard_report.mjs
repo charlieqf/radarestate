@@ -3,6 +3,7 @@ import path from 'node:path'
 import { Client } from 'pg'
 
 const root = process.cwd()
+const PRECINCT_RECENT_APPLICATION_WINDOW_START = '2025-01-01'
 
 function readFile(relativePath) {
   return fs.readFileSync(path.join(root, relativePath), 'utf8')
@@ -43,6 +44,30 @@ function formatNumber(value) {
 
 function safeJson(value) {
   return JSON.stringify(value).replace(/</g, '\\u003c')
+}
+
+function formatIsoDate(value) {
+  if (!value) return null
+  if (typeof value === 'string') return value.slice(0, 10)
+  return value.toISOString().slice(0, 10)
+}
+
+function slugify(value) {
+  if (value === null || value === undefined) return ''
+  return String(value).trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+}
+
+function siteOutputName(dashboardOutputName) {
+  if (dashboardOutputName === 'latest-report') return 'latest'
+  return dashboardOutputName.endsWith('-report') ? dashboardOutputName.slice(0, -7) : dashboardOutputName
+}
+
+function siteCardHtmlPath(outputName, siteKey) {
+  return `../client-output/site-card-${slugify(outputName)}-${slugify(siteKey)}.html`
+}
+
+function siteReportHtmlPath(outputName) {
+  return `../client-output/top-site-screening-${slugify(outputName)}.html`
 }
 
 function parseArgs() {
@@ -413,7 +438,7 @@ function htmlTemplate(data) {
 
       <div class="panel span-6">
         <h2>Recent Activity Ranking</h2>
-        <p class="subtle">Recent applications from the current focus-council sync window.</p>
+        <p class="subtle">Council tracker recent window starts ${data.meta.councilRecentWindowStart ? `<code>${data.meta.councilRecentWindowStart}</code>` : 'from the latest synced source window'}.</p>
         <canvas id="recentActivityChart"></canvas>
       </div>
       <div class="panel span-6">
@@ -455,13 +480,13 @@ function htmlTemplate(data) {
 
       <div class="panel span-6">
         <h2>Top Precinct Shortlist</h2>
-        <p class="subtle">First-pass precinct seed built from mapped proposal and application signals.</p>
+        <p class="subtle">First-pass precinct watchlist. Ratings combine policy and timing, then get downgraded when friction stacks.</p>
         <canvas id="precinctChart"></canvas>
       </div>
 
       <div class="panel span-6">
         <h2>Precinct Shortlist Table</h2>
-        <p class="subtle">Heuristic shortlist only. Constraints and site assembly are not integrated yet.</p>
+        <p class="subtle">Heuristic watchlist only. Recent apps here means mapped applications lodged on or after <code>${data.meta.precinctRecentWindowStart}</code>; no parcel-level feasibility is implied.</p>
         <table>
           <thead>
             <tr>
@@ -475,11 +500,48 @@ function htmlTemplate(data) {
           <tbody>
             ${data.precinctShortlist.map((row) => `
               <tr>
-                <td>${row.precinct_name}<br><span style="color:var(--muted);font-size:12px">${row.constraint_summary ?? 'No derived constraint hit'}</span></td>
+                <td>${row.precinct_name}<br><span style="color:var(--muted);font-size:12px">${row.constraint_summary ?? 'No current derived constraint hit. Not risk-free.'}</span></td>
                 <td><span class="tag">${row.opportunity_rating}</span></td>
                 <td>${formatNumber(row.friction_score)}</td>
                 <td>${formatNumber(row.recent_application_count)}</td>
                 <td>${formatNumber(row.active_pipeline_count)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel span-12">
+        <h2>Top Sites</h2>
+        <p class="subtle">Automated lot/site screening cut from the current open-data layer. Sorted by screening score, then mapped signal count, then site area. Watchlist bucket names already split out cross-jurisdiction cases where the governing EPI does not match the broader precinct grouping. Full site-screening report: <a href="${data.meta.siteReportHref}">open report</a>.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Site</th>
+              <th>Precinct</th>
+              <th>Band</th>
+              <th>Score</th>
+              <th>Zoning</th>
+              <th>FSR</th>
+              <th>Height</th>
+              <th>Lot Area</th>
+              <th>Constraint Stack</th>
+              <th>Card</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${data.topSites.map((row) => `
+              <tr>
+                <td>${row.site_label}</td>
+                <td>${row.watchlist_bucket_name || row.precinct_name}<br><span style="color:var(--muted);font-size:12px">${row.apparent_site_jurisdiction || row.council_name}</span></td>
+                <td><span class="tag">${row.screening_band}</span></td>
+                <td>${formatNumber(row.screening_score)}</td>
+                <td>${row.zoning_code || '-'}</td>
+                <td>${formatNumber(row.fsr)}</td>
+                <td>${row.height_m === null || row.height_m === undefined ? '-' : `${formatNumber(row.height_m)}m`}</td>
+                <td>${row.geometry_area_sqm === null || row.geometry_area_sqm === undefined ? '-' : `${formatNumber(row.geometry_area_sqm)} sqm`}</td>
+                <td>${row.constraint_summary || 'No current site-level derived constraint hit'}</td>
+                <td>${row.card_href ? `<a href="${row.card_href}">Open card</a>` : '-'}</td>
               </tr>
             `).join('')}
           </tbody>
@@ -605,7 +667,7 @@ function htmlTemplate(data) {
             'Recent apps: ' + recent + '<br>' +
             'Active pipeline: ' + Number(row.active_pipeline_count || 0) + '<br>' +
             'Risk score: ' + Number(row.friction_score || 0) + '<br>' +
-            'Constraints: ' + (row.constraint_summary || 'None') +
+            'Constraints: ' + (row.constraint_summary || 'No current derived hit. Not risk-free.') +
           '</div>'
         );
         return marker;
@@ -727,27 +789,44 @@ async function main() {
   const options = parseArgs()
   const client = await connectWithFallback()
   try {
+    const outputSlug = siteOutputName(options.outputName)
     const metaPlanning = await client.query(`select count(*)::int as total from public.planning_proposals pp join public.councils c on c.id = pp.council_id where c.region_group = $1`, [options.regionGroup])
     const metaApps = await client.query(`select count(*)::int as total from public.application_signals a join public.councils c on c.id = a.council_id where c.region_group = $1`, [options.regionGroup])
     const metaPrecinct = await client.query(`select count(*)::int as total from public.v_precinct_shortlist v join public.councils c on c.canonical_name = v.council_name where c.region_group = $1`, [options.regionGroup])
     const metaConstraints = await client.query(`select count(*)::int as total from public.constraints ct join public.precincts p on p.id = ct.precinct_id join public.councils c on c.id = p.primary_council_id where c.region_group = $1`, [options.regionGroup])
-    const recentRanking = await client.query(`select v.council_name, v.recent_count, v.total_count from public.v_recent_application_ranking v join public.councils c on c.canonical_name = v.council_name where c.region_group = $1 limit 10`, [options.regionGroup])
+    const recentRanking = await client.query(`select v.council_name, v.recent_count, v.total_count, v.recent_window_start from public.v_recent_application_ranking v join public.councils c on c.canonical_name = v.council_name where c.region_group = $1 limit 10`, [options.regionGroup])
     const pipeline = await client.query(`select pp.stage, pp.stage_rank, count(*)::int as proposal_count from public.planning_proposals pp join public.councils c on c.id = pp.council_id where c.region_group = $1 group by pp.stage, pp.stage_rank order by pp.stage_rank nulls last, pp.stage`, [options.regionGroup])
     const scoreboard = await client.query(`select council_name, target_value, application_recent_count, active_pipeline_count from public.v_council_scoreboard where region_group = $1 order by active_pipeline_count desc nulls last, made_count desc nulls last limit 12`, [options.regionGroup])
     const scatter = await client.query(`select council_name, target_value, application_recent_count from public.v_target_pressure_vs_activity where region_group = $1 and target_value is not null and application_recent_count is not null order by target_value desc nulls last`, [options.regionGroup])
     const watchlist = await client.query(`select c.canonical_name as council_name, pp.stage, pp.title, pp.location_text from public.planning_proposals pp join public.councils c on c.id = pp.council_id where c.region_group = $1 and pp.stage in ('under_assessment','pre_exhibition','on_exhibition','finalisation') order by pp.stage_rank nulls last, pp.last_seen_at desc, pp.title limit 20`, [options.regionGroup])
-    const precinctShortlist = await client.query(`select v.precinct_name, v.council_name, v.opportunity_rating, v.friction_score, v.recent_application_count, v.active_pipeline_count, v.constraint_summary from public.v_precinct_shortlist v join public.councils c on c.canonical_name = v.council_name where c.region_group = $1 order by case v.opportunity_rating when 'A' then 1 when 'B' then 2 else 3 end, v.friction_score asc nulls last, v.recent_application_count desc nulls last limit 12`, [options.regionGroup])
-    const constrainedPrecincts = await client.query(`select v.precinct_name, v.council_name, v.friction_score, v.constraint_summary, v.recent_application_count, v.active_pipeline_count from public.v_precinct_shortlist v join public.councils c on c.canonical_name = v.council_name where c.region_group = $1 and v.constraint_count > 0 order by v.friction_score desc, v.recent_application_count desc limit 12`, [options.regionGroup])
+    const precinctShortlist = await client.query(`select v.precinct_name, v.council_name, v.opportunity_rating, v.friction_score, v.recent_application_count, v.active_pipeline_count, v.constraint_summary from public.v_precinct_shortlist v join public.councils c on c.canonical_name = v.council_name where c.region_group = $1 order by case v.opportunity_rating when 'A' then 1 when 'B' then 2 else 3 end, v.friction_score asc nulls last, v.timing_score desc nulls last, v.recent_da_count desc nulls last limit 12`, [options.regionGroup])
+    const constrainedPrecincts = await client.query(`select v.precinct_name, v.council_name, v.friction_score, v.constraint_summary, v.recent_application_count, v.active_pipeline_count from public.v_precinct_shortlist v join public.councils c on c.canonical_name = v.council_name where c.region_group = $1 and v.constraint_count > 0 order by v.friction_score desc, v.timing_score desc nulls last, v.recent_da_count desc nulls last limit 12`, [options.regionGroup])
     const precinctMapPoints = await client.query(`select v.precinct_name, v.council_name, v.opportunity_rating, v.friction_score, v.recent_application_count, v.active_pipeline_count, v.constraint_summary, v.centroid_latitude, v.centroid_longitude, v.point_count from public.v_precinct_map_points v join public.councils c on c.canonical_name = v.council_name where c.region_group = $1`, [options.regionGroup])
+    const topSites = await client.query(
+      `select site_key, site_label, precinct_name, council_name, watchlist_bucket_name, apparent_site_jurisdiction, screening_band, screening_score, zoning_code, fsr, height_m, geometry_area_sqm, constraint_summary
+        from public.v_site_screening_latest
+       where region_group = $1
+        order by screening_score desc,
+                 title_complexity_penalty asc nulls last,
+                 high_constraint_count asc nulls last,
+                 abs(coalesce(geometry_area_sqm, plan_area_sqm, 0) - 1200) asc nulls last,
+                 matched_signal_count desc,
+                 site_label
+        limit 10`,
+      [options.regionGroup]
+    )
 
     const data = {
       reportTitle: `${options.label} Planning And Activity Research Dashboard`,
-      reportLede: `Public-data powered view across housing target pressure, planning proposal pipeline, recent development activity and first-pass risk signals for ${options.label}. This report is generated directly from Supabase views, not from mock sample JSON.`,
+      reportLede: `Public-data powered watchlist and diligence-triage view across housing target pressure, planning proposal pipeline, recent development activity and first-pass risk signals for ${options.label}. This is a screening dashboard, not a parcel-level decision tool.`,
       meta: {
         totalPlanningProposals: metaPlanning.rows[0].total,
         totalApplicationSignals: metaApps.rows[0].total,
         totalPrecinctShortlist: metaPrecinct.rows[0].total,
-        totalConstraints: metaConstraints.rows[0].total
+        totalConstraints: metaConstraints.rows[0].total,
+        councilRecentWindowStart: formatIsoDate(recentRanking.rows[0]?.recent_window_start),
+        precinctRecentWindowStart: PRECINCT_RECENT_APPLICATION_WINDOW_START,
+        siteReportHref: siteReportHtmlPath(outputSlug)
       },
       recentRanking: recentRanking.rows,
       pipeline: pipeline.rows,
@@ -756,7 +835,11 @@ async function main() {
       watchlist: watchlist.rows,
       precinctShortlist: precinctShortlist.rows,
       constrainedPrecincts: constrainedPrecincts.rows,
-      precinctMapPoints: precinctMapPoints.rows
+      precinctMapPoints: precinctMapPoints.rows,
+      topSites: topSites.rows.map((row, index) => ({
+        ...row,
+        card_href: index < 5 ? siteCardHtmlPath(outputSlug, row.site_key) : null
+      }))
     }
 
     const dashboardDir = path.join(root, 'dashboard')

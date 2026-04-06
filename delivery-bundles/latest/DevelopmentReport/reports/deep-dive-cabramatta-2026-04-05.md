@@ -24,7 +24,7 @@ Cabramatta currently screens as one of the strongest precinct-level candidates b
 
 ## Why This Precinct Surfaced
 
-- Trigger summary: 2 active proposals, 257 recent applications, 2 state significant projects
+- Trigger summary: 2 active proposals, 257 recent applications (55 DA, 186 CDC), 2 state significant projects
 - Policy momentum is already visible in the current pipeline.
 - Recent development activity is sufficiently strong to justify immediate attention.
 - There is already a meaningful stock of made-stage planning history in this precinct.
@@ -53,6 +53,7 @@ Cabramatta currently screens as one of the strongest precinct-level candidates b
 ## Development Activity Context
 
 Recent applications below are screening signals with lodgement date on or after `2025-01-01`. The application-type table is shown as mutually exclusive DA / CDC / Modification / Other buckets so it stays consistent with the `Recent applications` count above. State-significant signals stay separate in the quick scorecard.
+Current mix note: this precinct is presently **CDC-led** (186 CDC vs 55 DA), so raw activity volume should not be read as pure acquisition-quality momentum.
 
 | Status | Count |
 | --- | --- |

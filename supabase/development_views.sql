@@ -262,33 +262,50 @@ with constraint_agg as (
     ps.friction_score as precinct_friction_score,
     case ps.opportunity_rating when 'A' then 18 when 'B' then 12 when 'C' then 6 else 2 end as precinct_score,
     case
-      when coalesce(cand.geometry_area_sqm, cand.plan_area_sqm, 0) >= 2000 then 14
-      when coalesce(cand.geometry_area_sqm, cand.plan_area_sqm, 0) >= 1200 then 11
-      when coalesce(cand.geometry_area_sqm, cand.plan_area_sqm, 0) >= 800 then 8
-      when coalesce(cand.geometry_area_sqm, cand.plan_area_sqm, 0) >= 450 then 4
+      when coalesce(cand.geometry_area_sqm, cand.plan_area_sqm, 0) between 450 and 1200 then 12
+      when coalesce(cand.geometry_area_sqm, cand.plan_area_sqm, 0) > 1200 and coalesce(cand.geometry_area_sqm, cand.plan_area_sqm, 0) <= 2500 then 10
+      when coalesce(cand.geometry_area_sqm, cand.plan_area_sqm, 0) between 250 and 449.999 then 8
+      when coalesce(cand.geometry_area_sqm, cand.plan_area_sqm, 0) > 2500 and coalesce(cand.geometry_area_sqm, cand.plan_area_sqm, 0) <= 4000 then 7
+      when coalesce(cand.geometry_area_sqm, cand.plan_area_sqm, 0) > 4000 and coalesce(cand.geometry_area_sqm, cand.plan_area_sqm, 0) <= 7000 then 4
+      when coalesce(cand.geometry_area_sqm, cand.plan_area_sqm, 0) > 7000 then 1
       else 0
     end as area_score,
     case
-      when coalesce(cand.frontage_candidate_m, 0) >= 30 then 8
-      when coalesce(cand.frontage_candidate_m, 0) >= 20 then 6
-      when coalesce(cand.frontage_candidate_m, 0) >= 12 then 3
+      when coalesce(cand.frontage_candidate_m, 0) between 16 and 32 then 8
+      when coalesce(cand.frontage_candidate_m, 0) >= 12 and coalesce(cand.frontage_candidate_m, 0) < 16 then 6
+      when coalesce(cand.frontage_candidate_m, 0) > 32 and coalesce(cand.frontage_candidate_m, 0) <= 50 then 4
+      when coalesce(cand.frontage_candidate_m, 0) >= 8 and coalesce(cand.frontage_candidate_m, 0) < 12 then 2
+      when coalesce(cand.frontage_candidate_m, 0) > 50 then 1
       else 0
     end as frontage_score,
     case
-      when coalesce(ctl.fsr, 0) >= 3 then 12
-      when coalesce(ctl.fsr, 0) >= 2 then 9
-      when coalesce(ctl.fsr, 0) >= 1.5 then 6
-      when coalesce(ctl.fsr, 0) >= 1 then 3
+      when coalesce(ctl.fsr, 0) between 0.75 and 1.5 then 8
+      when coalesce(ctl.fsr, 0) > 1.5 and coalesce(ctl.fsr, 0) < 2.5 then 6
+      when coalesce(ctl.fsr, 0) >= 2.5 and coalesce(ctl.fsr, 0) < 4 then 4
+      when coalesce(ctl.fsr, 0) >= 4 then 2
+      when coalesce(ctl.fsr, 0) >= 0.5 then 3
       else 0
     end as fsr_score,
     case
-      when coalesce(ctl.height_m, 0) >= 45 then 12
-      when coalesce(ctl.height_m, 0) >= 28 then 9
-      when coalesce(ctl.height_m, 0) >= 18 then 6
-      when coalesce(ctl.height_m, 0) >= 12 then 3
+      when coalesce(ctl.height_m, 0) between 9 and 15 then 8
+      when coalesce(ctl.height_m, 0) > 15 and coalesce(ctl.height_m, 0) <= 24 then 6
+      when coalesce(ctl.height_m, 0) > 24 and coalesce(ctl.height_m, 0) <= 35 then 4
+      when coalesce(ctl.height_m, 0) > 35 then 2
+      when coalesce(ctl.height_m, 0) >= 6 then 3
       else 0
     end as height_score,
     least(coalesce(cand.matched_signal_count, 0), 5) * 2 as signal_score,
+    case
+      when coalesce(cand.geometry_area_sqm, cand.plan_area_sqm, 0) >= 15000 then 10
+      when coalesce(cand.geometry_area_sqm, cand.plan_area_sqm, 0) >= 8000 then 7
+      when coalesce(cand.geometry_area_sqm, cand.plan_area_sqm, 0) >= 5000 then 4
+      else 0
+    end as oversize_penalty,
+    case
+      when coalesce(ctl.fsr, 0) >= 8 or coalesce(ctl.height_m, 0) >= 80 then 4
+      when coalesce(ctl.fsr, 0) >= 5 or coalesce(ctl.height_m, 0) >= 45 then 2
+      else 0
+    end as large_format_penalty,
     (coalesce(ca.high_constraint_count, 0) * 10) + (coalesce(ca.medium_constraint_count, 0) * 5) as constraint_penalty,
     least(
       case
@@ -330,6 +347,8 @@ with constraint_agg as (
       + base.fsr_score
       + base.height_score
       + base.signal_score
+      - base.oversize_penalty
+      - base.large_format_penalty
       - base.constraint_penalty
       - base.title_complexity_penalty
     ) as screening_score
@@ -338,14 +357,15 @@ with constraint_agg as (
 select
   scored.*,
   case
-    when scored.screening_score >= 45 and scored.high_constraint_count = 0 and scored.title_complexity_penalty = 0 then 'Advance'
-    when scored.screening_score >= 28 then 'Review'
+    when scored.screening_score >= 42 and scored.high_constraint_count = 0 and scored.title_complexity_penalty = 0 then 'Advance'
+    when scored.screening_score >= 24 then 'Review'
     else 'Caution'
   end as screening_band,
   case
-    when scored.screening_score >= 45 and scored.high_constraint_count = 0 and scored.title_complexity_penalty = 0 then 'Advance to site review'
+    when scored.screening_score >= 42 and scored.high_constraint_count = 0 and scored.title_complexity_penalty = 0 then 'Advance to site review'
     when scored.title_complexity_penalty > 0 then 'Review title / strata complexity before promotion'
-    when scored.screening_score >= 28 then 'Validate controls and constraints'
+    when scored.oversize_penalty > 0 or scored.large_format_penalty > 0 then 'Validate under strategic larger-format lens before promotion'
+    when scored.screening_score >= 24 then 'Validate controls and constraints'
     else 'Keep on caution list'
   end as recommended_site_action
 from scored;

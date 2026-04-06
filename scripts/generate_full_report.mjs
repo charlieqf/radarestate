@@ -191,8 +191,10 @@ function buildPriorityTargets(siteRows) {
     if (row.screening_band) reasons.push(`${row.screening_band} band`)
     if (row.screening_score !== null && row.screening_score !== undefined) reasons.push(`score ${formatNumber(row.screening_score)}`)
     if (row.matched_signal_count) reasons.push(`${formatNumber(row.matched_signal_count)} mapped signals`)
+    if (row.geometry_area_sqm || row.plan_area_sqm) reasons.push(`${formatMeasure(row.geometry_area_sqm || row.plan_area_sqm, ' sqm')} lot area`)
+    if (row.frontage_candidate_m) reasons.push(`${formatMeasure(row.frontage_candidate_m, ' m', 1)} frontage`)
     if (row.zoning_code) reasons.push(`zone ${row.zoning_code}`)
-    if (row.height_m) reasons.push(`${formatMeasure(row.height_m, 'm', 1)} height envelope`)
+    if (Number(row.title_complexity_penalty || 0) > 0) reasons.push(`title penalty ${formatNumber(row.title_complexity_penalty)}`)
     return {
       site_label: row.site_label,
       search_area: row.watchlist_bucket_name || row.precinct_name,
@@ -254,6 +256,8 @@ function buildMethodNotes(snapshot) {
     `Snapshot date: ${snapshot.manifest.snapshot_date}`,
     `Baseline type: ${snapshot.manifest.baseline_type}`,
     `Recent application window start: ${snapshot.activity.window_start}`,
+    'Default site ranking lens: small-mid developer buy box, with townhouse / small subdivision fit slightly ahead of boutique apartment / mixed-use infill.',
+    'Precinct timing score is DA-led and deliberately down-weights CDC-heavy activity so the default shortlist better reflects acquisition relevance.',
     'Precinct rows are read from the saved weekly precinct snapshot, not from a live latest-state query at report render time.',
     'Site rows are read from the saved weekly site-screening snapshot, not from a live latest-state query at report render time.'
   ]
@@ -273,7 +277,8 @@ function boundariesForManifest(manifest) {
     'No owner/title contact layer is included.',
     'No proprietary comparable-sales layer is included.',
     'No residual pricing model is included.',
-    'Site screening remains a triage layer, not a parcel-clearance or acquisition approval output.'
+    'Site screening remains a triage layer, not a parcel-clearance or acquisition approval output.',
+    'Large-format strategic assembly or high-rise opportunities may be under-ranked in this default lens because the primary target user is a small-mid developer.'
   ]
   if (manifest.baseline_type === 'reconstructed') {
     items.unshift('This baseline is reconstructed from retained source history and is not a formally captured historical weekly package.')

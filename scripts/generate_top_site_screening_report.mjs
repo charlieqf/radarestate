@@ -190,13 +190,15 @@ async function main() {
          high_constraint_count,
          medium_constraint_count,
          constraint_summary
-       from public.v_site_screening_latest
-       where ($1::text is null or region_group = $1)
-       order by screening_score desc,
-                matched_signal_count desc,
-                coalesce(geometry_area_sqm, plan_area_sqm) desc nulls last,
-                site_label
-       limit 12`,
+        from public.v_site_screening_latest
+        where ($1::text is null or region_group = $1)
+        order by screening_score desc,
+                 title_complexity_penalty asc nulls last,
+                 high_constraint_count asc nulls last,
+                 abs(coalesce(geometry_area_sqm, plan_area_sqm, 0) - 1200) asc nulls last,
+                 matched_signal_count desc,
+                 site_label
+        limit 12`,
       [options.regionGroup || null]
     )
 
@@ -249,6 +251,7 @@ async function main() {
       '## Summary',
       '',
       `- Current automated site-screening top cut shown below: **${formatNumber(candidates.rows.length)}** sites for ${options.label}.`,
+      '- Default ranking lens: calibrated for small-mid developers, with a slight preference toward townhouse / small subdivision fit over larger-format high-rise or assembly-style parcels.',
       `- Band mix across the current region-level site layer: **${formatNumber(summaryByBand.Advance || 0)} Advance**, **${formatNumber(summaryByBand.Review || 0)} Review**, **${formatNumber(summaryByBand.Caution || 0)} Caution**.`,
       `- Highest current site candidate: **${top.site_label}** in **${top.watchlist_bucket_name || top.precinct_name}** with score **${formatNumber(top.screening_score)}** and action **${top.recommended_site_action}**.`,
       constraintLead.length
@@ -258,6 +261,7 @@ async function main() {
       '## Method',
       '',
       '- This report is fully automated from free, public NSW open data and current mapped application signals.',
+      '- The default buy box is now a small-mid developer lens. Moderate lot sizes, workable frontage, lower title complexity, and townhouse-to-boutique-apartment control envelopes are preferred ahead of supersites.',
       '- It screens lots/sites, not just precincts, but it is still a triage tool rather than a title/comps/residual decision engine.',
       '- Controls shown here are the current point-intersected planning envelope. Constraint rows show current open-data red flags such as heritage, state heritage curtilage, land reservation, flood planning, biodiversity, bushfire, airport noise and OLS.',
       '- A row that says no current open-data red flag was surfaced means no current mapped red flag appeared in this pass. It does not mean the site is parcel-safe or cleared for acquisition.',

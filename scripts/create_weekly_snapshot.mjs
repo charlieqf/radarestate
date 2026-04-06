@@ -168,11 +168,13 @@ async function queryPrecinctSnapshot(client, regionGroup, snapshotDate) {
      from public.v_precinct_shortlist v
      join public.councils c on c.canonical_name = v.council_name
      left join public.v_precinct_signal_summary vpss on vpss.precinct_id = v.precinct_id
-     where c.region_group = $1
-     order by case v.opportunity_rating when 'A' then 1 when 'B' then 2 else 3 end,
-              v.friction_score asc nulls last,
-              v.recent_application_count desc nulls last,
-              v.precinct_name`,
+      where c.region_group = $1
+      order by case v.opportunity_rating when 'A' then 1 when 'B' then 2 else 3 end,
+               v.friction_score asc nulls last,
+               v.timing_score desc nulls last,
+               v.recent_da_count desc nulls last,
+               v.active_pipeline_count desc nulls last,
+               v.precinct_name`,
     [regionGroup]
   )
 
@@ -230,12 +232,14 @@ async function querySiteSnapshot(client, regionGroup, snapshotDate) {
        title_complexity_penalty,
        apparent_site_jurisdiction,
        observed_at as source_observed_at
-     from public.v_site_screening_latest
-     where region_group = $1
-     order by screening_score desc,
-              matched_signal_count desc,
-              coalesce(geometry_area_sqm, plan_area_sqm) desc nulls last,
-              site_label`,
+      from public.v_site_screening_latest
+      where region_group = $1
+      order by screening_score desc,
+               title_complexity_penalty asc nulls last,
+               high_constraint_count asc nulls last,
+               abs(coalesce(geometry_area_sqm, plan_area_sqm, 0) - 1200) asc nulls last,
+               matched_signal_count desc,
+               site_label`,
     [regionGroup]
   )
 

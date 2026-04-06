@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RadarEstate 报告流程和工作量说明</title>
+  <style>
+    :root {
+      --ink: #142033;
+      --muted: #58667d;
+      --line: #d7dee9;
+      --panel: #f6f9fc;
+      --accent: #0f5bd8;
+      --accent-soft: #eaf2ff;
+      --strong: #0b1220;
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 12mm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #eef3f9;
+      color: var(--ink);
+      font-family: Arial, "Microsoft YaHei", "PingFang SC", sans-serif;
+      line-height: 1.55;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    body {
+      padding: 12mm 0;
+    }
+
+    .page {
+      width: 190mm;
+      min-height: 273mm;
+      margin: 0 auto;
+      background: #fff;
+      box-shadow: 0 10px 30px rgba(16, 31, 61, 0.08);
+      padding: 14mm;
+    }
+
+    h1, h2, h3, p, ul, ol, table {
+      margin-top: 0;
+    }
+
+    h1 {
+      font-size: 28px;
+      line-height: 1.15;
+      color: var(--strong);
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 18px;
+      line-height: 1.25;
+      margin-bottom: 10px;
+      color: var(--strong);
+    }
+
+    h3 {
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: var(--strong);
+    }
+
+    p, li {
+      font-size: 12.5px;
+      color: var(--ink);
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .lede {
+      font-size: 14px;
+      color: var(--strong);
+      margin-bottom: 14px;
+    }
+
+    .subtle {
+      color: var(--muted);
+    }
+
+    .hero {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+
+    .hero-grid,
+    .grid-2,
+    .grid-3,
+    .grid-4 {
+      display: grid;
+      gap: 10px;
+    }
+
+    .hero-grid,
+    .grid-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .stat,
+    .card,
+    .step,
+    .note {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 12px;
+      padding: 10px 11px;
+      break-inside: avoid;
+    }
+
+    .stat-value {
+      font-size: 22px;
+      line-height: 1.1;
+      font-weight: 700;
+      color: var(--strong);
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .section {
+      margin-bottom: 16px;
+      break-inside: avoid;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .section-kicker {
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+      border: 1px solid var(--line);
+      break-inside: avoid;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--line);
+      padding: 7px 8px;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      background: var(--accent-soft);
+      color: var(--strong);
+      font-weight: 700;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 10.5px;
+      font-weight: 700;
+      margin-right: 6px;
+      margin-bottom: 4px;
+    }
+
+    .mono {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 11px;
+    }
+
+    ul,
+    ol {
+      padding-left: 18px;
+      margin-bottom: 0;
+    }
+
+    .footer {
+      margin-top: 18px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+      font-size: 10.5px;
+      color: var(--muted);
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+      }
+
+      .page {
+        width: auto;
+        min-height: auto;
+        margin: 0;
+        box-shadow: none;
+        padding: 0;
+      }
+    }
+
+    @media (max-width: 960px) {
+      .page {
+        width: auto;
+        min-height: auto;
+        margin: 12px;
+      }
+
+      .hero-grid,
+      .grid-2,
+      .grid-3,
+      .grid-4 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="eyebrow">RadarEstate</div>
+      <h1>报告流程和工作量说明</h1>
+      <p class="lede">这不是“一份周报模板”或“一个可视化页面”的工作量，而是一条从权威公开数据获取、结构化入库、评分建模、周快照冻结、差异对比、解释性报告生成，到客户化交付包装的完整自动化生产链。</p>
+      <div class="hero-grid">
+        <div class="stat">
+          <div class="stat-value">1,413</div>
+          <div class="stat-label">当前正式快照内跟踪的 planning proposals</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">45,114</div>
+          <div class="stat-label">当前源层内累计 application signals</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">43</div>
+          <div class="stat-label">当前正式快照内已评分 precincts</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">307</div>
+          <div class="stat-label">当前正式快照内 site screening rows</div>
+        </div>
+      </div>
+      <p class="subtle" style="margin-top:10px; margin-bottom:0;">示例基准：当前正式周快照为 <span class="mono">2026-04-05</span>。当前客户包进一步展开为 <strong>1 份 Full Report</strong>、<strong>1 份 Delta Report</strong>、<strong>1 份 Methodology Appendix</strong>、<strong>1 份 Top 10 Insights</strong>、<strong>1 份 Weekly Radar</strong>、<strong>1 份 Top Site Screening</strong>、<strong>12 份 Site Cards</strong>、<strong>4 份 Precinct Deep Dives</strong>、<strong>1 份 Hero Visual Pack</strong>、<strong>1 份 Opportunity Map</strong> 与分组后的客户交付门户。</p>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>1. 数据源的广泛性与权威性</h2>
+        <div class="section-kicker">公开来源 + 结构化治理 + 时间范围留痕</div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>数据层</th>
+            <th>具体来源</th>
+            <th>在流程中的作用</th>
+            <th>当前可见覆盖例子</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>NSW Planning Portal<br>Planning Proposals</strong></td>
+            <td>来自 <strong>NSW Planning Portal</strong> 的 planning proposal 公示页面与 proposal 详情页。客户可以把它理解成“新州规划系统里公开披露的 proposal 名单、阶段和对应说明页面”。</td>
+            <td>形成 precinct 级政策信号、proposal watchlist、stage pipeline、policy score</td>
+            <td>当前正式快照记录了 proposal 源时间范围，且会进入 stage history 与周快照归档</td>
+          </tr>
+          <tr>
+            <td><strong>NSW Planning Portal<br>DA Application Tracker</strong></td>
+            <td>来自 <strong>NSW Planning Portal</strong> 的开发申请跟踪数据。客户可以把它理解成“各 council 公开开发申请记录的统一抓取层”，其中包含 DA、CDC、Modification 等常见申请类型。</td>
+            <td>形成 DA / CDC / Modification / Other 的 application signal 基础层，以及 timing score 和活跃度判断</td>
+            <td>当前源层累计 application signals 为 <strong>45,114</strong>；客户口径下自 <span class="mono">2025-01-01</span> 起累计为 <strong>43,191</strong></td>
+          </tr>
+          <tr>
+            <td><strong>NSW Planning Portal<br>State Significant Projects</strong></td>
+            <td>来自 <strong>NSW Planning Portal</strong> 的 state significant projects 公共项目数据。客户可以把它理解成“新州政府直接评审或具有州级意义的重大项目名录与空间位置”，不是一般 council DA。</td>
+            <td>补充 state-significant 项目对 timing 与 activity 的影响，并与 ordinary applications 分开披露</td>
+            <td>当前客户口径下单列 state-significant signals 为 <strong>1,920</strong></td>
+          </tr>
+          <tr>
+            <td><strong>NSW Spatial Services +<br>NSW Planning Map Services</strong></td>
+            <td>来自 <strong>NSW Spatial Services</strong> 的 parcel / property layers，以及新州规划与环境公开地图服务中的 zoning、FSR、height、minimum lot size、heritage、land reservation、flood planning、airport noise、OLS、biodiversity、bushfire prone land 等法定控制和风险图层。</td>
+            <td>形成 zoning、FSR、height、flood、bushfire、heritage、biodiversity、airport OLS 等 site/precinct 风险判断</td>
+            <td>进入 <strong>friction score</strong>、site-level red-flag stack 与 site screening penalty</td>
+          </tr>
+          <tr>
+            <td><strong>Weekly Snapshot Archive</strong></td>
+            <td>这是我们的内部正式归档层。它不是新的外部数据源，而是把上面这些公开来源在某一周的状态按日期冻结下来，并记录 source range、snapshot date、captured at、baseline type。</td>
+            <td>保证 Full / Delta / Bundle 不依赖“当下 latest 状态”，而依赖可复现的 dated snapshot</td>
+            <td>当前正式周快照目录：<span class="mono">snapshots/weekly/2026-04-05/</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="note" style="margin-top:10px;">
+        <h3>用客户更容易理解的话说</h3>
+        <p style="margin-bottom:0;">我们不是拿一份别人整理好的二手 Excel 来做排名，而是直接从 <strong>NSW Planning Portal</strong>、<strong>NSW Spatial Services</strong>、以及新州规划与环境公开地图服务中抓取原始公开资料，再把它们统一整理成每周可比较、可解释、可复盘的开发机会与风险视图。</p>
+      </div>
+      <div class="grid-3" style="margin-top:10px;">
+        <div class="card">
+          <h3>为什么这能体现权威性</h3>
+          <p>我们的结论不是从单一榜单或人工筛选开始，而是建立在政策、申请、法定控制与空间风险等多个公开权威层之上。</p>
+        </div>
+        <div class="card">
+          <h3>为什么这能体现广泛性</h3>
+          <p>同一套周报同时覆盖 precinct 级、site 级、proposal 级、activity 级与 methodology 级信息，而不是只输出一个 ranking。</p>
+        </div>
+        <div class="card">
+          <h3>为什么这能体现专业性</h3>
+          <p>每次快照都写明 <span class="mono">snapshot_date</span>、<span class="mono">captured_at</span>、<span class="mono">baseline_type</span> 与 source range，减少“看起来专业、但不可追溯”的风险。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>2. 数据处理流水线的条理与自动化程度</h2>
+        <div class="section-kicker">Daily 维护层 + Weekly 归档层 + Client Delivery 组装层</div>
+      </div>
+      <div class="grid-2">
+        <div class="step">
+          <h3>Daily / Source Maintenance</h3>
+          <ol>
+            <li>同步 planning proposals，更新 stage 与 stage history。</li>
+            <li>同步 ordinary applications 与 state-significant rows，写入 <span class="mono">application_signals</span>。</li>
+            <li>将公开数据统一落到 Supabase 分析层，供 shortlist / screening / dashboard 使用。</li>
+            <li>如需要，还可运行 coverage readiness 评估，判断扩区前的数据稳定性。</li>
+          </ol>
+          <p class="subtle" style="margin-top:8px;">说明：连接层内置 direct / pooler fallback，支持分页、focus councils、config 继承与范围控制。</p>
+        </div>
+        <div class="step">
+          <h3>Weekly / Dated Reporting</h3>
+          <ol>
+            <li>构建 precinct shortlist 与 site screening layer。</li>
+            <li>冻结 weekly snapshot，保存 precinct、site、proposal、activity 四类 dated artifacts。</li>
+            <li>基于 snapshot 生成 Full Report、Delta Report、Methodology Appendix。</li>
+            <li>生成 Top 10 Insights、Weekly Radar、Top Site Screening、Site Cards、Deep Dives。</li>
+            <li>渲染 HTML，导出 customer bundle，并按客户阅读路径重新分组。</li>
+          </ol>
+          <p class="subtle" style="margin-top:8px;">说明：Delta 现在默认只允许使用更早的 <span class="mono">formal</span> snapshot 作为 previous baseline；如需 transition delta，必须显式允许 reconstructed baseline。</p>
+        </div>
+      </div>
+      <div class="grid-4" style="margin-top:10px;">
+        <div class="note">
+          <div class="tag">Production Layer</div>
+          <p style="margin-bottom:0;">把 dated full / delta / methodology 作为核心生产物，而不是临时从 latest view 即时拼接。</p>
+        </div>
+        <div class="note">
+          <div class="tag">Assembly Layer</div>
+          <p style="margin-bottom:0;">把客户包组装、HTML 渲染、bundle 导出从“分析逻辑”中拆出来，便于稳定复用和交付重组。</p>
+        </div>
+        <div class="note">
+          <div class="tag">Snapshot Discipline</div>
+          <p style="margin-bottom:0;">快照不可随意重写，默认要求 dated folder、manifest、source range 一致，保证可复核性。</p>
+        </div>
+        <div class="note">
+          <div class="tag">Automation Value</div>
+          <p style="margin-bottom:0;">自动化不是为了省人工，而是为了让每周都能重复生产、重复比较、重复解释，而不靠临场手工拼接。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>3. 我们实际交付的不是“一个文件”，而是一组有逻辑层次的输出</h2>
+        <div class="section-kicker">结论层 → 变化层 → 动作层 → 证据层 → 方法层</div>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <h3>01 核心结论</h3>
+          <p><strong>Full Report</strong> 给出当前完整盘面：Top Takeaways、Priority Precincts、Priority Site Shortlist、Risk Watchlist、Policy Pipeline、Activity Snapshot、Recommended Actions。</p>
+        </div>
+        <div class="card">
+          <h3>02 周度变化</h3>
+          <p><strong>Delta Report</strong> 解释 compared-to-previous 发生了什么：新增、减少、升降级、activity 变化、transition reliability 与高优先新目标。</p>
+        </div>
+        <div class="card">
+          <h3>03 本周动作</h3>
+          <p><strong>Top 10 Insights</strong> 和 <strong>Top Site Screening</strong> 把“大盘判断”转成“本周该跟进哪些 precinct / 哪些 lot”的短名单。</p>
+        </div>
+        <div class="card">
+          <h3>04 Supporting Evidence</h3>
+          <p><strong>Site Cards</strong> 下钻到 lot level，<strong>Precinct Deep Dives</strong> 下钻到 precinct level。它们不是重复主报告，而是为 shortlisted targets 提供可读证据链。</p>
+        </div>
+        <div class="card">
+          <h3>05 Visual Summary</h3>
+          <p><strong>Hero Visual Pack</strong> 与 <strong>Opportunity Map</strong> 提供空间感与优先级图像表达，方便更快和更高层地沟通机会与风险。</p>
+        </div>
+        <div class="card">
+          <h3>06 Methodology & Boundaries</h3>
+          <p><strong>Methodology Appendix</strong> 明确公式、阈值、比较边界、数据窗口和当前 gaps，降低“黑盒报告”的疑虑。</p>
+        </div>
+      </div>
+      <div class="note" style="margin-top:10px;">
+        <h3>当前客户包的结构意义</h3>
+        <p style="margin-bottom:0;">我们已经把客户主路径重新组织为 <strong>5 步决策路径</strong>：先看本周完整结论，再看本周变化，再看本周动作，再看 supporting evidence，最后看 visual summary 与 methodology。这不是简单换目录名，而是把“内部产物视角”重排成“客户决策视角”。</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>4. 工作量体现在哪里</h2>
+        <div class="section-kicker">难点不在“写文字”，而在“把文字背后的系统做成每周可复用”</div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>看得见的工作</h3>
+          <ul>
+            <li>写出结构清晰、客户可读、可比较的 weekly outputs。</li>
+            <li>将复杂 source layer 压缩成可以用于投资人、开发商、客户讨论的简洁结论。</li>
+            <li>把 site-level 与 precinct-level evidence 做成可下钻、可导航、可打印的交付包。</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>更关键但不一定立刻看见的工作</h3>
+          <ul>
+            <li>清洗不同公开源的时间口径、字段口径、重复问题和 stage/state 差异。</li>
+            <li>把 latest-state views 改造成可冻结、可比对、可复盘的 dated snapshots。</li>
+            <li>设计 formal / reconstructed baseline 规则，避免“看起来像周报，实际上不可比较”。</li>
+            <li>维护评分公式、site band 阈值、风险降级规则与客户可见 methodology 的一致性。</li>
+            <li>把交付包从技术目录变成客户可顺脑子阅读的 decision path。</li>
+          </ul>
+        </div>
+      </div>
+      <table style="margin-top:10px;">
+        <thead>
+          <tr>
+            <th>工作单元</th>
+            <th>不是简单人工汇总的原因</th>
+            <th>体现出的价值</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>数据接入与更新</td>
+            <td>涉及多源公开接口、分页、focus council、state-significant 补层与结构化入库</td>
+            <td>保证覆盖面和更新频率，而不是依赖一次性人工下载</td>
+          </tr>
+          <tr>
+            <td>评分与筛选</td>
+            <td>需要把 policy、timing、risk、site fit、constraint penalty、title complexity 放入统一逻辑</td>
+            <td>把“信息很多”转成“优先级明确”</td>
+          </tr>
+          <tr>
+            <td>快照与 delta</td>
+            <td>需要处理 snapshot_date、captured_at、source ranges、formal / reconstructed baseline 与 diff identity</td>
+            <td>把“当前状态”升级成“可持续周报产品”</td>
+          </tr>
+          <tr>
+            <td>解释与包装</td>
+            <td>需要把技术层、分析层、交付层拆开，再按客户使用顺序重组</td>
+            <td>提升客户理解速度，也提升外部对工作量和价值的尊重</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>5. 当前正式快照示例：2026-04-05</h2>
+        <div class="section-kicker">用实际产出证明这不是概念设计</div>
+      </div>
+      <div class="grid-4">
+        <div class="stat">
+          <div class="stat-value">5 / 26 / 12</div>
+          <div class="stat-label">A / B / C precinct mix</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">31 / 130 / 146</div>
+          <div class="stat-label">Advance / Review / Caution site mix</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">12</div>
+          <div class="stat-label">本期 Sydney dated site cards</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">4</div>
+          <div class="stat-label">本期 Sydney dated precinct deep dives</div>
+        </div>
+      </div>
+      <div class="grid-2" style="margin-top:10px;">
+        <div class="card">
+          <h3>当前 source range provenance</h3>
+          <ul>
+            <li>Planning proposals: <span class="mono">2026-04-01</span> 至 <span class="mono">2026-04-02</span></li>
+            <li>Application signals: <span class="mono">2022-07-07</span> 至 <span class="mono">2026-04-02</span></li>
+            <li>Site screening layers: <span class="mono">2026-04-04</span> 至 <span class="mono">2026-04-05</span></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>当前交付中最能体现价值的内容层次</h3>
+          <ul>
+            <li>Full Report 内部同时包含 precinct priority、site shortlist、risk watchlist、policy pipeline、activity snapshot 与 weekly actions。</li>
+            <li>Delta Report 将“这周相对上周的变化”单独成层，而不是让客户自己从 cumulative numbers 里猜。</li>
+            <li>Methodology Appendix 把公式、阈值、可比性边界和 gaps 公开出来，提升可解释性和可信度。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>6. 一句话总结</h2>
+        <div class="section-kicker">为什么值得尊重这项工作的工作量与价值</div>
+      </div>
+      <div class="note">
+        <p style="margin-bottom:0;"><strong>我们交付的不是“一个报告文件”，而是一个把多源公开权威数据、自动化处理流水线、可解释评分逻辑、周快照治理、客户化交付结构和可持续复用能力整合在一起的研究与产品系统。</strong></p>
+      </div>
+    </section>
+
+    <div class="footer">
+      本页为对外说明页，内容依据当前代码库中的 pipeline、snapshot、methodology 与最新 Sydney development bundle 汇总整理。建议打印为 A4 纵向；如希望更宽松地展示表格，也可在打印对话框中切换为 landscape。
+    </div>
+  </main>
+</body>
+</html>

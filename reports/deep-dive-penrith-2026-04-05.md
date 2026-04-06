@@ -24,7 +24,7 @@ Penrith currently screens as one of the strongest precinct-level candidates beca
 
 ## Why This Precinct Surfaced
 
-- Trigger summary: 4 active proposals, 351 recent applications, 40 state significant projects
+- Trigger summary: 4 active proposals, 351 recent applications (85 DA, 238 CDC), 40 state significant projects
 - Policy momentum is already visible in the current pipeline.
 - Recent development activity is sufficiently strong to justify immediate attention.
 - There is already a meaningful stock of made-stage planning history in this precinct.
@@ -56,6 +56,7 @@ Penrith currently screens as one of the strongest precinct-level candidates beca
 ## Development Activity Context
 
 Recent applications below are screening signals with lodgement date on or after `2025-01-01`. The application-type table is shown as mutually exclusive DA / CDC / Modification / Other buckets so it stays consistent with the `Recent applications` count above. State-significant signals stay separate in the quick scorecard.
+Current mix note: this precinct is presently **CDC-led** (238 CDC vs 85 DA), so raw activity volume should not be read as pure acquisition-quality momentum.
 
 | Status | Count |
 | --- | --- |

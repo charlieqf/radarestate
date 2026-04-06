@@ -26,23 +26,23 @@
 
 ### 03 Site Cards
 
-- `reports/site-card-2026-04-05-precinct-chatswood-10-dp1143909.md`
-- `reports/site-card-2026-04-05-precinct-chatswood-3-dp1295867.md`
-- `reports/site-card-2026-04-05-precinct-epping-14-dp876736.md`
-- `reports/site-card-2026-04-05-precinct-epping-2-dp1205413.md`
-- `reports/site-card-2026-04-05-precinct-hurstville-100-dp1036230.md`
-- `reports/site-card-2026-04-05-precinct-macquarie-park-1-dp1317213.md`
-- `reports/site-card-2026-04-05-precinct-miranda-1-dp865839.md`
-- `reports/site-card-2026-04-05-precinct-norwest-4054-dp1070487.md`
-- `reports/site-card-2026-04-05-precinct-st-leonards-11-dp1013030.md`
-- `reports/site-card-2026-04-05-precinct-st-leonards-2-dp879307.md`
-- `reports/site-card-2026-04-05-precinct-st-leonards-71-dp749690.md`
-- `reports/site-card-2026-04-05-precinct-westmead-2-dp1227281.md`
+- `reports/site-card-2026-04-05-precinct-auburn-14-1-dp979296.md`
+- `reports/site-card-2026-04-05-precinct-auburn-6-dp22618.md`
+- `reports/site-card-2026-04-05-precinct-cabramatta-21-dp220467.md`
+- `reports/site-card-2026-04-05-precinct-chatswood-c-dp385527.md`
+- `reports/site-card-2026-04-05-precinct-gladesville-114-dp24389.md`
+- `reports/site-card-2026-04-05-precinct-gladesville-33-dp10610.md`
+- `reports/site-card-2026-04-05-precinct-gladesville-37-dp13080.md`
+- `reports/site-card-2026-04-05-precinct-gladesville-c-dp324772.md`
+- `reports/site-card-2026-04-05-precinct-gladesville-g-dp410094.md`
+- `reports/site-card-2026-04-05-precinct-marrickville-28-2-dp777.md`
+- `reports/site-card-2026-04-05-precinct-riverwood-86-dp15347.md`
+- `reports/site-card-2026-04-05-precinct-westmead-31-dp12067.md`
 
 ### 04 Precinct Deep Dives
 
-- `reports/deep-dive-bankstown-2026-04-05.md`
 - `reports/deep-dive-cabramatta-2026-04-05.md`
+- `reports/deep-dive-campbelltown-2026-04-05.md`
 - `reports/deep-dive-gladesville-2026-04-05.md`
 - `reports/deep-dive-penrith-2026-04-05.md`
 

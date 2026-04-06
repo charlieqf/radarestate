@@ -6,7 +6,7 @@ Companion visual dashboard: `dashboard/2026-04-05-report.html`
 
 ## Headline
 
-`Penrith`, `Cabramatta`, `Gladesville` currently screen as the strongest priority precincts, while `Bankstown`, `Ingleburn` should be downgraded to a high-risk watchlist because flood, bushfire and friction signals are now stacking together.
+`Penrith`, `Cabramatta`, `Gladesville` currently screen as the strongest priority precincts, while `Campbelltown`, `Ingleburn` should be downgraded to a high-risk watchlist because flood, bushfire and friction signals are now stacking together.
 
 ## Snapshot
 
@@ -21,7 +21,7 @@ Scope note: the four snapshot numbers above are full region totals for the curre
 
 - `Penrith`, `Cabramatta`, `Gladesville` currently form the first priority tier because active pipeline and recent applications are both visible while friction is still manageable.
 - `Blacktown`, `The Hills Shire`, `Canterbury-Bankstown` remain the strongest council-level activity cluster and are the best candidates for further precinct and street-level work.
-- `Bankstown`, `Ingleburn`, `Liverpool` are now showing obvious risk stacking and are better treated as a risk-adjusted watchlist instead of immediate acquisition priorities. The strongest risk signals currently include flood metadata high hits = 25, bushfire spatial high hits = 9.
+- `Campbelltown`, `Ingleburn`, `Bankstown` are now showing obvious risk stacking and are better treated as a risk-adjusted watchlist instead of immediate acquisition priorities. The strongest risk signals currently include flood metadata high hits = 25, bushfire spatial high hits = 9.
 - There are still 107 active proposal items in the pipeline, alongside 1,164 items already in made stage, which is enough to support a sustained planning radar rather than a one-off hotspot view.
 
 ## Scoring Method
@@ -38,29 +38,29 @@ Scope note: the four snapshot numbers above are full region totals for the curre
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | Penrith | Penrith | A | 4 | 5 | 0 | 351 | 4 | Prioritise |
 | 2 | Cabramatta | Fairfield | A | 4 | 5 | 0 | 257 | 2 | Prioritise |
-| 3 | Gladesville | Hunters Hill | A | 4 | 5 | 0 | 217 | 2 | Prioritise |
-| 4 | Five Dock | Canada Bay | A | 4 | 5 | 0 | 113 | 2 | Prioritise |
-| 5 | Edgecliff | Woollahra | A | 4 | 4 | 0 | 70 | 5 | Prioritise |
-| 6 | Seven Hills | Blacktown | B | 2 | 5 | 0 | 282 | 1 | Investigate |
-| 7 | Smithfield | Fairfield | B | 3 | 5 | 0 | 219 | 1 | Investigate |
-| 8 | St Marys | Penrith | B | 3 | 5 | 0 | 204 | 1 | Investigate |
-| 9 | Bexley | Bayside | B | 2 | 5 | 0 | 201 | 1 | Investigate |
-| 10 | Double Bay | Woollahra | B | 3 | 5 | 0 | 182 | 1 | Investigate |
+| 3 | Gladesville | Hunters Hill | A | 4 | 4 | 0 | 217 | 2 | Prioritise |
+| 4 | Seven Hills | Blacktown | B | 2 | 5 | 0 | 282 | 1 | Investigate |
+| 5 | St Marys | Penrith | B | 3 | 5 | 0 | 204 | 1 | Investigate |
+| 6 | Smithfield | Fairfield | B | 3 | 5 | 0 | 219 | 1 | Investigate |
+| 7 | Double Bay | Woollahra | B | 3 | 4 | 0 | 182 | 1 | Investigate |
+| 8 | Bexley | Bayside | B | 2 | 4 | 0 | 201 | 1 | Investigate |
+| 9 | Edgecliff | Woollahra | B | 4 | 3 | 0 | 70 | 5 | Investigate |
+| 10 | Five Dock | Canada Bay | B | 4 | 3 | 0 | 113 | 2 | Investigate |
 
 ## Highest Friction Precincts
 
 | Precinct | Council | Risk | Recent Apps | Pipeline | Constraint Summary |
 | --- | --- | --- | --- | --- | --- |
-| Bankstown | Canterbury-Bankstown | 5 | 238 | 0 | flood_metadata_signal (high), heat_vulnerability_proxy (high), low_tree_canopy_proxy (high), policy_withdrawal_friction (medium) |
-| Ingleburn | Campbelltown | 5 | 230 | 0 | bushfire_spatial_sample (high), flood_metadata_signal (high), low_tree_canopy_proxy (high), heat_vulnerability_proxy (medium) |
-| Liverpool | Liverpool | 5 | 220 | 2 | bushfire_spatial_sample (high), flood_metadata_signal (high), heat_vulnerability_proxy (high), low_tree_canopy_proxy (high), policy_withdrawal_friction (medium) |
 | Campbelltown | Campbelltown | 5 | 219 | 5 | bushfire_spatial_sample (high), flood_metadata_signal (high), low_tree_canopy_proxy (high), heat_vulnerability_proxy (medium) |
+| Ingleburn | Campbelltown | 5 | 230 | 0 | bushfire_spatial_sample (high), flood_metadata_signal (high), low_tree_canopy_proxy (high), heat_vulnerability_proxy (medium) |
+| Bankstown | Canterbury-Bankstown | 5 | 238 | 0 | flood_metadata_signal (high), heat_vulnerability_proxy (high), low_tree_canopy_proxy (high), policy_withdrawal_friction (medium) |
+| Liverpool | Liverpool | 5 | 220 | 2 | bushfire_spatial_sample (high), flood_metadata_signal (high), heat_vulnerability_proxy (high), low_tree_canopy_proxy (high), policy_withdrawal_friction (medium) |
 | Glenfield | Campbelltown | 5 | 72 | 0 | bushfire_spatial_sample (high), low_tree_canopy_proxy (high), flood_metadata_signal (medium), heat_vulnerability_proxy (medium) |
 | Chatswood | Willoughby | 4 | 505 | 2 | bushfire_spatial_sample (high), flood_metadata_signal (high) |
 | Tallawong | Blacktown | 4 | 209 | 1 | bushfire_spatial_sample (high), flood_metadata_signal (high) |
 | Homebush | Strathfield | 4 | 121 | 0 | flood_metadata_signal (high), low_tree_canopy_proxy (high) |
-| Lakemba | Canterbury-Bankstown | 4 | 91 | 0 | heat_vulnerability_proxy (high), low_tree_canopy_proxy (high) |
 | Gordon | Ku-ring-gai | 4 | 70 | 0 | bushfire_spatial_sample (high), flood_metadata_signal (high) |
+| Lakemba | Canterbury-Bankstown | 4 | 91 | 0 | heat_vulnerability_proxy (high), low_tree_canopy_proxy (high) |
 
 ## Council Scoreboard
 

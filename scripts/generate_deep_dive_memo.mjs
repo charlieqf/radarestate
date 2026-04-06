@@ -349,6 +349,9 @@ async function main() {
     const data = await fetchDeepDiveData(client, precinctName)
     const { row, rawActiveProposalCount, activeProposals, historicalProposals, apps, appStatus, appTypeMix, constraints, council, mapPoint } = data
     const applicationTypeRows = appTypeMix.filter((item) => item.application_bucket !== 'SSD')
+    const applicationTypeMap = Object.fromEntries(applicationTypeRows.map((item) => [item.application_bucket, Number(item.total || 0)]))
+    const cdcCount = Number(applicationTypeMap.CDC || 0)
+    const daCount = Number(applicationTypeMap.DA || 0)
     const today = options.snapshotDate
 
     const markdown = [
@@ -415,6 +418,11 @@ async function main() {
       '## Development Activity Context',
       '',
       `Recent applications below are screening signals with lodgement date on or after \`${RECENT_FROM}\`. The application-type table is shown as mutually exclusive DA / CDC / Modification / Other buckets so it stays consistent with the \`Recent applications\` count above. State-significant signals stay separate in the quick scorecard.`,
+      cdcCount > daCount && cdcCount > 0
+        ? `Current mix note: this precinct is presently **CDC-led** (${formatNumber(cdcCount)} CDC vs ${formatNumber(daCount)} DA), so raw activity volume should not be read as pure acquisition-quality momentum.`
+        : daCount > 0
+          ? `Current mix note: this precinct is presently **DA-led or balanced** (${formatNumber(daCount)} DA vs ${formatNumber(cdcCount)} CDC), which is generally more useful for acquisition timing than CDC-heavy volume alone.`
+          : 'Current mix note: no DA-led activity is currently visible in the retained window.',
       '',
       appStatus.length
         ? markdownTable(

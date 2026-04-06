@@ -146,10 +146,12 @@ function goLines(row, constraints) {
     lines.push('- The site still screens positively on size, control envelope or precinct context, even though it is not in the top `Advance` band.')
   }
 
-  if ((row.geometry_area_sqm || row.plan_area_sqm || 0) >= 1500 || (row.frontage_candidate_m || 0) >= 20) {
-    lines.push('- Site scale and frontage both look meaningful enough to justify the next automated diligence pass.')
+  const siteArea = Number(row.geometry_area_sqm || row.plan_area_sqm || 0)
+  const frontage = Number(row.frontage_candidate_m || 0)
+  if ((siteArea >= 350 && siteArea <= 2500) || (frontage >= 12 && frontage <= 32)) {
+    lines.push('- Site scale and frontage fit the current small-mid buy box well enough to justify the next automated diligence pass.')
   } else {
-    lines.push('- The lot still looks usable for screening, but it should be treated as a tighter geometry case until parcel dimensions are checked more closely.')
+    lines.push('- The lot still looks usable for screening, but it should be treated as either a tighter geometry case or a larger-format exception until the site strategy is confirmed more directly.')
   }
 
   if (!(constraints || []).some((item) => item.severity === 'high')) {
@@ -174,6 +176,10 @@ function cautionLines(row, constraints) {
 
   if ((row.constraint_penalty || 0) > 0) {
     lines.push(`- Current scoring already applies a constraint penalty of **${formatNumber(row.constraint_penalty)}**.`)
+  }
+
+  if ((row.oversize_penalty || 0) > 0 || (row.large_format_penalty || 0) > 0) {
+    lines.push('- This site is being de-emphasised by the default small-mid developer lens because its scale or high-rise envelope looks more strategic / larger-format than the current default buy box.')
   }
   return lines
 }
@@ -252,12 +258,14 @@ async function main() {
          s.frontage_score,
          s.fsr_score,
          s.height_score,
-          s.signal_score,
-          s.constraint_penalty,
-          s.title_complexity_penalty,
-          s.screening_score,
-         s.screening_band,
-         s.recommended_site_action,
+         s.signal_score,
+         s.oversize_penalty,
+         s.large_format_penalty,
+         s.constraint_penalty,
+         s.title_complexity_penalty,
+         s.screening_score,
+          s.screening_band,
+          s.recommended_site_action,
          cand.source_url as candidate_source_url,
          ctl.zoning_source_url,
          ctl.fsr_source_url,
@@ -265,13 +273,15 @@ async function main() {
          ctl.minimum_lot_size_source_url
        from public.v_site_screening_latest s
        left join public.v_site_candidates_latest cand on cand.site_candidate_id = s.site_candidate_id
-       left join public.v_site_controls_latest ctl on ctl.site_candidate_id = s.site_candidate_id
-       where ($1::text is null or s.region_group = $1)
-       order by s.screening_score desc,
-                s.matched_signal_count desc,
-                coalesce(s.geometry_area_sqm, s.plan_area_sqm) desc nulls last,
-                s.site_label
-       limit $2`,
+        left join public.v_site_controls_latest ctl on ctl.site_candidate_id = s.site_candidate_id
+        where ($1::text is null or s.region_group = $1)
+        order by s.screening_score desc,
+                 s.title_complexity_penalty asc nulls last,
+                 s.high_constraint_count asc nulls last,
+                 abs(coalesce(s.geometry_area_sqm, s.plan_area_sqm, 0) - 1200) asc nulls last,
+                 s.matched_signal_count desc,
+                 s.site_label
+        limit $2`,
       [options.regionGroup || null, options.limit]
     )
 
@@ -382,6 +392,8 @@ async function main() {
             ['FSR score', formatNumber(row.fsr_score)],
             ['Height score', formatNumber(row.height_score)],
             ['Signal score', formatNumber(row.signal_score)],
+            ['Oversize penalty', formatNumber(row.oversize_penalty)],
+            ['Large-format penalty', formatNumber(row.large_format_penalty)],
             ['Constraint penalty', formatNumber(row.constraint_penalty)],
             ['Title complexity penalty', formatNumber(row.title_complexity_penalty)],
             ['Total screening score', formatNumber(row.screening_score)]

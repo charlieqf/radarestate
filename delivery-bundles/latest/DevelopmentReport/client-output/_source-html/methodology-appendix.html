@@ -428,13 +428,14 @@
 <ul>
 <li>Precinct rows are read from the saved weekly precinct snapshot rather than re-queried live when the report is rendered.</li>
 <li>The rating stack combines policy signal strength, timing signal strength, and approval risk. In the current saved snapshot these appear as <code>policy_score</code>, <code>timing_score</code>, and <code>friction_score</code>.</li>
-<li><code>policy_score</code> is positive evidence from the current proposal pipeline and planning direction. <code>timing_score</code> reflects current activity tempo and near-term development momentum. <code>friction_score</code> is a penalty layer for planning and environmental red flags.</li>
-<li>Current rated precinct mix: <strong>A</strong>: 5, <strong>B</strong>: 26, <strong>C</strong>: 12.</li>
+<li><code>policy_score</code> is positive evidence from the current proposal pipeline and planning direction. <code>timing_score</code> reflects current DA-led development tempo with CDC activity deliberately down-weighted. <code>friction_score</code> is a penalty layer for planning and environmental red flags.</li>
+<li>Current rated precinct mix: <strong>A</strong>: 3, <strong>B</strong>: 28, <strong>C</strong>: 12.</li>
 </ul>
 <h2>Precinct Rating Formula</h2>
 <ul>
 <li><code>policy_score</code> starts at 0, then adds <code>+2</code> when active pipeline count is at least 1, <code>+1</code> more when active pipeline count is at least 2, <code>+1</code> when made count is at least 5, and <code>-1</code> when withdrawn count is at least 3. The final result is clamped between 0 and 5.</li>
-<li><code>timing_score</code> is <code>5</code> at 100+ recent applications, <code>4</code> at 50-99, <code>3</code> at 20-49, <code>2</code> at 5-19, otherwise <code>1</code>. It then gets <code>+1</code> when state-significant count is above 0, capped at 5. If active pipeline is above 0 and timing would otherwise be below 2, it is lifted to 2.</li>
+<li><code>timing_score</code> now uses a DA-led weighted activity measure rather than raw application totals alone: <code>recent_da_count + 0.35 x recent_modification_count + 0.10 x recent_cdc_count + 0.15 x recent_other_count</code>.</li>
+<li>Timing thresholds are <code>5</code> at weighted activity 120+, <code>4</code> at 60-119.9, <code>3</code> at 25-59.9, <code>2</code> at 8-24.9, otherwise <code>1</code>. A precinct with 20+ recent DAs is lifted to at least <code>3</code> even if CDC-heavy noise would otherwise drag it lower. State-significant count still adds <code>+1</code>, capped at 5. If active pipeline is above 0 and timing would otherwise be below 2, it is lifted to 2.</li>
 <li><code>friction_score</code> is <code>2 x high constraints + 1 x medium constraints + 1 if any low constraint exists</code>, then clamped between 0 and 5.</li>
 <li>Rating rule: <code>A</code> requires policy score at least 4 and timing score at least 4. <code>B</code> requires policy score at least 3 or timing score at least 3. Otherwise the row is <code>C</code>.</li>
 <li>Risk downgrade rule: friction score 3 downgrades <code>A</code> to <code>B</code>. Friction score 4 downgrades <code>A</code> to <code>B</code> and <code>B</code> to <code>C</code>. If there is no live signal from active pipeline, recent applications, or state-significant projects, the row is forced to <code>C</code>.</li>
@@ -443,25 +444,27 @@
 <h2>Site Screening Logic</h2>
 <ul>
 <li>Site rows are read from the saved weekly site snapshot rather than from a live latest-state view.</li>
-<li>Site screening ranks candidate lots by current planning fit, local precinct strength, matched signal count, and current red-flag burden.</li>
-<li>Current site screening band mix: <strong>Advance</strong> 31, <strong>Review</strong> 130, <strong>Caution</strong> 146.</li>
+<li>Site screening now uses a default small-mid developer lens, with a slight preference toward townhouse / small subdivision fit over larger-format high-rise or assembly-style parcels.</li>
+<li>Candidate lots are still ranked by planning fit, local precinct strength, matched signal count, and current red-flag burden, but supersites and large-format high-rise envelopes are intentionally de-emphasised in this default view.</li>
+<li>Current site screening band mix: <strong>Advance</strong> 76, <strong>Review</strong> 155, <strong>Caution</strong> 76.</li>
 <li><code>Advance</code> means the screening layer currently supports moving into street-level diligence. <code>Review</code> means there is enough signal to keep on the working list but not enough to promote immediately. <code>Caution</code> means the current signal-to-risk balance is weak or blocked.</li>
 </ul>
 <h2>Site Score Formula</h2>
 <ul>
-<li><code>screening_score = precinct_score + area_score + frontage_score + fsr_score + height_score + signal_score - constraint_penalty - title_complexity_penalty</code>.</li>
+<li><code>screening_score = precinct_score + area_score + frontage_score + fsr_score + height_score + signal_score - oversize_penalty - large_format_penalty - constraint_penalty - title_complexity_penalty</code>.</li>
 <li><code>precinct_score</code> is <code>18</code> for an A-rated precinct, <code>12</code> for B, <code>6</code> for C, otherwise <code>2</code>.</li>
-<li><code>area_score</code> is <code>14</code> at 2,000+ sqm, <code>11</code> at 1,200-1,999 sqm, <code>8</code> at 800-1,199 sqm, <code>4</code> at 450-799 sqm, otherwise <code>0</code>.</li>
-<li><code>frontage_score</code> is <code>8</code> at 30m+, <code>6</code> at 20-29.9m, <code>3</code> at 12-19.9m, otherwise <code>0</code>.</li>
-<li><code>fsr_score</code> is <code>12</code> at FSR 3+, <code>9</code> at 2-2.99, <code>6</code> at 1.5-1.99, <code>3</code> at 1-1.49, otherwise <code>0</code>.</li>
-<li><code>height_score</code> is <code>12</code> at 45m+, <code>9</code> at 28-44.9m, <code>6</code> at 18-27.9m, <code>3</code> at 12-17.9m, otherwise <code>0</code>.</li>
-<li><code>signal_score</code> is <code>2 x matched_signal_count</code>, capped at 10. <code>constraint_penalty</code> is <code>10 x high constraints + 5 x medium constraints</code>. <code>title_complexity_penalty</code> is capped at 24 and rises with strata / under strata title complexity plus lot-count and parcel-complexity signals.</li>
+<li><code>area_score</code> now peaks in the small-mid range: <code>12</code> at 450-1,200 sqm, <code>10</code> at 1,200-2,500 sqm, <code>8</code> at 250-449 sqm, <code>7</code> at 2,500-4,000 sqm, <code>4</code> at 4,000-7,000 sqm, and only <code>1</code> above 7,000 sqm.</li>
+<li><code>frontage_score</code> peaks at <code>16-32m</code> with score <code>8</code>, then tapers down. Very wide frontages still retain some value, but no longer dominate the ranking.</li>
+<li><code>fsr_score</code> now peaks at FSR <code>0.75-1.5</code>, then tapers through mid-rise ranges. Very high FSR remains useful, but is no longer treated as the default best fit.</li>
+<li><code>height_score</code> now peaks at <code>9-15m</code>, then tapers through <code>15-24m</code> and <code>24-35m</code>. Tall high-rise envelopes still score, but only as a secondary fit in the default lens.</li>
+<li><code>signal_score</code> is <code>2 x matched_signal_count</code>, capped at 10. <code>oversize_penalty</code> is <code>4</code> at 5,000-7,999 sqm, <code>7</code> at 8,000-14,999 sqm, and <code>10</code> at 15,000+ sqm. <code>large_format_penalty</code> is <code>2</code> at FSR 5+ or height 45m+, and <code>4</code> at FSR 8+ or height 80m+.</li>
+<li><code>constraint_penalty</code> is <code>10 x high constraints + 5 x medium constraints</code>. <code>title_complexity_penalty</code> is capped at 24 and rises with strata / under strata title complexity plus lot-count and parcel-complexity signals.</li>
 </ul>
 <h2>Site Band Thresholds</h2>
 <ul>
-<li><code>Advance</code>: screening score at least 45, with no high constraint and no title complexity penalty.</li>
-<li><code>Review</code>: screening score at least 28 but not qualifying for <code>Advance</code>.</li>
-<li><code>Caution</code>: screening score below 28.</li>
+<li><code>Advance</code>: screening score at least 42, with no high constraint and no title complexity penalty.</li>
+<li><code>Review</code>: screening score at least 24 but not qualifying for <code>Advance</code>.</li>
+<li><code>Caution</code>: screening score below 24.</li>
 </ul>
 <h2>A/B/C Thresholds</h2>
 <p>These are empirical ranges from the currently saved snapshot, not universal planning-law thresholds.</p>
@@ -477,23 +480,23 @@
 </thead>
 <tbody><tr>
 <td>A</td>
-<td>5</td>
+<td>3</td>
 <td>4 to 4</td>
 <td>4 to 5</td>
 <td>0 to 0</td>
 </tr>
 <tr>
 <td>B</td>
-<td>26</td>
+<td>28</td>
 <td>0 to 4</td>
-<td>4 to 5</td>
+<td>2 to 5</td>
 <td>0 to 4</td>
 </tr>
 <tr>
 <td>C</td>
 <td>12</td>
 <td>0 to 3</td>
-<td>2 to 5</td>
+<td>1 to 5</td>
 <td>0 to 5</td>
 </tr>
 </tbody></table>
@@ -507,6 +510,7 @@
 <ul>
 <li>Customer-facing application totals are derived from mutually exclusive DA / CDC / Modification / Other buckets. In the current snapshot that sums to 43,191 application signals since 2025-01-01.</li>
 <li>State-significant signals are tracked separately. In the current snapshot that count is 1,920.</li>
+<li>The default site ranking is not trying to maximise supersite or high-rise assembly potential. It is trying to surface small-mid developer opportunities first, with townhouse / small subdivision fit slightly ahead of boutique apartment / mixed-use infill.</li>
 <li>Site bands in the current product vocabulary are <code>Advance</code>, <code>Review</code>, and <code>Caution</code>.</li>
 </ul>
 <h2>Data Coverage</h2>
