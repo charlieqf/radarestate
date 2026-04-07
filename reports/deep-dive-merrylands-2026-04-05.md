@@ -10,7 +10,7 @@ Merrylands is worth tracking because activity and policy signals are real, but i
 
 ## Quick Scorecard
 
-- Council: `Cumberland`
+- Precinct council context: `Cumberland`
 - Current rating: `C`
 - Policy score: `1`
 - Timing score: `5`

@@ -242,6 +242,10 @@ function controlSourceLinks(row) {
   ].filter(Boolean).join(' / ') || '-'
 }
 
+function jurisdictionMatchesPrecinct(item, precinctCouncil) {
+  return clean(item.apparent_site_jurisdiction || precinctCouncil) === clean(precinctCouncil)
+}
+
 async function resolvePrecinctName(client, requestedPrecinct) {
   if (requestedPrecinct) return requestedPrecinct
   const { rows } = await client.query(
@@ -355,9 +359,9 @@ async function fetchDeepDiveData(client, precinctName) {
     [precinctName]
   )
 
-  const representativeSites = await client.query(
-    `select
-       s.site_label,
+    const representativeSites = await client.query(
+      `select
+        s.site_label,
        s.address,
        s.site_key,
        s.screening_score,
@@ -372,14 +376,15 @@ async function fetchDeepDiveData(client, precinctName) {
        ctl.fsr_source_url,
        ctl.height_source_url,
        ctl.minimum_lot_size_source_url
-     from public.v_site_screening_latest s
-     left join public.v_site_controls_latest ctl on ctl.site_candidate_id = s.site_candidate_id
-     where s.precinct_name = $1
-       and s.council_name = $2
-     order by s.screening_score desc,
-              s.title_complexity_penalty asc nulls last,
-              s.high_constraint_count asc nulls last,
-              abs(coalesce(s.geometry_area_sqm, s.plan_area_sqm, 0) - 1200) asc nulls last,
+      from public.v_site_screening_latest s
+      left join public.v_site_controls_latest ctl on ctl.site_candidate_id = s.site_candidate_id
+      where s.precinct_name = $1
+        and s.council_name = $2
+        and coalesce(s.apparent_site_jurisdiction, s.council_name, '') = $2
+      order by s.screening_score desc,
+               s.title_complexity_penalty asc nulls last,
+               s.high_constraint_count asc nulls last,
+               abs(coalesce(s.geometry_area_sqm, s.plan_area_sqm, 0) - 1200) asc nulls last,
               s.matched_signal_count desc,
               s.site_label
      limit 3`,
@@ -449,7 +454,6 @@ async function main() {
     const cdcCount = Number(applicationTypeMap.CDC || 0)
     const daCount = Number(applicationTypeMap.DA || 0)
     const today = options.snapshotDate
-
     const markdown = [
       `# Deep Dive: ${row.precinct_name}`,
       '',
@@ -463,7 +467,7 @@ async function main() {
       '',
       '## Quick Scorecard',
       '',
-      `- Council: \`${row.council_name}\``,
+      `- Precinct council context: \`${row.council_name}\``,
       `- Current rating: \`${row.opportunity_rating}\``,
       `- Policy score: \`${row.policy_score ?? '-'}\``,
       `- Timing score: \`${row.timing_score ?? '-'}\``,

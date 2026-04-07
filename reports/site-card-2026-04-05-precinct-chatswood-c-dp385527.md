@@ -8,8 +8,9 @@
 
 - Watchlist bucket: **Chatswood**
 - Watchlist precinct: **Chatswood**
-- Current precinct grouping: **Willoughby**
-- Apparent site jurisdiction from governing EPI: **Willoughby**
+- Precinct-level council context: **Willoughby**
+- Parcel governing jurisdiction from EPI: **Willoughby**
+- Jurisdiction alignment: **Aligned**
 - Screening band: **Advance**
 - Screening score: **56**
 - Recommended action: **Advance to site review**
@@ -26,7 +27,7 @@
 | FSR | 0.90 | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/1) |
 | Height | 12.0m | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/5) |
 | Minimum lot size | - | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/4) |
-| Apparent site jurisdiction | Willoughby | - |
+| Parcel governing jurisdiction | Willoughby | - |
 | Zoning EPI | Willoughby Local Environmental Plan 2012 | - |
 | FSR clause | Clause 4.4 | - |
 | Height clause | - | - |

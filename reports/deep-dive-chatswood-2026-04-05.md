@@ -10,7 +10,7 @@ Chatswood currently screens as one of the strongest precinct-level candidates be
 
 ## Quick Scorecard
 
-- Council: `Willoughby`
+- Precinct council context: `Willoughby`
 - Current rating: `A`
 - Policy score: `4`
 - Timing score: `5`
@@ -88,8 +88,8 @@ Current mix note: this precinct is presently **CDC-led** (373 CDC vs 86 DA), so 
 | 2026-04-01 | Approved | Complying Development Certificate Application | shop 78a, 436 victoria avenue chatswood nsw 2067 |
 | 2026-03-30 | Under Assessment | Complying Development Certificate Application | 282 VICTORIA AVENUE CHATSWOOD 2067 |
 | 2026-03-26 | Approved | Complying Development Certificate Application | 7 HELP STREET CHATSWOOD 2067 |
-| 2026-03-25 | Approved | Complying Development Certificate Application | 799 PACIFIC HIGHWAY CHATSWOOD 2067 |
 | 2026-03-25 | Approved | Complying Development Certificate Application | 457 VICTORIA AVENUE CHATSWOOD 2067 |
+| 2026-03-25 | Approved | Complying Development Certificate Application | 799 PACIFIC HIGHWAY CHATSWOOD 2067 |
 | 2026-03-25 | Approved | Complying Development Certificate Application | 345 VICTORIA AVENUE CHATSWOOD 2067 |
 | 2026-03-24 | Approved | Complying Development Certificate Application | 1 ANDERSON STREET CHATSWOOD 2067 |
 | 2026-03-24 | Approved | Complying Development Certificate Application | 436 VICTORIA AVENUE CHATSWOOD 2067 |

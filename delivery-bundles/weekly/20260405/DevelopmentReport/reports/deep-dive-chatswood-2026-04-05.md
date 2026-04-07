@@ -10,7 +10,7 @@ Chatswood currently screens as one of the strongest precinct-level candidates be
 
 ## Quick Scorecard
 
-- Council: `Willoughby`
+- Precinct council context: `Willoughby`
 - Current rating: `A`
 - Policy score: `4`
 - Timing score: `5`

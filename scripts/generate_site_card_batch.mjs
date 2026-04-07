@@ -136,6 +136,19 @@ function apparentJurisdiction(epiName) {
   return value
 }
 
+function siteJurisdiction(row) {
+  return row.apparent_site_jurisdiction || apparentJurisdiction(row.zoning_epi_name)
+}
+
+function jurisdictionAlignment(row) {
+  const parcelJurisdiction = clean(siteJurisdiction(row))
+  const precinctCouncil = clean(row.council_name)
+  if (!parcelJurisdiction || parcelJurisdiction === '-' || !precinctCouncil || precinctCouncil === '-') return null
+  return parcelJurisdiction === precinctCouncil
+    ? 'Aligned'
+    : `Split - use ${parcelJurisdiction} for DCP / approval reading`
+}
+
 function collectDeepDivePrecincts(outputName) {
   if (!outputName) return []
   const reportsDir = path.join(root, 'reports')
@@ -365,6 +378,8 @@ async function main() {
     for (let index = 0; index < siteRows.length; index += 1) {
       const row = siteRows[index]
       const siteConstraints = constraintsBySite.get(row.site_key) || []
+      const parcelJurisdiction = siteJurisdiction(row)
+      const alignment = jurisdictionAlignment(row)
       const markdown = [
         `# Site Card: ${row.site_label}`,
         '',
@@ -376,8 +391,9 @@ async function main() {
         '',
         `- Watchlist bucket: **${row.watchlist_bucket_name || row.precinct_name}**`,
         `- Watchlist precinct: **${row.precinct_name}**`,
-        `- Current precinct grouping: **${row.council_name || '-'}**`,
-        `- Apparent site jurisdiction from governing EPI: **${row.apparent_site_jurisdiction || apparentJurisdiction(row.zoning_epi_name)}**`,
+        `- Precinct-level council context: **${row.council_name || '-'}**`,
+        `- Parcel governing jurisdiction from EPI: **${parcelJurisdiction}**`,
+        alignment ? `- Jurisdiction alignment: **${alignment}**` : '',
         `- Screening band: **${row.screening_band}**`,
         `- Screening score: **${formatNumber(row.screening_score)}**`,
         `- Recommended action: **${row.recommended_site_action}**`,
@@ -395,7 +411,7 @@ async function main() {
             ['FSR', formatNumber(row.fsr, 2), markdownLink('Open source', row.fsr_source_url)],
             ['Height', formatMeasure(row.height_m, 'm', 1), markdownLink('Open source', row.height_source_url)],
             ['Minimum lot size', formatLotSize(row.minimum_lot_size_sqm, row.minimum_lot_size_units), markdownLink('Open source', row.minimum_lot_size_source_url)],
-            ['Apparent site jurisdiction', row.apparent_site_jurisdiction || apparentJurisdiction(row.zoning_epi_name), '-'],
+            ['Parcel governing jurisdiction', parcelJurisdiction, '-'],
             ['Zoning EPI', row.zoning_epi_name || '-', '-'],
             ['FSR clause', row.fsr_clause || '-', '-'],
             ['Height clause', row.height_clause || '-', '-'],

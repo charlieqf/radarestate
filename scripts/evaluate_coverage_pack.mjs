@@ -189,16 +189,18 @@ async function main() {
       [precinctCodes]
     )
 
-    const shortlist = await client.query(
-      `select precinct_name, council_name, opportunity_rating, policy_score, friction_score, timing_score, recent_application_count, active_pipeline_count, constraint_summary
-       from public.v_precinct_shortlist
-       where precinct_code = any($1::text[])
-       order by case opportunity_rating when 'A' then 1 when 'B' then 2 else 3 end,
-                friction_score asc nulls last,
-                recent_application_count desc nulls last,
-                active_pipeline_count desc nulls last`,
-      [precinctCodes]
-    )
+     const shortlist = await client.query(
+       `select precinct_name, council_name, opportunity_rating, policy_score, friction_score, timing_score, recent_application_count, active_pipeline_count, constraint_summary
+        from public.v_precinct_shortlist
+        where precinct_code = any($1::text[])
+        order by case opportunity_rating when 'A' then 1 when 'B' then 2 else 3 end,
+                 friction_score asc nulls last,
+                 timing_score desc nulls last,
+                 recent_da_count desc nulls last,
+                 active_pipeline_count desc nulls last,
+                 precinct_name`,
+       [precinctCodes]
+     )
 
     const summary = overview.rows[0]
     const gates = readiness(summary, riskSummary.rows, shortlist.rows)

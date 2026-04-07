@@ -441,6 +441,13 @@ function buildSteps(options) {
           ]
         })
       }
+      steps.push({
+        name: 'validate_development_report_consistency',
+        script: 'scripts/validate_development_report_consistency.mjs',
+        args: [
+          `--snapshot-date=${options.snapshotDate}`
+        ]
+      })
     }
   }
 

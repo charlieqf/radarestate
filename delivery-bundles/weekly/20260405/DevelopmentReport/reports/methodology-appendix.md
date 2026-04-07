@@ -17,7 +17,7 @@
 - Precinct rows are read from the saved weekly precinct snapshot rather than re-queried live when the report is rendered.
 - The rating stack combines policy signal strength, timing signal strength, and approval risk. In the current saved snapshot these appear as `policy_score`, `timing_score`, and `friction_score`.
 - `policy_score` is positive evidence from the current proposal pipeline and planning direction. `timing_score` reflects current DA-led development tempo with CDC activity deliberately down-weighted. `friction_score` is a penalty layer for planning and environmental red flags.
-- Current rated precinct mix: **A**: 4, **B**: 40, **C**: 26.
+- Current rated precinct mix: **A**: 3, **B**: 42, **C**: 26.
 
 ## Precinct Rating Formula
 
@@ -34,7 +34,7 @@
 - Site rows are read from the saved weekly site snapshot rather than from a live latest-state view.
 - Site screening now uses a default small-mid developer lens, with a slight preference toward townhouse / small subdivision fit over larger-format high-rise or assembly-style parcels.
 - Candidate lots are still ranked by planning fit, local precinct strength, matched signal count, and current red-flag burden, but supersites and large-format high-rise envelopes are intentionally de-emphasised in this default view.
-- Current site screening band mix: **Advance** 75, **Review** 359, **Caution** 160.
+- Current site screening band mix: **Advance** 69, **Review** 352, **Caution** 153.
 - `Advance` means the screening layer currently supports moving into street-level diligence. `Review` means there is enough signal to keep on the working list but not enough to promote immediately. `Caution` means the current signal-to-risk balance is weak or blocked.
 
 ## Site Score Formula
@@ -60,8 +60,8 @@ These are empirical ranges from the currently saved snapshot, not universal plan
 
 | Rating | Precinct Count | Policy Score Range | Timing Score Range | Risk Range |
 | --- | --- | --- | --- | --- |
-| A | 4 | 4 to 4 | 4 to 5 | 0 to 2 |
-| B | 40 | 0 to 4 | 3 to 5 | 0 to 5 |
+| A | 3 | 4 to 4 | 5 to 5 | 2 to 2 |
+| B | 42 | 0 to 4 | 3 to 5 | 0 to 5 |
 | C | 26 | 0 to 3 | 1 to 5 | 0 to 5 |
 
 ## Cross-Council Comparability
@@ -84,7 +84,7 @@ These are empirical ranges from the currently saved snapshot, not universal plan
 | --- | --- | --- | --- | --- |
 | Planning proposals | 2026-04-01 | 2026-04-05 | - | - |
 | Application signals | 2022-07-07 | 2026-04-05 | 2022-07-07 | 2026-03-28 |
-| Site screening layers | 2026-04-04 | 2026-04-05 | - | - |
+| Site screening layers | 2026-04-04 | 2026-04-06 | - | - |
 
 ## Known Gaps
 

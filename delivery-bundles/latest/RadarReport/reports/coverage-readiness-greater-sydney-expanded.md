@@ -2,96 +2,104 @@
 
 ## Date
 
-2026-04-03
+2026-04-05
 
 ## Scope
 
 - Precinct config: `mvp/config/precinct-focus-map-greater-sydney-expanded.json`
-- Configured councils: `22`
-- Configured precincts: `56`
+- Configured councils: `28`
+- Configured precincts: `73`
 
 ## Gate Verdict
 
 - Precinct mapping: `PASS`
 - Risk layer availability: `PASS`
 - Stable shortlist and report output: `PASS`
-- Overall: `READY TO EXPAND`
+- Overall: `PRODUCTION-STABLE WITHIN CONFIGURED SCOPE`
 
 ## Mapping Coverage
 
-- Precincts with any signal: `44 / 56` (79%)
-- Precincts with mapped proposals: `40`
-- Precincts with mapped applications: `44`
-- Total mapped proposals: `505`
-- Total mapped applications: `7,769`
+- Scope note: this page describes only the configured precinct universe in the named focus map. These counts are not full-region totals for every proposal or application in Sydney.
+- Precincts with any signal: `72 / 73` (99%)
+- Precincts with mapped proposals: `65`
+- Precincts with mapped applications: `72`
+- Total mapped proposals: `770`
+- Total mapped applications: `13,563`
 
 | Council | Precincts | With Signals | Recent Apps | Active Pipeline | With Constraints |
 | --- | --- | --- | --- | --- | --- |
-| Blacktown | 5 | 5 | 1,068 | 6 | 4 |
-| Inner West | 3 | 3 | 627 | 2 | 3 |
-| Ryde | 4 | 4 | 627 | 0 | 4 |
+| The Hills Shire | 4 | 4 | 1,096 | 7 | 3 |
+| Blacktown | 5 | 5 | 1,068 | 6 | 5 |
+| Sydney | 6 | 6 | 946 | 6 | 6 |
+| Cumberland | 3 | 3 | 859 | 0 | 3 |
+| Ryde | 5 | 5 | 796 | 0 | 5 |
+| Inner West | 3 | 3 | 628 | 2 | 3 |
+| Sutherland Shire | 4 | 4 | 612 | 5 | 3 |
+| Parramatta | 3 | 3 | 603 | 3 | 3 |
 | Penrith | 2 | 2 | 555 | 5 | 2 |
-| Campbelltown | 4 | 4 | 522 | 5 | 4 |
-| Georges River | 4 | 4 | 506 | 1 | 4 |
-| Willoughby | 1 | 1 | 505 | 2 | 1 |
+| Campbelltown | 4 | 4 | 523 | 5 | 4 |
+| Georges River | 4 | 4 | 510 | 1 | 4 |
+| Willoughby | 1 | 1 | 506 | 2 | 1 |
+| Randwick | 3 | 3 | 498 | 2 | 3 |
+| Mosman | 1 | 1 | 491 | 2 | 1 |
 | Fairfield | 2 | 2 | 476 | 3 | 2 |
-| Canterbury-Bankstown | 2 | 2 | 329 | 1 | 2 |
+| Hornsby | 4 | 4 | 426 | 0 | 3 |
+| Canterbury-Bankstown | 2 | 2 | 329 | 0 | 2 |
+| Canada Bay | 2 | 2 | 282 | 3 | 2 |
 | Ku-ring-gai | 2 | 2 | 266 | 0 | 2 |
-| Cumberland | 3 | 1 | 260 | 0 | 1 |
 | Woollahra | 2 | 2 | 252 | 6 | 2 |
-| Sutherland Shire | 4 | 1 | 223 | 2 | 1 |
-| Liverpool | 1 | 1 | 220 | 2 | 1 |
-| Bayside | 2 | 2 | 219 | 2 | 0 |
-| Hunters Hill | 1 | 1 | 217 | 2 | 0 |
-| Burwood | 1 | 1 | 192 | 1 | 1 |
+| Liverpool | 1 | 1 | 222 | 2 | 1 |
+| Bayside | 2 | 2 | 219 | 2 | 2 |
+| Lane Cove | 1 | 1 | 205 | 2 | 1 |
+| Burwood | 1 | 1 | 195 | 1 | 1 |
+| Waverley | 1 | 1 | 182 | 1 | 1 |
 | Strathfield | 2 | 1 | 121 | 0 | 2 |
-| Canada Bay | 2 | 1 | 113 | 2 | 0 |
-| The Hills Shire | 4 | 1 | 105 | 2 | 1 |
-| Parramatta | 3 | 1 | 51 | 2 | 1 |
 | North Sydney | 2 | 1 | 50 | 0 | 1 |
+| Hunters Hill | 1 | 1 | 42 | 2 | 0 |
 
 ## Risk Layer Availability
 
-- Precincts with at least one constraint: `39 / 56` (70%)
+- Precincts with at least one constraint: `68 / 73` (93%)
 
 | Constraint Type | Severity | Count |
 | --- | --- | --- |
-| biodiversity_spatial_sample | medium | 1 |
-| bushfire_spatial_sample | high | 10 |
+| biodiversity_spatial_sample | medium | 3 |
+| bushfire_spatial_sample | high | 18 |
 | bushfire_spatial_sample | medium | 3 |
-| flood_metadata_signal | high | 29 |
+| flood_metadata_signal | high | 43 |
 | flood_metadata_signal | medium | 5 |
-| heat_vulnerability_proxy | high | 3 |
+| heat_vulnerability_proxy | high | 15 |
 | heat_vulnerability_proxy | medium | 4 |
-| low_tree_canopy_proxy | high | 9 |
-| low_tree_canopy_proxy | medium | 3 |
+| low_tree_canopy_proxy | high | 30 |
+| low_tree_canopy_proxy | medium | 13 |
+| policy_withdrawal_friction | high | 1 |
 | policy_withdrawal_friction | medium | 2 |
 
 ## Shortlist And Report Stability
 
-- Shortlist items in pack: `55`
-- Rating mix: `A=4`, `B=35`, `C=16`
+- Shortlist items in pack: `71`
+- Rating mix: `A=3`, `B=42`, `C=26`
 
 | Rank | Precinct | Council | Rating | Risk | Recent Apps | Pipeline |
 | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Gladesville | Hunters Hill | A | 0 | 217 | 2 |
-| 2 | Five Dock | Canada Bay | A | 0 | 113 | 2 |
-| 3 | Edgecliff | Woollahra | A | 1 | 70 | 5 |
-| 4 | Cabramatta | Fairfield | A | 2 | 257 | 2 |
-| 5 | Seven Hills | Blacktown | B | 0 | 282 | 1 |
-| 6 | Bexley | Bayside | B | 0 | 201 | 1 |
-| 7 | Cronulla | Sutherland Shire | B | 0 | 0 | 0 |
-| 8 | Drummoyne | Canada Bay | B | 0 | 0 | 0 |
-| 9 | Gables | The Hills Shire | B | 0 | 0 | 0 |
-| 10 | Croydon | Burwood | B | 1 | 192 | 1 |
-| 11 | Double Bay | Woollahra | B | 1 | 182 | 1 |
-| 12 | Beverly Hills | Georges River | B | 1 | 64 | 1 |
-| 13 | Hurstville | Georges River | B | 2 | 280 | 0 |
-| 14 | Auburn | Cumberland | B | 2 | 260 | 0 |
-| 15 | Epping | Ryde | B | 2 | 250 | 0 |
+| 1 | Mosman / Spit Junction | Mosman | A | 2 | 491 | 2 |
+| 2 | Chatswood | Willoughby | A | 2 | 506 | 2 |
+| 3 | Lane Cove | Lane Cove | A | 2 | 205 | 2 |
+| 4 | Gables | The Hills Shire | B | 0 | 429 | 2 |
+| 5 | Cronulla | Sutherland Shire | B | 0 | 191 | 1 |
+| 6 | Waitara / Wahroonga | Hornsby | B | 0 | 66 | 0 |
+| 7 | Gladesville - Hunters Hill | Hunters Hill | B | 0 | 42 | 2 |
+| 8 | Redfern | Sydney | B | 1 | 135 | 0 |
+| 9 | Double Bay | Woollahra | B | 1 | 182 | 1 |
+| 10 | Ultimo / Broadway | Sydney | B | 1 | 107 | 3 |
+| 11 | Edgecliff | Woollahra | B | 1 | 70 | 5 |
+| 12 | Castle Hill | The Hills Shire | B | 2 | 483 | 2 |
+| 13 | Drummoyne | Canada Bay | B | 2 | 169 | 1 |
+| 14 | Bondi Junction | Waverley | B | 2 | 182 | 1 |
+| 15 | Miranda | Sutherland Shire | B | 2 | 223 | 2 |
 
 ## Interpretation
 
-- Mapping has moved beyond council-level heat and is now usable at precinct level.
-- The risk layer is already changing shortlist order, which means the expanded pack is doing more than just surfacing hotter places.
-- The current expanded pack can already produce a stable enough shortlist and report set.
+- Mapping is now dense enough to support production client reporting across the configured precinct universe, with only marginal residual gaps.
+- The risk layer is already changing shortlist order, which means the expanded pack is doing more than just surfacing hotter places, but it is still a first-pass proxy layer.
+- The current expanded pack is stable for client-facing reporting inside the configured precinct scope, but it should still be described as configured-scope coverage rather than full metro-complete market coverage.

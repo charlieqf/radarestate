@@ -1,6 +1,6 @@
 {
   "snapshot_date": "2026-04-05",
-  "captured_at": "2026-04-06T04:28:05.748Z",
+  "captured_at": "2026-04-07T23:25:14.220Z",
   "region_group": "Greater Sydney",
   "label": "Sydney",
   "baseline_type": "formal",
@@ -16,15 +16,15 @@
   "source_ranges": {
     "planning_proposals": {
       "min_date": "2026-04-01T13:00:00.000Z",
-      "max_date": "2026-04-02T13:00:00.000Z"
+      "max_date": "2026-04-05T14:00:00.000Z"
     },
     "application_signals": {
       "min_date": "2022-07-07T14:00:00.000Z",
-      "max_date": "2026-04-02T13:00:00.000Z"
+      "max_date": "2026-04-05T14:00:00.000Z"
     },
     "site_screening_layers": {
       "min_date": "2026-04-04T13:00:00.000Z",
-      "max_date": "2026-04-05T14:00:00.000Z"
+      "max_date": "2026-04-06T14:00:00.000Z"
     }
   }
 }

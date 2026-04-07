@@ -10,7 +10,7 @@ Waitara / Wahroonga is best viewed as a medium-conviction precinct where policy 
 
 ## Quick Scorecard
 
-- Council: `Hornsby`
+- Precinct council context: `Hornsby`
 - Current rating: `B`
 - Policy score: `0`
 - Timing score: `4`
@@ -82,8 +82,8 @@ Current mix note: this precinct is presently **CDC-led** (32 CDC vs 30 DA), so r
 | 2026-04-01 | Under Assessment | Complying Development Certificate Application | 40 RUSSELL AVENUE WAHROONGA 2076 |
 | 2026-04-01 | Under Assessment | Development Application | 59A RUSSELL AVENUE WAHROONGA 2076 |
 | 2026-03-31 | Under Assessment | Complying Development Certificate Application | 31 JUBILEE STREET WAHROONGA 2076 |
-| 2026-03-26 | Under Assessment | Complying Development Certificate Application | 52 UNWIN ROAD WAHROONGA 2076 |
 | 2026-03-26 | Under Assessment | Development Application | 49 HEWITT AVENUE WAHROONGA 2076 |
+| 2026-03-26 | Under Assessment | Complying Development Certificate Application | 52 UNWIN ROAD WAHROONGA 2076 |
 | 2026-03-18 | Under Assessment | Complying Development Certificate Application | 4 SPURGIN STREET WAHROONGA 2076 |
 | 2026-03-11 | Under Assessment | Complying Development Certificate Application | 11 HERBERT AVENUE WAHROONGA 2076 |
 | 2026-02-25 | Under Assessment | Development Application | 27 BALMORAL STREET WAITARA 2077 |

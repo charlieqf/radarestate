@@ -2,14 +2,15 @@
 
 ## Rank
 
-15 in the current Sydney automated site-screening cut.
+12 in the current Sydney automated site-screening cut.
 
 ## Snapshot
 
 - Watchlist bucket: **Mosman / Spit Junction**
 - Watchlist precinct: **Mosman / Spit Junction**
-- Current precinct grouping: **Mosman**
-- Apparent site jurisdiction from governing EPI: **Mosman**
+- Precinct-level council context: **Mosman**
+- Parcel governing jurisdiction from EPI: **Mosman**
+- Jurisdiction alignment: **Aligned**
 - Screening band: **Advance**
 - Screening score: **46**
 - Recommended action: **Advance to site review**
@@ -26,7 +27,7 @@
 | FSR | 0.50 | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/1) |
 | Height | 8.5m | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/5) |
 | Minimum lot size | 700 m² | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/4) |
-| Apparent site jurisdiction | Mosman | - |
+| Parcel governing jurisdiction | Mosman | - |
 | Zoning EPI | Mosman Local Environmental Plan 2012 | - |
 | FSR clause | Clause 4.4 | - |
 | Height clause | Clause 4.3 | - |

@@ -13,8 +13,8 @@
 
 ## 1. Risk-adjusted leaders are not the loudest precincts
 
-- Finding: `Gladesville`, `Mosman / Spit Junction`, `Chatswood`, `Lane Cove` currently lead the shortlist because policy and activity are both visible while friction remains low.
-- Evidence: Gladesville: recent apps 220, active pipeline 2, risk 0; Mosman / Spit Junction: recent apps 491, active pipeline 2, risk 2; Chatswood: recent apps 506, active pipeline 2, risk 2; Lane Cove: recent apps 205, active pipeline 2, risk 2
+- Finding: `Mosman / Spit Junction`, `Chatswood`, `Lane Cove` currently lead the shortlist because policy and activity are both visible while friction remains low.
+- Evidence: Mosman / Spit Junction: recent apps 491, active pipeline 2, risk 2; Chatswood: recent apps 506, active pipeline 2, risk 2; Lane Cove: recent apps 205, active pipeline 2, risk 2
 - Why it matters: This is the clearest evidence that the system is not just surfacing noisy, high-volume markets. It is already separating cleaner opportunity precincts from merely busy ones.
 - Action: Use these names as the first layer for committee discussion and street-level follow-up.
 
@@ -35,7 +35,7 @@
 ## 4. The inner east is showing more policy motion than intuition would suggest
 
 - Finding: Woollahra is no longer just a prestige residential story. It is now a visible planning watchlist cluster.
-- Evidence: Local Heritage Listing: Woollahra Modern Buildings Priority Study [under_assessment]; Heritage listing of eight sites and one HCA in the area of the Edgecliff Commercial Centre. [under_assessment]; Double Bay Centre- Planning Proposal [under_assessment]; Woollahra Contemporary Buildings Study Review [under_assessment]; Edgecliff Commercial Centre Planning Proposal [under_assessment]; Planning proposal request for 203-233 New South Head Road, Edgecliff [under_assessment]; Edgecliff Woollahra Precinct [pre_exhibition]; Net Dwelling Loss [finalisation]
+- Evidence: Local Heritage Listing: Woollahra Modern Buildings Priority Study [under_assessment]; Heritage listing of eight sites and one HCA in the area of the Edgecliff Commercial Centre. [under_assessment]; Double Bay Centre- Planning Proposal [under_assessment]; Woollahra Contemporary Buildings Study Review [under_assessment]; Edgecliff Commercial Centre Planning Proposal [under_assessment]; Planning proposal request for 203-233 New South Head Road, Edgecliff [under_assessment]; Edgecliff Woollahra Precinct [pre_exhibition]; FSR Housekeeping Planning Proposal [finalisation]
 - Why it matters: This is a useful reminder that policy-led opportunity can emerge in places that traditional “developer hotspot” lists often underweight.
 - Action: Keep Edgecliff / Double Bay in the “serious but selective” category rather than dismissing them as premium residential only.
 
@@ -48,15 +48,15 @@
 
 ## 6. There is a smaller but more valuable class of policy-led early precincts
 
-- Finding: `Edgecliff`, `Sutherland`, `Westmead` stand out because policy intensity is visible before recent mapped activity becomes broad.
-- Evidence: Edgecliff: policy 4, active pipeline 5, recent apps 70; Sutherland: policy 4, active pipeline 2, recent apps 64; Westmead: policy 3, active pipeline 2, recent apps 51
+- Finding: `Edgecliff`, `Sutherland`, `Westmead`, `Gladesville - Hunters Hill` stand out because policy intensity is visible before recent mapped activity becomes broad.
+- Evidence: Edgecliff: policy 4, active pipeline 5, recent apps 70; Sutherland: policy 4, active pipeline 2, recent apps 64; Westmead: policy 3, active pipeline 2, recent apps 51; Gladesville - Hunters Hill: policy 3, active pipeline 2, recent apps 42
 - Why it matters: This is where planning intelligence is most likely to add timing edge, because the story is still earlier in the translation from policy into visible market behaviour.
 - Action: Use these as front-running candidates rather than waiting for activity counts to catch up.
 
 ## 7. Flood and bushfire dominate the current risk stack
 
 - Finding: The most common risk signals in the current system are flood metadata hits and bushfire spatial hits, not biodiversity or heritage-style constraints.
-- Evidence: Sydney only: flood high hits 42; bushfire high hits 18.
+- Evidence: Sydney only: flood high hits 43; bushfire high hits 18.
 - Why it matters: That tells us the current shortlist is being shaped much more by environmental and implementation exposure than by abstract planning complexity alone.
 - Action: Keep prioritising better flood and bushfire data quality, because that is where ranking changes are happening most often.
 
@@ -70,7 +70,7 @@
 ## 9. Site screening is now surfacing lot-level follow-up candidates
 
 - Finding: The Sydney pack no longer stops at precinct ranking. It now carries a site-screening layer that identifies specific lots for follow-up review under a small-mid developer lens, with townhouse / small subdivision fit slightly ahead of larger-format high-rise sites.
-- Evidence: Top current sites include 2A BLAKESLEY STREET CHATSWOOD, 14 GATACRE AVENUE LANE COVE, 76 PENROSE STREET LANE COVE WEST, 19 STANBURY STREET GLADESVILLE, 53 AMIENS STREET GLADESVILLE.
+- Evidence: Top current sites include 2A BLAKESLEY STREET CHATSWOOD, 14 GATACRE AVENUE LANE COVE, 76 PENROSE STREET LANE COVE WEST, 42 CULLEN STREET LANE COVE WEST, 45 BARWON ROAD LANE COVE WEST.
 - Why it matters: This matters because precinct conviction and site conviction are not the same thing. The extra lot-level layer is where watchlist output becomes more actionable.
 - Action: Use the site-screening report and linked site cards as the next step after precinct triage, not as a substitute for parcel-level diligence.
 

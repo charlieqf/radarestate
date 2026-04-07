@@ -10,7 +10,7 @@ Mosman / Spit Junction currently screens as one of the strongest precinct-level 
 
 ## Quick Scorecard
 
-- Council: `Mosman`
+- Precinct council context: `Mosman`
 - Current rating: `A`
 - Policy score: `4`
 - Timing score: `5`
@@ -90,14 +90,14 @@ Current mix note: this precinct is presently **DA-led or balanced** (224 DA vs 1
 | 2026-03-31 | Under Assessment | Complying Development Certificate Application | 5 CYPRIAN STREET MOSMAN 2088 |
 | 2026-03-30 | Approved | Modification to Complying Development Certificate | 74 AVENUE ROAD MOSMAN 2088 |
 | 2026-03-26 | Under Assessment | Complying Development Certificate Application | 20 NOBLE STREET MOSMAN 2088 |
-| 2026-03-22 | Under Assessment | Modification Application | 2 38 BOTANIC ROAD MOSMAN 2088 |
 | 2026-03-22 | Under Assessment | Modification Application | 6 MUSGRAVE STREET MOSMAN 2088 |
+| 2026-03-22 | Under Assessment | Modification Application | 2 38 BOTANIC ROAD MOSMAN 2088 |
 | 2026-03-18 | Under Assessment | Development Application | 31 THE GROVE MOSMAN 2088 |
 | 2026-03-18 | Approved | Complying Development Certificate Application | 16 INKERMAN STREET MOSMAN 2088 |
 | 2026-03-17 | Under Assessment | Development Application | 5 PARK AVENUE MOSMAN 2088 |
 | 2026-03-17 | Under Assessment | Modification Application | 1A SUPERBA PARADE MOSMAN 2088 |
 | 2026-03-16 | Under Assessment | Development Application | 89 COWLES ROAD MOSMAN 2088 |
-| 2026-03-15 | Under Assessment | Development Application | 36 HOPETOUN AVENUE MOSMAN 2088 |
+| 2026-03-15 | Additional Information Requested | Development Application | 14 PARRIWI ROAD MOSMAN 2088 |
 
 ## Risk And Friction
 

@@ -1,0 +1,697 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Site Card: 1/28 GLEN STREET MARRICKVILLE</title>
+  <script>
+    (() => {
+      const storageKey = 'radarestate-theme';
+      const sidebarKey = 'radarestate-sidebar';
+      let stored = null;
+      let storedSidebar = null;
+      try {
+        stored = window.localStorage.getItem(storageKey);
+        storedSidebar = window.localStorage.getItem(sidebarKey);
+      } catch {
+      }
+      const preferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.dataset.theme = stored || preferred;
+      document.documentElement.dataset.sidebar = storedSidebar || 'expanded';
+    })();
+  </script>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg-accent: #132048;
+      --panel: #121932;
+      --panel-2: #171f3d;
+      --text: #e9eefc;
+      --muted: #92a0c4;
+      --line: #273154;
+      --cyan: #33d1ff;
+      --lime: #b7ff3c;
+      --amber: #ffb547;
+      --red: #ff6b6b;
+      --link: #7dd3fc;
+      --panel-top: rgba(255,255,255,0.03);
+      --panel-bottom: rgba(255,255,255,0.015);
+      --shadow: rgba(0,0,0,0.18);
+      --button-bg: rgba(255,255,255,0.06);
+      --button-text: var(--text);
+      --article-code-bg: rgba(255,255,255,0.06);
+      --article-code-border: rgba(255,255,255,0.08);
+      --pre-bg: #0f1731;
+      --blockquote-bg: rgba(51,209,255,0.06);
+    }
+
+    html[data-theme="light"] {
+      --bg: #eef4ff;
+      --bg-accent: #d9e8ff;
+      --panel: #ffffff;
+      --panel-2: #f4f8ff;
+      --text: #11203f;
+      --muted: #597094;
+      --line: #d3def0;
+      --cyan: #0f84c9;
+      --lime: #6eab12;
+      --amber: #d6861b;
+      --red: #c94242;
+      --link: #0f84c9;
+      --panel-top: rgba(255,255,255,0.94);
+      --panel-bottom: rgba(240,246,255,0.94);
+      --shadow: rgba(45,72,117,0.12);
+      --button-bg: #ffffff;
+      --button-text: #11203f;
+      --article-code-bg: rgba(17,32,63,0.06);
+      --article-code-border: rgba(17,32,63,0.08);
+      --pre-bg: #eef4ff;
+      --blockquote-bg: rgba(15,132,201,0.08);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top left, var(--bg-accent) 0, var(--bg) 45%);
+      color: var(--text);
+      font-family: Inter, Arial, sans-serif;
+      overflow-x: hidden;
+    }
+    .sidebar-toggle {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 1200;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+      box-shadow: 0 12px 30px var(--shadow);
+      color: var(--button-text);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+    }
+    .theme-switcher {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 1200;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+      box-shadow: 0 12px 30px var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .theme-switcher-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .theme-switcher-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px;
+      border-radius: 999px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+    }
+    .theme-switcher-button {
+      appearance: none;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      min-width: 68px;
+    }
+    .theme-switcher-button[aria-pressed="true"] {
+      background: var(--button-bg);
+      color: var(--button-text);
+      box-shadow: inset 0 0 0 1px var(--line);
+    }
+    .shell {
+      display: grid;
+      grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+      min-height: 100vh;
+      transition: grid-template-columns 180ms ease;
+    }
+    html[data-sidebar="collapsed"] .shell {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .sidebar {
+      padding: 24px 18px;
+      border-right: 1px solid var(--line);
+      background: var(--panel);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      min-width: 0;
+      width: 300px;
+      max-width: 300px;
+      transition: opacity 150ms ease, transform 180ms ease;
+    }
+    html[data-sidebar="collapsed"] .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-110%);
+      display: block;
+    }
+    .brand {
+      margin-bottom: 22px;
+    }
+    .eyebrow {
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    .brand h1 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.2;
+    }
+    .brand p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 10px 0 0;
+    }
+    .actions {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+    .action-link {
+      display: inline-block;
+      text-decoration: none;
+      color: var(--text);
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 13px;
+    }
+    .nav {
+      display: grid;
+      gap: 16px;
+    }
+    .nav-group {
+      display: grid;
+      gap: 8px;
+    }
+    .nav-heading {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0 4px;
+    }
+    .nav-group-links {
+      display: grid;
+      gap: 10px;
+    }
+    .nav-link {
+      display: block;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.02);
+      text-decoration: none;
+      color: var(--text);
+    }
+    .nav-link.active {
+      border-color: rgba(51,209,255,0.45);
+      box-shadow: inset 0 0 0 1px rgba(51,209,255,0.25);
+      background: rgba(51,209,255,0.08);
+    }
+    .nav-title {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .nav-meta {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .main {
+      padding: 88px 28px 28px;
+      min-width: 0;
+      width: 100%;
+    }
+    .article {
+      width: 100%;
+      max-width: 920px;
+      margin: 0 auto;
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 28px 32px;
+      box-shadow: 0 16px 40px var(--shadow);
+    }
+    .article.article-wide {
+      width: 100%;
+      max-width: 1320px;
+    }
+    .article h1, .article h2, .article h3 {
+      margin-top: 0;
+    }
+    .article h1 {
+      font-size: 32px;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .article h2 {
+      font-size: 20px;
+      margin-top: 28px;
+      margin-bottom: 14px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+    .article h3 {
+      font-size: 16px;
+      margin-top: 22px;
+      margin-bottom: 10px;
+      color: var(--cyan);
+    }
+    .article p, .article li {
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+    .article ul, .article ol {
+      padding-left: 22px;
+    }
+    .article a {
+      color: var(--link);
+    }
+    .article code {
+      background: var(--article-code-bg);
+      border: 1px solid var(--article-code-border);
+      border-radius: 8px;
+      padding: 2px 6px;
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 0.92em;
+    }
+    .article pre {
+      background: var(--pre-bg);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      overflow: auto;
+    }
+    .article table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 20px;
+      font-size: 14px;
+    }
+    .article th, .article td {
+      border-bottom: 1px solid var(--line);
+      padding: 11px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .article th {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 12px;
+    }
+    .article blockquote {
+      margin: 18px 0;
+      padding: 14px 18px;
+      border-left: 3px solid var(--cyan);
+      background: var(--blockquote-bg);
+      border-radius: 12px;
+      color: var(--text);
+    }
+    .embed-frame {
+      width: 100%;
+      height: calc(100vh - 170px);
+      min-height: 980px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #ffffff;
+    }
+    .embed-note {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 980px) {
+      .sidebar-toggle {
+        left: 18px;
+      }
+      .theme-switcher {
+        left: 18px;
+        right: 18px;
+        justify-content: space-between;
+        top: 64px;
+      }
+      .shell { grid-template-columns: 1fr; }
+      .sidebar {
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+      .main { padding: 92px 18px 18px; }
+      .article { padding: 22px 20px; }
+      .embed-frame { min-height: 760px; height: calc(100vh - 220px); }
+    }
+  </style>
+</head>
+<body>
+  <button class="sidebar-toggle" id="sidebarToggle" type="button" aria-expanded="true">Hide Navigation</button>
+  <div class="theme-switcher" role="group" aria-label="Theme switcher">
+    <span class="theme-switcher-label">Theme</span>
+    <div class="theme-switcher-group">
+      <button class="theme-switcher-button" type="button" data-theme-option="dark">Dark</button>
+      <button class="theme-switcher-button" type="button" data-theme-option="light">Light</button>
+    </div>
+  </div>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="eyebrow">RadarEstate</div>
+        <h1>Client Reports</h1>
+        <p>Customer detail page inside the grouped DevelopmentReport bundle.</p>
+      </div>
+      <div class="actions">
+        <a class="action-link" href="../index.html">Back to Development Client Portal</a>
+        <a class="action-link" href="../02-this-weeks-actions/index.html">Open This Week's Actions</a>
+        <a class="action-link" href="../05-visual-summary/index.html">Open Visual Summary</a>
+      </div>
+      <nav class="nav"><section class="nav-group"><div class="nav-heading">Grouped Navigation</div><div class="nav-group-links"><a class="nav-link" href="../01-core/index.html"><span class="nav-title">Core</span><span class="nav-meta">Start here. These are the two files that should be read first in every weekly cycle.</span></a><a class="nav-link" href="../02-this-weeks-actions/index.html"><span class="nav-title">This Week's Actions</span><span class="nav-meta">Use this folder to move from conclusions into immediate follow-up work.</span></a><a class="nav-link active" href="../03-site-cards/index.html"><span class="nav-title">Site Cards</span><span class="nav-meta">Detailed lot-level follow-up material for the shortlisted sites.</span></a><a class="nav-link" href="../04-precinct-deep-dives/index.html"><span class="nav-title">Precinct Deep Dives</span><span class="nav-meta">Supporting precinct evidence once a location is already in active review.</span></a><a class="nav-link" href="../05-visual-summary/index.html"><span class="nav-title">Visual Summary And Methodology</span><span class="nav-meta">Visual context and methodology for customers who want maps, broader pattern recognition, or scoring boundaries.</span></a></div></section></nav>
+    </aside>
+    <main class="main">
+      <article class="article"><h1>Site Card: 1/28 GLEN STREET MARRICKVILLE</h1>
+<h2>Rank</h2>
+<p>9 in the current Sydney automated site-screening cut.</p>
+<h2>Snapshot</h2>
+<ul>
+<li>Watchlist bucket: <strong>Marrickville</strong></li>
+<li>Watchlist precinct: <strong>Marrickville</strong></li>
+<li>Precinct-level council context: <strong>Inner West</strong></li>
+<li>Parcel governing jurisdiction from EPI: <strong>Inner West</strong></li>
+<li>Jurisdiction alignment: <strong>Aligned</strong></li>
+<li>Screening band: <strong>Advance</strong></li>
+<li>Screening score: <strong>48</strong></li>
+<li>Recommended action: <strong>Advance to site review</strong></li>
+<li>Address signal: 1/28 GLEN STREET MARRICKVILLE</li>
+<li>Lot reference: 28/2/DP777 / DP777</li>
+<li>Latest mapped signal date: 2026-03-23</li>
+<li>Matched recent signals: 1</li>
+</ul>
+<h2>Control Envelope</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Zoning</td>
+<td>R1 (General Residential)</td>
+<td><a href="https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/2">Open source</a></td>
+</tr>
+<tr>
+<td>FSR</td>
+<td>1.10</td>
+<td><a href="https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/1">Open source</a></td>
+</tr>
+<tr>
+<td>Height</td>
+<td>17.0m</td>
+<td><a href="https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/5">Open source</a></td>
+</tr>
+<tr>
+<td>Minimum lot size</td>
+<td>-</td>
+<td><a href="https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/4">Open source</a></td>
+</tr>
+<tr>
+<td>Parcel governing jurisdiction</td>
+<td>Inner West</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Zoning EPI</td>
+<td>Inner West Local Environmental Plan 2022</td>
+<td>-</td>
+</tr>
+<tr>
+<td>FSR clause</td>
+<td>Clause 4.4</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Height clause</td>
+<td>Clause 4.3</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Minimum lot size clause</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody></table>
+<h2>Site Metrics</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Plan area</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Geometry area</td>
+<td>1,006 sqm</td>
+</tr>
+<tr>
+<td>Perimeter</td>
+<td>146.7 m</td>
+</tr>
+<tr>
+<td>BBox width</td>
+<td>55.8 m</td>
+</tr>
+<tr>
+<td>BBox height</td>
+<td>46.1 m</td>
+</tr>
+<tr>
+<td>Frontage candidate</td>
+<td>18.4 m</td>
+</tr>
+<tr>
+<td>Property type</td>
+<td>Property</td>
+</tr>
+<tr>
+<td>ValNet status</td>
+<td>CURRENT</td>
+</tr>
+<tr>
+<td>ValNet type</td>
+<td>NORMAL</td>
+</tr>
+<tr>
+<td>Dissolve parcel count</td>
+<td>1</td>
+</tr>
+<tr>
+<td>ValNet lot count</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<h2>Score Breakdown</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Precinct score</td>
+<td>12</td>
+</tr>
+<tr>
+<td>Area score</td>
+<td>12</td>
+</tr>
+<tr>
+<td>Frontage score</td>
+<td>8</td>
+</tr>
+<tr>
+<td>FSR score</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Height score</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Signal score</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Oversize penalty</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Large-format penalty</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Constraint penalty</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Title complexity penalty</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Total screening score</td>
+<td>48</td>
+</tr>
+</tbody></table>
+<h2>Constraint Stack</h2>
+<p>No current site-level derived constraint hit is surfaced in the present open-data layer. This is not a parcel-safe finding.</p>
+<h2>Go</h2>
+<ul>
+<li>Current score is in the <code>Advance</code> band, so precinct backdrop, controls and site geometry are aligned strongly enough for immediate review.</li>
+<li>Site scale and frontage fit the current small-mid buy box well enough to justify the next automated diligence pass.</li>
+<li>No current high-severity open-data constraint is attached to this site.</li>
+</ul>
+<h2>Caution</h2>
+<ul>
+<li>No current site-level derived constraint hit is surfaced in the present open-data layer, but that is not a clean-risk finding and should not be read as parcel clearance.</li>
+</ul>
+<h2>Verify</h2>
+<ul>
+<li>Treat the watchlist precinct label as a search bucket, not as proof of the site&#39;s governing planning jurisdiction.</li>
+<li>Verify the current zoning / FSR / height envelope directly against the source EPI before treating this as transaction-facing output.</li>
+<li>Verify lot geometry, frontage and assembly implications against current cadastre and current site circumstances.</li>
+<li>Verify flood, heritage, bushfire, biodiversity, airport and other overlay signals before promotion into any acquisition-facing shortlist.</li>
+<li>No owner/title certainty, comps or residual pricing is included in this automated card.</li>
+</ul>
+<h2>Companion Files</h2>
+<ul>
+<li><a href="top-site-screening-2026-04-05.html"><code>reports/top-site-screening-2026-04-05.md</code></a></li>
+<li><a href="../../dashboard/2026-04-05-report.html">Opportunity Map</a></li>
+<li><a href="weekly-radar-2026-04-05.html">Market Context Radar</a></li>
+</ul>
+<h2>Boundaries</h2>
+<ul>
+<li>This card is generated only from free, public and automatable NSW open data.</li>
+<li>No owner/title data is used here.</li>
+<li>No proprietary comps or residual pricing is used here.</li>
+<li>Flood-related rows should be read as current planning/open-data signals, not final parcel-clearance certification.</li>
+</ul>
+</article>
+    </main>
+  </div>
+  <script>
+    (() => {
+      const navScrollKey = 'radarestate-nav-scroll';
+      const storageKey = 'radarestate-theme';
+      const sidebarKey = 'radarestate-sidebar';
+      const currentTheme = document.documentElement.dataset.theme || 'dark';
+      const currentSidebarState = document.documentElement.dataset.sidebar || 'expanded';
+      const sidebar = document.querySelector('.sidebar');
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const buttons = [...document.querySelectorAll('[data-theme-option]')];
+
+      const updateSidebarToggle = (state) => {
+        if (!sidebarToggle) return;
+        const expanded = state !== 'collapsed';
+        sidebarToggle.textContent = expanded ? 'Hide Navigation' : 'Show Navigation';
+        sidebarToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      };
+
+      updateSidebarToggle(currentSidebarState);
+
+      if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', () => {
+          const nextState = document.documentElement.dataset.sidebar === 'collapsed' ? 'expanded' : 'collapsed';
+          document.documentElement.dataset.sidebar = nextState;
+          updateSidebarToggle(nextState);
+          try {
+            window.localStorage.setItem(sidebarKey, nextState);
+          } catch {
+          }
+        });
+      }
+
+      if (sidebar) {
+        try {
+          const storedScroll = window.localStorage.getItem(navScrollKey);
+          if (storedScroll !== null) {
+            requestAnimationFrame(() => {
+              sidebar.scrollTop = Number(storedScroll) || 0;
+            });
+          }
+        } catch {
+        }
+
+        sidebar.addEventListener('scroll', () => {
+          try {
+            window.localStorage.setItem(navScrollKey, String(sidebar.scrollTop));
+          } catch {
+          }
+        }, { passive: true });
+      }
+
+      if (!buttons.length) return;
+      buttons.forEach((button) => {
+        const theme = button.dataset.themeOption;
+        button.setAttribute('aria-pressed', theme === currentTheme ? 'true' : 'false');
+        button.addEventListener('click', () => {
+          if (theme === currentTheme) return;
+          try {
+            window.localStorage.setItem(storageKey, theme);
+          } catch {
+          }
+          document.documentElement.dataset.theme = theme;
+          window.location.reload();
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

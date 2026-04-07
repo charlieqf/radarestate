@@ -27,19 +27,18 @@
 ### 03 Site Cards
 
 - `reports/site-card-2026-04-05-precinct-asquith-normanhurst-29-dp31482.md`
+- `reports/site-card-2026-04-05-precinct-carlingford-20-dp32722.md`
 - `reports/site-card-2026-04-05-precinct-chatswood-c-dp385527.md`
-- `reports/site-card-2026-04-05-precinct-gladesville-114-dp24389.md`
-- `reports/site-card-2026-04-05-precinct-gladesville-37-dp13080.md`
-- `reports/site-card-2026-04-05-precinct-gladesville-c-dp324772.md`
-- `reports/site-card-2026-04-05-precinct-gladesville-g-dp410094.md`
 - `reports/site-card-2026-04-05-precinct-lane-cove-1-dp1042523.md`
 - `reports/site-card-2026-04-05-precinct-lane-cove-11-dp13316.md`
 - `reports/site-card-2026-04-05-precinct-lane-cove-39-dp4842.md`
 - `reports/site-card-2026-04-05-precinct-lane-cove-44b-dp372323.md`
 - `reports/site-card-2026-04-05-precinct-lane-cove-d-dp15678.md`
 - `reports/site-card-2026-04-05-precinct-lane-cove-d-dp408643.md`
+- `reports/site-card-2026-04-05-precinct-marrickville-28-2-dp777.md`
 - `reports/site-card-2026-04-05-precinct-merrylands-2-dp15979.md`
 - `reports/site-card-2026-04-05-precinct-pennant-hills-51-dp1284389.md`
+- `reports/site-card-2026-04-05-precinct-riverwood-86-dp15347.md`
 - `reports/site-card-2026-04-05-precinct-spit-junction-c-dp319194.md`
 - `reports/site-card-2026-04-05-precinct-thornleigh-47-dp9791.md`
 - `reports/site-card-2026-04-05-precinct-waitara-wahroonga-1-dp843067.md`
@@ -49,7 +48,7 @@
 
 - `reports/deep-dive-asquith-normanhurst-2026-04-05.md`
 - `reports/deep-dive-chatswood-2026-04-05.md`
-- `reports/deep-dive-gladesville-2026-04-05.md`
+- `reports/deep-dive-lane-cove-2026-04-05.md`
 - `reports/deep-dive-merrylands-2026-04-05.md`
 - `reports/deep-dive-mosman-spit-junction-2026-04-05.md`
 - `reports/deep-dive-pennant-hills-2026-04-05.md`
@@ -70,8 +69,8 @@
 - Dated delta report: `reports/delta-report-2026-04-05-vs-2026-03-29.md`
 - Coverage readiness memo: `reports/coverage-readiness-greater-sydney-expanded.md`
 - Methodology appendix: `reports/methodology-appendix.md`
-- Full report lead takeaway: Strongest current precinct signal: **Gladesville** (Hunters Hill) is rated **A** with policy **4**, timing **4** and risk **0**.
-- Delta report summary: **2026-03-29 -> 2026-04-05**. 70 precincts currently carry formal ratings, 594 new shortlisted sites, +634 application signals versus prior snapshot.
+- Full report lead takeaway: Strongest current precinct signal: **Mosman / Spit Junction** (precinct council context: Mosman) is rated **A** with policy **4**, timing **5** and risk **2**.
+- Delta report summary: **2026-03-29 -> 2026-04-05**. 71 precincts currently carry formal ratings, 574 new shortlisted sites, +634 application signals versus prior snapshot.
 
 ## Notes
 

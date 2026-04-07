@@ -105,6 +105,19 @@ function apparentJurisdiction(epiName) {
   return value
 }
 
+function siteJurisdiction(row) {
+  return row.apparent_site_jurisdiction || apparentJurisdiction(row.zoning_epi_name)
+}
+
+function jurisdictionAlignment(row) {
+  const parcelJurisdiction = clean(siteJurisdiction(row))
+  const precinctCouncil = clean(row.council_name)
+  if (!parcelJurisdiction || parcelJurisdiction === '-' || !precinctCouncil || precinctCouncil === '-') return null
+  return parcelJurisdiction === precinctCouncil
+    ? 'Aligned'
+    : `Split - use ${parcelJurisdiction} for DCP / approval reading`
+}
+
 async function applyArtifacts(client) {
   await client.query(readFile('supabase/development_views.sql'))
 }
@@ -129,13 +142,16 @@ function markdownTable(headers, rows) {
 }
 
 function detailBlock(outputName, row, constraints) {
+  const parcelJurisdiction = siteJurisdiction(row)
+  const alignment = jurisdictionAlignment(row)
   return [
     `### ${row.site_label}`,
     '',
     `- Search area: **${row.watchlist_bucket_name || row.precinct_name}**`,
     `- Precinct: **${row.precinct_name}**`,
-    `- Current precinct grouping: **${row.council_name}**`,
-    `- Apparent site jurisdiction from governing EPI: **${row.apparent_site_jurisdiction || apparentJurisdiction(row.zoning_epi_name)}**`,
+    `- Precinct-level council context: **${row.council_name}**`,
+    `- Parcel governing jurisdiction from EPI: **${parcelJurisdiction}**`,
+    alignment ? `- Jurisdiction alignment: **${alignment}**` : null,
     `- Screening band: **${row.screening_band}** with score **${formatNumber(row.screening_score)}**`,
     `- Recommended action: ${row.recommended_site_action}`,
     `- Precinct backdrop: rating \`${row.precinct_opportunity_rating || '-'}\`, policy \`${formatNumber(row.precinct_policy_score)}\`, timing \`${formatNumber(row.precinct_timing_score)}\`, approval risk \`${formatNumber(row.precinct_friction_score)}\``,
@@ -265,12 +281,12 @@ async function main() {
       '- It screens lots/sites, not just precincts, but it is still a triage tool rather than a title/comps/residual decision engine.',
       '- Controls shown here are the current point-intersected planning envelope. Constraint rows show current open-data red flags such as heritage, state heritage curtilage, land reservation, flood planning, biodiversity, bushfire, airport noise and OLS.',
       '- A row that says no current open-data red flag was surfaced means no current mapped red flag appeared in this pass. It does not mean the site is parcel-safe or cleared for acquisition.',
-      '- The search-area label is only a working geography. Governing EPI and apparent site jurisdiction should control how the planning envelope is interpreted for a given lot.',
+      '- The search-area label is only a working geography. Governing EPI and parcel jurisdiction should control how the planning envelope is interpreted for a given lot.',
       '',
       '## Top Ranked Sites',
       '',
       markdownTable(
-        ['Rank', 'Site', 'Search Area', 'Apparent Jurisdiction', 'Band', 'Score', 'Zoning', 'FSR', 'Height', 'Lot Area', 'Frontage', 'Signals', 'Red-Flag Stack', 'Card'],
+        ['Rank', 'Site', 'Search Area', 'Parcel Jurisdiction', 'Band', 'Score', 'Zoning', 'FSR', 'Height', 'Lot Area', 'Frontage', 'Signals', 'Red-Flag Stack', 'Card'],
         candidates.rows.map((row, index) => [
            index + 1,
            row.site_label,

@@ -8,8 +8,9 @@
 
 - Watchlist bucket: **Lane Cove**
 - Watchlist precinct: **Lane Cove**
-- Current precinct grouping: **Lane Cove**
-- Apparent site jurisdiction from governing EPI: **Lane Cove**
+- Precinct-level council context: **Lane Cove**
+- Parcel governing jurisdiction from EPI: **Lane Cove**
+- Jurisdiction alignment: **Aligned**
 - Screening band: **Advance**
 - Screening score: **51**
 - Recommended action: **Advance to site review**
@@ -26,7 +27,7 @@
 | FSR | 0.50 | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/1) |
 | Height | 9.5m | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/5) |
 | Minimum lot size | 550 m² | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/4) |
-| Apparent site jurisdiction | Lane Cove | - |
+| Parcel governing jurisdiction | Lane Cove | - |
 | Zoning EPI | Lane Cove Local Environmental Plan 2009 | - |
 | FSR clause | Clause 4.4 | - |
 | Height clause | Clause 4.3 | - |

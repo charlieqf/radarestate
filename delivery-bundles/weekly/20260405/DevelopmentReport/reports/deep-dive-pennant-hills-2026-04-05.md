@@ -10,7 +10,7 @@ Pennant Hills is best viewed as a medium-conviction precinct where policy and ac
 
 ## Quick Scorecard
 
-- Council: `Hornsby`
+- Precinct council context: `Hornsby`
 - Current rating: `B`
 - Policy score: `0`
 - Timing score: `4`
@@ -85,8 +85,8 @@ Current mix note: this precinct is presently **CDC-led** (81 CDC vs 73 DA), so r
 | --- | --- | --- | --- |
 | 2026-04-01 | Approved | Complying Development Certificate Application | 2A FAIRBURN AVENUE WEST PENNANT HILLS 2125 |
 | 2026-04-01 | Under Assessment | Development Application | 154 VICTORIA ROAD WEST PENNANT HILLS 2125 |
-| 2026-03-31 | Additional Information Requested | Development Application | 107 CARDINAL AVENUE WEST PENNANT HILLS 2125 |
 | 2026-03-31 | Under Assessment | Modification Application | 53-119 BOUNDARY ROAD PENNANT HILLS 2120 |
+| 2026-03-31 | Additional Information Requested | Development Application | 107 CARDINAL AVENUE WEST PENNANT HILLS 2125 |
 | 2026-03-31 | Additional Information Requested | Development Application | 53-119 BOUNDARY ROAD PENNANT HILLS 2120 |
 | 2026-03-31 | Under Assessment | Development Application | 21 SHIELDS LANE PENNANT HILLS 2120 |
 | 2026-03-26 | Additional Information Requested | Development Application | 11 CECIL AVENUE PENNANT HILLS 2120 |
@@ -94,7 +94,7 @@ Current mix note: this precinct is presently **CDC-led** (81 CDC vs 73 DA), so r
 | 2026-03-24 | Determined | Modification Application | 130 VICTORIA ROAD WEST PENNANT HILLS 2125 |
 | 2026-03-23 | Approved | Complying Development Certificate Application | 18 BOYD AVENUE WEST PENNANT HILLS 2125 |
 | 2026-03-22 | Under Assessment | Complying Development Certificate Application | 25 VAUGHAN AVENUE PENNANT HILLS 2120 |
-| 2026-03-18 | Approved | Complying Development Certificate Application | 59 NEW FARM ROAD WEST PENNANT HILLS 2125 |
+| 2026-03-18 | Additional Information Requested | Development Application | 38 GRAYLIND AVENUE WEST PENNANT HILLS 2125 |
 
 ## Risk And Friction
 

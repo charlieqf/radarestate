@@ -262,11 +262,21 @@
       "keywords": ["Five Dock"]
     },
     {
-      "code": "PRECINCT_GLADESVILLE",
-      "name": "Gladesville",
+      "code": "PRECINCT_GLADESVILLE_HUNTERS_HILL",
+      "name": "Gladesville - Hunters Hill",
       "type": "centre",
       "primaryCouncil": "Hunters Hill",
-      "allowedCouncils": ["Hunters Hill", "Ryde"],
+      "allowedCouncils": ["Hunters Hill"],
+      "policyTheme": "Observed",
+      "watchPriority": "medium",
+      "keywords": ["Gladesville"]
+    },
+    {
+      "code": "PRECINCT_GLADESVILLE_RYDE",
+      "name": "Gladesville - Ryde",
+      "type": "centre",
+      "primaryCouncil": "Ryde",
+      "allowedCouncils": ["Ryde"],
       "policyTheme": "Observed",
       "watchPriority": "medium",
       "keywords": ["Gladesville"]

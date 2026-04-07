@@ -10,7 +10,7 @@ Merrylands is worth tracking because activity and policy signals are real, but i
 
 ## Quick Scorecard
 
-- Council: `Cumberland`
+- Precinct council context: `Cumberland`
 - Current rating: `C`
 - Policy score: `1`
 - Timing score: `5`
@@ -90,8 +90,8 @@ Current mix note: this precinct is presently **CDC-led** (228 CDC vs 130 DA), so
 | --- | --- | --- | --- |
 | 2026-04-01 | Under Assessment | Modification Application | 20 LANSDOWNE STREET MERRYLANDS 2160 |
 | 2026-04-01 | Under Assessment | Development Application | 242 PITT STREET MERRYLANDS 2160 |
-| 2026-03-31 | Under Assessment | Complying Development Certificate Application | 38 MARY STREET MERRYLANDS 2160 |
 | 2026-03-31 | Under Assessment | Complying Development Certificate Application | 25 MALVERN AVENUE MERRYLANDS 2160 |
+| 2026-03-31 | Under Assessment | Complying Development Certificate Application | 38 MARY STREET MERRYLANDS 2160 |
 | 2026-03-31 | Additional Information Requested | Development Application | 93 JOHN STREET MERRYLANDS 2160 |
 | 2026-03-30 | Approved | Complying Development Certificate Application | 25 CHARLOTTE STREET MERRYLANDS 2160 |
 | 2026-03-29 | Additional Information Requested | Development Application | 108 CHETWYND ROAD MERRYLANDS 2160 |

@@ -10,7 +10,7 @@ Asquith / Normanhurst is best viewed as a medium-conviction precinct where polic
 
 ## Quick Scorecard
 
-- Council: `Hornsby`
+- Precinct council context: `Hornsby`
 - Current rating: `B`
 - Policy score: `0`
 - Timing score: `3`

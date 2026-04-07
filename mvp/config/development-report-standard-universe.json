@@ -1,8 +1,9 @@
 {
   "label": "Sydney Hotspot Development Report",
-  "description": "Fixed hotspot universe for demonstrating and selling the weekly DevelopmentReport layer.",
+  "description": "Fixed hotspot universe for QA, weekly comparison and structured product validation of the DevelopmentReport layer.",
   "precincts": [
-    "Gladesville",
+    "Gladesville - Hunters Hill",
+    "Gladesville - Ryde",
     "Edgecliff",
     "Five Dock",
     "Westmead",

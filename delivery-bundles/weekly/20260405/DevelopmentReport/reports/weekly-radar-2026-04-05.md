@@ -6,22 +6,22 @@ Companion visual dashboard: `dashboard/2026-04-05-report.html`
 
 ## Headline
 
-`Gladesville`, `Mosman / Spit Junction`, `Chatswood` currently screen as the strongest priority precincts, while `Merrylands`, `Auburn` should be downgraded to a high-risk watchlist because flood, bushfire and friction signals are now stacking together.
+`Mosman / Spit Junction`, `Chatswood`, `Lane Cove` currently screen as the strongest priority precincts, while `Merrylands`, `Auburn` should be downgraded to a high-risk watchlist because flood, heat and low tree canopy signals are now stacking together.
 
 ## Snapshot
 
 - Planning proposals tracked: `1,675`
-- Application signals tracked: `56,060`
-- Precinct shortlist items: `70`
-- Derived constraints: `136`
+- Total signals tracked (applications + SSD): `56,057`
+- Precinct shortlist items: `71`
+- Derived constraints: `137`
 
 Scope note: the four snapshot numbers above are full region totals for the current source layer, not counts limited to the configured precinct watchlist.
 
 ## Executive Summary
 
-- `Gladesville`, `Mosman / Spit Junction`, `Chatswood` currently form the first priority tier because active pipeline and recent applications are both visible while friction is still manageable.
+- `Mosman / Spit Junction`, `Chatswood`, `Lane Cove` currently form the first priority tier because active pipeline and recent applications are both visible while friction is still manageable.
 - `Blacktown`, `Sydney`, `The Hills Shire` remain the strongest council-level activity cluster and are the best candidates for further precinct and street-level work.
-- `Merrylands`, `Auburn`, `Penrith` are now showing obvious risk stacking and are better treated as a risk-adjusted watchlist instead of immediate acquisition priorities. The strongest risk signals currently include flood metadata high hits = 42, bushfire spatial high hits = 18.
+- `Merrylands`, `Auburn`, `Penrith` are now showing obvious risk stacking and are better treated as a risk-adjusted watchlist instead of immediate acquisition priorities. The currently surfaced stack is flood, heat and low tree canopy signals.
 - There are still 131 active proposal items in the pipeline, alongside 1,383 items already in made stage, which is enough to support a sustained planning radar rather than a one-off hotspot view.
 
 ## Scoring Method
@@ -36,13 +36,13 @@ Scope note: the four snapshot numbers above are full region totals for the curre
 
 | Rank | Precinct | Council | Rating | Policy | Timing | Risk | Recent Apps | Pipeline | Action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Gladesville | Hunters Hill | A | 4 | 4 | 0 | 220 | 2 | Prioritise |
-| 2 | Mosman / Spit Junction | Mosman | A | 4 | 5 | 2 | 491 | 2 | Prioritise |
-| 3 | Chatswood | Willoughby | A | 4 | 5 | 2 | 506 | 2 | Prioritise |
-| 4 | Lane Cove | Lane Cove | A | 4 | 5 | 2 | 205 | 2 | Prioritise |
-| 5 | Gables | The Hills Shire | B | 3 | 5 | 0 | 429 | 2 | Investigate |
-| 6 | Cronulla | Sutherland Shire | B | 2 | 5 | 0 | 191 | 1 | Investigate |
-| 7 | Waitara / Wahroonga | Hornsby | B | 0 | 4 | 0 | 66 | 0 | Investigate |
+| 1 | Mosman / Spit Junction | Mosman | A | 4 | 5 | 2 | 491 | 2 | Prioritise |
+| 2 | Chatswood | Willoughby | A | 4 | 5 | 2 | 506 | 2 | Prioritise |
+| 3 | Lane Cove | Lane Cove | A | 4 | 5 | 2 | 205 | 2 | Prioritise |
+| 4 | Gables | The Hills Shire | B | 3 | 5 | 0 | 429 | 2 | Investigate |
+| 5 | Cronulla | Sutherland Shire | B | 2 | 5 | 0 | 191 | 1 | Investigate |
+| 6 | Waitara / Wahroonga | Hornsby | B | 0 | 4 | 0 | 66 | 0 | Investigate |
+| 7 | Gladesville - Hunters Hill | Hunters Hill | B | 3 | 3 | 0 | 42 | 2 | Investigate |
 | 8 | Redfern | Sydney | B | 0 | 5 | 1 | 135 | 0 | Investigate |
 | 9 | Double Bay | Woollahra | B | 3 | 4 | 1 | 182 | 1 | Investigate |
 | 10 | Ultimo / Broadway | Sydney | B | 3 | 4 | 1 | 107 | 3 | Investigate |
@@ -105,8 +105,8 @@ Current screen window: `2025-01-01`. DA, CDC, SSD and Modification are shown sep
 | Stage | Council | Title | Location |
 | --- | --- | --- | --- |
 | Under Assessment | Sydney | 41-49 Mountain Street, Ultimo | 41-49 Mountain Street Ultimo 2007 |
-| Under Assessment | Liverpool | Amendment to the State Environmental Planning Policy (Precincts - Western Parkland City) 2021 | 260 Eighth Avenue Austral 2179 |
 | Under Assessment | Liverpool | Amendment to the State Environmental Planning Policy (Precincts - Western Parkland City) 2021 | 495 Fourth Avenue Austral 2179 |
+| Under Assessment | Liverpool | Amendment to the State Environmental Planning Policy (Precincts - Western Parkland City) 2021 | 260 Eighth Avenue Austral 2179 |
 | Under Assessment | Burwood | Burwood Town Centre Special Entertainment Precinct | Burwood |
 | Under Assessment | Sydney | City of Sydney Special Entertainment Precincts | Sydney |
 | Under Assessment | The Hills Shire | Council Operations Centre 183-191 Maguires Road, Gables | 191 Maguires Road Gables 2765 & more |
@@ -124,7 +124,7 @@ Current screen window: `2025-01-01`. DA, CDC, SSD and Modification are shown sep
 | biodiversity_spatial_sample | medium | 3 |
 | bushfire_spatial_sample | high | 18 |
 | bushfire_spatial_sample | medium | 3 |
-| flood_metadata_signal | high | 42 |
+| flood_metadata_signal | high | 43 |
 | flood_metadata_signal | medium | 5 |
 | heat_vulnerability_proxy | high | 15 |
 | heat_vulnerability_proxy | medium | 4 |

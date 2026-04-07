@@ -429,7 +429,7 @@
 <li>Precinct rows are read from the saved weekly precinct snapshot rather than re-queried live when the report is rendered.</li>
 <li>The rating stack combines policy signal strength, timing signal strength, and approval risk. In the current saved snapshot these appear as <code>policy_score</code>, <code>timing_score</code>, and <code>friction_score</code>.</li>
 <li><code>policy_score</code> is positive evidence from the current proposal pipeline and planning direction. <code>timing_score</code> reflects current DA-led development tempo with CDC activity deliberately down-weighted. <code>friction_score</code> is a penalty layer for planning and environmental red flags.</li>
-<li>Current rated precinct mix: <strong>A</strong>: 4, <strong>B</strong>: 40, <strong>C</strong>: 26.</li>
+<li>Current rated precinct mix: <strong>A</strong>: 3, <strong>B</strong>: 42, <strong>C</strong>: 26.</li>
 </ul>
 <h2>Precinct Rating Formula</h2>
 <ul>
@@ -446,7 +446,7 @@
 <li>Site rows are read from the saved weekly site snapshot rather than from a live latest-state view.</li>
 <li>Site screening now uses a default small-mid developer lens, with a slight preference toward townhouse / small subdivision fit over larger-format high-rise or assembly-style parcels.</li>
 <li>Candidate lots are still ranked by planning fit, local precinct strength, matched signal count, and current red-flag burden, but supersites and large-format high-rise envelopes are intentionally de-emphasised in this default view.</li>
-<li>Current site screening band mix: <strong>Advance</strong> 75, <strong>Review</strong> 359, <strong>Caution</strong> 160.</li>
+<li>Current site screening band mix: <strong>Advance</strong> 69, <strong>Review</strong> 352, <strong>Caution</strong> 153.</li>
 <li><code>Advance</code> means the screening layer currently supports moving into street-level diligence. <code>Review</code> means there is enough signal to keep on the working list but not enough to promote immediately. <code>Caution</code> means the current signal-to-risk balance is weak or blocked.</li>
 </ul>
 <h2>Site Score Formula</h2>
@@ -480,14 +480,14 @@
 </thead>
 <tbody><tr>
 <td>A</td>
-<td>4</td>
+<td>3</td>
 <td>4 to 4</td>
-<td>4 to 5</td>
-<td>0 to 2</td>
+<td>5 to 5</td>
+<td>2 to 2</td>
 </tr>
 <tr>
 <td>B</td>
-<td>40</td>
+<td>42</td>
 <td>0 to 4</td>
 <td>3 to 5</td>
 <td>0 to 5</td>
@@ -542,7 +542,7 @@
 <tr>
 <td>Site screening layers</td>
 <td>2026-04-04</td>
-<td>2026-04-05</td>
+<td>2026-04-06</td>
 <td>-</td>
 <td>-</td>
 </tr>

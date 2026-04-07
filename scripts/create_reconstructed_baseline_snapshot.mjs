@@ -261,44 +261,39 @@ async function queryProposalSnapshot(client, regionGroup, snapshotDate) {
 
 async function queryActivitySnapshot(client, regionGroup, snapshotDate) {
   const totals = await client.query(
-    `select
-       count(*) filter (where a.tracker_scope = 'applications')::int as mapped_application_count,
-       count(*) filter (where a.tracker_scope = 'applications' and coalesce(a.lodgement_date, a.observed_at) >= $3::date)::int as recent_application_count,
-       count(*) filter (
-         where a.tracker_scope = 'applications'
-           and coalesce(a.lodgement_date, a.observed_at) >= $3::date
-           and lower(coalesce(a.application_type, '')) like '%development application%'
-           and lower(coalesce(a.application_type, '')) not like '%complying development certificate%'
-           and lower(coalesce(a.application_type, '')) not like '%state significant%'
-       )::int as recent_da_count,
-       count(*) filter (
-         where a.tracker_scope = 'applications'
-           and coalesce(a.lodgement_date, a.observed_at) >= $3::date
-           and (lower(coalesce(a.application_type, '')) like '%complying development certificate%' or lower(coalesce(a.application_type, '')) like '%cdc%')
-       )::int as recent_cdc_count,
-       count(*) filter (
-         where coalesce(a.lodgement_date, a.observed_at) >= $3::date
-           and (a.tracker_scope = 'state_significant' or lower(coalesce(a.application_type, '')) like '%state significant%' or lower(coalesce(a.application_type, '')) like '%ssd%')
-       )::int as recent_ssd_count,
-       count(*) filter (
-         where a.tracker_scope = 'applications'
-           and coalesce(a.lodgement_date, a.observed_at) >= $3::date
-           and lower(coalesce(a.application_type, '')) like '%modification%'
-       )::int as recent_modification_count,
-       count(*) filter (
-         where a.tracker_scope = 'applications'
-           and coalesce(a.lodgement_date, a.observed_at) >= $3::date
-           and lower(coalesce(a.application_type, '')) not like '%development application%'
-           and lower(coalesce(a.application_type, '')) not like '%complying development certificate%'
-           and lower(coalesce(a.application_type, '')) not like '%cdc%'
-           and lower(coalesce(a.application_type, '')) not like '%modification%'
-           and lower(coalesce(a.application_type, '')) not like '%state significant%'
-           and lower(coalesce(a.application_type, '')) not like '%ssd%'
-       )::int as recent_other_count
-     from public.application_signals a
-     join public.councils c on c.id = a.council_id
-     where c.region_group = $1
-       and coalesce(a.lodgement_date, a.observed_at) <= $2::date`,
+    `with mapped as (
+       select count(*) filter (where a.tracker_scope = 'applications')::int as mapped_application_count
+       from public.application_signals a
+       join public.councils c on c.id = a.council_id
+       where c.region_group = $1
+         and coalesce(a.lodgement_date, a.observed_at) <= $2::date
+     ), bucketed as (
+       select
+         case
+           when a.tracker_scope = 'state_significant' then 'SSD'
+           when lower(coalesce(a.application_type, '')) like '%complying development certificate%' or lower(coalesce(a.application_type, '')) like '%cdc%' then 'CDC'
+           when lower(coalesce(a.application_type, '')) like '%modification%' then 'Modification'
+           when lower(coalesce(a.application_type, '')) like '%state significant%' or lower(coalesce(a.application_type, '')) like '%ssd%' then 'SSD'
+           when lower(coalesce(a.application_type, '')) like '%development application%' then 'DA'
+           else 'Other'
+         end as application_bucket
+       from public.application_signals a
+       join public.councils c on c.id = a.council_id
+       where c.region_group = $1
+         and coalesce(a.lodgement_date, a.observed_at) >= $3::date
+         and coalesce(a.lodgement_date, a.observed_at) <= $2::date
+     )
+     select
+       mapped.mapped_application_count,
+       count(*) filter (where application_bucket in ('DA', 'CDC', 'Modification', 'Other'))::int as recent_application_count,
+       count(*) filter (where application_bucket = 'DA')::int as recent_da_count,
+       count(*) filter (where application_bucket = 'CDC')::int as recent_cdc_count,
+       count(*) filter (where application_bucket = 'SSD')::int as recent_ssd_count,
+       count(*) filter (where application_bucket = 'Modification')::int as recent_modification_count,
+       count(*) filter (where application_bucket = 'Other')::int as recent_other_count
+     from bucketed
+     cross join mapped
+     group by mapped.mapped_application_count`,
     [regionGroup, snapshotDate, RECENT_APPLICATION_WINDOW_START]
   )
 

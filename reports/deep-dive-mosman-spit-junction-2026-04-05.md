@@ -10,7 +10,7 @@ Mosman / Spit Junction currently screens as one of the strongest precinct-level 
 
 ## Quick Scorecard
 
-- Council: `Mosman`
+- Precinct council context: `Mosman`
 - Current rating: `A`
 - Policy score: `4`
 - Timing score: `5`
@@ -97,7 +97,7 @@ Current mix note: this precinct is presently **DA-led or balanced** (224 DA vs 1
 | 2026-03-17 | Under Assessment | Development Application | 5 PARK AVENUE MOSMAN 2088 |
 | 2026-03-17 | Under Assessment | Modification Application | 1A SUPERBA PARADE MOSMAN 2088 |
 | 2026-03-16 | Under Assessment | Development Application | 89 COWLES ROAD MOSMAN 2088 |
-| 2026-03-15 | Approved | Complying Development Certificate Application | 6 BALMORAL AVENUE MOSMAN 2088 |
+| 2026-03-15 | Additional Information Requested | Development Application | 14 PARRIWI ROAD MOSMAN 2088 |
 
 ## Risk And Friction
 

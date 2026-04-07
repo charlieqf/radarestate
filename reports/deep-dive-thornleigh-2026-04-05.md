@@ -10,7 +10,7 @@ Thornleigh is best viewed as a medium-conviction precinct where policy and activ
 
 ## Quick Scorecard
 
-- Council: `Hornsby`
+- Precinct council context: `Hornsby`
 - Current rating: `B`
 - Policy score: `0`
 - Timing score: `4`
@@ -80,8 +80,8 @@ Current mix note: this precinct is presently **CDC-led** (31 CDC vs 29 DA), so r
 | Lodgement | Status | Type | Location |
 | --- | --- | --- | --- |
 | 2026-03-31 | Under Assessment | Complying Development Certificate Application | 41 ADAMSON AVENUE THORNLEIGH 2120 |
-| 2026-03-29 | Additional Information Requested | Development Application | 46 WAREEMBA AVENUE THORNLEIGH 2120 |
 | 2026-03-29 | Additional Information Requested | Development Application | 1 JUDSON ROAD THORNLEIGH 2120 |
+| 2026-03-29 | Additional Information Requested | Development Application | 46 WAREEMBA AVENUE THORNLEIGH 2120 |
 | 2026-03-26 | Additional Information Requested | Development Application | 3 3-5 CHILVERS ROAD THORNLEIGH 2120 |
 | 2026-03-23 | Under Assessment | Modification Application | 28 EDMUNDSON CLOSE THORNLEIGH 2120 |
 | 2026-03-15 | Additional Information Requested | Development Application | 8 TILLOCK STREET THORNLEIGH 2120 |

@@ -119,7 +119,7 @@ function topTakeaways(precinctRows, siteRows, proposalRows, activity) {
   return [
     best
       ? best.opportunity_rating
-        ? `Strongest current precinct signal: **${best.precinct_name}** (${best.council_name}) is rated **${best.opportunity_rating}** with policy **${formatNumber(best.policy_score)}**, timing **${formatNumber(best.timing_score)}** and risk **${formatNumber(best.friction_score)}**.`
+        ? `Strongest current precinct signal: **${best.precinct_name}** (precinct council context: ${best.council_name}) is rated **${best.opportunity_rating}** with policy **${formatNumber(best.policy_score)}**, timing **${formatNumber(best.timing_score)}** and risk **${formatNumber(best.friction_score)}**.`
         : `Highest reconstructed activity precinct: **${best.precinct_name}** (${best.council_name}) shows **${formatNumber(best.recent_application_count)}** recent mapped applications in the retained history available for this baseline.`
       : 'No current precinct leader is available in this snapshot.',
     topSite
@@ -328,6 +328,8 @@ function buildMarkdown(options, snapshot) {
     '',
     '## Priority Precincts',
     '',
+    'These precinct rows are watchlist-level council groupings. In border suburbs, parcel-level controls can sit under a different governing jurisdiction, so use the site-table `Jurisdiction` field and site cards for DCP / approval reading.',
+    '',
     markdownTable(
       ['Rank', 'Precinct', 'Council', 'Rating', 'Policy', 'Timing', 'Risk', 'Recent Apps', 'Pipeline', 'Action'],
       priorityPrecincts.map((row) => [
@@ -345,6 +347,8 @@ function buildMarkdown(options, snapshot) {
     ),
     '',
     '## Priority Site Shortlist',
+    '',
+    '`Search Area` is the watchlist bucket. `Jurisdiction` is the parcel-level governing planning jurisdiction and should drive DCP / approval reading when it differs from the precinct name or council context.',
     '',
     markdownTable(
       ['Rank', 'Site', 'Search Area', 'Jurisdiction', 'Band', 'Score', 'Zoning', 'FSR', 'Height', 'Lot Area', 'Frontage', 'Action'],
@@ -381,6 +385,8 @@ function buildMarkdown(options, snapshot) {
       : 'No site targets were surfaced for this week\'s priority list.',
     '',
     '## 3 Pre-Assembly Clusters To Validate',
+    '',
+    'If `Search Area` differs from `Precinct`, treat that row as a cross-jurisdiction search bucket. The precinct rating and posture remain broader watchlist context, not parcel approval jurisdiction.',
     '',
     assemblyPrecincts.length
       ? markdownTable(

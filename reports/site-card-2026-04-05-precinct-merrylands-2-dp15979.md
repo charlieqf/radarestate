@@ -8,8 +8,9 @@
 
 - Watchlist bucket: **Merrylands**
 - Watchlist precinct: **Merrylands**
-- Current precinct grouping: **Cumberland**
-- Apparent site jurisdiction from governing EPI: **Cumberland**
+- Precinct-level council context: **Cumberland**
+- Parcel governing jurisdiction from EPI: **Cumberland**
+- Jurisdiction alignment: **Aligned**
 - Screening band: **Review**
 - Screening score: **36**
 - Recommended action: **Validate controls and constraints**
@@ -26,7 +27,7 @@
 | FSR | - | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/1) |
 | Height | 9.0m | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/5) |
 | Minimum lot size | 450 m² | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/4) |
-| Apparent site jurisdiction | Cumberland | - |
+| Parcel governing jurisdiction | Cumberland | - |
 | Zoning EPI | Cumberland Local Environmental Plan 2021 | - |
 | FSR clause | - | - |
 | Height clause | Clause 4.3 | - |

@@ -2,7 +2,8 @@
   "dashboardPath": "dashboard/latest-report.html",
   "radarPath": "reports/weekly-radar-latest.md",
   "precincts": [
-    "Gladesville",
+    "Gladesville - Hunters Hill",
+    "Gladesville - Ryde",
     "Bankstown",
     "Five Dock",
     "Mayfield",

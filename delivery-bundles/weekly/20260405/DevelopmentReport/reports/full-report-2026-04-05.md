@@ -8,39 +8,43 @@ This is the complete current weekly development view for the report date shown b
 
 ## Top 3 Takeaways
 
-- Strongest current precinct signal: **Gladesville** (Hunters Hill) is rated **A** with policy **4**, timing **4** and risk **0**.
+- Strongest current precinct signal: **Mosman / Spit Junction** (precinct council context: Mosman) is rated **A** with policy **4**, timing **5** and risk **2**.
 - Top current site candidate: **2A BLAKESLEY STREET CHATSWOOD** in **Chatswood** is currently **Advance** with score **56**.
 - Current active policy load is led by **Under Assessment** with **43** tracked items, while cumulative application-signal volume across the region sits at **52,847** since **2025-01-01**.
 
 ## Priority Precincts
 
+These precinct rows are watchlist-level council groupings. In border suburbs, parcel-level controls can sit under a different governing jurisdiction, so use the site-table `Jurisdiction` field and site cards for DCP / approval reading.
+
 | Rank | Precinct | Council | Rating | Policy | Timing | Risk | Recent Apps | Pipeline | Action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Gladesville | Hunters Hill | A | 4 | 4 | 0 | 220 | 2 | Prioritise |
-| 2 | Mosman / Spit Junction | Mosman | A | 4 | 5 | 2 | 491 | 2 | Prioritise |
-| 3 | Chatswood | Willoughby | A | 4 | 5 | 2 | 506 | 2 | Prioritise |
-| 4 | Lane Cove | Lane Cove | A | 4 | 5 | 2 | 205 | 2 | Prioritise |
-| 5 | Gables | The Hills Shire | B | 3 | 5 | 0 | 429 | 2 | Investigate |
-| 6 | Cronulla | Sutherland Shire | B | 2 | 5 | 0 | 191 | 1 | Investigate |
-| 7 | Waitara / Wahroonga | Hornsby | B | 0 | 4 | 0 | 66 | 0 | Investigate |
+| 1 | Mosman / Spit Junction | Mosman | A | 4 | 5 | 2 | 491 | 2 | Prioritise |
+| 2 | Chatswood | Willoughby | A | 4 | 5 | 2 | 506 | 2 | Prioritise |
+| 3 | Lane Cove | Lane Cove | A | 4 | 5 | 2 | 205 | 2 | Prioritise |
+| 4 | Gables | The Hills Shire | B | 3 | 5 | 0 | 429 | 2 | Investigate |
+| 5 | Cronulla | Sutherland Shire | B | 2 | 5 | 0 | 191 | 1 | Investigate |
+| 6 | Waitara / Wahroonga | Hornsby | B | 0 | 4 | 0 | 66 | 0 | Investigate |
+| 7 | Gladesville - Hunters Hill | Hunters Hill | B | 3 | 3 | 0 | 42 | 2 | Investigate |
 | 8 | Redfern | Sydney | B | 0 | 5 | 1 | 135 | 0 | Investigate |
 | 9 | Double Bay | Woollahra | B | 3 | 4 | 1 | 182 | 1 | Investigate |
 | 10 | Ultimo / Broadway | Sydney | B | 3 | 4 | 1 | 107 | 3 | Investigate |
 
 ## Priority Site Shortlist
 
+`Search Area` is the watchlist bucket. `Jurisdiction` is the parcel-level governing planning jurisdiction and should drive DCP / approval reading when it differs from the precinct name or council context.
+
 | Rank | Site | Search Area | Jurisdiction | Band | Score | Zoning | FSR | Height | Lot Area | Frontage | Action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | 2A BLAKESLEY STREET CHATSWOOD | Chatswood | Willoughby | Advance | 56 | R3 | 0.90 | 12.0m | 495 sqm | 22.7 m | Advance to site review |
 | 2 | 14 GATACRE AVENUE LANE COVE | Lane Cove | Lane Cove | Advance | 51 | R2 | 0.50 | 9.5m | 1,089 sqm | 18.8 m | Advance to site review |
 | 3 | 76 PENROSE STREET LANE COVE WEST | Lane Cove | Lane Cove | Advance | 51 | R2 | 0.50 | 9.5m | 993 sqm | 18.0 m | Advance to site review |
-| 4 | 19 STANBURY STREET GLADESVILLE | Gladesville - Ryde | Ryde | Advance | 51 | R2 | 0.50 | 9.5m | 958 sqm | 19.8 m | Advance to site review |
-| 5 | 53 AMIENS STREET GLADESVILLE | Gladesville - Ryde | Ryde | Advance | 51 | R2 | 0.50 | 9.5m | 887 sqm | 22.2 m | Advance to site review |
-| 6 | 18 GERRISH STREET GLADESVILLE | Gladesville - Ryde | Ryde | Advance | 51 | R2 | 0.50 | 9.5m | 854 sqm | 23.9 m | Advance to site review |
-| 7 | 42 CULLEN STREET LANE COVE WEST | Lane Cove | Lane Cove | Advance | 51 | R2 | 0.50 | 9.5m | 835 sqm | 16.4 m | Advance to site review |
-| 8 | 45 BARWON ROAD LANE COVE WEST | Lane Cove | Lane Cove | Advance | 51 | R2 | 0.60 | 9.5m | 799 sqm | 21.3 m | Advance to site review |
-| 9 | 160 BRIDGE ROAD WESTMEAD | Westmead | Parramatta | Advance | 50 | R4 | 0.80 | 11.0m | 1,024 sqm | 18.9 m | Advance to site review |
-| 10 | 6 SPENCER STREET GLADESVILLE | Gladesville - Ryde | Ryde | Advance | 49 | R2 | 0.50 | 9.5m | 1,217 sqm | 25.2 m | Advance to site review |
+| 4 | 42 CULLEN STREET LANE COVE WEST | Lane Cove | Lane Cove | Advance | 51 | R2 | 0.50 | 9.5m | 835 sqm | 16.4 m | Advance to site review |
+| 5 | 45 BARWON ROAD LANE COVE WEST | Lane Cove | Lane Cove | Advance | 51 | R2 | 0.60 | 9.5m | 799 sqm | 21.3 m | Advance to site review |
+| 6 | 160 BRIDGE ROAD WESTMEAD | Westmead | Parramatta | Advance | 50 | R4 | 0.80 | 11.0m | 1,024 sqm | 18.9 m | Advance to site review |
+| 7 | 10 MORRICE STREET LANE COVE | Lane Cove | Lane Cove | Advance | 49 | R2 | 0.50 | 9.5m | 1,298 sqm | 18.1 m | Advance to site review |
+| 8 | 21 PENROSE STREET LANE COVE | Lane Cove | Lane Cove | Advance | 49 | R2 | 0.50 | 9.5m | 1,301 sqm | 25.6 m | Advance to site review |
+| 9 | 1/28 GLEN STREET MARRICKVILLE | Marrickville | Inner West | Advance | 48 | R1 | 1.10 | 17.0m | 1,006 sqm | 18.4 m | Advance to site review |
+| 10 | 5 MOROTAI AVENUE RIVERWOOD | Riverwood | Georges River | Advance | 48 | R4 | 1.00 | 12.0m | 871 sqm | 14.7 m | Advance to site review |
 
 ## 5 First-Look Site Targets This Week
 
@@ -49,16 +53,18 @@ This is the complete current weekly development view for the report date shown b
 | 2A BLAKESLEY STREET CHATSWOOD | Chatswood | Willoughby | Advance to site review | No current title complexity penalty | Advance band, score 56, 1 mapped signals, 495 sqm lot area, 22.7 m frontage, zone R3 |
 | 14 GATACRE AVENUE LANE COVE | Lane Cove | Lane Cove | Advance to site review | No current title complexity penalty | Advance band, score 51, 1 mapped signals, 1,089 sqm lot area, 18.8 m frontage, zone R2 |
 | 76 PENROSE STREET LANE COVE WEST | Lane Cove | Lane Cove | Advance to site review | No current title complexity penalty | Advance band, score 51, 1 mapped signals, 993 sqm lot area, 18.0 m frontage, zone R2 |
-| 19 STANBURY STREET GLADESVILLE | Gladesville - Ryde | Ryde | Advance to site review | No current title complexity penalty | Advance band, score 51, 1 mapped signals, 958 sqm lot area, 19.8 m frontage, zone R2 |
-| 53 AMIENS STREET GLADESVILLE | Gladesville - Ryde | Ryde | Advance to site review | No current title complexity penalty | Advance band, score 51, 1 mapped signals, 887 sqm lot area, 22.2 m frontage, zone R2 |
+| 42 CULLEN STREET LANE COVE WEST | Lane Cove | Lane Cove | Advance to site review | No current title complexity penalty | Advance band, score 51, 1 mapped signals, 835 sqm lot area, 16.4 m frontage, zone R2 |
+| 45 BARWON ROAD LANE COVE WEST | Lane Cove | Lane Cove | Advance to site review | No current title complexity penalty | Advance band, score 51, 1 mapped signals, 799 sqm lot area, 21.3 m frontage, zone R2 |
 
 ## 3 Pre-Assembly Clusters To Validate
 
+If `Search Area` differs from `Precinct`, treat that row as a cross-jurisdiction search bucket. The precinct rating and posture remain broader watchlist context, not parcel approval jurisdiction.
+
 | Precinct | Search Area | Rating | Sites In Top Cut | Advance Sites | Title Complexity Flags | Best Score | Approx Lot Area | Approx Frontage | Current Posture | Example Sites |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Lane Cove | Lane Cove | A | 6 | 6 | 0 | 51 | 6,314 sqm | 118.1 m | Prioritise | 14 GATACRE AVENUE LANE COVE; 76 PENROSE STREET LANE COVE WEST; 42 CULLEN STREET LANE COVE WEST |
-| Gladesville | Gladesville - Ryde | A | 5 | 5 | 0 | 51 | 4,873 sqm | 105.7 m | Prioritise | 19 STANBURY STREET GLADESVILLE; 53 AMIENS STREET GLADESVILLE; 18 GERRISH STREET GLADESVILLE |
+| Lane Cove | Lane Cove | A | 7 | 6 | 1 | 51 | 7,439 sqm | 210.8 m | Prioritise | 14 GATACRE AVENUE LANE COVE; 76 PENROSE STREET LANE COVE WEST; 42 CULLEN STREET LANE COVE WEST |
 | Carlingford | Carlingford | B | 4 | 4 | 0 | 46 | 4,670 sqm | 80.5 m | Investigate | 74 KEELER STREET CARLINGFORD; 14 DUNROSSIL AVENUE CARLINGFORD; 206 CARLINGFORD ROAD CARLINGFORD |
+| West Ryde | West Ryde | B | 4 | 4 | 0 | 45 | 3,345 sqm | 106.4 m | Investigate | 23 FEDERAL ROAD WEST RYDE; 27 LINTON AVENUE WEST RYDE; 29 GRIFFITHS AVENUE WEST RYDE |
 
 These clusters are prioritisation cues from the current top cut, not adjacency-confirmed or ownership-confirmed assembly schemes.
 
@@ -125,7 +131,7 @@ These are cumulative activity counts within the retained application window star
 
 ## Recommended Actions This Week
 
-1. Push precinct-level follow-up in **Gladesville**, **Mosman / Spit Junction**, **Chatswood** before broadening the watchlist further.
+1. Push precinct-level follow-up in **Mosman / Spit Junction**, **Chatswood**, **Lane Cove** before broadening the watchlist further.
 2. Move the current leading site shortlist into street-level diligence for **2A BLAKESLEY STREET CHATSWOOD**, **14 GATACRE AVENUE LANE COVE**, **76 PENROSE STREET LANE COVE WEST**.
 3. Keep **Penrith**, **Marsden Park**, **Cabramatta** on a separate caution list until the current risk stack is validated or cleared.
 

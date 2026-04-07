@@ -8,8 +8,9 @@
 
 - Watchlist bucket: **Asquith / Normanhurst**
 - Watchlist precinct: **Asquith / Normanhurst**
-- Current precinct grouping: **Hornsby**
-- Apparent site jurisdiction from governing EPI: **Hornsby**
+- Precinct-level council context: **Hornsby**
+- Parcel governing jurisdiction from EPI: **Hornsby**
+- Jurisdiction alignment: **Aligned**
 - Screening band: **Review**
 - Screening score: **37**
 - Recommended action: **Validate controls and constraints**
@@ -26,7 +27,7 @@
 | FSR | - | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/1) |
 | Height | 8.5m | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/5) |
 | Minimum lot size | 500 m² | [Open source](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/4) |
-| Apparent site jurisdiction | Hornsby | - |
+| Parcel governing jurisdiction | Hornsby | - |
 | Zoning EPI | Hornsby Local Environmental Plan 2013 | - |
 | FSR clause | - | - |
 | Height clause | Clause 4.3 | - |

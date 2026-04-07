@@ -60,8 +60,23 @@ const councilMap = new Map([
   ['Ryde City Council', 'Ryde'],
   ['North Sydney', 'North Sydney'],
   ['North Sydney Council', 'North Sydney'],
+  ['Sydney', 'Sydney'],
+  ['City of Sydney', 'Sydney'],
+  ['City of Sydney Council', 'Sydney'],
+  ['Council of the City of Sydney', 'Sydney'],
   ['Willoughby', 'Willoughby'],
   ['Willoughby City Council', 'Willoughby'],
+  ['Randwick', 'Randwick'],
+  ['Randwick City Council', 'Randwick'],
+  ['Waverley', 'Waverley'],
+  ['Waverley Council', 'Waverley'],
+  ['Lane Cove', 'Lane Cove'],
+  ['Lane Cove Municipal Council', 'Lane Cove'],
+  ['Mosman', 'Mosman'],
+  ['Mosman Municipal Council', 'Mosman'],
+  ['Hornsby', 'Hornsby'],
+  ['Hornsby Shire Council', 'Hornsby'],
+  ['The Council of the Shire of Hornsby', 'Hornsby'],
   ['Ku-ring-gai', 'Ku-ring-gai'],
   ['Ku-ring-gai Council', 'Ku-ring-gai'],
   ['Campbelltown', 'Campbelltown'],
@@ -206,6 +221,14 @@ async function ensureCouncil(client, rawName, regionGroup = 'Greater Sydney') {
 }
 
 async function ensurePrecincts(client, config) {
+  const activeCodes = config.precincts.map((precinct) => precinct.code)
+  await client.query(
+    `delete from public.precincts
+     where source_url = $1
+       and not (precinct_code = any($2::text[]))`,
+    [config._sourcePath || 'mvp/config/precinct-focus-map.json', activeCodes]
+  )
+
   const precinctMap = new Map()
   for (const precinct of config.precincts) {
     const councilId = await ensureCouncil(client, precinct.primaryCouncil, config.regionGroup || 'Greater Sydney')
