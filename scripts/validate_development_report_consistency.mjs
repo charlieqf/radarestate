@@ -30,6 +30,12 @@ function readJson(filePath) {
   return JSON.parse(readText(filePath))
 }
 
+function loadPrimaryPrecinctConfig() {
+  const filePath = path.join(root, 'mvp', 'config', 'precinct-focus-map.json')
+  if (!fs.existsSync(filePath)) return { precincts: [] }
+  return readJson(filePath)
+}
+
 function escapeRegex(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }
@@ -99,6 +105,19 @@ function constraintTypeLabel(value) {
     policy_withdrawal_friction: 'policy withdrawal'
   }
   return labels[value] || value
+}
+
+function canonicalCouncilName(value) {
+  const cleaned = String(value || '').trim()
+  const aliases = new Map([
+    ['The Hills', 'The Hills Shire'],
+    ['City of Parramatta', 'Parramatta'],
+    ['City Of Parramatta', 'Parramatta'],
+    ['Parramatta Council', 'Parramatta'],
+    ['Ryde Council', 'Ryde'],
+    ['Hornsby Shire', 'Hornsby']
+  ])
+  return aliases.get(cleaned) || cleaned
 }
 
 function extractRiskLabelsFromSummary(summary) {
@@ -236,6 +255,42 @@ function validateFullReportScopeNotes(fullReport) {
   )
 }
 
+function validatePrecinctCouncilAlignment(snapshotDate) {
+  const config = loadPrimaryPrecinctConfig()
+  const allowedCouncilCounts = new Map(
+    (config.precincts || []).map((precinct) => [String(precinct.name || '').trim(), (precinct.allowedCouncils || []).length || 0])
+  )
+  const siteScreeningPath = path.join(root, 'snapshots', 'weekly', snapshotDate, 'site-screening.json')
+  if (!fs.existsSync(siteScreeningPath)) return
+  const siteScreening = readJson(siteScreeningPath)
+  const grouped = new Map()
+
+  for (const row of siteScreening.rows || []) {
+    const precinctName = String(row.precinct_name || '').trim()
+    const councilName = canonicalCouncilName(row.council_name)
+    const jurisdiction = canonicalCouncilName(row.apparent_site_jurisdiction)
+    if (!precinctName || !councilName || !jurisdiction) continue
+    const key = `${precinctName}||${councilName}`
+    const current = grouped.get(key) || { precinctName, councilName, total: 0, counts: new Map() }
+    current.total += 1
+    current.counts.set(jurisdiction, (current.counts.get(jurisdiction) || 0) + 1)
+    grouped.set(key, current)
+  }
+
+  for (const item of grouped.values()) {
+    const allowedCouncilCount = allowedCouncilCounts.get(item.precinctName)
+    if (allowedCouncilCount !== 1) continue
+    if (item.total < 3) continue
+    const sorted = [...item.counts.entries()].sort((a, b) => b[1] - a[1])
+    const [predominantJurisdiction, count] = sorted[0]
+    if (predominantJurisdiction === item.councilName) continue
+    if (count / item.total < 0.7) continue
+    throw new Error(
+      `Precinct council mismatch for ${item.precinctName}. Snapshot council is ${item.councilName} but ${predominantJurisdiction} governs ${count}/${item.total} screened parcels.`
+    )
+  }
+}
+
 function validateBundleCopies(snapshotDate) {
   const datedSlug = snapshotDate.replace(/-/g, '')
   const bundleRoots = [
@@ -280,6 +335,7 @@ function main() {
   validateRankConsistency(precinctSnapshot, fullReport, weeklyRadar, coverageReport)
   validateTotals(activitySnapshot, fullReport, weeklyRadar)
   validateRiskNarrative(weeklyRadar)
+  validatePrecinctCouncilAlignment(options.snapshotDate)
   validateSiteCards(options.reportsDir, options.snapshotDate)
   validateDeepDives(options.reportsDir, options.snapshotDate)
   validateFullReportScopeNotes(fullReport)

@@ -1,0 +1,961 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sydney Top Site Screening</title>
+  <script>
+    (() => {
+      const storageKey = 'radarestate-theme';
+      const sidebarKey = 'radarestate-sidebar';
+      let stored = null;
+      let storedSidebar = null;
+      try {
+        stored = window.localStorage.getItem(storageKey);
+        storedSidebar = window.localStorage.getItem(sidebarKey);
+      } catch {
+      }
+      const preferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.dataset.theme = stored || preferred;
+      document.documentElement.dataset.sidebar = storedSidebar || 'expanded';
+    })();
+  </script>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg-accent: #132048;
+      --panel: #121932;
+      --panel-2: #171f3d;
+      --text: #e9eefc;
+      --muted: #92a0c4;
+      --line: #273154;
+      --cyan: #33d1ff;
+      --lime: #b7ff3c;
+      --amber: #ffb547;
+      --red: #ff6b6b;
+      --link: #7dd3fc;
+      --panel-top: rgba(255,255,255,0.03);
+      --panel-bottom: rgba(255,255,255,0.015);
+      --shadow: rgba(0,0,0,0.18);
+      --button-bg: rgba(255,255,255,0.06);
+      --button-text: var(--text);
+      --article-code-bg: rgba(255,255,255,0.06);
+      --article-code-border: rgba(255,255,255,0.08);
+      --pre-bg: #0f1731;
+      --blockquote-bg: rgba(51,209,255,0.06);
+    }
+
+    html[data-theme="light"] {
+      --bg: #eef4ff;
+      --bg-accent: #d9e8ff;
+      --panel: #ffffff;
+      --panel-2: #f4f8ff;
+      --text: #11203f;
+      --muted: #597094;
+      --line: #d3def0;
+      --cyan: #0f84c9;
+      --lime: #6eab12;
+      --amber: #d6861b;
+      --red: #c94242;
+      --link: #0f84c9;
+      --panel-top: rgba(255,255,255,0.94);
+      --panel-bottom: rgba(240,246,255,0.94);
+      --shadow: rgba(45,72,117,0.12);
+      --button-bg: #ffffff;
+      --button-text: #11203f;
+      --article-code-bg: rgba(17,32,63,0.06);
+      --article-code-border: rgba(17,32,63,0.08);
+      --pre-bg: #eef4ff;
+      --blockquote-bg: rgba(15,132,201,0.08);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top left, var(--bg-accent) 0, var(--bg) 45%);
+      color: var(--text);
+      font-family: Inter, Arial, sans-serif;
+      overflow-x: hidden;
+    }
+    .sidebar-toggle {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 1200;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+      box-shadow: 0 12px 30px var(--shadow);
+      color: var(--button-text);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+    }
+    .theme-switcher {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 1200;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+      box-shadow: 0 12px 30px var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .theme-switcher-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .theme-switcher-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px;
+      border-radius: 999px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+    }
+    .theme-switcher-button {
+      appearance: none;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      min-width: 68px;
+    }
+    .theme-switcher-button[aria-pressed="true"] {
+      background: var(--button-bg);
+      color: var(--button-text);
+      box-shadow: inset 0 0 0 1px var(--line);
+    }
+    .shell {
+      display: grid;
+      grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+      min-height: 100vh;
+      transition: grid-template-columns 180ms ease;
+    }
+    html[data-sidebar="collapsed"] .shell {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .sidebar {
+      padding: 24px 18px;
+      border-right: 1px solid var(--line);
+      background: var(--panel);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      min-width: 0;
+      width: 300px;
+      max-width: 300px;
+      transition: opacity 150ms ease, transform 180ms ease;
+    }
+    html[data-sidebar="collapsed"] .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-110%);
+      display: block;
+    }
+    .brand {
+      margin-bottom: 22px;
+    }
+    .eyebrow {
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    .brand h1 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.2;
+    }
+    .brand p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 10px 0 0;
+    }
+    .actions {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+    .action-link {
+      display: inline-block;
+      text-decoration: none;
+      color: var(--text);
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 13px;
+    }
+    .nav {
+      display: grid;
+      gap: 16px;
+    }
+    .nav-group {
+      display: grid;
+      gap: 8px;
+    }
+    .nav-heading {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0 4px;
+    }
+    .nav-group-links {
+      display: grid;
+      gap: 10px;
+    }
+    .nav-link {
+      display: block;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.02);
+      text-decoration: none;
+      color: var(--text);
+    }
+    .nav-link.active {
+      border-color: rgba(51,209,255,0.45);
+      box-shadow: inset 0 0 0 1px rgba(51,209,255,0.25);
+      background: rgba(51,209,255,0.08);
+    }
+    .nav-title {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .nav-meta {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .main {
+      padding: 88px 28px 28px;
+      min-width: 0;
+      width: 100%;
+    }
+    .article {
+      width: 100%;
+      max-width: 920px;
+      margin: 0 auto;
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 28px 32px;
+      box-shadow: 0 16px 40px var(--shadow);
+    }
+    .article.article-wide {
+      width: 100%;
+      max-width: 1320px;
+    }
+    .article h1, .article h2, .article h3 {
+      margin-top: 0;
+    }
+    .article h1 {
+      font-size: 32px;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .article h2 {
+      font-size: 20px;
+      margin-top: 28px;
+      margin-bottom: 14px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+    .article h3 {
+      font-size: 16px;
+      margin-top: 22px;
+      margin-bottom: 10px;
+      color: var(--cyan);
+    }
+    .article p, .article li {
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+    .article ul, .article ol {
+      padding-left: 22px;
+    }
+    .article a {
+      color: var(--link);
+    }
+    .article code {
+      background: var(--article-code-bg);
+      border: 1px solid var(--article-code-border);
+      border-radius: 8px;
+      padding: 2px 6px;
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 0.92em;
+    }
+    .article pre {
+      background: var(--pre-bg);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      overflow: auto;
+    }
+    .article table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 20px;
+      font-size: 14px;
+    }
+    .article th, .article td {
+      border-bottom: 1px solid var(--line);
+      padding: 11px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .article th {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 12px;
+    }
+    .article blockquote {
+      margin: 18px 0;
+      padding: 14px 18px;
+      border-left: 3px solid var(--cyan);
+      background: var(--blockquote-bg);
+      border-radius: 12px;
+      color: var(--text);
+    }
+    .embed-frame {
+      width: 100%;
+      height: calc(100vh - 170px);
+      min-height: 980px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #ffffff;
+    }
+    .embed-note {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 980px) {
+      .sidebar-toggle {
+        left: 18px;
+      }
+      .theme-switcher {
+        left: 18px;
+        right: 18px;
+        justify-content: space-between;
+        top: 64px;
+      }
+      .shell { grid-template-columns: 1fr; }
+      .sidebar {
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+      .main { padding: 92px 18px 18px; }
+      .article { padding: 22px 20px; }
+      .embed-frame { min-height: 760px; height: calc(100vh - 220px); }
+    }
+  </style>
+</head>
+<body>
+  <button class="sidebar-toggle" id="sidebarToggle" type="button" aria-expanded="true">Hide Navigation</button>
+  <div class="theme-switcher" role="group" aria-label="Theme switcher">
+    <span class="theme-switcher-label">Theme</span>
+    <div class="theme-switcher-group">
+      <button class="theme-switcher-button" type="button" data-theme-option="dark">Dark</button>
+      <button class="theme-switcher-button" type="button" data-theme-option="light">Light</button>
+    </div>
+  </div>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="eyebrow">RadarEstate</div>
+        <h1>Client Reports</h1>
+        <p>Styled HTML delivery layer for weekly radar, deep dives and client pack notes.</p>
+      </div>
+      <div class="actions">
+        <a class="action-link" href="../dashboard/latest-report.html">Open Visual Dashboard</a>
+        <a class="action-link" href="hero-visual-pack.html">Open Hero Visual Pack</a>
+        <a class="action-link" href="index.html">Open Client Pack</a>
+      </div>
+      <nav class="nav"><section class="nav-group"><div class="nav-heading">Main Deliverables</div><div class="nav-group-links"><a class="nav-link" href="hero-visual-pack.html"><span class="nav-title">Hero Visual Pack</span><span class="nav-meta">Hero Visual Pack</span></a><a class="nav-link" href="client-pack-latest.html"><span class="nav-title">Sydney Client Pack</span><span class="nav-meta">Client Pack Latest</span></a><a class="nav-link" href="full-report-2026-04-05.html"><span class="nav-title">Sydney Development Full Report</span><span class="nav-meta">Full Report 2026 04 05</span></a><a class="nav-link" href="delta-report-2026-04-05-vs-2026-03-29.html"><span class="nav-title">Sydney Development Delta Report</span><span class="nav-meta">Delta Report 2026 04 05 Vs 2026 03 29</span></a><a class="nav-link" href="top-10-insights-latest.html"><span class="nav-title">Top 10 Insights</span><span class="nav-meta">Top 10 Insights Latest</span></a><a class="nav-link" href="top-site-screening-2026-04-05.html"><span class="nav-title">Sydney Top Site Screening</span><span class="nav-meta">Top Site Screening 2026 04 05</span></a><a class="nav-link" href="weekly-radar-2026-04-05.html"><span class="nav-title">Sydney Planning Opportunity Radar</span><span class="nav-meta">Weekly Radar 2026 04 05</span></a><a class="nav-link" href="methodology-appendix.html"><span class="nav-title">Sydney Development Report Methodology</span><span class="nav-meta">Methodology Appendix</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-asquith-normanhurst-29-dp31482.html"><span class="nav-title">Site Card: 22 CARCOOLA CRESCENT NORMANHURST</span><span class="nav-meta">Site Card 2026 04 05 Precinct Asquith Normanhurst 29 Dp31482</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-carlingford-20-dp32722.html"><span class="nav-title">Site Card: 74 KEELER STREET CARLINGFORD</span><span class="nav-meta">Site Card 2026 04 05 Precinct Carlingford 20 Dp32722</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-chatswood-c-dp385527.html"><span class="nav-title">Site Card: 2A BLAKESLEY STREET CHATSWOOD</span><span class="nav-meta">Site Card 2026 04 05 Precinct Chatswood C Dp385527</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-lane-cove-1-dp1042523.html"><span class="nav-title">Site Card: 76 PENROSE STREET LANE COVE WEST</span><span class="nav-meta">Site Card 2026 04 05 Precinct Lane Cove 1 Dp1042523</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-lane-cove-11-dp13316.html"><span class="nav-title">Site Card: 42 CULLEN STREET LANE COVE WEST</span><span class="nav-meta">Site Card 2026 04 05 Precinct Lane Cove 11 Dp13316</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-lane-cove-39-dp4842.html"><span class="nav-title">Site Card: 14 GATACRE AVENUE LANE COVE</span><span class="nav-meta">Site Card 2026 04 05 Precinct Lane Cove 39 Dp4842</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-lane-cove-44b-dp372323.html"><span class="nav-title">Site Card: 10 MORRICE STREET LANE COVE</span><span class="nav-meta">Site Card 2026 04 05 Precinct Lane Cove 44b Dp372323</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-lane-cove-d-dp15678.html"><span class="nav-title">Site Card: 45 BARWON ROAD LANE COVE WEST</span><span class="nav-meta">Site Card 2026 04 05 Precinct Lane Cove D Dp15678</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-lane-cove-d-dp408643.html"><span class="nav-title">Site Card: 21 PENROSE STREET LANE COVE</span><span class="nav-meta">Site Card 2026 04 05 Precinct Lane Cove D Dp408643</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-marrickville-28-2-dp777.html"><span class="nav-title">Site Card: 1/28 GLEN STREET MARRICKVILLE</span><span class="nav-meta">Site Card 2026 04 05 Precinct Marrickville 28 2 Dp777</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-merrylands-2-dp15979.html"><span class="nav-title">Site Card: 25 CHARLOTTE STREET MERRYLANDS</span><span class="nav-meta">Site Card 2026 04 05 Precinct Merrylands 2 Dp15979</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-pennant-hills-51-dp1284389.html"><span class="nav-title">Site Card: 130 VICTORIA ROAD WEST PENNANT HILLS</span><span class="nav-meta">Site Card 2026 04 05 Precinct Pennant Hills 51 Dp1284389</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-riverwood-86-dp15347.html"><span class="nav-title">Site Card: 5 MOROTAI AVENUE RIVERWOOD</span><span class="nav-meta">Site Card 2026 04 05 Precinct Riverwood 86 Dp15347</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-spit-junction-c-dp319194.html"><span class="nav-title">Site Card: 31 THE GROVE MOSMAN</span><span class="nav-meta">Site Card 2026 04 05 Precinct Spit Junction C Dp319194</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-thornleigh-47-dp9791.html"><span class="nav-title">Site Card: 19 OAKLEIGH AVENUE THORNLEIGH</span><span class="nav-meta">Site Card 2026 04 05 Precinct Thornleigh 47 Dp9791</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-waitara-wahroonga-1-dp843067.html"><span class="nav-title">Site Card: 25 BALMORAL STREET WAITARA</span><span class="nav-meta">Site Card 2026 04 05 Precinct Waitara Wahroonga 1 Dp843067</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-westmead-31-dp12067.html"><span class="nav-title">Site Card: 160 BRIDGE ROAD WESTMEAD</span><span class="nav-meta">Site Card 2026 04 05 Precinct Westmead 31 Dp12067</span></a><a class="nav-link" href="deep-dive-asquith-normanhurst-2026-04-05.html"><span class="nav-title">Deep Dive: Asquith / Normanhurst</span><span class="nav-meta">Deep Dive Asquith Normanhurst 2026 04 05</span></a><a class="nav-link" href="deep-dive-chatswood-2026-04-05.html"><span class="nav-title">Deep Dive: Chatswood</span><span class="nav-meta">Deep Dive Chatswood 2026 04 05</span></a><a class="nav-link" href="deep-dive-lane-cove-2026-04-05.html"><span class="nav-title">Deep Dive: Lane Cove</span><span class="nav-meta">Deep Dive Lane Cove 2026 04 05</span></a><a class="nav-link" href="deep-dive-merrylands-2026-04-05.html"><span class="nav-title">Deep Dive: Merrylands</span><span class="nav-meta">Deep Dive Merrylands 2026 04 05</span></a><a class="nav-link" href="deep-dive-mosman-spit-junction-2026-04-05.html"><span class="nav-title">Deep Dive: Mosman / Spit Junction</span><span class="nav-meta">Deep Dive Mosman Spit Junction 2026 04 05</span></a><a class="nav-link" href="deep-dive-pennant-hills-2026-04-05.html"><span class="nav-title">Deep Dive: Pennant Hills</span><span class="nav-meta">Deep Dive Pennant Hills 2026 04 05</span></a><a class="nav-link" href="deep-dive-thornleigh-2026-04-05.html"><span class="nav-title">Deep Dive: Thornleigh</span><span class="nav-meta">Deep Dive Thornleigh 2026 04 05</span></a><a class="nav-link" href="deep-dive-waitara-wahroonga-2026-04-05.html"><span class="nav-title">Deep Dive: Waitara / Wahroonga</span><span class="nav-meta">Deep Dive Waitara Wahroonga 2026 04 05</span></a><a class="nav-link" href="coverage-readiness-greater-sydney-expanded.html"><span class="nav-title">Coverage Readiness: greater-sydney-expanded</span><span class="nav-meta">Coverage Readiness Greater Sydney Expanded</span></a></div></section><section class="nav-group"><div class="nav-heading">Regional</div><div class="nav-group-links"><a class="nav-link" href="client-pack-newcastle-hunter.html"><span class="nav-title">Newcastle-Hunter Client Pack</span><span class="nav-meta">Client Pack Newcastle Hunter</span></a><a class="nav-link" href="top-10-insights-latest.html"><span class="nav-title">Top 10 Insights</span><span class="nav-meta">Top 10 Insights Latest</span></a><a class="nav-link" href="weekly-radar-newcastle-hunter.html"><span class="nav-title">Newcastle-Hunter Planning Opportunity Radar</span><span class="nav-meta">Weekly Radar Newcastle Hunter</span></a><a class="nav-link" href="top-site-screening-newcastle-hunter.html"><span class="nav-title">Newcastle-Hunter Top Site Screening</span><span class="nav-meta">Top Site Screening Newcastle Hunter</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-kotara-19-dp876517.html"><span class="nav-title">Site Card: 89 PARK AVENUE KOTARA</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Kotara 19 Dp876517</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-charlestown-20-dp1177332.html"><span class="nav-title">Site Card: 30 PEARSON STREET CHARLESTOWN</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Charlestown 20 Dp1177332</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-newcastle-city-centre-1-dp867617.html"><span class="nav-title">Site Card: 711 HUNTER STREET NEWCASTLE WEST</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Newcastle City Centre 1 Dp867617</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-newcastle-city-centre-2-dp1271240.html"><span class="nav-title">Site Card: 854 HUNTER STREET NEWCASTLE WEST</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Newcastle City Centre 2 Dp1271240</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-newcastle-city-centre-24-dp1269807.html"><span class="nav-title">Site Card: 5 PERKINS STREET NEWCASTLE</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Newcastle City Centre 24 Dp1269807</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-kotara-140-dp1167789.html"><span class="nav-title">Site Card: 88 PARK AVENUE KOTARA</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Kotara 140 Dp1167789</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-newcastle-city-centre-20-dp1204023.html"><span class="nav-title">Site Card: 45 WATT STREET NEWCASTLE</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Newcastle City Centre 20 Dp1204023</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-nelson-bay-2-dp15998.html"><span class="nav-title">Site Card: 90 MAGNUS STREET NELSON BAY</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Nelson Bay 2 Dp15998</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-newcastle-city-centre-1-dp798865.html"><span class="nav-title">Site Card: 134 KING STREET NEWCASTLE</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Newcastle City Centre 1 Dp798865</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-newcastle-city-centre-4-dp1250295.html"><span class="nav-title">Site Card: 373 HUNTER STREET NEWCASTLE</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Newcastle City Centre 4 Dp1250295</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-raymond-terrace-1-dp789728.html"><span class="nav-title">Site Card: 103 RICHARDSON ROAD RAYMOND TERRACE</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Raymond Terrace 1 Dp789728</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-mayfield-4-dp270249.html"><span class="nav-title">Site Card: 4 LAURIO PLACE MAYFIELD WEST</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Mayfield 4 Dp270249</span></a><a class="nav-link" href="deep-dive-mayfield.html"><span class="nav-title">Deep Dive: Mayfield</span><span class="nav-meta">Deep Dive Mayfield</span></a><a class="nav-link" href="deep-dive-newcastle-city-centre.html"><span class="nav-title">Deep Dive: Newcastle City Centre</span><span class="nav-meta">Deep Dive Newcastle City Centre</span></a><a class="nav-link" href="deep-dive-cessnock.html"><span class="nav-title">Deep Dive: Cessnock</span><span class="nav-meta">Deep Dive Cessnock</span></a></div></section><section class="nav-group"><div class="nav-heading">Site Cards</div><div class="nav-group-links"><a class="nav-link" href="site-card-2026-04-05-precinct-asquith-normanhurst-29-dp31482.html"><span class="nav-title">Site Card: 22 CARCOOLA CRESCENT NORMANHURST</span><span class="nav-meta">Site Card 2026 04 05 Precinct Asquith Normanhurst 29 Dp31482</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-carlingford-20-dp32722.html"><span class="nav-title">Site Card: 74 KEELER STREET CARLINGFORD</span><span class="nav-meta">Site Card 2026 04 05 Precinct Carlingford 20 Dp32722</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-chatswood-c-dp385527.html"><span class="nav-title">Site Card: 2A BLAKESLEY STREET CHATSWOOD</span><span class="nav-meta">Site Card 2026 04 05 Precinct Chatswood C Dp385527</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-lane-cove-1-dp1042523.html"><span class="nav-title">Site Card: 76 PENROSE STREET LANE COVE WEST</span><span class="nav-meta">Site Card 2026 04 05 Precinct Lane Cove 1 Dp1042523</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-lane-cove-11-dp13316.html"><span class="nav-title">Site Card: 42 CULLEN STREET LANE COVE WEST</span><span class="nav-meta">Site Card 2026 04 05 Precinct Lane Cove 11 Dp13316</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-lane-cove-39-dp4842.html"><span class="nav-title">Site Card: 14 GATACRE AVENUE LANE COVE</span><span class="nav-meta">Site Card 2026 04 05 Precinct Lane Cove 39 Dp4842</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-lane-cove-44b-dp372323.html"><span class="nav-title">Site Card: 10 MORRICE STREET LANE COVE</span><span class="nav-meta">Site Card 2026 04 05 Precinct Lane Cove 44b Dp372323</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-lane-cove-d-dp15678.html"><span class="nav-title">Site Card: 45 BARWON ROAD LANE COVE WEST</span><span class="nav-meta">Site Card 2026 04 05 Precinct Lane Cove D Dp15678</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-lane-cove-d-dp408643.html"><span class="nav-title">Site Card: 21 PENROSE STREET LANE COVE</span><span class="nav-meta">Site Card 2026 04 05 Precinct Lane Cove D Dp408643</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-marrickville-28-2-dp777.html"><span class="nav-title">Site Card: 1/28 GLEN STREET MARRICKVILLE</span><span class="nav-meta">Site Card 2026 04 05 Precinct Marrickville 28 2 Dp777</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-merrylands-2-dp15979.html"><span class="nav-title">Site Card: 25 CHARLOTTE STREET MERRYLANDS</span><span class="nav-meta">Site Card 2026 04 05 Precinct Merrylands 2 Dp15979</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-pennant-hills-51-dp1284389.html"><span class="nav-title">Site Card: 130 VICTORIA ROAD WEST PENNANT HILLS</span><span class="nav-meta">Site Card 2026 04 05 Precinct Pennant Hills 51 Dp1284389</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-riverwood-86-dp15347.html"><span class="nav-title">Site Card: 5 MOROTAI AVENUE RIVERWOOD</span><span class="nav-meta">Site Card 2026 04 05 Precinct Riverwood 86 Dp15347</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-spit-junction-c-dp319194.html"><span class="nav-title">Site Card: 31 THE GROVE MOSMAN</span><span class="nav-meta">Site Card 2026 04 05 Precinct Spit Junction C Dp319194</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-thornleigh-47-dp9791.html"><span class="nav-title">Site Card: 19 OAKLEIGH AVENUE THORNLEIGH</span><span class="nav-meta">Site Card 2026 04 05 Precinct Thornleigh 47 Dp9791</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-waitara-wahroonga-1-dp843067.html"><span class="nav-title">Site Card: 25 BALMORAL STREET WAITARA</span><span class="nav-meta">Site Card 2026 04 05 Precinct Waitara Wahroonga 1 Dp843067</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-westmead-31-dp12067.html"><span class="nav-title">Site Card: 160 BRIDGE ROAD WESTMEAD</span><span class="nav-meta">Site Card 2026 04 05 Precinct Westmead 31 Dp12067</span></a></div></section><section class="nav-group"><div class="nav-heading">Deep Dives</div><div class="nav-group-links"><a class="nav-link" href="deep-dive-asquith-normanhurst-2026-04-05.html"><span class="nav-title">Deep Dive: Asquith / Normanhurst</span><span class="nav-meta">Deep Dive Asquith Normanhurst 2026 04 05</span></a><a class="nav-link" href="deep-dive-chatswood-2026-04-05.html"><span class="nav-title">Deep Dive: Chatswood</span><span class="nav-meta">Deep Dive Chatswood 2026 04 05</span></a><a class="nav-link" href="deep-dive-lane-cove-2026-04-05.html"><span class="nav-title">Deep Dive: Lane Cove</span><span class="nav-meta">Deep Dive Lane Cove 2026 04 05</span></a><a class="nav-link" href="deep-dive-merrylands-2026-04-05.html"><span class="nav-title">Deep Dive: Merrylands</span><span class="nav-meta">Deep Dive Merrylands 2026 04 05</span></a><a class="nav-link" href="deep-dive-mosman-spit-junction-2026-04-05.html"><span class="nav-title">Deep Dive: Mosman / Spit Junction</span><span class="nav-meta">Deep Dive Mosman Spit Junction 2026 04 05</span></a><a class="nav-link" href="deep-dive-pennant-hills-2026-04-05.html"><span class="nav-title">Deep Dive: Pennant Hills</span><span class="nav-meta">Deep Dive Pennant Hills 2026 04 05</span></a><a class="nav-link" href="deep-dive-thornleigh-2026-04-05.html"><span class="nav-title">Deep Dive: Thornleigh</span><span class="nav-meta">Deep Dive Thornleigh 2026 04 05</span></a><a class="nav-link" href="deep-dive-waitara-wahroonga-2026-04-05.html"><span class="nav-title">Deep Dive: Waitara / Wahroonga</span><span class="nav-meta">Deep Dive Waitara Wahroonga 2026 04 05</span></a><a class="nav-link" href="deep-dive-mayfield.html"><span class="nav-title">Deep Dive: Mayfield</span><span class="nav-meta">Deep Dive Mayfield</span></a><a class="nav-link" href="deep-dive-newcastle-city-centre.html"><span class="nav-title">Deep Dive: Newcastle City Centre</span><span class="nav-meta">Deep Dive Newcastle City Centre</span></a><a class="nav-link" href="deep-dive-cessnock.html"><span class="nav-title">Deep Dive: Cessnock</span><span class="nav-meta">Deep Dive Cessnock</span></a></div></section></nav>
+    </aside>
+    <main class="main">
+      <article class="article"><h1>Sydney Top Site Screening</h1>
+<h2>Summary</h2>
+<ul>
+<li>Current automated site-screening top cut shown below: <strong>12</strong> sites for Sydney.</li>
+<li>Default ranking lens: calibrated for small-mid developers, with a slight preference toward townhouse / small subdivision fit over larger-format high-rise or assembly-style parcels.</li>
+<li>Band mix across the current region-level site layer: <strong>71 Advance</strong>, <strong>337 Review</strong>, <strong>142 Caution</strong>.</li>
+<li>Highest current site candidate: <strong>2A BLAKESLEY STREET CHATSWOOD</strong> in <strong>Chatswood</strong> with score <strong>56</strong> and action <strong>Advance to site review</strong>.</li>
+<li>Most common current site-level flags: <strong>Heritage item [high] = 71</strong>, <strong>Bushfire prone land [high] = 20</strong>, <strong>Bushfire prone land [medium] = 6</strong>.</li>
+</ul>
+<h2>Method</h2>
+<ul>
+<li>This report is fully automated from free, public NSW open data and current mapped application signals.</li>
+<li>The default buy box is now a small-mid developer lens. Moderate lot sizes, workable frontage, lower title complexity, and townhouse-to-boutique-apartment control envelopes are preferred ahead of supersites.</li>
+<li>It screens lots/sites, not just precincts, but it is still a triage tool rather than a title/comps/residual decision engine.</li>
+<li>Controls shown here are the current point-intersected planning envelope. Constraint rows show current open-data red flags such as heritage, state heritage curtilage, land reservation, flood planning, biodiversity, bushfire, airport noise and OLS.</li>
+<li>A row that says no current open-data red flag was surfaced means no current mapped red flag appeared in this pass. It does not mean the site is parcel-safe or cleared for acquisition.</li>
+<li>The search-area label is only a working geography. Governing EPI and parcel jurisdiction should control how the planning envelope is interpreted for a given lot.</li>
+</ul>
+<h2>Top Ranked Sites</h2>
+<table>
+<thead>
+<tr>
+<th>Rank</th>
+<th>Site</th>
+<th>Search Area</th>
+<th>Parcel Jurisdiction</th>
+<th>Band</th>
+<th>Score</th>
+<th>Zoning</th>
+<th>FSR</th>
+<th>Height</th>
+<th>Lot Area</th>
+<th>Frontage</th>
+<th>Signals</th>
+<th>Red-Flag Stack</th>
+<th>Card</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>2A BLAKESLEY STREET CHATSWOOD</td>
+<td>Chatswood</td>
+<td>Willoughby</td>
+<td>Advance</td>
+<td>56</td>
+<td>R3</td>
+<td>0.90</td>
+<td>12.0m</td>
+<td>495 sqm</td>
+<td>22.7 m</td>
+<td>1</td>
+<td>No current open-data red flag surfaced in this pass. Not parcel-safe.</td>
+<td><a href="reports/site-card-latest-precinct-chatswood-c-dp385527.md">Open card</a></td>
+</tr>
+<tr>
+<td>2</td>
+<td>14 GATACRE AVENUE LANE COVE</td>
+<td>Lane Cove</td>
+<td>Lane Cove</td>
+<td>Advance</td>
+<td>51</td>
+<td>R2</td>
+<td>0.50</td>
+<td>9.5m</td>
+<td>1,089 sqm</td>
+<td>18.8 m</td>
+<td>1</td>
+<td>No current open-data red flag surfaced in this pass. Not parcel-safe.</td>
+<td><a href="reports/site-card-latest-precinct-lane-cove-39-dp4842.md">Open card</a></td>
+</tr>
+<tr>
+<td>3</td>
+<td>76 PENROSE STREET LANE COVE WEST</td>
+<td>Lane Cove</td>
+<td>Lane Cove</td>
+<td>Advance</td>
+<td>51</td>
+<td>R2</td>
+<td>0.50</td>
+<td>9.5m</td>
+<td>993 sqm</td>
+<td>18.0 m</td>
+<td>1</td>
+<td>No current open-data red flag surfaced in this pass. Not parcel-safe.</td>
+<td><a href="reports/site-card-latest-precinct-lane-cove-1-dp1042523.md">Open card</a></td>
+</tr>
+<tr>
+<td>4</td>
+<td>42 CULLEN STREET LANE COVE WEST</td>
+<td>Lane Cove</td>
+<td>Lane Cove</td>
+<td>Advance</td>
+<td>51</td>
+<td>R2</td>
+<td>0.50</td>
+<td>9.5m</td>
+<td>835 sqm</td>
+<td>16.4 m</td>
+<td>1</td>
+<td>No current open-data red flag surfaced in this pass. Not parcel-safe.</td>
+<td><a href="reports/site-card-latest-precinct-lane-cove-11-dp13316.md">Open card</a></td>
+</tr>
+<tr>
+<td>5</td>
+<td>45 BARWON ROAD LANE COVE WEST</td>
+<td>Lane Cove</td>
+<td>Lane Cove</td>
+<td>Advance</td>
+<td>51</td>
+<td>R2</td>
+<td>0.60</td>
+<td>9.5m</td>
+<td>799 sqm</td>
+<td>21.3 m</td>
+<td>1</td>
+<td>No current open-data red flag surfaced in this pass. Not parcel-safe.</td>
+<td><a href="reports/site-card-latest-precinct-lane-cove-d-dp15678.md">Open card</a></td>
+</tr>
+<tr>
+<td>6</td>
+<td>10 MORRICE STREET LANE COVE</td>
+<td>Lane Cove</td>
+<td>Lane Cove</td>
+<td>Advance</td>
+<td>49</td>
+<td>R2</td>
+<td>0.50</td>
+<td>9.5m</td>
+<td>1,298 sqm</td>
+<td>18.1 m</td>
+<td>1</td>
+<td>No current open-data red flag surfaced in this pass. Not parcel-safe.</td>
+<td><a href="reports/site-card-latest-precinct-lane-cove-44b-dp372323.md">Open card</a></td>
+</tr>
+<tr>
+<td>7</td>
+<td>21 PENROSE STREET LANE COVE</td>
+<td>Lane Cove</td>
+<td>Lane Cove</td>
+<td>Advance</td>
+<td>49</td>
+<td>R2</td>
+<td>0.50</td>
+<td>9.5m</td>
+<td>1,301 sqm</td>
+<td>25.6 m</td>
+<td>1</td>
+<td>No current open-data red flag surfaced in this pass. Not parcel-safe.</td>
+<td><a href="reports/site-card-latest-precinct-lane-cove-d-dp408643.md">Open card</a></td>
+</tr>
+<tr>
+<td>8</td>
+<td>1/28 GLEN STREET MARRICKVILLE</td>
+<td>Marrickville</td>
+<td>Inner West</td>
+<td>Advance</td>
+<td>48</td>
+<td>R1</td>
+<td>1.10</td>
+<td>17.0m</td>
+<td>1,006 sqm</td>
+<td>18.4 m</td>
+<td>1</td>
+<td>No current open-data red flag surfaced in this pass. Not parcel-safe.</td>
+<td><a href="reports/site-card-latest-precinct-marrickville-28-2-dp777.md">Open card</a></td>
+</tr>
+<tr>
+<td>9</td>
+<td>5 MOROTAI AVENUE RIVERWOOD</td>
+<td>Riverwood</td>
+<td>Georges River</td>
+<td>Advance</td>
+<td>48</td>
+<td>R4</td>
+<td>1.00</td>
+<td>12.0m</td>
+<td>871 sqm</td>
+<td>14.7 m</td>
+<td>1</td>
+<td>No current open-data red flag surfaced in this pass. Not parcel-safe.</td>
+<td><a href="reports/site-card-latest-precinct-riverwood-86-dp15347.md">Open card</a></td>
+</tr>
+<tr>
+<td>10</td>
+<td>74 KEELER STREET CARLINGFORD</td>
+<td>Carlingford</td>
+<td>Parramatta</td>
+<td>Advance</td>
+<td>46</td>
+<td>R4</td>
+<td>1.30</td>
+<td>17.5m</td>
+<td>1,383 sqm</td>
+<td>21.0 m</td>
+<td>1</td>
+<td>No current open-data red flag surfaced in this pass. Not parcel-safe.</td>
+<td><a href="reports/site-card-latest-precinct-carlingford-20-dp32722.md">Open card</a></td>
+</tr>
+<tr>
+<td>11</td>
+<td>31 THE GROVE MOSMAN</td>
+<td>Mosman / Spit Junction</td>
+<td>Mosman</td>
+<td>Advance</td>
+<td>46</td>
+<td>C4</td>
+<td>0.50</td>
+<td>8.5m</td>
+<td>861 sqm</td>
+<td>22.2 m</td>
+<td>1</td>
+<td>No current open-data red flag surfaced in this pass. Not parcel-safe.</td>
+<td><a href="reports/site-card-latest-precinct-spit-junction-c-dp319194.md">Open card</a></td>
+</tr>
+<tr>
+<td>12</td>
+<td>16 INKERMAN STREET MOSMAN</td>
+<td>Mosman / Spit Junction</td>
+<td>Mosman</td>
+<td>Advance</td>
+<td>46</td>
+<td>C4</td>
+<td>0.50</td>
+<td>8.5m</td>
+<td>781 sqm</td>
+<td>18.5 m</td>
+<td>1</td>
+<td>No current open-data red flag surfaced in this pass. Not parcel-safe.</td>
+<td><a href="reports/site-card-latest-precinct-spit-junction-a-dp13359.md">Open card</a></td>
+</tr>
+</tbody></table>
+<h2>Current Site-Level Red Flags</h2>
+<table>
+<thead>
+<tr>
+<th>Constraint</th>
+<th>Severity</th>
+<th>Hit Count</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Heritage item</td>
+<td>high</td>
+<td>71</td>
+</tr>
+<tr>
+<td>Bushfire prone land</td>
+<td>high</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Bushfire prone land</td>
+<td>medium</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Obstacle limitation surface</td>
+<td>low</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Biodiversity values</td>
+<td>high</td>
+<td>3</td>
+</tr>
+<tr>
+<td>Land reservation</td>
+<td>high</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Flood planning overlay</td>
+<td>medium</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<h2>Top 12 Detail</h2>
+<h3>2A BLAKESLEY STREET CHATSWOOD</h3>
+<ul>
+<li>Search area: <strong>Chatswood</strong></li>
+<li>Precinct: <strong>Chatswood</strong></li>
+<li>Precinct-level council context: <strong>Willoughby</strong></li>
+<li>Parcel governing jurisdiction from EPI: <strong>Willoughby</strong></li>
+<li>Jurisdiction alignment: <strong>Aligned</strong></li>
+<li>Screening band: <strong>Advance</strong> with score <strong>56</strong></li>
+<li>Recommended action: Advance to site review</li>
+<li>Precinct backdrop: rating <code>A</code>, policy <code>4</code>, timing <code>5</code>, approval risk <code>2</code></li>
+<li>Control envelope: zoning <code>R3</code> (Medium Density Residential), FSR <code>0.90</code>, height <code>12.0m</code>, minimum lot size <code>-</code></li>
+<li>Site metrics: lot <code>C//DP385527</code>, plan area <code>-</code>, geometry area <code>495 sqm</code>, frontage candidate <code>22.7 m</code>, matched recent signals <code>1</code></li>
+<li>Current red-flag stack: no current open-data red flag is surfaced in this pass. This is not a parcel-safe finding.</li>
+<li>Address signal: 2A BLAKESLEY STREET CHATSWOOD</li>
+<li>Site card: <a href="site-card-latest-precinct-chatswood-c-dp385527.html"><code>reports/site-card-latest-precinct-chatswood-c-dp385527.md</code></a></li>
+</ul>
+<h3>14 GATACRE AVENUE LANE COVE</h3>
+<ul>
+<li>Search area: <strong>Lane Cove</strong></li>
+<li>Precinct: <strong>Lane Cove</strong></li>
+<li>Precinct-level council context: <strong>Lane Cove</strong></li>
+<li>Parcel governing jurisdiction from EPI: <strong>Lane Cove</strong></li>
+<li>Jurisdiction alignment: <strong>Aligned</strong></li>
+<li>Screening band: <strong>Advance</strong> with score <strong>51</strong></li>
+<li>Recommended action: Advance to site review</li>
+<li>Precinct backdrop: rating <code>A</code>, policy <code>4</code>, timing <code>5</code>, approval risk <code>2</code></li>
+<li>Control envelope: zoning <code>R2</code> (Low Density Residential), FSR <code>0.50</code>, height <code>9.5m</code>, minimum lot size <code>550 m²</code></li>
+<li>Site metrics: lot <code>39//DP4842</code>, plan area <code>-</code>, geometry area <code>1,089 sqm</code>, frontage candidate <code>18.8 m</code>, matched recent signals <code>1</code></li>
+<li>Current red-flag stack: no current open-data red flag is surfaced in this pass. This is not a parcel-safe finding.</li>
+<li>Address signal: 14 GATACRE AVENUE LANE COVE</li>
+<li>Site card: <a href="site-card-latest-precinct-lane-cove-39-dp4842.html"><code>reports/site-card-latest-precinct-lane-cove-39-dp4842.md</code></a></li>
+</ul>
+<h3>76 PENROSE STREET LANE COVE WEST</h3>
+<ul>
+<li>Search area: <strong>Lane Cove</strong></li>
+<li>Precinct: <strong>Lane Cove</strong></li>
+<li>Precinct-level council context: <strong>Lane Cove</strong></li>
+<li>Parcel governing jurisdiction from EPI: <strong>Lane Cove</strong></li>
+<li>Jurisdiction alignment: <strong>Aligned</strong></li>
+<li>Screening band: <strong>Advance</strong> with score <strong>51</strong></li>
+<li>Recommended action: Advance to site review</li>
+<li>Precinct backdrop: rating <code>A</code>, policy <code>4</code>, timing <code>5</code>, approval risk <code>2</code></li>
+<li>Control envelope: zoning <code>R2</code> (Low Density Residential), FSR <code>0.50</code>, height <code>9.5m</code>, minimum lot size <code>550 m²</code></li>
+<li>Site metrics: lot <code>1//DP1042523</code>, plan area <code>-</code>, geometry area <code>993 sqm</code>, frontage candidate <code>18.0 m</code>, matched recent signals <code>1</code></li>
+<li>Current red-flag stack: no current open-data red flag is surfaced in this pass. This is not a parcel-safe finding.</li>
+<li>Address signal: 76 PENROSE STREET LANE COVE WEST</li>
+<li>Site card: <a href="site-card-latest-precinct-lane-cove-1-dp1042523.html"><code>reports/site-card-latest-precinct-lane-cove-1-dp1042523.md</code></a></li>
+</ul>
+<h3>42 CULLEN STREET LANE COVE WEST</h3>
+<ul>
+<li>Search area: <strong>Lane Cove</strong></li>
+<li>Precinct: <strong>Lane Cove</strong></li>
+<li>Precinct-level council context: <strong>Lane Cove</strong></li>
+<li>Parcel governing jurisdiction from EPI: <strong>Lane Cove</strong></li>
+<li>Jurisdiction alignment: <strong>Aligned</strong></li>
+<li>Screening band: <strong>Advance</strong> with score <strong>51</strong></li>
+<li>Recommended action: Advance to site review</li>
+<li>Precinct backdrop: rating <code>A</code>, policy <code>4</code>, timing <code>5</code>, approval risk <code>2</code></li>
+<li>Control envelope: zoning <code>R2</code> (Low Density Residential), FSR <code>0.50</code>, height <code>9.5m</code>, minimum lot size <code>550 m²</code></li>
+<li>Site metrics: lot <code>11//DP13316</code>, plan area <code>-</code>, geometry area <code>835 sqm</code>, frontage candidate <code>16.4 m</code>, matched recent signals <code>1</code></li>
+<li>Current red-flag stack: no current open-data red flag is surfaced in this pass. This is not a parcel-safe finding.</li>
+<li>Address signal: 42 CULLEN STREET LANE COVE WEST</li>
+<li>Site card: <a href="site-card-latest-precinct-lane-cove-11-dp13316.html"><code>reports/site-card-latest-precinct-lane-cove-11-dp13316.md</code></a></li>
+</ul>
+<h3>45 BARWON ROAD LANE COVE WEST</h3>
+<ul>
+<li>Search area: <strong>Lane Cove</strong></li>
+<li>Precinct: <strong>Lane Cove</strong></li>
+<li>Precinct-level council context: <strong>Lane Cove</strong></li>
+<li>Parcel governing jurisdiction from EPI: <strong>Lane Cove</strong></li>
+<li>Jurisdiction alignment: <strong>Aligned</strong></li>
+<li>Screening band: <strong>Advance</strong> with score <strong>51</strong></li>
+<li>Recommended action: Advance to site review</li>
+<li>Precinct backdrop: rating <code>A</code>, policy <code>4</code>, timing <code>5</code>, approval risk <code>2</code></li>
+<li>Control envelope: zoning <code>R2</code> (Low Density Residential), FSR <code>0.60</code>, height <code>9.5m</code>, minimum lot size <code>-</code></li>
+<li>Site metrics: lot <code>D//DP15678</code>, plan area <code>-</code>, geometry area <code>799 sqm</code>, frontage candidate <code>21.3 m</code>, matched recent signals <code>1</code></li>
+<li>Current red-flag stack: no current open-data red flag is surfaced in this pass. This is not a parcel-safe finding.</li>
+<li>Address signal: 45 BARWON ROAD LANE COVE WEST</li>
+<li>Site card: <a href="site-card-latest-precinct-lane-cove-d-dp15678.html"><code>reports/site-card-latest-precinct-lane-cove-d-dp15678.md</code></a></li>
+</ul>
+<h3>10 MORRICE STREET LANE COVE</h3>
+<ul>
+<li>Search area: <strong>Lane Cove</strong></li>
+<li>Precinct: <strong>Lane Cove</strong></li>
+<li>Precinct-level council context: <strong>Lane Cove</strong></li>
+<li>Parcel governing jurisdiction from EPI: <strong>Lane Cove</strong></li>
+<li>Jurisdiction alignment: <strong>Aligned</strong></li>
+<li>Screening band: <strong>Advance</strong> with score <strong>49</strong></li>
+<li>Recommended action: Advance to site review</li>
+<li>Precinct backdrop: rating <code>A</code>, policy <code>4</code>, timing <code>5</code>, approval risk <code>2</code></li>
+<li>Control envelope: zoning <code>R2</code> (Low Density Residential), FSR <code>0.50</code>, height <code>9.5m</code>, minimum lot size <code>550 m²</code></li>
+<li>Site metrics: lot <code>44B//DP372323</code>, plan area <code>-</code>, geometry area <code>1,298 sqm</code>, frontage candidate <code>18.1 m</code>, matched recent signals <code>1</code></li>
+<li>Current red-flag stack: no current open-data red flag is surfaced in this pass. This is not a parcel-safe finding.</li>
+<li>Address signal: 10 MORRICE STREET LANE COVE</li>
+<li>Site card: <a href="site-card-latest-precinct-lane-cove-44b-dp372323.html"><code>reports/site-card-latest-precinct-lane-cove-44b-dp372323.md</code></a></li>
+</ul>
+<h3>21 PENROSE STREET LANE COVE</h3>
+<ul>
+<li>Search area: <strong>Lane Cove</strong></li>
+<li>Precinct: <strong>Lane Cove</strong></li>
+<li>Precinct-level council context: <strong>Lane Cove</strong></li>
+<li>Parcel governing jurisdiction from EPI: <strong>Lane Cove</strong></li>
+<li>Jurisdiction alignment: <strong>Aligned</strong></li>
+<li>Screening band: <strong>Advance</strong> with score <strong>49</strong></li>
+<li>Recommended action: Advance to site review</li>
+<li>Precinct backdrop: rating <code>A</code>, policy <code>4</code>, timing <code>5</code>, approval risk <code>2</code></li>
+<li>Control envelope: zoning <code>R2</code> (Low Density Residential), FSR <code>0.50</code>, height <code>9.5m</code>, minimum lot size <code>550 m²</code></li>
+<li>Site metrics: lot <code>D//DP408643</code>, plan area <code>-</code>, geometry area <code>1,301 sqm</code>, frontage candidate <code>25.6 m</code>, matched recent signals <code>1</code></li>
+<li>Current red-flag stack: no current open-data red flag is surfaced in this pass. This is not a parcel-safe finding.</li>
+<li>Address signal: 21 PENROSE STREET LANE COVE</li>
+<li>Site card: <a href="site-card-latest-precinct-lane-cove-d-dp408643.html"><code>reports/site-card-latest-precinct-lane-cove-d-dp408643.md</code></a></li>
+</ul>
+<h3>1/28 GLEN STREET MARRICKVILLE</h3>
+<ul>
+<li>Search area: <strong>Marrickville</strong></li>
+<li>Precinct: <strong>Marrickville</strong></li>
+<li>Precinct-level council context: <strong>Inner West</strong></li>
+<li>Parcel governing jurisdiction from EPI: <strong>Inner West</strong></li>
+<li>Jurisdiction alignment: <strong>Aligned</strong></li>
+<li>Screening band: <strong>Advance</strong> with score <strong>48</strong></li>
+<li>Recommended action: Advance to site review</li>
+<li>Precinct backdrop: rating <code>B</code>, policy <code>3</code>, timing <code>5</code>, approval risk <code>3</code></li>
+<li>Control envelope: zoning <code>R1</code> (General Residential), FSR <code>1.10</code>, height <code>17.0m</code>, minimum lot size <code>-</code></li>
+<li>Site metrics: lot <code>28/2/DP777</code>, plan area <code>-</code>, geometry area <code>1,006 sqm</code>, frontage candidate <code>18.4 m</code>, matched recent signals <code>1</code></li>
+<li>Current red-flag stack: no current open-data red flag is surfaced in this pass. This is not a parcel-safe finding.</li>
+<li>Address signal: 1/28 GLEN STREET MARRICKVILLE</li>
+<li>Site card: <a href="site-card-latest-precinct-marrickville-28-2-dp777.html"><code>reports/site-card-latest-precinct-marrickville-28-2-dp777.md</code></a></li>
+</ul>
+<h3>5 MOROTAI AVENUE RIVERWOOD</h3>
+<ul>
+<li>Search area: <strong>Riverwood</strong></li>
+<li>Precinct: <strong>Riverwood</strong></li>
+<li>Precinct-level council context: <strong>Georges River</strong></li>
+<li>Parcel governing jurisdiction from EPI: <strong>Georges River</strong></li>
+<li>Jurisdiction alignment: <strong>Aligned</strong></li>
+<li>Screening band: <strong>Advance</strong> with score <strong>48</strong></li>
+<li>Recommended action: Advance to site review</li>
+<li>Precinct backdrop: rating <code>B</code>, policy <code>0</code>, timing <code>3</code>, approval risk <code>3</code></li>
+<li>Control envelope: zoning <code>R4</code> (High Density Residential), FSR <code>1.00</code>, height <code>12.0m</code>, minimum lot size <code>1,000 m²</code></li>
+<li>Site metrics: lot <code>86//DP15347</code>, plan area <code>-</code>, geometry area <code>871 sqm</code>, frontage candidate <code>14.7 m</code>, matched recent signals <code>1</code></li>
+<li>Current red-flag stack: no current open-data red flag is surfaced in this pass. This is not a parcel-safe finding.</li>
+<li>Address signal: 5 MOROTAI AVENUE RIVERWOOD</li>
+<li>Site card: <a href="site-card-latest-precinct-riverwood-86-dp15347.html"><code>reports/site-card-latest-precinct-riverwood-86-dp15347.md</code></a></li>
+</ul>
+<h3>74 KEELER STREET CARLINGFORD</h3>
+<ul>
+<li>Search area: <strong>Carlingford</strong></li>
+<li>Precinct: <strong>Carlingford</strong></li>
+<li>Precinct-level council context: <strong>Parramatta</strong></li>
+<li>Parcel governing jurisdiction from EPI: <strong>Parramatta</strong></li>
+<li>Jurisdiction alignment: <strong>Aligned</strong></li>
+<li>Screening band: <strong>Advance</strong> with score <strong>46</strong></li>
+<li>Recommended action: Advance to site review</li>
+<li>Precinct backdrop: rating <code>B</code>, policy <code>1</code>, timing <code>4</code>, approval risk <code>2</code></li>
+<li>Control envelope: zoning <code>R4</code> (High Density Residential), FSR <code>1.30</code>, height <code>17.5m</code>, minimum lot size <code>550 m²</code></li>
+<li>Site metrics: lot <code>20//DP32722</code>, plan area <code>-</code>, geometry area <code>1,383 sqm</code>, frontage candidate <code>21.0 m</code>, matched recent signals <code>1</code></li>
+<li>Current red-flag stack: no current open-data red flag is surfaced in this pass. This is not a parcel-safe finding.</li>
+<li>Address signal: 74 KEELER STREET CARLINGFORD</li>
+<li>Site card: <a href="site-card-latest-precinct-carlingford-20-dp32722.html"><code>reports/site-card-latest-precinct-carlingford-20-dp32722.md</code></a></li>
+</ul>
+<h3>31 THE GROVE MOSMAN</h3>
+<ul>
+<li>Search area: <strong>Mosman / Spit Junction</strong></li>
+<li>Precinct: <strong>Mosman / Spit Junction</strong></li>
+<li>Precinct-level council context: <strong>Mosman</strong></li>
+<li>Parcel governing jurisdiction from EPI: <strong>Mosman</strong></li>
+<li>Jurisdiction alignment: <strong>Aligned</strong></li>
+<li>Screening band: <strong>Advance</strong> with score <strong>46</strong></li>
+<li>Recommended action: Advance to site review</li>
+<li>Precinct backdrop: rating <code>A</code>, policy <code>4</code>, timing <code>5</code>, approval risk <code>2</code></li>
+<li>Control envelope: zoning <code>C4</code> (Environmental Living), FSR <code>0.50</code>, height <code>8.5m</code>, minimum lot size <code>700 m²</code></li>
+<li>Site metrics: lot <code>C//DP319194</code>, plan area <code>-</code>, geometry area <code>861 sqm</code>, frontage candidate <code>22.2 m</code>, matched recent signals <code>1</code></li>
+<li>Current red-flag stack: no current open-data red flag is surfaced in this pass. This is not a parcel-safe finding.</li>
+<li>Address signal: 31 THE GROVE MOSMAN</li>
+<li>Site card: <a href="site-card-latest-precinct-spit-junction-c-dp319194.html"><code>reports/site-card-latest-precinct-spit-junction-c-dp319194.md</code></a></li>
+</ul>
+<h3>16 INKERMAN STREET MOSMAN</h3>
+<ul>
+<li>Search area: <strong>Mosman / Spit Junction</strong></li>
+<li>Precinct: <strong>Mosman / Spit Junction</strong></li>
+<li>Precinct-level council context: <strong>Mosman</strong></li>
+<li>Parcel governing jurisdiction from EPI: <strong>Mosman</strong></li>
+<li>Jurisdiction alignment: <strong>Aligned</strong></li>
+<li>Screening band: <strong>Advance</strong> with score <strong>46</strong></li>
+<li>Recommended action: Advance to site review</li>
+<li>Precinct backdrop: rating <code>A</code>, policy <code>4</code>, timing <code>5</code>, approval risk <code>2</code></li>
+<li>Control envelope: zoning <code>C4</code> (Environmental Living), FSR <code>0.50</code>, height <code>8.5m</code>, minimum lot size <code>700 m²</code></li>
+<li>Site metrics: lot <code>A//DP13359</code>, plan area <code>-</code>, geometry area <code>781 sqm</code>, frontage candidate <code>18.5 m</code>, matched recent signals <code>1</code></li>
+<li>Current red-flag stack: no current open-data red flag is surfaced in this pass. This is not a parcel-safe finding.</li>
+<li>Address signal: 16 INKERMAN STREET MOSMAN</li>
+<li>Site card: <a href="site-card-latest-precinct-spit-junction-a-dp13359.html"><code>reports/site-card-latest-precinct-spit-junction-a-dp13359.md</code></a>
+Precinct-level search-area labels and site-level control envelopes should be read separately. A precinct summary describes the broader search area; the site rows above describe the current point-intersected planning envelope for the candidate lot itself.</li>
+</ul>
+<h2>Boundaries</h2>
+<ul>
+<li>No owner/title data is used here.</li>
+<li>No proprietary comps or residual pricing model is used here.</li>
+<li>Flood is treated as current planning/open-data signal, not as parcel-clearance certification.</li>
+</ul>
+</article>
+    </main>
+  </div>
+  <script>
+    (() => {
+      const navScrollKey = 'radarestate-nav-scroll';
+      const storageKey = 'radarestate-theme';
+      const sidebarKey = 'radarestate-sidebar';
+      const currentTheme = document.documentElement.dataset.theme || 'dark';
+      const currentSidebarState = document.documentElement.dataset.sidebar || 'expanded';
+      const sidebar = document.querySelector('.sidebar');
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const buttons = [...document.querySelectorAll('[data-theme-option]')];
+
+      const updateSidebarToggle = (state) => {
+        if (!sidebarToggle) return;
+        const expanded = state !== 'collapsed';
+        sidebarToggle.textContent = expanded ? 'Hide Navigation' : 'Show Navigation';
+        sidebarToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      };
+
+      updateSidebarToggle(currentSidebarState);
+
+      if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', () => {
+          const nextState = document.documentElement.dataset.sidebar === 'collapsed' ? 'expanded' : 'collapsed';
+          document.documentElement.dataset.sidebar = nextState;
+          updateSidebarToggle(nextState);
+          try {
+            window.localStorage.setItem(sidebarKey, nextState);
+          } catch {
+          }
+        });
+      }
+
+      if (sidebar) {
+        try {
+          const storedScroll = window.localStorage.getItem(navScrollKey);
+          if (storedScroll !== null) {
+            requestAnimationFrame(() => {
+              sidebar.scrollTop = Number(storedScroll) || 0;
+            });
+          }
+        } catch {
+        }
+
+        sidebar.addEventListener('scroll', () => {
+          try {
+            window.localStorage.setItem(navScrollKey, String(sidebar.scrollTop));
+          } catch {
+          }
+        }, { passive: true });
+      }
+
+      if (!buttons.length) return;
+      buttons.forEach((button) => {
+        const theme = button.dataset.themeOption;
+        button.setAttribute('aria-pressed', theme === currentTheme ? 'true' : 'false');
+        button.addEventListener('click', () => {
+          if (theme === currentTheme) return;
+          try {
+            window.localStorage.setItem(storageKey, theme);
+          } catch {
+          }
+          document.documentElement.dataset.theme = theme;
+          window.location.reload();
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

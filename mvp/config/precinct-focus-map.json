@@ -15,11 +15,12 @@
       "code": "PRECINCT_EPPING",
       "name": "Epping",
       "type": "station",
-      "primaryCouncil": "Ryde",
-      "allowedCouncils": ["Ryde", "Parramatta"],
+      "primaryCouncil": "Parramatta",
+      "allowedCouncils": ["Parramatta"],
       "policyTheme": "TOD;LMR",
       "watchPriority": "high",
-      "keywords": ["Epping"]
+      "keywords": ["Epping"],
+      "excludeKeywords": ["North Ryde"]
     },
     {
       "code": "PRECINCT_MEADOWBANK",

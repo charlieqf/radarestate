@@ -4,9 +4,9 @@
 
 - Current automated site-screening top cut shown below: **12** sites for Sydney.
 - Default ranking lens: calibrated for small-mid developers, with a slight preference toward townhouse / small subdivision fit over larger-format high-rise or assembly-style parcels.
-- Band mix across the current region-level site layer: **69 Advance**, **352 Review**, **153 Caution**.
+- Band mix across the current region-level site layer: **84 Advance**, **414 Review**, **170 Caution**.
 - Highest current site candidate: **2A BLAKESLEY STREET CHATSWOOD** in **Chatswood** with score **56** and action **Advance to site review**.
-- Most common current site-level flags: **Heritage item [high] = 85**, **Bushfire prone land [high] = 23**, **Obstacle limitation surface [low] = 9**.
+- Most common current site-level flags: **Heritage item [high] = 95**, **Bushfire prone land [high] = 25**, **Obstacle limitation surface [low] = 9**.
 
 ## Method
 
@@ -38,11 +38,11 @@
 
 | Constraint | Severity | Hit Count |
 | --- | --- | --- |
-| Heritage item | high | 85 |
-| Bushfire prone land | high | 23 |
+| Heritage item | high | 95 |
+| Bushfire prone land | high | 25 |
 | Obstacle limitation surface | low | 9 |
+| Bushfire prone land | medium | 6 |
 | Biodiversity values | high | 3 |
-| Bushfire prone land | medium | 3 |
 | Land reservation | high | 2 |
 | State heritage curtilage | high | 1 |
 | Flood planning overlay | medium | 1 |

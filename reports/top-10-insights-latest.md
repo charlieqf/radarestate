@@ -2,14 +2,14 @@
 
 ## Date
 
-2026-04-05
+2026-04-08
 
 ## Companion Outputs
 
 - `dashboard/hero-visual-pack.html`
-- `dashboard/2026-04-05-report.html`
-- `reports/weekly-radar-2026-04-05.md`
-- `reports/top-site-screening-2026-04-05.md`
+- `dashboard/latest-report.html`
+- `reports/weekly-radar-latest.md`
+- `reports/top-site-screening-latest.md`
 
 ## 1. Risk-adjusted leaders are not the loudest precincts
 
@@ -35,14 +35,14 @@
 ## 4. The inner east is showing more policy motion than intuition would suggest
 
 - Finding: Woollahra is no longer just a prestige residential story. It is now a visible planning watchlist cluster.
-- Evidence: Local Heritage Listing: Woollahra Modern Buildings Priority Study [under_assessment]; Heritage listing of eight sites and one HCA in the area of the Edgecliff Commercial Centre. [under_assessment]; Double Bay Centre- Planning Proposal [under_assessment]; Woollahra Contemporary Buildings Study Review [under_assessment]; Edgecliff Commercial Centre Planning Proposal [under_assessment]; Planning proposal request for 203-233 New South Head Road, Edgecliff [under_assessment]; Edgecliff Woollahra Precinct [pre_exhibition]; FSR Housekeeping Planning Proposal [finalisation]
+- Evidence: Local Heritage Listing: Woollahra Modern Buildings Priority Study [under_assessment]; Edgecliff Commercial Centre Planning Proposal [under_assessment]; Double Bay Centre- Planning Proposal [under_assessment]; Woollahra Contemporary Buildings Study Review [under_assessment]; Heritage listing of eight sites and one HCA in the area of the Edgecliff Commercial Centre. [under_assessment]; Planning proposal request for 203-233 New South Head Road, Edgecliff [under_assessment]; Edgecliff Woollahra Precinct [pre_exhibition]; FSR Housekeeping Planning Proposal [finalisation]
 - Why it matters: This is a useful reminder that policy-led opportunity can emerge in places that traditional “developer hotspot” lists often underweight.
 - Action: Keep Edgecliff / Double Bay in the “serious but selective” category rather than dismissing them as premium residential only.
 
 ## 5. There is a real class of activity-led precincts with weak policy visibility
 
-- Finding: `Merrylands`, `Surry Hills`, `Hurstville`, `Auburn`, `Epping` are all moving on activity before strong active-pipeline evidence appears.
-- Evidence: Merrylands: recent apps 417, policy 1, active pipeline 0; Surry Hills: recent apps 322, policy 1, active pipeline 0; Hurstville: recent apps 282, policy 0, active pipeline 0; Auburn: recent apps 260, policy 0, active pipeline 0; Epping: recent apps 239, policy 1, active pipeline 0
+- Finding: `Merrylands`, `Surry Hills`, `Hurstville`, `Auburn`, `Bankstown` are all moving on activity before strong active-pipeline evidence appears.
+- Evidence: Merrylands: recent apps 417, policy 1, active pipeline 0; Surry Hills: recent apps 322, policy 1, active pipeline 0; Hurstville: recent apps 282, policy 0, active pipeline 0; Auburn: recent apps 260, policy 0, active pipeline 0; Bankstown: recent apps 238, policy 0, active pipeline 0
 - Why it matters: These are the places where the market or development behaviour may already be changing faster than the public policy narrative suggests.
 - Action: Treat them as market-led search pools that need more site-level diligence before conviction increases.
 

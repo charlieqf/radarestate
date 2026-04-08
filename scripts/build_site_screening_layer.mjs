@@ -57,6 +57,21 @@ function readJson(relativeOrAbsolutePath) {
   return JSON.parse(fs.readFileSync(absolutePath, 'utf8'))
 }
 
+function loadConfig(configPath) {
+  const absolutePath = path.isAbsolute(configPath) ? configPath : path.join(root, configPath)
+  const config = JSON.parse(fs.readFileSync(absolutePath, 'utf8'))
+  if (!config.extends) return config
+  const parentPath = path.isAbsolute(config.extends)
+    ? config.extends
+    : path.join(path.dirname(absolutePath), config.extends)
+  const base = loadConfig(parentPath)
+  return {
+    ...base,
+    ...config,
+    precincts: [...(base.precincts || []), ...(config.precincts || [])]
+  }
+}
+
 function getConnectionStrings() {
   const text = readFile('supabase.txt')
   const matches = [...text.matchAll(/postgresql:\/\/[^\s`]+/g)].map((match) => match[0])
@@ -319,18 +334,22 @@ async function applyArtifacts(client) {
 }
 
 async function fetchTargetPrecincts(client, config, regionGroup) {
+  const codes = Array.isArray(config?.precincts)
+    ? config.precincts.map((item) => typeof item === 'string' ? null : item?.code).filter(Boolean)
+    : []
   const names = Array.isArray(config?.precincts)
     ? config.precincts.map((item) => typeof item === 'string' ? item : item?.name).filter(Boolean)
     : []
 
-  if (names.length) {
+  if (codes.length || names.length) {
     const { rows } = await client.query(
       `select p.id as precinct_id, p.precinct_code, p.name as precinct_name, p.primary_council_id as council_id, c.canonical_name as council_name
        from public.precincts p
        left join public.councils c on c.id = p.primary_council_id
-       where p.name = any($1::text[])
-       order by p.name`,
-      [names]
+       where (cardinality($1::text[]) > 0 and p.precinct_code = any($1::text[]))
+          or (cardinality($2::text[]) > 0 and p.name = any($2::text[]))
+       order by p.name, p.precinct_code`,
+      [codes, names]
     )
     return rows
   }
@@ -393,9 +412,16 @@ async function fetchSamplePoints(client, precinctIds) {
   return grouped
 }
 
-async function resetSiteData(client, precinctIds) {
-  if (!precinctIds.length) return
-  await client.query('delete from public.site_candidates where precinct_id = any($1::uuid[])', [precinctIds])
+async function resetSiteData(client, precincts) {
+  const precinctIds = precincts.map((item) => item.precinct_id).filter(Boolean)
+  const precinctNames = precincts.map((item) => item.precinct_name).filter(Boolean)
+  if (!precinctIds.length && !precinctNames.length) return
+  await client.query(
+    `delete from public.site_candidates
+     where precinct_id = any($1::uuid[])
+        or precinct_id in (select id from public.precincts where name = any($2::text[]))`,
+    [precinctIds, precinctNames]
+  )
 }
 
 function buildSiteKey(precinctCode, lotFeature, propertyFeature, pointKey) {
@@ -853,7 +879,7 @@ async function insertSiteConstraint(client, row) {
 
 async function main() {
   const options = parseArgs()
-  const config = options.configPath ? readJson(options.configPath) : null
+  const config = options.configPath ? loadConfig(options.configPath) : null
   const client = await connectWithFallback()
   try {
     await applyArtifacts(client)
@@ -937,7 +963,7 @@ async function main() {
 
     console.log(`Collected unique site candidates: ${sites.size}`)
 
-    await resetSiteData(client, precinctIds)
+    await resetSiteData(client, precincts)
 
     let siteCount = 0
     let controlCount = 0

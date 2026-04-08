@@ -144,6 +144,11 @@ function buildSearchText(row) {
     .toLowerCase()
 }
 
+function hasExcludedKeyword(searchText, precinct) {
+  const excluded = precinct.excludeKeywords || []
+  return excluded.some((keyword) => keywordRegex(keyword).test(searchText))
+}
+
 function normaliseText(value) {
   return clean(value)?.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim() || ''
 }
@@ -232,6 +237,13 @@ async function ensurePrecincts(client, config) {
   const precinctMap = new Map()
   for (const precinct of config.precincts) {
     const councilId = await ensureCouncil(client, precinct.primaryCouncil, config.regionGroup || 'Greater Sydney')
+    const allowedCouncilIds = [
+      ...new Set(
+        await Promise.all(
+          (precinct.allowedCouncils || []).map((council) => ensureCouncil(client, council, config.regionGroup || 'Greater Sydney'))
+        )
+      )
+    ].filter(Boolean)
     const { rows } = await client.query(
       `insert into public.precincts (
          precinct_code, name, precinct_type, primary_council_id, policy_theme, source_url, watch_priority, notes
@@ -256,7 +268,7 @@ async function ensurePrecincts(client, config) {
         `keywords=${precinct.keywords.join('|')}`
       ]
     )
-    precinctMap.set(precinct.code, { ...precinct, id: rows[0].id, primaryCouncilId: councilId })
+    precinctMap.set(precinct.code, { ...precinct, id: rows[0].id, primaryCouncilId: councilId, allowedCouncilIds })
   }
   return precinctMap
 }
@@ -270,6 +282,7 @@ function matchPrecinct(row, precinctsByCouncil) {
   let bestLength = -1
 
   for (const precinct of candidates) {
+    if (hasExcludedKeyword(searchText, precinct)) continue
     for (const keyword of precinct.keywords) {
       if (keywordRegex(keyword).test(searchText)) {
         if (keyword.length > bestLength) {
@@ -291,6 +304,7 @@ function matchProposalPrecinct(row, precinctsByCouncil) {
   let bestLength = -1
 
   for (const precinct of candidates) {
+    if (hasExcludedKeyword(buildSearchText(row), precinct)) continue
     for (const keyword of precinct.keywords) {
       if (proposalKeywordIsExplicit(row, keyword)) {
         if (keyword.length > bestLength) {
@@ -523,7 +537,7 @@ async function main() {
   try {
     await applyPrecinctViews(client)
     const precinctMap = await ensurePrecincts(client, config)
-    const councilIds = [...new Set([...precinctMap.values()].map((item) => item.primaryCouncilId).filter(Boolean))]
+    const councilIds = [...new Set([...precinctMap.values()].flatMap((item) => item.allowedCouncilIds || []).filter(Boolean))]
 
     await resetMappings(client, councilIds)
 

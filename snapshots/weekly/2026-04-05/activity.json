@@ -377,17 +377,6 @@
     },
     {
       "rank": 16,
-      "precinct_key": "precinct:epping",
-      "precinct_name": "Epping",
-      "council_name": "Ryde",
-      "recent_application_count": 239,
-      "recent_da_count": 77,
-      "recent_cdc_count": 126,
-      "recent_ssd_count": 0,
-      "recent_modification_count": 51
-    },
-    {
-      "rank": 17,
       "precinct_key": "precinct:bankstown",
       "precinct_name": "Bankstown",
       "council_name": "Canterbury-Bankstown",
@@ -398,7 +387,7 @@
       "recent_modification_count": 42
     },
     {
-      "rank": 18,
+      "rank": 17,
       "precinct_key": "precinct:ingleburn",
       "precinct_name": "Ingleburn",
       "council_name": "Campbelltown",
@@ -407,6 +396,17 @@
       "recent_cdc_count": 162,
       "recent_ssd_count": 3,
       "recent_modification_count": 22
+    },
+    {
+      "rank": 18,
+      "precinct_key": "precinct:epping",
+      "precinct_name": "Epping",
+      "council_name": "Parramatta",
+      "recent_application_count": 230,
+      "recent_da_count": 77,
+      "recent_cdc_count": 117,
+      "recent_ssd_count": 0,
+      "recent_modification_count": 50
     },
     {
       "rank": 19,
