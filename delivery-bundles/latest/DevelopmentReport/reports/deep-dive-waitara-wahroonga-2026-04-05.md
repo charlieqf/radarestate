@@ -79,8 +79,8 @@ Current mix note: this precinct is presently **CDC-led** (32 CDC vs 30 DA), so r
 
 | Lodgement | Status | Type | Location |
 | --- | --- | --- | --- |
-| 2026-04-01 | Under Assessment | Complying Development Certificate Application | 40 RUSSELL AVENUE WAHROONGA 2076 |
 | 2026-04-01 | Under Assessment | Development Application | 59A RUSSELL AVENUE WAHROONGA 2076 |
+| 2026-04-01 | Under Assessment | Complying Development Certificate Application | 40 RUSSELL AVENUE WAHROONGA 2076 |
 | 2026-03-31 | Under Assessment | Complying Development Certificate Application | 31 JUBILEE STREET WAHROONGA 2076 |
 | 2026-03-26 | Under Assessment | Development Application | 49 HEWITT AVENUE WAHROONGA 2076 |
 | 2026-03-26 | Under Assessment | Complying Development Certificate Application | 52 UNWIN ROAD WAHROONGA 2076 |

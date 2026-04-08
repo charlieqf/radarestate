@@ -1,0 +1,132 @@
+## 发现的错误、缺陷与可信度问题
+
+### 1. 悉尼包里混入纽卡斯尔/亨特内容，明显是打包或模板复用失误
+
+最典型的是 `Top 10 Insights` 明明是悉尼包，却直接引用了 Newcastle-Hunter 周报：
+
+- `reports/top-10-insights-latest.md:9-12`
+
+而且 Insight 8、9、10 直接在讲 Hunter / Newcastle：
+
+- `reports/top-10-insights-latest.md:63-82`
+
+这对付费客户来说是很严重的 QA 问题，因为它说明：
+
+- 这不是完全按你的市场定制的严谨交付
+- 至少部分内容是从别的区域产品拼接来的
+- 他们的最终人工审核不够严格
+
+如果一个周报在最终 client pack 里都能混入别的城市内容，就很难让人相信站点级推荐被认真复核过。
+
+### 2. 关键指标口径不清，报告之间数字不一致
+
+例如同一交付包里：
+
+- `weekly-radar-latest` 写 `Application signals tracked: 45,114`：`reports/weekly-radar-latest.md:13-16`
+- `coverage-readiness-greater-sydney-expanded` 写 `Total mapped applications: 7,769`：`reports/coverage-readiness-greater-sydney-expanded.md:22-27`
+
+同样：
+
+- `weekly-radar-latest` 写 `Planning proposals tracked: 1,413`：`reports/weekly-radar-latest.md:13`
+- `coverage-readiness-greater-sydney-expanded` 写 `Total mapped proposals: 505`：`reports/coverage-readiness-greater-sydney-expanded.md:25`
+
+这些数字未必一定数学上矛盾，可能是不同 universe、不同筛选层、不同映射口径，但报告没有把口径差异解释清楚。对客户来说，这就是“数字很多，但不知道哪个才是该信的”。
+
+付费情报产品最怕的不是数字少，而是数字口径不清。
+
+### 3. Top site 的 council / EPI / precinct 存在内部不一致或高度可疑点
+
+`207 PACIFIC HIGHWAY ST LEONARDS` 这张卡：
+
+- Precinct 标成 `St Leonards (North Sydney)`：`reports/site-card-latest-precinct-st-leonards-11-dp1013030.md:9`
+- 但 `Zoning EPI` 却写 `Willoughby Local Environmental Plan 2012`：`reports/site-card-latest-precinct-st-leonards-11-dp1013030.md:26`
+
+同一 precinct 的另一张卡 `601 PACIFIC HIGHWAY ST LEONARDS` 又写成 `North Sydney Local Environmental Plan 2013`：
+
+- `reports/site-card-latest-precinct-st-leonards-71-dp749690.md:9`
+- `reports/site-card-latest-precinct-st-leonards-71-dp749690.md:26`
+
+这可能反映：
+
+- precinct naming 过粗
+- council boundary / EPI attribution 没处理干净
+- top ranked site 的 jurisdiction 归属存在混淆
+
+对开发商来说，这不是小问题。因为一旦 EPI / council 归属没分清，控规判断就可能错位。
+
+类似问题也出现在 Epping：
+
+- Precinct 写 `Epping (Ryde)`：`reports/site-card-latest-precinct-epping-2-dp1205413.md:9`
+- `Zoning EPI` 却写 `Parramatta Local Environmental Plan 2023`：`reports/site-card-latest-precinct-epping-2-dp1205413.md:26`
+
+哪怕现实中该地址确实落在 Parramatta 边界内，报告至少也应把 precinct/council 表达清楚，而不是让客户自己猜。
+
+### 4. Precinct 级控规结论与 site-level 控规结论差异大，但没有解释机制
+
+例如固定样本里，Edgecliff precinct 的 planning controls 写的是：
+
+- `R3 - Medium Density Residential`
+- `FSR 0.6500-0.9000`
+- `Height 9.5000-10.5000`
+
+见：
+
+- `reports/development-report-standard-universe.md:133`
+
+但该 precinct 的 top site `180 OCEAN STREET EDGECLIFF` 却显示：
+
+- `E1`
+- `FSR 2.50`
+- `Height 34.0m`
+
+见：
+
+- `reports/top-site-screening-latest.md:23`
+- `reports/site-card-latest-precinct-edgecliff-sp21608.md:22-29`
+
+这未必一定是数据错误，可能是 precinct 样本与 precinct 中心商业地块不同，但报告没有把这个差异解释成“precinct summary != candidate site envelope”。对客户来说，读起来就是前后矛盾。
+
+### 5. Top 12 站点里只有 5 个有 site card，交付不完整
+
+`top-site-screening-latest.md` 明确列了 12 个 Top Ranked Sites：
+
+- `reports/top-site-screening-latest.md:20-31`
+
+但其中从第 6 到第 12 名，`Card` 一栏都是 `-`，没有详细卡片：
+
+- `reports/top-site-screening-latest.md:25-31`
+
+作为按周收费的产品，这说明：
+
+- 交付深度不一致
+- 前 12 个结论里，超过一半没有配套证据页
+- 客户无法快速核查 why this site
+
+这会直接降低实用性。
+
+### 6. 内容里有明显模板化和清洗不到位的痕迹
+
+例如：
+
+- 悉尼报告里混入 Hunter 内容：`reports/top-10-insights-latest.md:12`, `63-82`
+- 英文正文里混入中文顿号 `、`：`reports/top-10-insights-latest.md:16`, `23`, `30`, `44`, `51`, `72`
+- 文本大小写和句式不统一，如小写开头 bullet：`reports/deep-dive-gladesville.md:28-30`, `reports/deep-dive-bankstown.md:28-29`
+- HTML entity 未清洗：`reports/deep-dive-bankstown.md:39-40`
+
+这些不一定影响模型结果，但会严重影响你对“他们是否认真看过交付内容”的信任。
+
+### 7. 风险提示逻辑容易给出“假安全感”
+
+Sydney top 5 site cards 全都写着：
+
+- `No current site-level derived constraint hit.`
+
+见：
+
+- `reports/site-card-latest-precinct-st-leonards-11-dp1013030.md:62`
+- `reports/site-card-latest-precinct-chatswood-10-dp1143909.md:62`
+- `reports/site-card-latest-precinct-epping-2-dp1205413.md:62`
+- `reports/site-card-latest-precinct-edgecliff-sp21608.md:62`
+- `reports/site-card-latest-precinct-st-leonards-71-dp749690.md:62`
+
+但报告自己同时又承认这些只是 open-data layer 没打到，并不代表 parcel-safe。这种表达对非技术客户很容易形成误读：看起来像低风险，实际上只是当前数据没覆盖出来。

@@ -5,6 +5,63 @@
   "rows": [
     {
       "rank": 1,
+      "precinct_key": "precinct:mosman-spit-junction",
+      "precinct_name": "Mosman / Spit Junction",
+      "council_name": "Mosman",
+      "precinct_type": "centre",
+      "opportunity_rating": null,
+      "recommended_action": null,
+      "policy_score": null,
+      "timing_score": null,
+      "friction_score": null,
+      "recent_application_count": 488,
+      "active_pipeline_count": 0,
+      "state_significant_count": 0,
+      "constraint_count": 0,
+      "constraint_summary": null,
+      "trigger_summary": "488 recent applications reconstructed from retained source history on or before 2026-03-29",
+      "source_observed_at": "2026-03-26T13:00:00.000Z"
+    },
+    {
+      "rank": 2,
+      "precinct_key": "precinct:gables",
+      "precinct_name": "Gables",
+      "council_name": "The Hills Shire",
+      "precinct_type": "centre",
+      "opportunity_rating": null,
+      "recommended_action": null,
+      "policy_score": null,
+      "timing_score": null,
+      "friction_score": null,
+      "recent_application_count": 427,
+      "active_pipeline_count": 0,
+      "state_significant_count": 0,
+      "constraint_count": 0,
+      "constraint_summary": null,
+      "trigger_summary": "427 recent applications reconstructed from retained source history on or before 2026-03-29",
+      "source_observed_at": "2026-03-26T13:00:00.000Z"
+    },
+    {
+      "rank": 3,
+      "precinct_key": "precinct:castle-hill",
+      "precinct_name": "Castle Hill",
+      "council_name": "The Hills Shire",
+      "precinct_type": "centre",
+      "opportunity_rating": null,
+      "recommended_action": null,
+      "policy_score": null,
+      "timing_score": null,
+      "friction_score": null,
+      "recent_application_count": 478,
+      "active_pipeline_count": 0,
+      "state_significant_count": 0,
+      "constraint_count": 0,
+      "constraint_summary": null,
+      "trigger_summary": "478 recent applications reconstructed from retained source history on or before 2026-03-29",
+      "source_observed_at": "2026-03-26T13:00:00.000Z"
+    },
+    {
+      "rank": 4,
       "precinct_key": "precinct:marrickville",
       "precinct_name": "Marrickville",
       "council_name": "Inner West",
@@ -23,7 +80,83 @@
       "source_observed_at": "2026-03-26T13:00:00.000Z"
     },
     {
-      "rank": 2,
+      "rank": 5,
+      "precinct_key": "precinct:surry-hills",
+      "precinct_name": "Surry Hills",
+      "council_name": "Sydney",
+      "precinct_type": "centre",
+      "opportunity_rating": null,
+      "recommended_action": null,
+      "policy_score": null,
+      "timing_score": null,
+      "friction_score": null,
+      "recent_application_count": 319,
+      "active_pipeline_count": 0,
+      "state_significant_count": 0,
+      "constraint_count": 0,
+      "constraint_summary": null,
+      "trigger_summary": "319 recent applications reconstructed from retained source history on or before 2026-03-29",
+      "source_observed_at": "2026-03-26T13:00:00.000Z"
+    },
+    {
+      "rank": 6,
+      "precinct_key": "precinct:merrylands",
+      "precinct_name": "Merrylands",
+      "council_name": "Cumberland",
+      "precinct_type": "centre",
+      "opportunity_rating": null,
+      "recommended_action": null,
+      "policy_score": null,
+      "timing_score": null,
+      "friction_score": null,
+      "recent_application_count": 409,
+      "active_pipeline_count": 0,
+      "state_significant_count": 0,
+      "constraint_count": 0,
+      "constraint_summary": null,
+      "trigger_summary": "409 recent applications reconstructed from retained source history on or before 2026-03-29",
+      "source_observed_at": "2026-03-28T13:00:00.000Z"
+    },
+    {
+      "rank": 7,
+      "precinct_key": "precinct:randwick",
+      "precinct_name": "Randwick",
+      "council_name": "Randwick",
+      "precinct_type": "centre",
+      "opportunity_rating": null,
+      "recommended_action": null,
+      "policy_score": null,
+      "timing_score": null,
+      "friction_score": null,
+      "recent_application_count": 253,
+      "active_pipeline_count": 0,
+      "state_significant_count": 0,
+      "constraint_count": 0,
+      "constraint_summary": null,
+      "trigger_summary": "253 recent applications reconstructed from retained source history on or before 2026-03-29",
+      "source_observed_at": "2026-03-26T13:00:00.000Z"
+    },
+    {
+      "rank": 8,
+      "precinct_key": "precinct:parramatta-cbd",
+      "precinct_name": "Parramatta CBD",
+      "council_name": "Parramatta",
+      "precinct_type": "centre",
+      "opportunity_rating": null,
+      "recommended_action": null,
+      "policy_score": null,
+      "timing_score": null,
+      "friction_score": null,
+      "recent_application_count": 327,
+      "active_pipeline_count": 0,
+      "state_significant_count": 0,
+      "constraint_count": 0,
+      "constraint_summary": null,
+      "trigger_summary": "327 recent applications reconstructed from retained source history on or before 2026-03-29",
+      "source_observed_at": "2026-03-26T13:00:00.000Z"
+    },
+    {
+      "rank": 9,
       "precinct_key": "precinct:seven-hills",
       "precinct_name": "Seven Hills",
       "council_name": "Blacktown",
@@ -42,7 +175,7 @@
       "source_observed_at": "2026-03-25T13:00:00.000Z"
     },
     {
-      "rank": 3,
+      "rank": 10,
       "precinct_key": "precinct:auburn",
       "precinct_name": "Auburn",
       "council_name": "Cumberland",
@@ -61,7 +194,7 @@
       "source_observed_at": "2026-03-26T13:00:00.000Z"
     },
     {
-      "rank": 4,
+      "rank": 11,
       "precinct_key": "precinct:chatswood",
       "precinct_name": "Chatswood",
       "council_name": "Willoughby",
@@ -80,7 +213,26 @@
       "source_observed_at": "2026-03-26T13:00:00.000Z"
     },
     {
-      "rank": 5,
+      "rank": 12,
+      "precinct_key": "precinct:drummoyne",
+      "precinct_name": "Drummoyne",
+      "council_name": "Canada Bay",
+      "precinct_type": "centre",
+      "opportunity_rating": null,
+      "recommended_action": null,
+      "policy_score": null,
+      "timing_score": null,
+      "friction_score": null,
+      "recent_application_count": 167,
+      "active_pipeline_count": 0,
+      "state_significant_count": 0,
+      "constraint_count": 0,
+      "constraint_summary": null,
+      "trigger_summary": "167 recent applications reconstructed from retained source history on or before 2026-03-29",
+      "source_observed_at": "2026-03-25T13:00:00.000Z"
+    },
+    {
+      "rank": 13,
       "precinct_key": "precinct:penrith",
       "precinct_name": "Penrith",
       "council_name": "Penrith",
@@ -99,26 +251,26 @@
       "source_observed_at": "2026-03-26T13:00:00.000Z"
     },
     {
-      "rank": 6,
-      "precinct_key": "precinct:epping",
-      "precinct_name": "Epping",
-      "council_name": "Ryde",
-      "precinct_type": "station",
+      "rank": 14,
+      "precinct_key": "precinct:darlinghurst",
+      "precinct_name": "Darlinghurst",
+      "council_name": "Sydney",
+      "precinct_type": "centre",
       "opportunity_rating": null,
       "recommended_action": null,
       "policy_score": null,
       "timing_score": null,
       "friction_score": null,
-      "recent_application_count": 247,
+      "recent_application_count": 191,
       "active_pipeline_count": 0,
       "state_significant_count": 0,
       "constraint_count": 0,
       "constraint_summary": null,
-      "trigger_summary": "247 recent applications reconstructed from retained source history on or before 2026-03-29",
+      "trigger_summary": "191 recent applications reconstructed from retained source history on or before 2026-03-29",
       "source_observed_at": "2026-03-25T13:00:00.000Z"
     },
     {
-      "rank": 7,
+      "rank": 15,
       "precinct_key": "precinct:tallawong",
       "precinct_name": "Tallawong",
       "council_name": "Blacktown",
@@ -137,7 +289,7 @@
       "source_observed_at": "2026-03-25T13:00:00.000Z"
     },
     {
-      "rank": 8,
+      "rank": 16,
       "precinct_key": "precinct:marsden-park",
       "precinct_name": "Marsden Park",
       "council_name": "Blacktown",
@@ -156,7 +308,26 @@
       "source_observed_at": "2026-03-26T13:00:00.000Z"
     },
     {
-      "rank": 9,
+      "rank": 17,
+      "precinct_key": "precinct:epping",
+      "precinct_name": "Epping",
+      "council_name": "Ryde",
+      "precinct_type": "station",
+      "opportunity_rating": null,
+      "recommended_action": null,
+      "policy_score": null,
+      "timing_score": null,
+      "friction_score": null,
+      "recent_application_count": 237,
+      "active_pipeline_count": 0,
+      "state_significant_count": 0,
+      "constraint_count": 0,
+      "constraint_summary": null,
+      "trigger_summary": "237 recent applications reconstructed from retained source history on or before 2026-03-29",
+      "source_observed_at": "2026-03-25T13:00:00.000Z"
+    },
+    {
+      "rank": 18,
       "precinct_key": "precinct:ashfield",
       "precinct_name": "Ashfield",
       "council_name": "Inner West",
@@ -175,7 +346,7 @@
       "source_observed_at": "2026-03-25T13:00:00.000Z"
     },
     {
-      "rank": 10,
+      "rank": 19,
       "precinct_key": "precinct:double-bay",
       "precinct_name": "Double Bay",
       "council_name": "Woollahra",
@@ -194,7 +365,7 @@
       "source_observed_at": "2026-03-25T13:00:00.000Z"
     },
     {
-      "rank": 11,
+      "rank": 20,
       "precinct_key": "precinct:petersham",
       "precinct_name": "Petersham",
       "council_name": "Inner West",
@@ -204,16 +375,54 @@
       "policy_score": null,
       "timing_score": null,
       "friction_score": null,
-      "recent_application_count": 105,
+      "recent_application_count": 106,
       "active_pipeline_count": 0,
       "state_significant_count": 0,
       "constraint_count": 0,
       "constraint_summary": null,
-      "trigger_summary": "105 recent applications reconstructed from retained source history on or before 2026-03-29",
+      "trigger_summary": "106 recent applications reconstructed from retained source history on or before 2026-03-29",
       "source_observed_at": "2026-03-26T13:00:00.000Z"
     },
     {
-      "rank": 12,
+      "rank": 21,
+      "precinct_key": "precinct:granville",
+      "precinct_name": "Granville",
+      "council_name": "Cumberland",
+      "precinct_type": "centre",
+      "opportunity_rating": null,
+      "recommended_action": null,
+      "policy_score": null,
+      "timing_score": null,
+      "friction_score": null,
+      "recent_application_count": 181,
+      "active_pipeline_count": 0,
+      "state_significant_count": 0,
+      "constraint_count": 0,
+      "constraint_summary": null,
+      "trigger_summary": "181 recent applications reconstructed from retained source history on or before 2026-03-29",
+      "source_observed_at": "2026-03-26T13:00:00.000Z"
+    },
+    {
+      "rank": 22,
+      "precinct_key": "precinct:lane-cove",
+      "precinct_name": "Lane Cove",
+      "council_name": "Lane Cove",
+      "precinct_type": "centre",
+      "opportunity_rating": null,
+      "recommended_action": null,
+      "policy_score": null,
+      "timing_score": null,
+      "friction_score": null,
+      "recent_application_count": 200,
+      "active_pipeline_count": 0,
+      "state_significant_count": 0,
+      "constraint_count": 0,
+      "constraint_summary": null,
+      "trigger_summary": "200 recent applications reconstructed from retained source history on or before 2026-03-29",
+      "source_observed_at": "2026-03-23T13:00:00.000Z"
+    },
+    {
+      "rank": 23,
       "precinct_key": "precinct:campbelltown",
       "precinct_name": "Campbelltown",
       "council_name": "Campbelltown",
@@ -232,7 +441,26 @@
       "source_observed_at": "2026-03-27T13:00:00.000Z"
     },
     {
-      "rank": 13,
+      "rank": 24,
+      "precinct_key": "precinct:redfern",
+      "precinct_name": "Redfern",
+      "council_name": "Sydney",
+      "precinct_type": "station",
+      "opportunity_rating": null,
+      "recommended_action": null,
+      "policy_score": null,
+      "timing_score": null,
+      "friction_score": null,
+      "recent_application_count": 134,
+      "active_pipeline_count": 0,
+      "state_significant_count": 0,
+      "constraint_count": 0,
+      "constraint_summary": null,
+      "trigger_summary": "134 recent applications reconstructed from retained source history on or before 2026-03-29",
+      "source_observed_at": "2026-03-26T13:00:00.000Z"
+    },
+    {
+      "rank": 25,
       "precinct_key": "precinct:croydon",
       "precinct_name": "Croydon",
       "council_name": "Burwood",
@@ -251,7 +479,7 @@
       "source_observed_at": "2026-03-26T13:00:00.000Z"
     },
     {
-      "rank": 14,
+      "rank": 26,
       "precinct_key": "precinct:ingleburn",
       "precinct_name": "Ingleburn",
       "council_name": "Campbelltown",
@@ -270,7 +498,26 @@
       "source_observed_at": "2026-03-25T13:00:00.000Z"
     },
     {
-      "rank": 15,
+      "rank": 27,
+      "precinct_key": "precinct:bondi-junction",
+      "precinct_name": "Bondi Junction",
+      "council_name": "Waverley",
+      "precinct_type": "centre",
+      "opportunity_rating": null,
+      "recommended_action": null,
+      "policy_score": null,
+      "timing_score": null,
+      "friction_score": null,
+      "recent_application_count": 179,
+      "active_pipeline_count": 0,
+      "state_significant_count": 0,
+      "constraint_count": 0,
+      "constraint_summary": null,
+      "trigger_summary": "179 recent applications reconstructed from retained source history on or before 2026-03-29",
+      "source_observed_at": "2026-03-26T13:00:00.000Z"
+    },
+    {
+      "rank": 28,
       "precinct_key": "precinct:bankstown",
       "precinct_name": "Bankstown",
       "council_name": "Canterbury-Bankstown",
@@ -289,7 +536,7 @@
       "source_observed_at": "2026-03-25T13:00:00.000Z"
     },
     {
-      "rank": 16,
+      "rank": 29,
       "precinct_key": "precinct:gladesville",
       "precinct_name": "Gladesville",
       "council_name": "Hunters Hill",
@@ -308,7 +555,26 @@
       "source_observed_at": "2026-03-26T13:00:00.000Z"
     },
     {
-      "rank": 17,
+      "rank": 30,
+      "precinct_key": "precinct:cronulla",
+      "precinct_name": "Cronulla",
+      "council_name": "Sutherland Shire",
+      "precinct_type": "centre",
+      "opportunity_rating": null,
+      "recommended_action": null,
+      "policy_score": null,
+      "timing_score": null,
+      "friction_score": null,
+      "recent_application_count": 188,
+      "active_pipeline_count": 0,
+      "state_significant_count": 0,
+      "constraint_count": 0,
+      "constraint_summary": null,
+      "trigger_summary": "188 recent applications reconstructed from retained source history on or before 2026-03-29",
+      "source_observed_at": "2026-03-23T13:00:00.000Z"
+    },
+    {
+      "rank": 31,
       "precinct_key": "precinct:cabramatta",
       "precinct_name": "Cabramatta",
       "council_name": "Fairfield",
@@ -327,7 +593,7 @@
       "source_observed_at": "2026-03-26T13:00:00.000Z"
     },
     {
-      "rank": 18,
+      "rank": 32,
       "precinct_key": "precinct:hurstville",
       "precinct_name": "Hurstville",
       "council_name": "Georges River",
@@ -346,7 +612,7 @@
       "source_observed_at": "2026-03-24T13:00:00.000Z"
     },
     {
-      "rank": 19,
+      "rank": 33,
       "precinct_key": "precinct:bexley",
       "precinct_name": "Bexley",
       "council_name": "Bayside",
@@ -365,7 +631,45 @@
       "source_observed_at": "2026-03-26T13:00:00.000Z"
     },
     {
-      "rank": 20,
+      "rank": 34,
+      "precinct_key": "precinct:carlingford",
+      "precinct_name": "Carlingford",
+      "council_name": "Parramatta",
+      "precinct_type": "centre",
+      "opportunity_rating": null,
+      "recommended_action": null,
+      "policy_score": null,
+      "timing_score": null,
+      "friction_score": null,
+      "recent_application_count": 216,
+      "active_pipeline_count": 0,
+      "state_significant_count": 0,
+      "constraint_count": 0,
+      "constraint_summary": null,
+      "trigger_summary": "216 recent applications reconstructed from retained source history on or before 2026-03-29",
+      "source_observed_at": "2026-03-26T13:00:00.000Z"
+    },
+    {
+      "rank": 35,
+      "precinct_key": "precinct:kensington",
+      "precinct_name": "Kensington",
+      "council_name": "Randwick",
+      "precinct_type": "centre",
+      "opportunity_rating": null,
+      "recommended_action": null,
+      "policy_score": null,
+      "timing_score": null,
+      "friction_score": null,
+      "recent_application_count": 106,
+      "active_pipeline_count": 0,
+      "state_significant_count": 0,
+      "constraint_count": 0,
+      "constraint_summary": null,
+      "trigger_summary": "106 recent applications reconstructed from retained source history on or before 2026-03-29",
+      "source_observed_at": "2026-03-19T13:00:00.000Z"
+    },
+    {
+      "rank": 36,
       "precinct_key": "precinct:miranda",
       "precinct_name": "Miranda",
       "council_name": "Sutherland Shire",
@@ -384,7 +688,7 @@
       "source_observed_at": "2026-03-26T13:00:00.000Z"
     },
     {
-      "rank": 21,
+      "rank": 37,
       "precinct_key": "precinct:st-marys",
       "precinct_name": "St Marys",
       "council_name": "Penrith",
@@ -403,7 +707,7 @@
       "source_observed_at": "2026-03-26T13:00:00.000Z"
     },
     {
-      "rank": 22,
+      "rank": 38,
       "precinct_key": "precinct:lindfield",
       "precinct_name": "Lindfield",
       "council_name": "Ku-ring-gai",
@@ -422,7 +726,7 @@
       "source_observed_at": "2026-03-26T13:00:00.000Z"
     },
     {
-      "rank": 23,
+      "rank": 39,
       "precinct_key": "precinct:liverpool",
       "precinct_name": "Liverpool",
       "council_name": "Liverpool",
@@ -441,7 +745,45 @@
       "source_observed_at": "2026-03-25T13:00:00.000Z"
     },
     {
-      "rank": 24,
+      "rank": 40,
+      "precinct_key": "precinct:kingsford",
+      "precinct_name": "Kingsford",
+      "council_name": "Randwick",
+      "precinct_type": "centre",
+      "opportunity_rating": null,
+      "recommended_action": null,
+      "policy_score": null,
+      "timing_score": null,
+      "friction_score": null,
+      "recent_application_count": 129,
+      "active_pipeline_count": 0,
+      "state_significant_count": 0,
+      "constraint_count": 0,
+      "constraint_summary": null,
+      "trigger_summary": "129 recent applications reconstructed from retained source history on or before 2026-03-29",
+      "source_observed_at": "2026-03-18T13:00:00.000Z"
+    },
+    {
+      "rank": 41,
+      "precinct_key": "precinct:ultimo-broadway",
+      "precinct_name": "Ultimo / Broadway",
+      "council_name": "Sydney",
+      "precinct_type": "centre",
+      "opportunity_rating": null,
+      "recommended_action": null,
+      "policy_score": null,
+      "timing_score": null,
+      "friction_score": null,
+      "recent_application_count": 107,
+      "active_pipeline_count": 0,
+      "state_significant_count": 0,
+      "constraint_count": 0,
+      "constraint_summary": null,
+      "trigger_summary": "107 recent applications reconstructed from retained source history on or before 2026-03-29",
+      "source_observed_at": "2026-03-24T13:00:00.000Z"
+    },
+    {
+      "rank": 42,
       "precinct_key": "precinct:schofields",
       "precinct_name": "Schofields",
       "council_name": "Blacktown",
@@ -460,7 +802,7 @@
       "source_observed_at": "2026-03-25T13:00:00.000Z"
     },
     {
-      "rank": 25,
+      "rank": 43,
       "precinct_key": "precinct:homebush",
       "precinct_name": "Homebush",
       "council_name": "Strathfield",
@@ -479,7 +821,7 @@
       "source_observed_at": "2026-03-25T13:00:00.000Z"
     },
     {
-      "rank": 26,
+      "rank": 44,
       "precinct_key": "precinct:lakemba",
       "precinct_name": "Lakemba",
       "council_name": "Canterbury-Bankstown",
@@ -498,7 +840,7 @@
       "source_observed_at": "2026-03-24T13:00:00.000Z"
     },
     {
-      "rank": 27,
+      "rank": 45,
       "precinct_key": "precinct:mount-druitt",
       "precinct_name": "Mount Druitt",
       "council_name": "Blacktown",
@@ -517,7 +859,7 @@
       "source_observed_at": "2026-03-26T13:00:00.000Z"
     },
     {
-      "rank": 28,
+      "rank": 46,
       "precinct_key": "precinct:kogarah",
       "precinct_name": "Kogarah",
       "council_name": "Georges River",
@@ -536,7 +878,7 @@
       "source_observed_at": "2026-03-24T13:00:00.000Z"
     },
     {
-      "rank": 29,
+      "rank": 47,
       "precinct_key": "precinct:smithfield",
       "precinct_name": "Smithfield",
       "council_name": "Fairfield",
@@ -555,7 +897,64 @@
       "source_observed_at": "2026-03-25T13:00:00.000Z"
     },
     {
-      "rank": 30,
+      "rank": 48,
+      "precinct_key": "precinct:potts-point-kings-cross",
+      "precinct_name": "Potts Point / Kings Cross",
+      "council_name": "Sydney",
+      "precinct_type": "centre",
+      "opportunity_rating": null,
+      "recommended_action": null,
+      "policy_score": null,
+      "timing_score": null,
+      "friction_score": null,
+      "recent_application_count": 98,
+      "active_pipeline_count": 0,
+      "state_significant_count": 0,
+      "constraint_count": 0,
+      "constraint_summary": null,
+      "trigger_summary": "98 recent applications reconstructed from retained source history on or before 2026-03-29",
+      "source_observed_at": "2026-03-26T13:00:00.000Z"
+    },
+    {
+      "rank": 49,
+      "precinct_key": "precinct:dural",
+      "precinct_name": "Dural",
+      "council_name": "The Hills Shire",
+      "precinct_type": "centre",
+      "opportunity_rating": null,
+      "recommended_action": null,
+      "policy_score": null,
+      "timing_score": null,
+      "friction_score": null,
+      "recent_application_count": 79,
+      "active_pipeline_count": 0,
+      "state_significant_count": 0,
+      "constraint_count": 0,
+      "constraint_summary": null,
+      "trigger_summary": "79 recent applications reconstructed from retained source history on or before 2026-03-29",
+      "source_observed_at": "2026-03-18T13:00:00.000Z"
+    },
+    {
+      "rank": 50,
+      "precinct_key": "precinct:waterloo",
+      "precinct_name": "Waterloo",
+      "council_name": "Sydney",
+      "precinct_type": "centre",
+      "opportunity_rating": null,
+      "recommended_action": null,
+      "policy_score": null,
+      "timing_score": null,
+      "friction_score": null,
+      "recent_application_count": 89,
+      "active_pipeline_count": 0,
+      "state_significant_count": 0,
+      "constraint_count": 0,
+      "constraint_summary": null,
+      "trigger_summary": "89 recent applications reconstructed from retained source history on or before 2026-03-29",
+      "source_observed_at": "2026-03-24T13:00:00.000Z"
+    },
+    {
+      "rank": 51,
       "precinct_key": "precinct:edgecliff",
       "precinct_name": "Edgecliff",
       "council_name": "Woollahra",
@@ -574,7 +973,26 @@
       "source_observed_at": "2026-03-24T13:00:00.000Z"
     },
     {
-      "rank": 31,
+      "rank": 52,
+      "precinct_key": "precinct:kirrawee",
+      "precinct_name": "Kirrawee",
+      "council_name": "Sutherland Shire",
+      "precinct_type": "centre",
+      "opportunity_rating": null,
+      "recommended_action": null,
+      "policy_score": null,
+      "timing_score": null,
+      "friction_score": null,
+      "recent_application_count": 131,
+      "active_pipeline_count": 0,
+      "state_significant_count": 0,
+      "constraint_count": 0,
+      "constraint_summary": null,
+      "trigger_summary": "131 recent applications reconstructed from retained source history on or before 2026-03-29",
+      "source_observed_at": "2026-03-24T13:00:00.000Z"
+    },
+    {
+      "rank": 53,
       "precinct_key": "precinct:macquarie-park",
       "precinct_name": "Macquarie Park",
       "council_name": "Ryde",
@@ -593,7 +1011,7 @@
       "source_observed_at": "2026-03-25T13:00:00.000Z"
     },
     {
-      "rank": 32,
+      "rank": 54,
       "precinct_key": "precinct:west-ryde",
       "precinct_name": "West Ryde",
       "council_name": "Ryde",
@@ -612,7 +1030,7 @@
       "source_observed_at": "2026-03-26T13:00:00.000Z"
     },
     {
-      "rank": 33,
+      "rank": 55,
       "precinct_key": "precinct:five-dock",
       "precinct_name": "Five Dock",
       "council_name": "Canada Bay",
@@ -631,7 +1049,7 @@
       "source_observed_at": "2026-03-26T13:00:00.000Z"
     },
     {
-      "rank": 34,
+      "rank": 56,
       "precinct_key": "precinct:glenfield",
       "precinct_name": "Glenfield",
       "council_name": "Campbelltown",
@@ -650,7 +1068,7 @@
       "source_observed_at": "2026-03-21T13:00:00.000Z"
     },
     {
-      "rank": 35,
+      "rank": 57,
       "precinct_key": "precinct:norwest",
       "precinct_name": "Norwest",
       "council_name": "The Hills Shire",
@@ -669,7 +1087,7 @@
       "source_observed_at": "2026-03-26T13:00:00.000Z"
     },
     {
-      "rank": 36,
+      "rank": 58,
       "precinct_key": "precinct:gordon",
       "precinct_name": "Gordon",
       "council_name": "Ku-ring-gai",
@@ -688,7 +1106,26 @@
       "source_observed_at": "2026-03-26T13:00:00.000Z"
     },
     {
-      "rank": 37,
+      "rank": 59,
+      "precinct_key": "precinct:sutherland",
+      "precinct_name": "Sutherland",
+      "council_name": "Sutherland Shire",
+      "precinct_type": "centre",
+      "opportunity_rating": null,
+      "recommended_action": null,
+      "policy_score": null,
+      "timing_score": null,
+      "friction_score": null,
+      "recent_application_count": 64,
+      "active_pipeline_count": 0,
+      "state_significant_count": 0,
+      "constraint_count": 0,
+      "constraint_summary": null,
+      "trigger_summary": "64 recent applications reconstructed from retained source history on or before 2026-03-29",
+      "source_observed_at": "2026-03-16T13:00:00.000Z"
+    },
+    {
+      "rank": 60,
       "precinct_key": "precinct:riverwood",
       "precinct_name": "Riverwood",
       "council_name": "Georges River",
@@ -707,7 +1144,7 @@
       "source_observed_at": "2026-03-16T13:00:00.000Z"
     },
     {
-      "rank": 38,
+      "rank": 61,
       "precinct_key": "precinct:westmead",
       "precinct_name": "Westmead",
       "council_name": "Parramatta",
@@ -726,7 +1163,7 @@
       "source_observed_at": "2026-03-26T13:00:00.000Z"
     },
     {
-      "rank": 39,
+      "rank": 62,
       "precinct_key": "precinct:beverly-hills",
       "precinct_name": "Beverly Hills",
       "council_name": "Georges River",
@@ -745,7 +1182,7 @@
       "source_observed_at": "2026-03-26T13:00:00.000Z"
     },
     {
-      "rank": 40,
+      "rank": 63,
       "precinct_key": "precinct:sandringham",
       "precinct_name": "Sandringham",
       "council_name": "Bayside",
@@ -764,7 +1201,7 @@
       "source_observed_at": "2026-03-08T13:00:00.000Z"
     },
     {
-      "rank": 41,
+      "rank": 64,
       "precinct_key": "precinct:st-leonards",
       "precinct_name": "St Leonards",
       "council_name": "North Sydney",
@@ -783,7 +1220,7 @@
       "source_observed_at": "2026-03-26T13:00:00.000Z"
     },
     {
-      "rank": 42,
+      "rank": 65,
       "precinct_key": "precinct:meadowbank",
       "precinct_name": "Meadowbank",
       "council_name": "Ryde",
@@ -802,7 +1239,7 @@
       "source_observed_at": "2026-01-18T13:00:00.000Z"
     },
     {
-      "rank": 43,
+      "rank": 66,
       "precinct_key": "precinct:macarthur",
       "precinct_name": "Macarthur",
       "council_name": "Campbelltown",

@@ -1,0 +1,120 @@
+不够符合用户思维的地方
+1. 目录是按“系统产物类型”分，不是按“客户要解决什么问题”分  
+现在是：
+- reports/
+- dashboard/
+- client-output/
+这是产品团队的视角。  
+但开发商更自然的思路是：
+- 我先看本周结论
+- 再看本周变化
+- 再看我该跟进哪些地
+- 再看 supporting evidence
+- 最后才看 methodology
+也就是说，当前结构更像“文件分类”，不是“决策路径分类”。
+2. reports/ 里文件太平铺，认知负担偏高  
+reports/ 里有 23 个文件，包含：
+- full report
+- delta
+- methodology
+- top insights
+- weekly radar
+- top site screening
+- 10 个 site card
+- 4 个 deep dive
+如果直接打开文件夹，普通客户第一反应不是“清晰”，而是“我到底先看哪个”。
+3. client-output/ 和 reports/ 的双轨结构，对客户不够直观  
+本质上是同一批内容的 HTML 和 MD 两套版本。  
+这对系统合理，但对客户不自然。  
+客户会问：
+- 我到底应该看 reports/ 还是 client-output/？
+- 为什么同一份东西有两套？
+4. 文件名仍然偏技术化  
+例如：
+- site-card-2026-04-05-precinct-st-leonards-11-dp1013030.md
+对内部系统是好名字。  
+但对开发商用户，不符合自然检索习惯。  
+用户更习惯的是：
+- Site Card - 207 Pacific Highway St Leonards
+- St Leonards Site Card 1
+现在这种 precinct + lot + DP 命名，太像底层数据产物。
+5. latest 和 dated 混用，容易让人犹豫  
+同目录同时有：
+- full-report-2026-04-05.md
+- top-10-insights-latest.md
+- client-pack-latest.md
+对客户来说会产生一个小疑问：
+- 到底应该看 dated 版本，还是 latest 版本？
+- latest 是否等于这次 dated 版本？
+这不致命，但会损失“顺手感”。
+6. Reading Order 太长，不像客户真实使用路径  
+client-pack-latest.md:34-59 给了 24 步阅读顺序。  
+这在信息上完整，但在体验上不符合用户习惯。  
+客户不会按 24 步走，他只想知道：
+- 先看哪 2 个
+- 接着看哪 3 个
+- 哪些是可选
+7. dashboard 这个词偏产品，不偏开发商  
+开发商会理解，但不如：
+- Visual Summary
+- Maps & Visuals
+- Opportunity Map
+更贴近客户语言。
+是否符合用户思维习惯
+部分符合，但还不够“顺脑子”。
+更符合开发商思维的顺序应该是：
+1. 本周结论  
+2. 本周变化  
+3. 本周优先看的地/片区  
+4. 深挖 supporting evidence  
+5. 最后才看方法论和技术边界
+而当前目录更像：
+1. 报告类型  
+2. 输出格式  
+3. 底层明细文件
+这两者不完全一样。
+如果我是客户，我会觉得哪里别扭
+1. 我知道有入口，但打开 reports/ 后还是会有点晕。  
+2. 我不太容易一眼分清：
+- full report
+- weekly radar
+- top 10 insights
+这三者各自的区别。
+3. site cards 和 deep dives 没有分组子目录，看起来像一长串明细文件。  
+4. HTML 和 Markdown 并存，会让我怀疑哪些才是“正式给我看的”。
+我建议的目录逻辑
+最符合客户思维的做法，不是继续堆文件，而是改成按用途分层。
+理想结构像这样：
+DevelopmentReport/
+  index.html
+  01-Start-Here/
+    full-report-2026-04-05.html
+    delta-report-2026-04-05-vs-2026-03-29.html
+    methodology-appendix.html
+  02-This-Weeks-Actions/
+    first-look-site-targets.html
+    pre-assembly-clusters.html
+    top-10-insights.html
+  03-Site-Cards/
+    207-pacific-highway-st-leonards.html
+    345-victoria-avenue-chatswood.html
+  04-Precinct-Deep-Dives/
+    penrith.html
+    cabramatta.html
+    gladesville.html
+    bankstown.html
+  05-Visuals/
+    hero-visual-pack.html
+    2026-04-05-report.html
+如果不想大改，最小可行优化是：
+1. 保留 client-output/ 作为客户主路径  
+2. 把 reports/ 视为技术/原始文本层，不让客户主看  
+3. 在 client-output/ 里再分 4 个子目录：
+- 01-core
+- 02-actions
+- 03-site-cards
+- 04-deep-dives
+4. 把文件名改得更像客户语言，而不是数据键名  
+5. 把 Reading Order 从 24 步缩成 5 步以内
+一句话判断
+现在的目录能用，但不够客户化。  

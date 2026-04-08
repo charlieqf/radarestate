@@ -16,6 +16,7 @@ Gladesville currently screens as one of the strongest precinct-level candidates 
 - Timing score: `5`
 - Friction score: `0`
 - Recent applications: `217`
+- Recent application window start: `2025-01-01`
 - Active planning proposals: `2`
 - State significant projects: `0`
 - Recommended action: `Prioritise`
@@ -30,19 +31,21 @@ Gladesville currently screens as one of the strongest precinct-level candidates 
 
 ## Policy And Planning Context
 
+Only rows with an explicit precinct-level location mention are shown below. Adjacent-suburb and council-wide policy rows are intentionally excluded from this deep dive.
+
 | Stage | Title | Location |
 | --- | --- | --- |
-| On Exhibition | Gladesville Masterplan | Hunters Hill |
 | Made | Draft Hunters Hill LEP 2010 - Hunters Hill Village Centre (Amendment 1) | Gladesville |
 | Made | Gladesville Village Shopping Centre | 1 Massey Street Gladesville 2111 & more |
 | Made | Hunters Hill Local Environmental Plan 2012 - Planning proposal to amend Schedule 5 Environmental Heritage and heritage maps | 10 Cowell Street Sydney Gladesville 2111 & more |
 | Made | 2-12 and 14 Tennyson Road, Gladsville | 2-12 Tennyson Road Sydney Gladesville 2111 & more |
-| Made | Draft Local Environmental Plan 2010 (Gladesville Town Centre & Victoria Road Corridor) | Ryde |
 | Made | Planning proposal for 2 College Street and 10 Monash Road, Gladesville | 2 College Street Sydney Gladesville 2111 & more |
 | Made | Planning Proposal for 461-495 Victoria Road, Gladesville (Bunnings) | 461 - 495 Victoria Road Sydney Gladesville 2111 |
 | Made | RECLASSIFICATION OF LAND AT 4 PITTWATER ROAD, GLADESVILLE FROM COMMUNITY TO OPERATIONAL LAND | 4 Pittwater Road Gladesville 2111 |
 
 ## Development Activity Context
+
+Recent applications below are screening signals with lodgement date on or after `2025-01-01`. DA / CDC / SSD / Modification are separated in the mix because they do not imply the same development-opportunity quality.
 
 | Status | Count |
 | --- | --- |
@@ -52,6 +55,12 @@ Gladesville currently screens as one of the strongest precinct-level candidates 
 | Withdrawn | 9 |
 | Additional Information Requested | 3 |
 | Refused | 1 |
+
+| Application Type | Count |
+| --- | --- |
+| DA | 58 |
+| CDC | 132 |
+| Modification | 27 |
 
 | Lodgement | Status | Type | Location |
 | --- | --- | --- | --- |
@@ -72,7 +81,7 @@ Gladesville currently screens as one of the strongest precinct-level candidates 
 
 No derived friction signal is currently dominant in the first-pass model. This does not mean risk is absent, only that it is not yet surfacing through the current layers.
 
-No derived constraint rows currently attached to this precinct.
+No derived constraint rows currently attached to this precinct. Treat this as missing current signal, not proof of zero site risk.
 
 ## Council Context
 
@@ -84,7 +93,7 @@ No derived constraint rows currently attached to this precinct.
 
 1. Keep `Gladesville` in the `A`-rated watchlist and treat `Prioritise` as the current workflow state.
 2. Use `dashboard/latest-report.html` to inspect the surrounding precinct cluster before doing any street-level or owner-contact work.
-3. The next uplift in confidence will come from more detailed site-level and constraint work rather than more high-level policy scanning.
+3. Treat the current derived risk gap as incomplete coverage rather than parcel-level clearance, and use more detailed site-level constraint work before promotion.
 
 ## References
 

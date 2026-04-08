@@ -88,8 +88,8 @@ Current mix note: this precinct is presently **CDC-led** (99 CDC vs 65 DA), so r
 | --- | --- | --- | --- |
 | 2026-04-01 | Under Assessment | Development Application | 10 MORRICE STREET LANE COVE 2066 |
 | 2026-04-01 | Under Assessment | Modification Application | 14 GATACRE AVENUE LANE COVE 2066 |
-| 2026-03-30 | Under Assessment | Development Application | 73 LONGUEVILLE ROAD LANE COVE 2066 |
 | 2026-03-30 | Approved | Complying Development Certificate Application | 45 BARWON ROAD LANE COVE WEST 2066 |
+| 2026-03-30 | Under Assessment | Development Application | 73 LONGUEVILLE ROAD LANE COVE 2066 |
 | 2026-03-29 | Approved | Complying Development Certificate Application | 11 ORION ROAD LANE COVE WEST 2066 |
 | 2026-03-23 | Under Assessment | Development Application | 42 CULLEN STREET LANE COVE WEST 2066 |
 | 2026-03-22 | Under Assessment | Development Application | 21 PENROSE STREET LANE COVE 2066 |

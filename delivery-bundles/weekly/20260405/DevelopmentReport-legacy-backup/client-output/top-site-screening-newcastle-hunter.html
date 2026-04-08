@@ -1,0 +1,932 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Newcastle-Hunter Top Site Screening</title>
+  <script>
+    (() => {
+      const storageKey = 'radarestate-theme';
+      const sidebarKey = 'radarestate-sidebar';
+      let stored = null;
+      let storedSidebar = null;
+      try {
+        stored = window.localStorage.getItem(storageKey);
+        storedSidebar = window.localStorage.getItem(sidebarKey);
+      } catch {
+      }
+      const preferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.dataset.theme = stored || preferred;
+      document.documentElement.dataset.sidebar = storedSidebar || 'expanded';
+    })();
+  </script>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg-accent: #132048;
+      --panel: #121932;
+      --panel-2: #171f3d;
+      --text: #e9eefc;
+      --muted: #92a0c4;
+      --line: #273154;
+      --cyan: #33d1ff;
+      --lime: #b7ff3c;
+      --amber: #ffb547;
+      --red: #ff6b6b;
+      --link: #7dd3fc;
+      --panel-top: rgba(255,255,255,0.03);
+      --panel-bottom: rgba(255,255,255,0.015);
+      --shadow: rgba(0,0,0,0.18);
+      --button-bg: rgba(255,255,255,0.06);
+      --button-text: var(--text);
+      --article-code-bg: rgba(255,255,255,0.06);
+      --article-code-border: rgba(255,255,255,0.08);
+      --pre-bg: #0f1731;
+      --blockquote-bg: rgba(51,209,255,0.06);
+    }
+
+    html[data-theme="light"] {
+      --bg: #eef4ff;
+      --bg-accent: #d9e8ff;
+      --panel: #ffffff;
+      --panel-2: #f4f8ff;
+      --text: #11203f;
+      --muted: #597094;
+      --line: #d3def0;
+      --cyan: #0f84c9;
+      --lime: #6eab12;
+      --amber: #d6861b;
+      --red: #c94242;
+      --link: #0f84c9;
+      --panel-top: rgba(255,255,255,0.94);
+      --panel-bottom: rgba(240,246,255,0.94);
+      --shadow: rgba(45,72,117,0.12);
+      --button-bg: #ffffff;
+      --button-text: #11203f;
+      --article-code-bg: rgba(17,32,63,0.06);
+      --article-code-border: rgba(17,32,63,0.08);
+      --pre-bg: #eef4ff;
+      --blockquote-bg: rgba(15,132,201,0.08);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top left, var(--bg-accent) 0, var(--bg) 45%);
+      color: var(--text);
+      font-family: Inter, Arial, sans-serif;
+      overflow-x: hidden;
+    }
+    .sidebar-toggle {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 1200;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+      box-shadow: 0 12px 30px var(--shadow);
+      color: var(--button-text);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+    }
+    .theme-switcher {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 1200;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+      box-shadow: 0 12px 30px var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .theme-switcher-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .theme-switcher-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px;
+      border-radius: 999px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+    }
+    .theme-switcher-button {
+      appearance: none;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      min-width: 68px;
+    }
+    .theme-switcher-button[aria-pressed="true"] {
+      background: var(--button-bg);
+      color: var(--button-text);
+      box-shadow: inset 0 0 0 1px var(--line);
+    }
+    .shell {
+      display: grid;
+      grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+      min-height: 100vh;
+      transition: grid-template-columns 180ms ease;
+    }
+    html[data-sidebar="collapsed"] .shell {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .sidebar {
+      padding: 24px 18px;
+      border-right: 1px solid var(--line);
+      background: var(--panel);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      min-width: 0;
+      width: 300px;
+      max-width: 300px;
+      transition: opacity 150ms ease, transform 180ms ease;
+    }
+    html[data-sidebar="collapsed"] .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-110%);
+      display: block;
+    }
+    .brand {
+      margin-bottom: 22px;
+    }
+    .eyebrow {
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    .brand h1 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.2;
+    }
+    .brand p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 10px 0 0;
+    }
+    .actions {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+    .action-link {
+      display: inline-block;
+      text-decoration: none;
+      color: var(--text);
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 13px;
+    }
+    .nav {
+      display: grid;
+      gap: 16px;
+    }
+    .nav-group {
+      display: grid;
+      gap: 8px;
+    }
+    .nav-heading {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0 4px;
+    }
+    .nav-group-links {
+      display: grid;
+      gap: 10px;
+    }
+    .nav-link {
+      display: block;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.02);
+      text-decoration: none;
+      color: var(--text);
+    }
+    .nav-link.active {
+      border-color: rgba(51,209,255,0.45);
+      box-shadow: inset 0 0 0 1px rgba(51,209,255,0.25);
+      background: rgba(51,209,255,0.08);
+    }
+    .nav-title {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .nav-meta {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .main {
+      padding: 88px 28px 28px;
+      min-width: 0;
+      width: 100%;
+    }
+    .article {
+      width: 100%;
+      max-width: 920px;
+      margin: 0 auto;
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 28px 32px;
+      box-shadow: 0 16px 40px var(--shadow);
+    }
+    .article.article-wide {
+      width: 100%;
+      max-width: 1320px;
+    }
+    .article h1, .article h2, .article h3 {
+      margin-top: 0;
+    }
+    .article h1 {
+      font-size: 32px;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .article h2 {
+      font-size: 20px;
+      margin-top: 28px;
+      margin-bottom: 14px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+    .article h3 {
+      font-size: 16px;
+      margin-top: 22px;
+      margin-bottom: 10px;
+      color: var(--cyan);
+    }
+    .article p, .article li {
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+    .article ul, .article ol {
+      padding-left: 22px;
+    }
+    .article a {
+      color: var(--link);
+    }
+    .article code {
+      background: var(--article-code-bg);
+      border: 1px solid var(--article-code-border);
+      border-radius: 8px;
+      padding: 2px 6px;
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 0.92em;
+    }
+    .article pre {
+      background: var(--pre-bg);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      overflow: auto;
+    }
+    .article table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 20px;
+      font-size: 14px;
+    }
+    .article th, .article td {
+      border-bottom: 1px solid var(--line);
+      padding: 11px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .article th {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 12px;
+    }
+    .article blockquote {
+      margin: 18px 0;
+      padding: 14px 18px;
+      border-left: 3px solid var(--cyan);
+      background: var(--blockquote-bg);
+      border-radius: 12px;
+      color: var(--text);
+    }
+    .embed-frame {
+      width: 100%;
+      height: calc(100vh - 170px);
+      min-height: 980px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #ffffff;
+    }
+    .embed-note {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 980px) {
+      .sidebar-toggle {
+        left: 18px;
+      }
+      .theme-switcher {
+        left: 18px;
+        right: 18px;
+        justify-content: space-between;
+        top: 64px;
+      }
+      .shell { grid-template-columns: 1fr; }
+      .sidebar {
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+      .main { padding: 92px 18px 18px; }
+      .article { padding: 22px 20px; }
+      .embed-frame { min-height: 760px; height: calc(100vh - 220px); }
+    }
+  </style>
+</head>
+<body>
+  <button class="sidebar-toggle" id="sidebarToggle" type="button" aria-expanded="true">Hide Navigation</button>
+  <div class="theme-switcher" role="group" aria-label="Theme switcher">
+    <span class="theme-switcher-label">Theme</span>
+    <div class="theme-switcher-group">
+      <button class="theme-switcher-button" type="button" data-theme-option="dark">Dark</button>
+      <button class="theme-switcher-button" type="button" data-theme-option="light">Light</button>
+    </div>
+  </div>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="eyebrow">RadarEstate</div>
+        <h1>Client Reports</h1>
+        <p>Styled HTML delivery layer for weekly radar, deep dives and client pack notes.</p>
+      </div>
+      <div class="actions">
+        <a class="action-link" href="../dashboard/latest-report.html">Open Visual Dashboard</a>
+        <a class="action-link" href="hero-visual-pack.html">Open Hero Visual Pack</a>
+        <a class="action-link" href="index.html">Open Client Pack</a>
+      </div>
+      <nav class="nav"><section class="nav-group"><div class="nav-heading">Main Deliverables</div><div class="nav-group-links"><a class="nav-link" href="hero-visual-pack.html"><span class="nav-title">Hero Visual Pack</span><span class="nav-meta">Hero Visual Pack</span></a><a class="nav-link" href="client-pack-latest.html"><span class="nav-title">Sydney Client Pack</span><span class="nav-meta">Client Pack Latest</span></a><a class="nav-link" href="top-10-insights-latest.html"><span class="nav-title">Top 10 Insights</span><span class="nav-meta">Top 10 Insights Latest</span></a><a class="nav-link" href="weekly-radar-latest.html"><span class="nav-title">Sydney Planning Opportunity Radar</span><span class="nav-meta">Weekly Radar Latest</span></a><a class="nav-link" href="top-site-screening-latest.html"><span class="nav-title">Sydney Top Site Screening</span><span class="nav-meta">Top Site Screening Latest</span></a><a class="nav-link" href="client-pack-newcastle-hunter.html"><span class="nav-title">Newcastle-Hunter Client Pack</span><span class="nav-meta">Client Pack Newcastle Hunter</span></a><a class="nav-link" href="weekly-radar-newcastle-hunter.html"><span class="nav-title">Newcastle-Hunter Planning Opportunity Radar</span><span class="nav-meta">Weekly Radar Newcastle Hunter</span></a><a class="nav-link active" href="top-site-screening-newcastle-hunter.html"><span class="nav-title">Newcastle-Hunter Top Site Screening</span><span class="nav-meta">Top Site Screening Newcastle Hunter</span></a></div></section><section class="nav-group"><div class="nav-heading">Site Cards</div><div class="nav-group-links"><a class="nav-link" href="site-card-latest-precinct-chatswood-10-dp1143909.html"><span class="nav-title">Site Card: 345 VICTORIA AVENUE CHATSWOOD</span><span class="nav-meta">Site Card Latest Precinct Chatswood 10 Dp1143909</span></a><a class="nav-link" href="site-card-latest-precinct-chatswood-3-dp1295867.html"><span class="nav-title">Site Card: 284 VICTORIA AVENUE CHATSWOOD</span><span class="nav-meta">Site Card Latest Precinct Chatswood 3 Dp1295867</span></a><a class="nav-link" href="site-card-latest-precinct-epping-14-dp876736.html"><span class="nav-title">Site Card: 1 EPPING ROAD NORTH RYDE</span><span class="nav-meta">Site Card Latest Precinct Epping 14 Dp876736</span></a><a class="nav-link" href="site-card-latest-precinct-epping-2-dp1205413.html"><span class="nav-title">Site Card: 37-41 OXFORD STREET EPPING</span><span class="nav-meta">Site Card Latest Precinct Epping 2 Dp1205413</span></a><a class="nav-link" href="site-card-latest-precinct-hurstville-100-dp1036230.html"><span class="nav-title">Site Card: 288 FOREST ROAD HURSTVILLE</span><span class="nav-meta">Site Card Latest Precinct Hurstville 100 Dp1036230</span></a><a class="nav-link" href="site-card-latest-precinct-macquarie-park-1-dp1317213.html"><span class="nav-title">Site Card: 23-25 LACHLAN AVENUE MACQUARIE PARK</span><span class="nav-meta">Site Card Latest Precinct Macquarie Park 1 Dp1317213</span></a><a class="nav-link" href="site-card-latest-precinct-miranda-1-dp865839.html"><span class="nav-title">Site Card: 600 KINGSWAY MIRANDA</span><span class="nav-meta">Site Card Latest Precinct Miranda 1 Dp865839</span></a><a class="nav-link" href="site-card-latest-precinct-norwest-4054-dp1070487.html"><span class="nav-title">Site Card: 2-4 BURBANK PLACE NORWEST</span><span class="nav-meta">Site Card Latest Precinct Norwest 4054 Dp1070487</span></a><a class="nav-link" href="site-card-latest-precinct-st-leonards-11-dp1013030.html"><span class="nav-title">Site Card: 207 PACIFIC HIGHWAY ST LEONARDS</span><span class="nav-meta">Site Card Latest Precinct St Leonards 11 Dp1013030</span></a><a class="nav-link" href="site-card-latest-precinct-st-leonards-2-dp879307.html"><span class="nav-title">Site Card: 203 PACIFIC HIGHWAY ST LEONARDS</span><span class="nav-meta">Site Card Latest Precinct St Leonards 2 Dp879307</span></a><a class="nav-link" href="site-card-latest-precinct-st-leonards-71-dp749690.html"><span class="nav-title">Site Card: 601 PACIFIC HIGHWAY ST LEONARDS</span><span class="nav-meta">Site Card Latest Precinct St Leonards 71 Dp749690</span></a><a class="nav-link" href="site-card-latest-precinct-westmead-2-dp1227281.html"><span class="nav-title">Site Card: 160 HAWKESBURY ROAD WESTMEAD</span><span class="nav-meta">Site Card Latest Precinct Westmead 2 Dp1227281</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-charlestown-20-dp1177332.html"><span class="nav-title">Site Card: 30 PEARSON STREET CHARLESTOWN</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Charlestown 20 Dp1177332</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-kotara-140-dp1167789.html"><span class="nav-title">Site Card: 88 PARK AVENUE KOTARA</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Kotara 140 Dp1167789</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-kotara-19-dp876517.html"><span class="nav-title">Site Card: 89 PARK AVENUE KOTARA</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Kotara 19 Dp876517</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-mayfield-4-dp270249.html"><span class="nav-title">Site Card: 4 LAURIO PLACE MAYFIELD WEST</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Mayfield 4 Dp270249</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-nelson-bay-2-dp15998.html"><span class="nav-title">Site Card: 90 MAGNUS STREET NELSON BAY</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Nelson Bay 2 Dp15998</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-newcastle-city-centre-1-dp798865.html"><span class="nav-title">Site Card: 134 KING STREET NEWCASTLE</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Newcastle City Centre 1 Dp798865</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-newcastle-city-centre-1-dp867617.html"><span class="nav-title">Site Card: 711 HUNTER STREET NEWCASTLE WEST</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Newcastle City Centre 1 Dp867617</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-newcastle-city-centre-2-dp1271240.html"><span class="nav-title">Site Card: 854 HUNTER STREET NEWCASTLE WEST</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Newcastle City Centre 2 Dp1271240</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-newcastle-city-centre-20-dp1204023.html"><span class="nav-title">Site Card: 45 WATT STREET NEWCASTLE</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Newcastle City Centre 20 Dp1204023</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-newcastle-city-centre-24-dp1269807.html"><span class="nav-title">Site Card: 5 PERKINS STREET NEWCASTLE</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Newcastle City Centre 24 Dp1269807</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-newcastle-city-centre-4-dp1250295.html"><span class="nav-title">Site Card: 373 HUNTER STREET NEWCASTLE</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Newcastle City Centre 4 Dp1250295</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-raymond-terrace-1-dp789728.html"><span class="nav-title">Site Card: 103 RICHARDSON ROAD RAYMOND TERRACE</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Raymond Terrace 1 Dp789728</span></a></div></section><section class="nav-group"><div class="nav-heading">Deep Dives</div><div class="nav-group-links"><a class="nav-link" href="deep-dive-gladesville.html"><span class="nav-title">Deep Dive: Gladesville</span><span class="nav-meta">Deep Dive Gladesville</span></a><a class="nav-link" href="deep-dive-bankstown.html"><span class="nav-title">Deep Dive: Bankstown</span><span class="nav-meta">Deep Dive Bankstown</span></a><a class="nav-link" href="deep-dive-mayfield.html"><span class="nav-title">Deep Dive: Mayfield</span><span class="nav-meta">Deep Dive Mayfield</span></a><a class="nav-link" href="deep-dive-newcastle-city-centre.html"><span class="nav-title">Deep Dive: Newcastle City Centre</span><span class="nav-meta">Deep Dive Newcastle City Centre</span></a><a class="nav-link" href="deep-dive-cessnock.html"><span class="nav-title">Deep Dive: Cessnock</span><span class="nav-meta">Deep Dive Cessnock</span></a></div></section><section class="nav-group"><div class="nav-heading">Internal</div><div class="nav-group-links"><a class="nav-link" href="coverage-readiness-greater-sydney-expanded.html"><span class="nav-title">Coverage Readiness: greater-sydney-expanded</span><span class="nav-meta">Coverage Readiness Greater Sydney Expanded</span></a><a class="nav-link" href="coverage-readiness-newcastle-hunter-pilot.html"><span class="nav-title">Coverage Readiness: newcastle-hunter-pilot</span><span class="nav-meta">Coverage Readiness Newcastle Hunter Pilot</span></a></div></section><section class="nav-group"><div class="nav-heading">Other</div><div class="nav-group-links"><a class="nav-link" href="coverage-readiness-coverage-pack.html"><span class="nav-title">Coverage Readiness: coverage-pack</span><span class="nav-meta">Coverage Readiness Coverage Pack</span></a><a class="nav-link" href="development-report-standard-universe.html"><span class="nav-title">Sydney Hotspot Development Report</span><span class="nav-meta">Development Report Standard Universe</span></a></div></section></nav>
+    </aside>
+    <main class="main">
+      <article class="article"><h1>Newcastle-Hunter Top Site Screening</h1>
+<h2>Summary</h2>
+<ul>
+<li>Current automated site-screening top cut shown below: <strong>12</strong> sites for Newcastle-Hunter.</li>
+<li>Band mix across the current region-level site layer: <strong>4 Advance</strong>, <strong>36 Review</strong>, <strong>41 Caution</strong>.</li>
+<li>Highest current site candidate: <strong>89 PARK AVENUE KOTARA</strong> in <strong>Kotara</strong> with score <strong>50</strong> and action <strong>Advance to site review</strong>.</li>
+<li>Most common current site-level flags: <strong>Heritage item [high] = 10</strong>, <strong>Bushfire prone land [high] = 5</strong>, <strong>State heritage curtilage [high] = 1</strong>.</li>
+</ul>
+<h2>Method</h2>
+<ul>
+<li>This report is fully automated from free, public NSW open data and current mapped application signals.</li>
+<li>It screens lots/sites, not just precincts, but it is still a triage tool rather than a title/comps/residual decision engine.</li>
+<li>Controls shown here are the current point-intersected planning envelope. Constraint rows show current open-data red flags such as heritage, state heritage curtilage, land reservation, flood planning, biodiversity, bushfire, airport noise and OLS.</li>
+<li>A row that says no current site-level derived constraint hit means no current open-data flag was surfaced in this pass. It does not mean the site is parcel-safe or cleared for acquisition.</li>
+<li>The watchlist precinct label is a search bucket. Governing EPI and apparent site jurisdiction should control how the planning envelope is interpreted for a given lot.</li>
+</ul>
+<h2>Top Ranked Sites</h2>
+<table>
+<thead>
+<tr>
+<th>Rank</th>
+<th>Site</th>
+<th>Watchlist Bucket</th>
+<th>Apparent Jurisdiction</th>
+<th>Band</th>
+<th>Score</th>
+<th>Zoning</th>
+<th>FSR</th>
+<th>Height</th>
+<th>Lot Area</th>
+<th>Frontage</th>
+<th>Signals</th>
+<th>Constraint Stack</th>
+<th>Card</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>89 PARK AVENUE KOTARA</td>
+<td>Kotara</td>
+<td>Newcastle</td>
+<td>Advance</td>
+<td>50</td>
+<td>E1</td>
+<td>2.00</td>
+<td>14.0m</td>
+<td>118,436 sqm</td>
+<td>1,274.4 m</td>
+<td>2</td>
+<td>No current site-level derived constraint hit surfaced in this pass. Not parcel-safe.</td>
+<td><a href="reports/site-card-newcastle-hunter-precinct-kotara-19-dp876517.md">Open card</a></td>
+</tr>
+<tr>
+<td>2</td>
+<td>30 PEARSON STREET CHARLESTOWN</td>
+<td>Charlestown</td>
+<td>Lake Macquarie</td>
+<td>Advance</td>
+<td>50</td>
+<td>E2</td>
+<td>-</td>
+<td>125.0m</td>
+<td>106,915 sqm</td>
+<td>1,352.8 m</td>
+<td>2</td>
+<td>No current site-level derived constraint hit surfaced in this pass. Not parcel-safe.</td>
+<td><a href="reports/site-card-newcastle-hunter-precinct-charlestown-20-dp1177332.md">Open card</a></td>
+</tr>
+<tr>
+<td>3</td>
+<td>711 HUNTER STREET NEWCASTLE WEST</td>
+<td>Newcastle City Centre</td>
+<td>Newcastle</td>
+<td>Review</td>
+<td>50</td>
+<td>E2</td>
+<td>8.00</td>
+<td>90.0m</td>
+<td>6,727 sqm</td>
+<td>241.5 m</td>
+<td>1</td>
+<td>Heritage Item [high]</td>
+<td><a href="reports/site-card-newcastle-hunter-precinct-newcastle-city-centre-1-dp867617.md">Open card</a></td>
+</tr>
+<tr>
+<td>4</td>
+<td>854 HUNTER STREET NEWCASTLE WEST</td>
+<td>Newcastle City Centre</td>
+<td>Newcastle</td>
+<td>Review</td>
+<td>50</td>
+<td>E2</td>
+<td>8.00</td>
+<td>90.0m</td>
+<td>3,947 sqm</td>
+<td>151.2 m</td>
+<td>1</td>
+<td>Heritage Item [high]</td>
+<td><a href="reports/site-card-newcastle-hunter-precinct-newcastle-city-centre-2-dp1271240.md">Open card</a></td>
+</tr>
+<tr>
+<td>5</td>
+<td>5 PERKINS STREET NEWCASTLE</td>
+<td>Newcastle City Centre</td>
+<td>Newcastle</td>
+<td>Review</td>
+<td>49</td>
+<td>MU1</td>
+<td>4.00</td>
+<td>42.0m</td>
+<td>6,694 sqm</td>
+<td>204.0 m</td>
+<td>2</td>
+<td>Heritage Item [high]</td>
+<td><a href="reports/site-card-newcastle-hunter-precinct-newcastle-city-centre-24-dp1269807.md">Open card</a></td>
+</tr>
+<tr>
+<td>6</td>
+<td>88 PARK AVENUE KOTARA</td>
+<td>Kotara</td>
+<td>Newcastle</td>
+<td>Advance</td>
+<td>48</td>
+<td>E1</td>
+<td>2.00</td>
+<td>14.0m</td>
+<td>3,441 sqm</td>
+<td>67.2 m</td>
+<td>1</td>
+<td>No current site-level derived constraint hit surfaced in this pass. Not parcel-safe.</td>
+<td><a href="reports/site-card-newcastle-hunter-precinct-kotara-140-dp1167789.md">Open card</a></td>
+</tr>
+<tr>
+<td>7</td>
+<td>45 WATT STREET NEWCASTLE</td>
+<td>Newcastle City Centre</td>
+<td>Newcastle</td>
+<td>Review</td>
+<td>47</td>
+<td>R4</td>
+<td>3.00</td>
+<td>35.0m</td>
+<td>6,221 sqm</td>
+<td>145.8 m</td>
+<td>1</td>
+<td>Heritage Item [high]</td>
+<td><a href="reports/site-card-newcastle-hunter-precinct-newcastle-city-centre-20-dp1204023.md">Open card</a></td>
+</tr>
+<tr>
+<td>8</td>
+<td>90 MAGNUS STREET NELSON BAY</td>
+<td>Nelson Bay</td>
+<td>Port Stephens</td>
+<td>Advance</td>
+<td>45</td>
+<td>R3</td>
+<td>2.50</td>
+<td>17.5m</td>
+<td>1,369 sqm</td>
+<td>42.1 m</td>
+<td>1</td>
+<td>No current site-level derived constraint hit surfaced in this pass. Not parcel-safe.</td>
+<td><a href="reports/site-card-newcastle-hunter-precinct-nelson-bay-2-dp15998.md">Open card</a></td>
+</tr>
+<tr>
+<td>9</td>
+<td>134 KING STREET NEWCASTLE</td>
+<td>Newcastle City Centre</td>
+<td>Newcastle</td>
+<td>Review</td>
+<td>38</td>
+<td>MU1</td>
+<td>3.00</td>
+<td>24.0m</td>
+<td>838 sqm</td>
+<td>58.3 m</td>
+<td>1</td>
+<td>Heritage Item [high]</td>
+<td><a href="reports/site-card-newcastle-hunter-precinct-newcastle-city-centre-1-dp798865.md">Open card</a></td>
+</tr>
+<tr>
+<td>10</td>
+<td>373 HUNTER STREET NEWCASTLE</td>
+<td>Newcastle City Centre</td>
+<td>Newcastle</td>
+<td>Review</td>
+<td>37</td>
+<td>E2</td>
+<td>4.00</td>
+<td>30.0m</td>
+<td>15,272 sqm</td>
+<td>250.8 m</td>
+<td>1</td>
+<td>Heritage Item [high]; State Heritage Curtilage [high]</td>
+<td><a href="reports/site-card-newcastle-hunter-precinct-newcastle-city-centre-4-dp1250295.md">Open card</a></td>
+</tr>
+<tr>
+<td>11</td>
+<td>103 RICHARDSON ROAD RAYMOND TERRACE</td>
+<td>Raymond Terrace</td>
+<td>Port Stephens</td>
+<td>Review</td>
+<td>36</td>
+<td>R2</td>
+<td>-</td>
+<td>9.0m</td>
+<td>6,351 sqm</td>
+<td>46.5 m</td>
+<td>1</td>
+<td>No current site-level derived constraint hit surfaced in this pass. Not parcel-safe.</td>
+<td><a href="reports/site-card-newcastle-hunter-precinct-raymond-terrace-1-dp789728.md">Open card</a></td>
+</tr>
+<tr>
+<td>12</td>
+<td>4 LAURIO PLACE MAYFIELD WEST</td>
+<td>Mayfield</td>
+<td>Newcastle</td>
+<td>Review</td>
+<td>36</td>
+<td>E4</td>
+<td>-</td>
+<td>-</td>
+<td>5,667 sqm</td>
+<td>98.2 m</td>
+<td>1</td>
+<td>No current site-level derived constraint hit surfaced in this pass. Not parcel-safe.</td>
+<td><a href="reports/site-card-newcastle-hunter-precinct-mayfield-4-dp270249.md">Open card</a></td>
+</tr>
+</tbody></table>
+<h2>Current Site-Level Red Flags</h2>
+<table>
+<thead>
+<tr>
+<th>Constraint</th>
+<th>Severity</th>
+<th>Hit Count</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Heritage item</td>
+<td>high</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Bushfire prone land</td>
+<td>high</td>
+<td>5</td>
+</tr>
+<tr>
+<td>State heritage curtilage</td>
+<td>high</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Bushfire prone land</td>
+<td>medium</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<h2>Top 12 Detail</h2>
+<h3>89 PARK AVENUE KOTARA</h3>
+<ul>
+<li>Watchlist bucket: <strong>Kotara</strong></li>
+<li>Watchlist precinct: <strong>Kotara</strong></li>
+<li>Current precinct grouping: <strong>Newcastle</strong></li>
+<li>Apparent site jurisdiction from governing EPI: <strong>Newcastle</strong></li>
+<li>Screening band: <strong>Advance</strong> with score <strong>50</strong></li>
+<li>Recommended action: Advance to site review</li>
+<li>Precinct backdrop: rating <code>B</code>, policy <code>0</code>, timing <code>4</code>, precinct friction <code>2</code></li>
+<li>Control envelope: zoning <code>E1</code> (Local Centre), FSR <code>2.00</code>, height <code>14.0m</code>, minimum lot size <code>-</code></li>
+<li>Site metrics: lot <code>19//DP876517</code>, plan area <code>-</code>, geometry area <code>118,436 sqm</code>, frontage candidate <code>1,274.4 m</code>, matched recent signals <code>2</code></li>
+<li>Current constraint stack: no current site-level derived constraint hit is surfaced in the present open-data layer. This is not a parcel-safe finding.</li>
+<li>Address signal: 89 PARK AVENUE KOTARA</li>
+<li>Site card: <a href="site-card-newcastle-hunter-precinct-kotara-19-dp876517.html"><code>reports/site-card-newcastle-hunter-precinct-kotara-19-dp876517.md</code></a></li>
+</ul>
+<h3>30 PEARSON STREET CHARLESTOWN</h3>
+<ul>
+<li>Watchlist bucket: <strong>Charlestown</strong></li>
+<li>Watchlist precinct: <strong>Charlestown</strong></li>
+<li>Current precinct grouping: <strong>Lake Macquarie</strong></li>
+<li>Apparent site jurisdiction from governing EPI: <strong>Lake Macquarie</strong></li>
+<li>Screening band: <strong>Advance</strong> with score <strong>50</strong></li>
+<li>Recommended action: Advance to site review</li>
+<li>Precinct backdrop: rating <code>B</code>, policy <code>1</code>, timing <code>5</code>, precinct friction <code>3</code></li>
+<li>Control envelope: zoning <code>E2</code> (Commercial Centre), FSR <code>-</code>, height <code>125.0m</code>, minimum lot size <code>-</code></li>
+<li>Site metrics: lot <code>20//DP1177332</code>, plan area <code>75,185 sqm</code>, geometry area <code>106,915 sqm</code>, frontage candidate <code>1,352.8 m</code>, matched recent signals <code>2</code></li>
+<li>Current constraint stack: no current site-level derived constraint hit is surfaced in the present open-data layer. This is not a parcel-safe finding.</li>
+<li>Address signal: 30 PEARSON STREET CHARLESTOWN</li>
+<li>Site card: <a href="site-card-newcastle-hunter-precinct-charlestown-20-dp1177332.html"><code>reports/site-card-newcastle-hunter-precinct-charlestown-20-dp1177332.md</code></a></li>
+</ul>
+<h3>711 HUNTER STREET NEWCASTLE WEST</h3>
+<ul>
+<li>Watchlist bucket: <strong>Newcastle City Centre</strong></li>
+<li>Watchlist precinct: <strong>Newcastle City Centre</strong></li>
+<li>Current precinct grouping: <strong>Newcastle</strong></li>
+<li>Apparent site jurisdiction from governing EPI: <strong>Newcastle</strong></li>
+<li>Screening band: <strong>Review</strong> with score <strong>50</strong></li>
+<li>Recommended action: Validate controls and constraints</li>
+<li>Precinct backdrop: rating <code>B</code>, policy <code>3</code>, timing <code>5</code>, precinct friction <code>2</code></li>
+<li>Control envelope: zoning <code>E2</code> (Commercial Centre), FSR <code>8.00</code>, height <code>90.0m</code>, minimum lot size <code>-</code></li>
+<li>Site metrics: lot <code>1//DP867617</code>, plan area <code>-</code>, geometry area <code>6,727 sqm</code>, frontage candidate <code>241.5 m</code>, matched recent signals <code>1</code></li>
+<li>Current constraint stack: Heritage item [high]</li>
+<li>Address signal: 711 HUNTER STREET NEWCASTLE WEST</li>
+<li>Site card: <a href="site-card-newcastle-hunter-precinct-newcastle-city-centre-1-dp867617.html"><code>reports/site-card-newcastle-hunter-precinct-newcastle-city-centre-1-dp867617.md</code></a></li>
+</ul>
+<h3>854 HUNTER STREET NEWCASTLE WEST</h3>
+<ul>
+<li>Watchlist bucket: <strong>Newcastle City Centre</strong></li>
+<li>Watchlist precinct: <strong>Newcastle City Centre</strong></li>
+<li>Current precinct grouping: <strong>Newcastle</strong></li>
+<li>Apparent site jurisdiction from governing EPI: <strong>Newcastle</strong></li>
+<li>Screening band: <strong>Review</strong> with score <strong>50</strong></li>
+<li>Recommended action: Validate controls and constraints</li>
+<li>Precinct backdrop: rating <code>B</code>, policy <code>3</code>, timing <code>5</code>, precinct friction <code>2</code></li>
+<li>Control envelope: zoning <code>E2</code> (Commercial Centre), FSR <code>8.00</code>, height <code>90.0m</code>, minimum lot size <code>-</code></li>
+<li>Site metrics: lot <code>2//DP1271240</code>, plan area <code>2,772 sqm</code>, geometry area <code>3,947 sqm</code>, frontage candidate <code>151.2 m</code>, matched recent signals <code>1</code></li>
+<li>Current constraint stack: Heritage item [high]</li>
+<li>Address signal: 854 HUNTER STREET NEWCASTLE WEST</li>
+<li>Site card: <a href="site-card-newcastle-hunter-precinct-newcastle-city-centre-2-dp1271240.html"><code>reports/site-card-newcastle-hunter-precinct-newcastle-city-centre-2-dp1271240.md</code></a></li>
+</ul>
+<h3>5 PERKINS STREET NEWCASTLE</h3>
+<ul>
+<li>Watchlist bucket: <strong>Newcastle City Centre</strong></li>
+<li>Watchlist precinct: <strong>Newcastle City Centre</strong></li>
+<li>Current precinct grouping: <strong>Newcastle</strong></li>
+<li>Apparent site jurisdiction from governing EPI: <strong>Newcastle</strong></li>
+<li>Screening band: <strong>Review</strong> with score <strong>49</strong></li>
+<li>Recommended action: Validate controls and constraints</li>
+<li>Precinct backdrop: rating <code>B</code>, policy <code>3</code>, timing <code>5</code>, precinct friction <code>2</code></li>
+<li>Control envelope: zoning <code>MU1</code> (Mixed Use), FSR <code>4.00</code>, height <code>42.0m</code>, minimum lot size <code>-</code></li>
+<li>Site metrics: lot <code>24//DP1269807</code>, plan area <code>4,701 sqm</code>, geometry area <code>6,694 sqm</code>, frontage candidate <code>204.0 m</code>, matched recent signals <code>2</code></li>
+<li>Current constraint stack: Heritage item [high]</li>
+<li>Address signal: 5 PERKINS STREET NEWCASTLE</li>
+<li>Site card: <a href="site-card-newcastle-hunter-precinct-newcastle-city-centre-24-dp1269807.html"><code>reports/site-card-newcastle-hunter-precinct-newcastle-city-centre-24-dp1269807.md</code></a></li>
+</ul>
+<h3>88 PARK AVENUE KOTARA</h3>
+<ul>
+<li>Watchlist bucket: <strong>Kotara</strong></li>
+<li>Watchlist precinct: <strong>Kotara</strong></li>
+<li>Current precinct grouping: <strong>Newcastle</strong></li>
+<li>Apparent site jurisdiction from governing EPI: <strong>Newcastle</strong></li>
+<li>Screening band: <strong>Advance</strong> with score <strong>48</strong></li>
+<li>Recommended action: Advance to site review</li>
+<li>Precinct backdrop: rating <code>B</code>, policy <code>0</code>, timing <code>4</code>, precinct friction <code>2</code></li>
+<li>Control envelope: zoning <code>E1</code> (Local Centre), FSR <code>2.00</code>, height <code>14.0m</code>, minimum lot size <code>-</code></li>
+<li>Site metrics: lot <code>140//DP1167789</code>, plan area <code>2,416 sqm</code>, geometry area <code>3,441 sqm</code>, frontage candidate <code>67.2 m</code>, matched recent signals <code>1</code></li>
+<li>Current constraint stack: no current site-level derived constraint hit is surfaced in the present open-data layer. This is not a parcel-safe finding.</li>
+<li>Address signal: 88 PARK AVENUE KOTARA</li>
+<li>Site card: <a href="site-card-newcastle-hunter-precinct-kotara-140-dp1167789.html"><code>reports/site-card-newcastle-hunter-precinct-kotara-140-dp1167789.md</code></a></li>
+</ul>
+<h3>45 WATT STREET NEWCASTLE</h3>
+<ul>
+<li>Watchlist bucket: <strong>Newcastle City Centre</strong></li>
+<li>Watchlist precinct: <strong>Newcastle City Centre</strong></li>
+<li>Current precinct grouping: <strong>Newcastle</strong></li>
+<li>Apparent site jurisdiction from governing EPI: <strong>Newcastle</strong></li>
+<li>Screening band: <strong>Review</strong> with score <strong>47</strong></li>
+<li>Recommended action: Validate controls and constraints</li>
+<li>Precinct backdrop: rating <code>B</code>, policy <code>3</code>, timing <code>5</code>, precinct friction <code>2</code></li>
+<li>Control envelope: zoning <code>R4</code> (High Density Residential), FSR <code>3.00</code>, height <code>35.0m</code>, minimum lot size <code>-</code></li>
+<li>Site metrics: lot <code>20//DP1204023</code>, plan area <code>4,369 sqm</code>, geometry area <code>6,221 sqm</code>, frontage candidate <code>145.8 m</code>, matched recent signals <code>1</code></li>
+<li>Current constraint stack: Heritage item [high]</li>
+<li>Address signal: 45 WATT STREET NEWCASTLE</li>
+<li>Site card: <a href="site-card-newcastle-hunter-precinct-newcastle-city-centre-20-dp1204023.html"><code>reports/site-card-newcastle-hunter-precinct-newcastle-city-centre-20-dp1204023.md</code></a></li>
+</ul>
+<h3>90 MAGNUS STREET NELSON BAY</h3>
+<ul>
+<li>Watchlist bucket: <strong>Nelson Bay</strong></li>
+<li>Watchlist precinct: <strong>Nelson Bay</strong></li>
+<li>Current precinct grouping: <strong>Port Stephens</strong></li>
+<li>Apparent site jurisdiction from governing EPI: <strong>Port Stephens</strong></li>
+<li>Screening band: <strong>Advance</strong> with score <strong>45</strong></li>
+<li>Recommended action: Advance to site review</li>
+<li>Precinct backdrop: rating <code>B</code>, policy <code>2</code>, timing <code>5</code>, precinct friction <code>2</code></li>
+<li>Control envelope: zoning <code>R3</code> (Medium Density Residential), FSR <code>2.50</code>, height <code>17.5m</code>, minimum lot size <code>500 m²</code></li>
+<li>Site metrics: lot <code>2//DP15998</code>, plan area <code>-</code>, geometry area <code>1,369 sqm</code>, frontage candidate <code>42.1 m</code>, matched recent signals <code>1</code></li>
+<li>Current constraint stack: no current site-level derived constraint hit is surfaced in the present open-data layer. This is not a parcel-safe finding.</li>
+<li>Address signal: 90 MAGNUS STREET NELSON BAY</li>
+<li>Site card: <a href="site-card-newcastle-hunter-precinct-nelson-bay-2-dp15998.html"><code>reports/site-card-newcastle-hunter-precinct-nelson-bay-2-dp15998.md</code></a></li>
+</ul>
+<h3>134 KING STREET NEWCASTLE</h3>
+<ul>
+<li>Watchlist bucket: <strong>Newcastle City Centre</strong></li>
+<li>Watchlist precinct: <strong>Newcastle City Centre</strong></li>
+<li>Current precinct grouping: <strong>Newcastle</strong></li>
+<li>Apparent site jurisdiction from governing EPI: <strong>Newcastle</strong></li>
+<li>Screening band: <strong>Review</strong> with score <strong>38</strong></li>
+<li>Recommended action: Validate controls and constraints</li>
+<li>Precinct backdrop: rating <code>B</code>, policy <code>3</code>, timing <code>5</code>, precinct friction <code>2</code></li>
+<li>Control envelope: zoning <code>MU1</code> (Mixed Use), FSR <code>3.00</code>, height <code>24.0m</code>, minimum lot size <code>-</code></li>
+<li>Site metrics: lot <code>1//DP798865</code>, plan area <code>-</code>, geometry area <code>838 sqm</code>, frontage candidate <code>58.3 m</code>, matched recent signals <code>1</code></li>
+<li>Current constraint stack: Heritage item [high]</li>
+<li>Address signal: 134 KING STREET NEWCASTLE</li>
+<li>Site card: <a href="site-card-newcastle-hunter-precinct-newcastle-city-centre-1-dp798865.html"><code>reports/site-card-newcastle-hunter-precinct-newcastle-city-centre-1-dp798865.md</code></a></li>
+</ul>
+<h3>373 HUNTER STREET NEWCASTLE</h3>
+<ul>
+<li>Watchlist bucket: <strong>Newcastle City Centre</strong></li>
+<li>Watchlist precinct: <strong>Newcastle City Centre</strong></li>
+<li>Current precinct grouping: <strong>Newcastle</strong></li>
+<li>Apparent site jurisdiction from governing EPI: <strong>Newcastle</strong></li>
+<li>Screening band: <strong>Review</strong> with score <strong>37</strong></li>
+<li>Recommended action: Validate controls and constraints</li>
+<li>Precinct backdrop: rating <code>B</code>, policy <code>3</code>, timing <code>5</code>, precinct friction <code>2</code></li>
+<li>Control envelope: zoning <code>E2</code> (Commercial Centre), FSR <code>4.00</code>, height <code>30.0m</code>, minimum lot size <code>-</code></li>
+<li>Site metrics: lot <code>4//DP1250295</code>, plan area <code>10,725 sqm</code>, geometry area <code>15,272 sqm</code>, frontage candidate <code>250.8 m</code>, matched recent signals <code>1</code></li>
+<li>Current constraint stack: Heritage item [high]; State heritage curtilage [high]</li>
+<li>Address signal: 373 HUNTER STREET NEWCASTLE</li>
+<li>Site card: <a href="site-card-newcastle-hunter-precinct-newcastle-city-centre-4-dp1250295.html"><code>reports/site-card-newcastle-hunter-precinct-newcastle-city-centre-4-dp1250295.md</code></a></li>
+</ul>
+<h3>103 RICHARDSON ROAD RAYMOND TERRACE</h3>
+<ul>
+<li>Watchlist bucket: <strong>Raymond Terrace</strong></li>
+<li>Watchlist precinct: <strong>Raymond Terrace</strong></li>
+<li>Current precinct grouping: <strong>Port Stephens</strong></li>
+<li>Apparent site jurisdiction from governing EPI: <strong>Port Stephens</strong></li>
+<li>Screening band: <strong>Review</strong> with score <strong>36</strong></li>
+<li>Recommended action: Validate controls and constraints</li>
+<li>Precinct backdrop: rating <code>B</code>, policy <code>0</code>, timing <code>5</code>, precinct friction <code>3</code></li>
+<li>Control envelope: zoning <code>R2</code> (Low Density Residential), FSR <code>-</code>, height <code>9.0m</code>, minimum lot size <code>500 m²</code></li>
+<li>Site metrics: lot <code>1//DP789728</code>, plan area <code>-</code>, geometry area <code>6,351 sqm</code>, frontage candidate <code>46.5 m</code>, matched recent signals <code>1</code></li>
+<li>Current constraint stack: no current site-level derived constraint hit is surfaced in the present open-data layer. This is not a parcel-safe finding.</li>
+<li>Address signal: 103 RICHARDSON ROAD RAYMOND TERRACE</li>
+<li>Site card: <a href="site-card-newcastle-hunter-precinct-raymond-terrace-1-dp789728.html"><code>reports/site-card-newcastle-hunter-precinct-raymond-terrace-1-dp789728.md</code></a></li>
+</ul>
+<h3>4 LAURIO PLACE MAYFIELD WEST</h3>
+<ul>
+<li>Watchlist bucket: <strong>Mayfield</strong></li>
+<li>Watchlist precinct: <strong>Mayfield</strong></li>
+<li>Current precinct grouping: <strong>Newcastle</strong></li>
+<li>Apparent site jurisdiction from governing EPI: <strong>Newcastle</strong></li>
+<li>Screening band: <strong>Review</strong> with score <strong>36</strong></li>
+<li>Recommended action: Validate controls and constraints</li>
+<li>Precinct backdrop: rating <code>B</code>, policy <code>0</code>, timing <code>5</code>, precinct friction <code>0</code></li>
+<li>Control envelope: zoning <code>E4</code> (General Industrial), FSR <code>-</code>, height <code>-</code>, minimum lot size <code>4,000 m²</code></li>
+<li>Site metrics: lot <code>4//DP270249</code>, plan area <code>-</code>, geometry area <code>5,667 sqm</code>, frontage candidate <code>98.2 m</code>, matched recent signals <code>1</code></li>
+<li>Current constraint stack: no current site-level derived constraint hit is surfaced in the present open-data layer. This is not a parcel-safe finding.</li>
+<li>Address signal: 4 LAURIO PLACE MAYFIELD WEST</li>
+<li>Site card: <a href="site-card-newcastle-hunter-precinct-mayfield-4-dp270249.html"><code>reports/site-card-newcastle-hunter-precinct-mayfield-4-dp270249.md</code></a>
+Precinct-level watchlist labels and site-level control envelopes should be read separately. A precinct summary describes the broader search bucket; the site rows above describe the current point-intersected planning envelope for the candidate lot itself.</li>
+</ul>
+<h2>Boundaries</h2>
+<ul>
+<li>No owner/title data is used here.</li>
+<li>No proprietary comps or residual pricing model is used here.</li>
+<li>Flood is treated as current planning/open-data signal, not as parcel-clearance certification.</li>
+</ul>
+</article>
+    </main>
+  </div>
+  <script>
+    (() => {
+      const navScrollKey = 'radarestate-nav-scroll';
+      const storageKey = 'radarestate-theme';
+      const sidebarKey = 'radarestate-sidebar';
+      const currentTheme = document.documentElement.dataset.theme || 'dark';
+      const currentSidebarState = document.documentElement.dataset.sidebar || 'expanded';
+      const sidebar = document.querySelector('.sidebar');
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const buttons = [...document.querySelectorAll('[data-theme-option]')];
+
+      const updateSidebarToggle = (state) => {
+        if (!sidebarToggle) return;
+        const expanded = state !== 'collapsed';
+        sidebarToggle.textContent = expanded ? 'Hide Navigation' : 'Show Navigation';
+        sidebarToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      };
+
+      updateSidebarToggle(currentSidebarState);
+
+      if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', () => {
+          const nextState = document.documentElement.dataset.sidebar === 'collapsed' ? 'expanded' : 'collapsed';
+          document.documentElement.dataset.sidebar = nextState;
+          updateSidebarToggle(nextState);
+          try {
+            window.localStorage.setItem(sidebarKey, nextState);
+          } catch {
+          }
+        });
+      }
+
+      if (sidebar) {
+        try {
+          const storedScroll = window.localStorage.getItem(navScrollKey);
+          if (storedScroll !== null) {
+            requestAnimationFrame(() => {
+              sidebar.scrollTop = Number(storedScroll) || 0;
+            });
+          }
+        } catch {
+        }
+
+        sidebar.addEventListener('scroll', () => {
+          try {
+            window.localStorage.setItem(navScrollKey, String(sidebar.scrollTop));
+          } catch {
+          }
+        }, { passive: true });
+      }
+
+      if (!buttons.length) return;
+      buttons.forEach((button) => {
+        const theme = button.dataset.themeOption;
+        button.setAttribute('aria-pressed', theme === currentTheme ? 'true' : 'false');
+        button.addEventListener('click', () => {
+          if (theme === currentTheme) return;
+          try {
+            window.localStorage.setItem(storageKey, theme);
+          } catch {
+          }
+          document.documentElement.dataset.theme = theme;
+          window.location.reload();
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

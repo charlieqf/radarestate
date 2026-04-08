@@ -420,7 +420,7 @@
 <ul>
 <li>Planning proposals tracked: <code>1,413</code></li>
 <li>Application signals tracked: <code>45,114</code></li>
-<li>Precinct shortlist items: <code>55</code></li>
+<li>Precinct shortlist items: <code>43</code></li>
 <li>Derived constraints: <code>69</code></li>
 </ul>
 <h2>Executive Summary</h2>
@@ -429,6 +429,13 @@
 <li><code>Blacktown</code>, <code>The Hills Shire</code>, <code>Canterbury-Bankstown</code> remain the strongest council-level activity cluster and are the best candidates for further precinct and street-level work.</li>
 <li><code>Bankstown</code>, <code>Ingleburn</code>, <code>Liverpool</code> are now showing obvious risk stacking and are better treated as a risk-adjusted watchlist instead of immediate acquisition priorities. The strongest risk signals currently include flood metadata high hits = 29, bushfire spatial high hits = 10.</li>
 <li>There are still 107 active proposal items in the pipeline, alongside 1,164 items already in made stage, which is enough to support a sustained planning radar rather than a one-off hotspot view.</li>
+</ul>
+<h2>Scoring Method</h2>
+<ul>
+<li>This is a first-pass weekly watchlist, not a parcel-level feasibility, pricing or acquisition report.</li>
+<li>Rating combines policy score and timing score, then downgrades precincts when friction stacks.</li>
+<li>Precincts with no current active proposals, mapped recent applications or state-significant projects are forced into <code>Watch</code> rather than <code>Investigate</code>.</li>
+<li><code>Recent Apps</code> means mapped application signals with lodgement date on or after <code>2025-01-01</code>.</li>
 </ul>
 <h2>Top Precinct Hotlist</h2>
 <table>
@@ -520,42 +527,6 @@
 </tr>
 <tr>
 <td>7</td>
-<td>Gables</td>
-<td>The Hills Shire</td>
-<td>B</td>
-<td>3</td>
-<td>5</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>Investigate</td>
-</tr>
-<tr>
-<td>8</td>
-<td>Cronulla</td>
-<td>Sutherland Shire</td>
-<td>B</td>
-<td>0</td>
-<td>5</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>Investigate</td>
-</tr>
-<tr>
-<td>9</td>
-<td>Drummoyne</td>
-<td>Canada Bay</td>
-<td>B</td>
-<td>3</td>
-<td>5</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>Investigate</td>
-</tr>
-<tr>
-<td>10</td>
 <td>Croydon</td>
 <td>Burwood</td>
 <td>B</td>
@@ -564,6 +535,42 @@
 <td>1</td>
 <td>192</td>
 <td>1</td>
+<td>Investigate</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Double Bay</td>
+<td>Woollahra</td>
+<td>B</td>
+<td>3</td>
+<td>5</td>
+<td>1</td>
+<td>182</td>
+<td>1</td>
+<td>Investigate</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Beverly Hills</td>
+<td>Georges River</td>
+<td>B</td>
+<td>2</td>
+<td>5</td>
+<td>1</td>
+<td>64</td>
+<td>1</td>
+<td>Investigate</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Hurstville</td>
+<td>Georges River</td>
+<td>B</td>
+<td>0</td>
+<td>5</td>
+<td>2</td>
+<td>280</td>
+<td>0</td>
 <td>Investigate</td>
 </tr>
 </tbody></table>
@@ -729,6 +736,36 @@
 <td>-</td>
 <td>2,208</td>
 <td>2</td>
+</tr>
+</tbody></table>
+<h2>Recent Application Mix</h2>
+<p>Current screen window: <code>2025-01-01</code>. DA, CDC, SSD and Modification are shown separately because they do not carry the same deal-screening meaning.</p>
+<table>
+<thead>
+<tr>
+<th>Application Type</th>
+<th>Count</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DA</td>
+<td>13,017</td>
+</tr>
+<tr>
+<td>CDC</td>
+<td>24,802</td>
+</tr>
+<tr>
+<td>SSD</td>
+<td>1,920</td>
+</tr>
+<tr>
+<td>Modification</td>
+<td>5,121</td>
+</tr>
+<tr>
+<td>Other</td>
+<td>251</td>
 </tr>
 </tbody></table>
 <h2>Policy Pipeline</h2>

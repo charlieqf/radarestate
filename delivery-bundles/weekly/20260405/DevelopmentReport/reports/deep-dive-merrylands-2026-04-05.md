@@ -88,8 +88,8 @@ Current mix note: this precinct is presently **CDC-led** (228 CDC vs 130 DA), so
 
 | Lodgement | Status | Type | Location |
 | --- | --- | --- | --- |
-| 2026-04-01 | Under Assessment | Modification Application | 20 LANSDOWNE STREET MERRYLANDS 2160 |
 | 2026-04-01 | Under Assessment | Development Application | 242 PITT STREET MERRYLANDS 2160 |
+| 2026-04-01 | Under Assessment | Modification Application | 20 LANSDOWNE STREET MERRYLANDS 2160 |
 | 2026-03-31 | Under Assessment | Complying Development Certificate Application | 25 MALVERN AVENUE MERRYLANDS 2160 |
 | 2026-03-31 | Under Assessment | Complying Development Certificate Application | 38 MARY STREET MERRYLANDS 2160 |
 | 2026-03-31 | Additional Information Requested | Development Application | 93 JOHN STREET MERRYLANDS 2160 |

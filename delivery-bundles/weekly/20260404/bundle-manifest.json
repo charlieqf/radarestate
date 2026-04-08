@@ -1,0 +1,20 @@
+{
+  "generated_at": "2026-04-04T11:05:07.114Z",
+  "bundle_date": "20260404",
+  "contents": {
+    "RadarReport": [
+      "index.html",
+      "client-output/",
+      "dashboard/",
+      "reports/",
+      "manifest.json"
+    ],
+    "DevelopmentReport": [
+      "index.html",
+      "client-output/",
+      "dashboard/",
+      "reports/",
+      "manifest.json"
+    ]
+  }
+}

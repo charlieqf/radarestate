@@ -15,7 +15,7 @@
 - Precinct mapping: `PASS`
 - Risk layer availability: `PASS`
 - Stable shortlist and report output: `PASS`
-- Overall: `READY TO EXPAND`
+- Overall: `SELECTIVE EXPANSION ONLY`
 
 ## Mapping Coverage
 
@@ -69,8 +69,8 @@
 
 ## Shortlist And Report Stability
 
-- Shortlist items in pack: `55`
-- Rating mix: `A=4`, `B=35`, `C=16`
+- Shortlist items in pack: `43`
+- Rating mix: `A=4`, `B=27`, `C=12`
 
 | Rank | Precinct | Council | Rating | Risk | Recent Apps | Pipeline |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -80,18 +80,18 @@
 | 4 | Cabramatta | Fairfield | A | 2 | 257 | 2 |
 | 5 | Seven Hills | Blacktown | B | 0 | 282 | 1 |
 | 6 | Bexley | Bayside | B | 0 | 201 | 1 |
-| 7 | Cronulla | Sutherland Shire | B | 0 | 0 | 0 |
-| 8 | Drummoyne | Canada Bay | B | 0 | 0 | 0 |
-| 9 | Gables | The Hills Shire | B | 0 | 0 | 0 |
-| 10 | Croydon | Burwood | B | 1 | 192 | 1 |
-| 11 | Double Bay | Woollahra | B | 1 | 182 | 1 |
-| 12 | Beverly Hills | Georges River | B | 1 | 64 | 1 |
-| 13 | Hurstville | Georges River | B | 2 | 280 | 0 |
-| 14 | Auburn | Cumberland | B | 2 | 260 | 0 |
-| 15 | Epping | Ryde | B | 2 | 250 | 0 |
+| 7 | Croydon | Burwood | B | 1 | 192 | 1 |
+| 8 | Double Bay | Woollahra | B | 1 | 182 | 1 |
+| 9 | Beverly Hills | Georges River | B | 1 | 64 | 1 |
+| 10 | Hurstville | Georges River | B | 2 | 280 | 0 |
+| 11 | Auburn | Cumberland | B | 2 | 260 | 0 |
+| 12 | Epping | Ryde | B | 2 | 250 | 0 |
+| 13 | Miranda | Sutherland Shire | B | 2 | 223 | 2 |
+| 14 | Smithfield | Fairfield | B | 2 | 219 | 1 |
+| 15 | St Marys | Penrith | B | 2 | 204 | 1 |
 
 ## Interpretation
 
-- Mapping has moved beyond council-level heat and is now usable at precinct level.
-- The risk layer is already changing shortlist order, which means the expanded pack is doing more than just surfacing hotter places.
-- The current expanded pack can already produce a stable enough shortlist and report set.
+- Mapping has moved beyond council-level heat and is now usable for selective precinct screening, but coverage gaps still remain.
+- The risk layer is already changing shortlist order, which means the expanded pack is doing more than just surfacing hotter places, but it is still a first-pass proxy layer.
+- The current expanded pack can support selective corridor-by-corridor reporting, but it should still be treated as beta coverage rather than broad market-grade maturity.

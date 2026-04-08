@@ -29,6 +29,8 @@ async function main() {
   const options = parseArgs()
   const dashboardName = `${options.slug}-report`
 
+  runNodeScript('scripts/build_site_screening_layer.mjs', [`--region-group=${options.regionGroup}`])
+
   runNodeScript('scripts/generate_dashboard_report.mjs', [
     `--region-group=${options.regionGroup}`,
     `--label=${options.label}`,
@@ -40,6 +42,21 @@ async function main() {
     `--label=${options.label}`,
     `--output-name=${options.slug}`,
     `--dashboard-path=dashboard/${dashboardName}.html`
+  ])
+
+  runNodeScript('scripts/generate_top_site_screening_report.mjs', [
+    `--region-group=${options.regionGroup}`,
+    `--label=${options.label}`,
+    `--output-name=${options.slug}`
+  ])
+
+  runNodeScript('scripts/generate_site_card_batch.mjs', [
+    `--region-group=${options.regionGroup}`,
+    `--label=${options.label}`,
+    `--output-name=${options.slug}`,
+    `--dashboard-path=dashboard/${dashboardName}.html`,
+    `--radar-path=reports/weekly-radar-${options.slug}.md`,
+    `--screening-path=reports/top-site-screening-${options.slug}.md`
   ])
 
   runNodeScript('scripts/render_client_reports.mjs')

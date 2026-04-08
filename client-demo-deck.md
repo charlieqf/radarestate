@@ -77,11 +77,12 @@
 - TOD / Low and Mid-Rise 适用 precinct
 - 周边 DA / application activity
 - Local Housing Strategies 与 housing target pressure
+- 在当前产品定义的 Sydney target-council scope 内，housing target context 为 `22/22`
 - 主要 constraints 和基础设施催化
 
 ### 讲述句
 
-`我们不是试图做所有数据，而是盯住最能改变开发优先级的那几类信号。`
+`我们不是试图做所有数据，而是盯住最能改变开发优先级的那几类信号；在当前 Sydney target-council scope 内，housing target context 也已经是完整层。`
 
 ### 视觉建议
 
@@ -116,6 +117,7 @@
 - Priority Alerts：少量高价值即时提醒
 - Hotlist：可执行 shortlist
 - Deep Dive Memo：对站点、走廊、LGA 的深度判断
+- Council-level context 在当前 Sydney target-council scope 内为完整 `22/22`，但不应被误读成覆盖所有更宽泛的 Greater Sydney LGA 定义
 
 ### 视觉建议
 

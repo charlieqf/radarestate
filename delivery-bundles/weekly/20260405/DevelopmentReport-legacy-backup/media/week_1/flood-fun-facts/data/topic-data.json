@@ -1,0 +1,50 @@
+{
+  "topic": "flood-fun-facts",
+  "series": "sydney-environment-fun-facts",
+  "scope_note": "Public-data screening signals, not parcel-level flood certification.",
+  "headline_stat": {
+    "label": "Flood high hits",
+    "value": 29
+  },
+  "secondary_stat": {
+    "label": "Flood medium hits",
+    "value": 5
+  },
+  "highlight_precincts": [
+    {
+      "name": "Bankstown",
+      "signal": "flood_metadata_signal",
+      "severity": "high",
+      "context": "Appears in high-friction group"
+    },
+    {
+      "name": "Liverpool",
+      "signal": "flood_metadata_signal",
+      "severity": "high",
+      "context": "Appears in high-friction group"
+    },
+    {
+      "name": "Homebush",
+      "signal": "flood_metadata_signal",
+      "severity": "high",
+      "context": "Appears in current high-friction list"
+    },
+    {
+      "name": "Epping",
+      "signal": "flood_metadata_signal",
+      "severity": "high",
+      "context": "Visible in shortlist commentary"
+    },
+    {
+      "name": "Edgecliff",
+      "signal": "flood_metadata_signal",
+      "severity": "medium",
+      "context": "Positive-lean precinct but with flood signal still visible"
+    }
+  ],
+  "report_refs": [
+    "reports/top-10-insights-latest.md:56-61",
+    "reports/weekly-radar-latest.md:124-128",
+    "reports/weekly-radar-latest.md:54-63"
+  ]
+}

@@ -1,0 +1,75 @@
+仍然存在的主要缺陷
+1. 这份 WeeklyDelta 还不能完全当成“真周报”  
+最大问题是这次对比基线不是正式归档，而是“reconstructed”：
+- delta-report-2026-04-05-vs-2026-03-29.md:8
+- delta-report-2026-04-05-vs-2026-03-29.md:174
+- methodology-appendix.md:53-56
+这意味着本期很多“变化”其实带有补历史、补基线的成分，不是真正干净的 week-over-week。
+2. 有些周度变化看起来像数据补录，不像真实市场变化  
+最明显的是 SSD：
+- delta-report-2026-04-05-vs-2026-03-29.md:148
+- delta-report-2026-04-05-vs-2026-03-29.md:158
+一周内从 0 到 1,920，更像基线缺口被补齐，不像真实周新增。  
+如果他们拿这种数字证明“本周变化很大”，那是有误导风险的。
+3. 报告内部仍有口径/质量不一致，伤信任  
+几个明显例子：
+- 同一份 full report 里  
+  Mapped applications = 43,194，但 Cumulative applications since 2025-01-01 = 43,191  
+  见 full-report-2026-04-05.md:93-94
+- Recent Modifications = 7,634，但按类型表里的 Modification = 5,121  
+  见 delta-report-2026-04-05-vs-2026-03-29.md:149 对比 :156  
+  也见 full-report-2026-04-05.md:98 对比 :106
+- 方法里说 band mix 是 Advance 30, Review 129, Hold 0  
+  但 site screening 里写的是 Advance 30, Review 129, Caution 148  
+  见 methodology-appendix.md:21-22 对比 top-site-screening-2026-04-05.md:5-7
+这种问题对你这种付费客户很关键，因为你买的是“可信筛选”，不是花哨版面。
+5. “site-level” 仍然偏表层，容易给人假安全感  
+Top 12 站点几乎清一色写：
+No current open-data red flag surfaced... Not parcel-safe.  
+见 top-site-screening-2026-04-05.md:22-33
+这说明它能告诉你“没扫出明显红旗”，但不能告诉你“这个地真的干净”。  
+如果销售时把它包装成 site-level certainty，那是夸大。
+6. 风险模型里混入了不少 council-level proxy，不够 transaction-facing  
+例如 Bankstown 的高风险里包括：
+- heat_vulnerability_proxy
+- low_tree_canopy_proxy
+见 deep-dive-bankstown-2026-04-05.md:83-88
+这些指标对宏观筛选有意义，但对具体 deal 的实际阻碍程度并不等价。  
+也就是说，它有“区域画像”价值，不一定有“地块决策”价值。
+7. Deep dive 的证据链仍不够扎实  
+例如 Gladesville 摘要说有 2 active planning proposal items：  
+deep-dive-gladesville-2026-04-05.md:9, :27
+但下面的政策表展示的几乎都是 Made 项：  
+deep-dive-gladesville-2026-04-05.md:36-44
+Bankstown 也类似：上面说 1 active planning proposals，下面表里仍主要是 Made。  
+这会让客户难以核验“为什么它今天是 A / C”。
+8. 还有交付层面的粗糙感  
+top-10-insights-latest.md 里引用了并不存在的文件：
+- dashboard/latest-report.html
+- reports/weekly-radar-latest.md
+- reports/top-site-screening-latest.md
+见 top-10-insights-latest.md:9-12。  
+当前目录里这些文件并不存在。  
+这类 broken reference 会让人觉得他们的交付流程还没完全产品化。
+
+
+和你上次反馈相比，哪些问题被解决了，哪些没解决
+已明显改善：
+- 周报不再只是假装“周报”
+- 评分逻辑开始可解释
+- 从 precinct 扩展到 site shortlist
+- 内部产品术语减少
+仍未解决到位：
+- 真正净新增的周报可信度还不够
+- 方法论还是不能让你独立复核分数
+- 仍有产品化粗糙和数据口径不一致问题
+
+值不值得买
+- 作为辅助筛选工具：可以试。
+
+建议继续改进这 4 件事
+1. 请证明从下周开始，WeeklyDelta 使用的都是正式归档快照，不再有 reconstructed baseline。
+2. 请解释 43,194 vs 43,191、7,634 vs 5,121、Hold vs Caution 这些口径冲突。
+3. 请公开 precinct rating 和 site score 的具体权重与 band 阈值。
+4. 请在每周版里增加“本周最值得联系的 5 个具体站点/街段”和“最可能 assembly 的 3 个组合”。
+

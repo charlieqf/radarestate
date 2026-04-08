@@ -5,6 +5,17 @@ import { parse } from 'csv-parse/sync'
 
 const root = process.cwd()
 
+function parseArgs() {
+  const args = process.argv.slice(2)
+  const options = {
+    only: 'all'
+  }
+  for (const arg of args) {
+    if (arg.startsWith('--only=')) options.only = arg.split('=')[1].trim()
+  }
+  return options
+}
+
 function readFile(relativePath) {
   return fs.readFileSync(path.join(root, relativePath), 'utf8')
 }
@@ -104,13 +115,14 @@ function extractMatch(text, regex, parser = clean) {
 }
 
 function parseHousingNotes(notes) {
+  const moderateMatch = notes ? notes.match(/approx ([0-9.]+)% moderate|moderate heat vulnerability approx ([0-9.]+)%/i) : null
   return {
     resident_population: extractMatch(notes, /Resident population ([0-9,]+)/i, toInt),
     number_of_homes: extractMatch(notes, /number of homes ([0-9,]+)/i, toInt),
     average_household_size: extractMatch(notes, /average household size ([0-9.]+)/i, toNumeric),
     urban_tree_canopy_pct: extractMatch(notes, /urban tree canopy ([0-9.]+)%/i, toNumeric),
     high_heat_vulnerability_pct: extractMatch(notes, /high heat vulnerability (?:approx |less than )?([0-9.]+)%/i, toNumeric),
-    moderate_heat_vulnerability_pct: extractMatch(notes, /approx ([0-9.]+)% moderate/i, toNumeric),
+    moderate_heat_vulnerability_pct: moderateMatch ? toNumeric(moderateMatch[1] || moderateMatch[2]) : null,
     source_updated_date: extractMatch(notes, /updated ([0-9]{4}-[0-9]{2}-[0-9]{2})/i),
   }
 }
@@ -395,6 +407,7 @@ async function verify(client) {
 }
 
 async function main() {
+  const options = parseArgs()
   const connectionStrings = getConnectionStrings()
   let lastError = null
 
@@ -408,10 +421,10 @@ async function main() {
       await client.connect()
       console.log(`Connected using ${connectionString.includes('pooler.supabase.com') ? 'pooler' : 'direct'} endpoint`)
       await applySqlFiles(client)
-      await loadHousingTargets(client)
-      await loadPlanningProposals(client)
-      await loadApplicationSignals(client)
-      await loadCouncilActivityCounts(client)
+      if (options.only === 'all' || options.only === 'housing-targets') await loadHousingTargets(client)
+      if (options.only === 'all' || options.only === 'planning-proposals') await loadPlanningProposals(client)
+      if (options.only === 'all' || options.only === 'application-signals') await loadApplicationSignals(client)
+      if (options.only === 'all' || options.only === 'council-activity') await loadCouncilActivityCounts(client)
       await verify(client)
       await client.end()
       return

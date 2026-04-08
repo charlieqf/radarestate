@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process'
 import { Client } from 'pg'
 
 const root = process.cwd()
+const RECENT_APPLICATION_WINDOW_START = '2025-01-01'
 
 function readFile(relativePath) {
   return fs.readFileSync(path.join(root, relativePath), 'utf8')
@@ -193,6 +194,7 @@ async function main() {
   runNodeScript('scripts/build_planning_controls_layer.mjs', [`--config=${options.configPath}`])
   runNodeScript('scripts/build_parcel_metrics_layer.mjs', [`--config=${options.configPath}`])
   runNodeScript('scripts/build_property_context_layer.mjs', [`--config=${options.configPath}`])
+  runNodeScript('scripts/build_site_screening_layer.mjs', [`--config=${options.configPath}`])
   const client = await connectWithFallback()
   try {
     const precincts = config.precincts || []
@@ -269,6 +271,41 @@ async function main() {
       [precincts]
     )
 
+    const siteScreening = await client.query(
+      `with ranked as (
+         select
+           s.precinct_name,
+           s.watchlist_bucket_name,
+           s.site_key,
+           s.site_label,
+           s.screening_band,
+           s.screening_score,
+           s.recommended_site_action,
+           s.title_complexity_penalty,
+           s.zoning_code,
+           s.fsr,
+           s.height_m,
+           s.geometry_area_sqm,
+           s.frontage_candidate_m,
+           s.constraint_summary,
+           row_number() over (
+             partition by s.watchlist_bucket_name
+             order by s.screening_score desc,
+                      s.matched_signal_count desc,
+                      coalesce(s.geometry_area_sqm, s.plan_area_sqm) desc nulls last,
+                      s.site_label
+           ) as rn
+         from public.v_site_screening_latest s
+         where s.precinct_name = any($1::text[])
+       )
+       select precinct_name, watchlist_bucket_name, site_key, site_label, screening_band, screening_score, recommended_site_action,
+              title_complexity_penalty, zoning_code, fsr, height_m, geometry_area_sqm, frontage_candidate_m, constraint_summary
+       from ranked
+       where rn = 1
+       order by screening_score desc, watchlist_bucket_name`,
+      [precincts]
+    )
+
     const controlByPrecinct = new Map(controls.rows.map((row) => [row.precinct_name, row]))
     const propertyByPrecinct = new Map(property.rows.map((row) => [row.precinct_name, row]))
     const parcelByPrecinct = new Map(parcel.rows.map((row) => {
@@ -337,7 +374,7 @@ async function main() {
     const riskSummaryRows = precincts.map((precinct) => {
       const rows = uniqueBy(riskByPrecinct.get(precinct) || [], (row) => `${row.constraint_type}|${row.severity}|${row.source_name}`)
       if (!rows.length) {
-        return [precinct, 'No currently surfaced derived risk row', '-', '-']
+        return [precinct, 'No currently surfaced derived risk row. This is absence of current signal, not proof of zero site risk.', '-', '-']
       }
       const summary = rows.map((row) => `${row.constraint_type} (${row.severity})`).join(' ; ')
       const highest = rows.find((row) => row.severity === 'high')?.severity || rows.find((row) => row.severity === 'medium')?.severity || rows[0].severity
@@ -351,6 +388,10 @@ async function main() {
     const controlsSource = controls.rows[0]
     const parcelSource = parcel.rows[0]?.source_url || 'https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/FeatureServer/8'
     const propertySource = property.rows[0]?.source_url || 'https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/FeatureServer/12'
+    const topSiteInUniverse = siteScreening.rows[0] || null
+    const advanceSiteRows = siteScreening.rows.filter((row) => row.screening_band === 'Advance')
+    const constrainedSiteRows = siteScreening.rows.filter((row) => !String(row.constraint_summary || '').startsWith('No current site-level derived constraint hit') || Number(row.title_complexity_penalty || 0) > 0)
+    const nonAdvanceSiteRows = siteScreening.rows.filter((row) => row.screening_band !== 'Advance')
 
     const markdown = [
       `# ${config.label}`,
@@ -365,12 +406,14 @@ async function main() {
       '',
       '## Radar Carry-Over',
       '',
-      strongest ? `- Strongest current opportunity in this fixed universe: **${strongest.precinct_name}** (${strongest.council_name}), rated **${strongest.opportunity_rating}** with risk score **${strongest.friction_score}**.` : '- No current strongest opportunity row available.',
-      highestRisk ? `- Highest current friction in this fixed universe: **${highestRisk.precinct_name}** (${highestRisk.council_name}), rated **${highestRisk.opportunity_rating}** with risk score **${highestRisk.friction_score}**.` : '- No current high-friction row available.',
+      strongest ? `- Strongest current opportunity in this fixed universe: **${strongest.precinct_name}** (${strongest.council_name}), rated **${strongest.opportunity_rating}** with derived risk score **${strongest.friction_score}**.` : '- No current strongest opportunity row available.',
+      highestRisk ? `- Highest current friction in this fixed universe: **${highestRisk.precinct_name}** (${highestRisk.council_name}), rated **${highestRisk.opportunity_rating}** with derived risk score **${highestRisk.friction_score}**.` : '- No current high-friction row available.',
+      topSiteInUniverse ? `- Highest current site-level candidate inside this fixed universe: **${topSiteInUniverse.site_label}** (${topSiteInUniverse.watchlist_bucket_name || topSiteInUniverse.precinct_name}), band **${topSiteInUniverse.screening_band}**, score **${formatNumber(topSiteInUniverse.screening_score)}**.` : '- No current site-level candidate row available inside this fixed universe.',
       '- Companion radar artifacts:',
       '  - `dashboard/hero-visual-pack.html`',
       '  - `reports/top-10-insights-latest.md`',
       '  - `reports/weekly-radar-latest.md`',
+      '  - `reports/top-site-screening-latest.md`',
       '',
       '## Data Sources',
       '',
@@ -382,6 +425,7 @@ async function main() {
           ['Planning controls', 'NSW EPI Primary Planning Layers', [markdownLink('Zoning', controlsSource?.zoning_source_url), markdownLink('FSR', controlsSource?.fsr_source_url), markdownLink('Height', controlsSource?.height_source_url)].filter(Boolean).join(' ; ')],
           ['Parcel metrics', 'NSW Land Parcel and Property Theme - Lot', markdownLink('Open source', parcelSource)],
           ['Property / ownership proxy', 'NSW Land Parcel and Property Theme - Property', markdownLink('Open source', propertySource)],
+          ['Site screening layer', 'Current lot/site screening built from NSW open controls, lot/property and open constraint overlays', '`public.v_site_screening_latest`'],
           ['Market comps research', 'NSW land value and property sales web map', markdownLink('Open source', 'https://portal.spatial.nsw.gov.au/portal/apps/webappviewer/index.html?id=2536c8e4882140eb957e90090cb0ef97')]
         ]
       ),
@@ -428,12 +472,53 @@ async function main() {
         ])
       ),
       '',
-      '## Why This Universe Works As A DevelopmentReport Demo',
+      `Recent Apps here means mapped applications with lodgement date on or after \`${RECENT_APPLICATION_WINDOW_START}\`. DA / CDC / SSD / Modification should be separated before any deal-level decision.`,
       '',
-      '- It is narrow enough to support consistent weekly follow-up.',
-      '- It is broad enough to show different site conditions and risk profiles.',
-      '- It can carry both “good opportunity” and “high-friction caution” cases in the same weekly package.',
-      '- It creates a stable target universe into which zoning, FSR, height, assembly, ownership, comps and residual logic can be added over time.',
+      '## Current Site Screening Layer',
+      '',
+      'The table below shows the highest current lot/site candidate surfaced inside each precinct from this fixed universe. It is generated from the automated site layer, not from manual site selection.',
+      'Read the precinct summary and the candidate-site envelope separately. Precinct-level controls describe the broader watchlist bucket, while the site rows below describe the current point-intersected controls for the surfaced lot itself.',
+      '',
+      siteScreening.rows.length
+        ? markdownTable(
+            ['Watchlist Bucket', 'Top Site', 'Band', 'Score', 'Title Complexity Penalty', 'Zoning', 'FSR', 'Height', 'Lot Area', 'Frontage', 'Constraint Stack'],
+            siteScreening.rows.map((row) => [
+              row.watchlist_bucket_name || row.precinct_name,
+              row.site_label,
+              row.screening_band,
+              formatNumber(row.screening_score),
+              formatNumber(row.title_complexity_penalty),
+              row.zoning_code || '-',
+              formatNumber(row.fsr),
+              row.height_m === null ? '-' : `${formatNumber(row.height_m)}m`,
+              row.geometry_area_sqm === null ? '-' : `${formatNumber(row.geometry_area_sqm)} sqm`,
+              row.frontage_candidate_m === null ? '-' : `${formatNumber(row.frontage_candidate_m)} m`,
+              row.constraint_summary
+            ])
+          )
+        : 'No current site screening rows surfaced for this fixed universe.',
+      '',
+      '## Automated Site-Level Conclusion',
+      '',
+      siteScreening.rows.length
+        ? `- **${advanceSiteRows.length}/${siteScreening.rows.length}** fixed-universe precincts currently surface an \`Advance\`-band site candidate.`
+        : '- No current site-level conclusion can be drawn because no site rows were surfaced.',
+      advanceSiteRows.length
+        ? `- Current push-forward watchlist buckets: ${advanceSiteRows.map((row) => `**${row.watchlist_bucket_name || row.precinct_name}** (${row.site_label})`).join('; ')}.`
+        : '- No current precinct in this fixed universe surfaces an Advance-band site candidate.',
+      constrainedSiteRows.length
+        ? `- Current verify-first watchlist buckets because the best surfaced site already carries a red flag or title complexity: ${constrainedSiteRows.map((row) => `**${row.watchlist_bucket_name || row.precinct_name}** (${row.constraint_summary}${(row.title_complexity_penalty || 0) > 0 ? '; title complexity penalty active' : ''})`).join('; ')}.`
+        : '- No current top site in this fixed universe carries a surfaced site-level red flag from the present open-data layer.',
+      nonAdvanceSiteRows.length
+        ? `- Watchlist buckets where the best surfaced site still needs more validation before promotion: ${nonAdvanceSiteRows.map((row) => `**${row.watchlist_bucket_name || row.precinct_name}** (${row.screening_band})`).join('; ')}.`
+        : '- Every fixed-universe precinct currently surfaces an Advance-band site candidate in this automated cut.',
+      '',
+      '## Why This Fixed Universe Is Useful',
+      '',
+      '- It is narrow enough to support consistent weekly follow-up and QA.',
+      '- It is broad enough to show different site conditions and risk profiles without pretending to cover the full market.',
+      '- It carries both cleaner opportunity cases and higher-friction caution cases in the same weekly package.',
+      '- It provides a stable target universe into which zoning, FSR, height, assembly, ownership, comps and residual logic can be added over time.',
       '',
       '## Current Policy Layer',
       '',
@@ -549,7 +634,7 @@ async function main() {
       '',
       '## Bottom Line',
       '',
-      'This fixed hotspot universe gives the second report a stable weekly scope. That is what makes it demo-able, sellable, and suitable for a higher-priced development-oriented layer.',
+      'This fixed hotspot universe gives the development-oriented report a stable weekly scope for screening, QA and structured iteration. It is useful as a development watchlist layer, but it is not yet a parcel-level decision-grade report.',
       ''
     ].join('\n')
 

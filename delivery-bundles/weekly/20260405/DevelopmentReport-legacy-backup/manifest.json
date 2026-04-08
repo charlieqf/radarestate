@@ -1,0 +1,10 @@
+{
+  "generated_at": "2026-04-04T11:05:07.114Z",
+  "report_type": "DevelopmentReport",
+  "notes": "Same structure as RadarReport, with added development-oriented hard-information content.",
+  "contents": [
+    "client-output/",
+    "dashboard/",
+    "reports/"
+  ]
+}

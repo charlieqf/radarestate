@@ -1,0 +1,50 @@
+{
+  "topic": "bushfire-fun-facts",
+  "series": "sydney-environment-fun-facts",
+  "scope_note": "Public-data screening signals, not bushfire certification for individual parcels.",
+  "headline_stat": {
+    "label": "Bushfire high hits",
+    "value": 10
+  },
+  "secondary_stat": {
+    "label": "Bushfire medium hits",
+    "value": 3
+  },
+  "highlight_precincts": [
+    {
+      "name": "Ingleburn",
+      "signal": "bushfire_spatial_sample",
+      "severity": "high",
+      "context": "High-friction group"
+    },
+    {
+      "name": "Liverpool",
+      "signal": "bushfire_spatial_sample",
+      "severity": "high",
+      "context": "High-friction group"
+    },
+    {
+      "name": "Campbelltown",
+      "signal": "bushfire_spatial_sample",
+      "severity": "high",
+      "context": "High-friction group"
+    },
+    {
+      "name": "Glenfield",
+      "signal": "bushfire_spatial_sample",
+      "severity": "high",
+      "context": "High-friction group"
+    },
+    {
+      "name": "Chatswood",
+      "signal": "bushfire_spatial_sample",
+      "severity": "high",
+      "context": "Unexpected inner-urban contrast example"
+    }
+  ],
+  "report_refs": [
+    "reports/top-10-insights-latest.md:56-61",
+    "reports/weekly-radar-latest.md:125-126",
+    "reports/weekly-radar-latest.md:54-59"
+  ]
+}

@@ -23,8 +23,8 @@
 - Precincts with any signal: `72 / 73` (99%)
 - Precincts with mapped proposals: `65`
 - Precincts with mapped applications: `72`
-- Total mapped proposals: `770`
-- Total mapped applications: `13,563`
+- Total mapped proposals: `768`
+- Total mapped applications: `13,554`
 
 | Council | Precincts | With Signals | Recent Apps | Active Pipeline | With Constraints |
 | --- | --- | --- | --- | --- | --- |
@@ -32,10 +32,10 @@
 | Blacktown | 5 | 5 | 1,068 | 6 | 5 |
 | Sydney | 6 | 6 | 946 | 6 | 6 |
 | Cumberland | 3 | 3 | 859 | 0 | 3 |
-| Ryde | 5 | 5 | 796 | 0 | 5 |
+| Parramatta | 4 | 4 | 833 | 3 | 4 |
 | Inner West | 3 | 3 | 628 | 2 | 3 |
 | Sutherland Shire | 4 | 4 | 612 | 5 | 3 |
-| Parramatta | 3 | 3 | 603 | 3 | 3 |
+| Ryde | 4 | 4 | 557 | 0 | 4 |
 | Penrith | 2 | 2 | 555 | 5 | 2 |
 | Campbelltown | 4 | 4 | 523 | 5 | 4 |
 | Georges River | 4 | 4 | 510 | 1 | 4 |

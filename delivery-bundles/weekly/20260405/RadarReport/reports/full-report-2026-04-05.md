@@ -62,9 +62,9 @@ If `Search Area` differs from `Precinct`, treat that row as a cross-jurisdiction
 
 | Precinct | Search Area | Rating | Sites In Top Cut | Advance Sites | Title Complexity Flags | Best Score | Approx Lot Area | Approx Frontage | Current Posture | Example Sites |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Lane Cove | Lane Cove | A | 7 | 6 | 1 | 51 | 7,439 sqm | 210.8 m | Prioritise | 14 GATACRE AVENUE LANE COVE; 76 PENROSE STREET LANE COVE WEST; 42 CULLEN STREET LANE COVE WEST |
+| Lane Cove | Lane Cove | A | 6 | 6 | 0 | 51 | 6,314 sqm | 118.1 m | Prioritise | 14 GATACRE AVENUE LANE COVE; 76 PENROSE STREET LANE COVE WEST; 42 CULLEN STREET LANE COVE WEST |
 | Carlingford | Carlingford | B | 4 | 4 | 0 | 46 | 4,670 sqm | 80.5 m | Investigate | 74 KEELER STREET CARLINGFORD; 14 DUNROSSIL AVENUE CARLINGFORD; 206 CARLINGFORD ROAD CARLINGFORD |
-| West Ryde | West Ryde | B | 4 | 4 | 0 | 45 | 3,345 sqm | 106.4 m | Investigate | 23 FEDERAL ROAD WEST RYDE; 27 LINTON AVENUE WEST RYDE; 29 GRIFFITHS AVENUE WEST RYDE |
+| Riverwood | Riverwood | B | 3 | 3 | 0 | 48 | 2,933 sqm | 60.7 m | Investigate | 5 MOROTAI AVENUE RIVERWOOD; 25 SHENSTONE ROAD RIVERWOOD; 17 ROMILLY STREET RIVERWOOD |
 
 These clusters are prioritisation cues from the current top cut, not adjacency-confirmed or ownership-confirmed assembly schemes.
 

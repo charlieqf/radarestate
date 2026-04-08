@@ -75,6 +75,7 @@
       background: radial-gradient(circle at top left, var(--bg-accent) 0, var(--bg) 45%);
       color: var(--text);
       font-family: Inter, Arial, sans-serif;
+      overflow-x: hidden;
     }
     .sidebar-toggle {
       position: fixed;
@@ -145,12 +146,12 @@
     }
     .shell {
       display: grid;
-      grid-template-columns: 300px 1fr;
+      grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
       min-height: 100vh;
       transition: grid-template-columns 180ms ease;
     }
     html[data-sidebar="collapsed"] .shell {
-      grid-template-columns: 0 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
     .sidebar {
       padding: 24px 18px;
@@ -163,10 +164,18 @@
       overscroll-behavior: contain;
       scrollbar-width: thin;
       min-width: 0;
+      width: 300px;
+      max-width: 300px;
       transition: opacity 150ms ease, transform 180ms ease;
     }
     html[data-sidebar="collapsed"] .sidebar {
-      display: none;
+      position: fixed;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-110%);
+      display: block;
     }
     .brand {
       margin-bottom: 22px;
@@ -249,8 +258,13 @@
       color: var(--muted);
       font-size: 12px;
     }
-    .main { padding: 88px 28px 28px; }
+    .main {
+      padding: 88px 28px 28px;
+      min-width: 0;
+      width: 100%;
+    }
     .article {
+      width: 100%;
       max-width: 920px;
       margin: 0 auto;
       background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
@@ -260,6 +274,7 @@
       box-shadow: 0 16px 40px var(--shadow);
     }
     .article.article-wide {
+      width: 100%;
       max-width: 1320px;
     }
     .article h1, .article h2, .article h3 {
@@ -393,14 +408,72 @@
         <a class="action-link" href="hero-visual-pack.html">Open Hero Visual Pack</a>
         <a class="action-link" href="index.html">Open Client Pack</a>
       </div>
-      <nav class="nav"><section class="nav-group"><div class="nav-heading">Main Deliverables</div><div class="nav-group-links"><a class="nav-link" href="hero-visual-pack.html"><span class="nav-title">Hero Visual Pack</span><span class="nav-meta">Hero Visual Pack</span></a><a class="nav-link" href="client-pack-latest.html"><span class="nav-title">Sydney Client Pack</span><span class="nav-meta">Client Pack Latest</span></a><a class="nav-link" href="top-10-insights-latest.html"><span class="nav-title">Top 10 Insights</span><span class="nav-meta">Top 10 Insights Latest</span></a><a class="nav-link" href="weekly-radar-latest.html"><span class="nav-title">Sydney Planning Opportunity Radar</span><span class="nav-meta">Weekly Radar Latest</span></a><a class="nav-link" href="client-pack-newcastle-hunter.html"><span class="nav-title">Newcastle-Hunter Client Pack</span><span class="nav-meta">Client Pack Newcastle Hunter</span></a><a class="nav-link" href="weekly-radar-newcastle-hunter.html"><span class="nav-title">Newcastle-Hunter Planning Opportunity Radar</span><span class="nav-meta">Weekly Radar Newcastle Hunter</span></a></div></section><section class="nav-group"><div class="nav-heading">Deep Dives</div><div class="nav-group-links"><a class="nav-link" href="deep-dive-gladesville.html"><span class="nav-title">Deep Dive: Gladesville</span><span class="nav-meta">Deep Dive Gladesville</span></a><a class="nav-link" href="deep-dive-bankstown.html"><span class="nav-title">Deep Dive: Bankstown</span><span class="nav-meta">Deep Dive Bankstown</span></a><a class="nav-link" href="deep-dive-mayfield.html"><span class="nav-title">Deep Dive: Mayfield</span><span class="nav-meta">Deep Dive Mayfield</span></a><a class="nav-link" href="deep-dive-newcastle-city-centre.html"><span class="nav-title">Deep Dive: Newcastle City Centre</span><span class="nav-meta">Deep Dive Newcastle City Centre</span></a><a class="nav-link" href="deep-dive-cessnock.html"><span class="nav-title">Deep Dive: Cessnock</span><span class="nav-meta">Deep Dive Cessnock</span></a></div></section><section class="nav-group"><div class="nav-heading">Internal</div><div class="nav-group-links"><a class="nav-link" href="coverage-readiness-greater-sydney-expanded.html"><span class="nav-title">Coverage Readiness: greater-sydney-expanded</span><span class="nav-meta">Coverage Readiness Greater Sydney Expanded</span></a><a class="nav-link" href="coverage-readiness-newcastle-hunter-pilot.html"><span class="nav-title">Coverage Readiness: newcastle-hunter-pilot</span><span class="nav-meta">Coverage Readiness Newcastle Hunter Pilot</span></a></div></section><section class="nav-group"><div class="nav-heading">Other</div><div class="nav-group-links"><a class="nav-link active" href="development-report-standard-universe.html"><span class="nav-title">Sydney Hotspot Development Report</span><span class="nav-meta">Development Report Standard Universe</span></a></div></section></nav>
+      <nav class="nav"><section class="nav-group"><div class="nav-heading">Main Deliverables</div><div class="nav-group-links"><a class="nav-link" href="hero-visual-pack.html"><span class="nav-title">Hero Visual Pack</span><span class="nav-meta">Hero Visual Pack</span></a><a class="nav-link" href="client-pack-latest.html"><span class="nav-title">Sydney Client Pack</span><span class="nav-meta">Client Pack Latest</span></a><a class="nav-link" href="full-report-2026-04-05.html"><span class="nav-title">Sydney Development Full Report</span><span class="nav-meta">Full Report 2026 04 05</span></a><a class="nav-link" href="delta-report-2026-04-05-vs-2026-03-29.html"><span class="nav-title">Sydney Development Delta Report</span><span class="nav-meta">Delta Report 2026 04 05 Vs 2026 03 29</span></a><a class="nav-link" href="top-10-insights-latest.html"><span class="nav-title">Top 10 Insights</span><span class="nav-meta">Top 10 Insights Latest</span></a><a class="nav-link" href="top-site-screening-2026-04-05.html"><span class="nav-title">Sydney Top Site Screening</span><span class="nav-meta">Top Site Screening 2026 04 05</span></a><a class="nav-link" href="weekly-radar-2026-04-05.html"><span class="nav-title">Sydney Planning Opportunity Radar</span><span class="nav-meta">Weekly Radar 2026 04 05</span></a><a class="nav-link" href="methodology-appendix.html"><span class="nav-title">Sydney Development Report Methodology</span><span class="nav-meta">Methodology Appendix</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-asquith-normanhurst-29-dp31482.html"><span class="nav-title">Site Card: 22 CARCOOLA CRESCENT NORMANHURST</span><span class="nav-meta">Site Card 2026 04 05 Precinct Asquith Normanhurst 29 Dp31482</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-carlingford-20-dp32722.html"><span class="nav-title">Site Card: 74 KEELER STREET CARLINGFORD</span><span class="nav-meta">Site Card 2026 04 05 Precinct Carlingford 20 Dp32722</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-chatswood-c-dp385527.html"><span class="nav-title">Site Card: 2A BLAKESLEY STREET CHATSWOOD</span><span class="nav-meta">Site Card 2026 04 05 Precinct Chatswood C Dp385527</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-lane-cove-1-dp1042523.html"><span class="nav-title">Site Card: 76 PENROSE STREET LANE COVE WEST</span><span class="nav-meta">Site Card 2026 04 05 Precinct Lane Cove 1 Dp1042523</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-lane-cove-11-dp13316.html"><span class="nav-title">Site Card: 42 CULLEN STREET LANE COVE WEST</span><span class="nav-meta">Site Card 2026 04 05 Precinct Lane Cove 11 Dp13316</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-lane-cove-39-dp4842.html"><span class="nav-title">Site Card: 14 GATACRE AVENUE LANE COVE</span><span class="nav-meta">Site Card 2026 04 05 Precinct Lane Cove 39 Dp4842</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-lane-cove-44b-dp372323.html"><span class="nav-title">Site Card: 10 MORRICE STREET LANE COVE</span><span class="nav-meta">Site Card 2026 04 05 Precinct Lane Cove 44b Dp372323</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-lane-cove-d-dp15678.html"><span class="nav-title">Site Card: 45 BARWON ROAD LANE COVE WEST</span><span class="nav-meta">Site Card 2026 04 05 Precinct Lane Cove D Dp15678</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-lane-cove-d-dp408643.html"><span class="nav-title">Site Card: 21 PENROSE STREET LANE COVE</span><span class="nav-meta">Site Card 2026 04 05 Precinct Lane Cove D Dp408643</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-marrickville-28-2-dp777.html"><span class="nav-title">Site Card: 1/28 GLEN STREET MARRICKVILLE</span><span class="nav-meta">Site Card 2026 04 05 Precinct Marrickville 28 2 Dp777</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-merrylands-2-dp15979.html"><span class="nav-title">Site Card: 25 CHARLOTTE STREET MERRYLANDS</span><span class="nav-meta">Site Card 2026 04 05 Precinct Merrylands 2 Dp15979</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-pennant-hills-51-dp1284389.html"><span class="nav-title">Site Card: 130 VICTORIA ROAD WEST PENNANT HILLS</span><span class="nav-meta">Site Card 2026 04 05 Precinct Pennant Hills 51 Dp1284389</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-riverwood-86-dp15347.html"><span class="nav-title">Site Card: 5 MOROTAI AVENUE RIVERWOOD</span><span class="nav-meta">Site Card 2026 04 05 Precinct Riverwood 86 Dp15347</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-spit-junction-c-dp319194.html"><span class="nav-title">Site Card: 31 THE GROVE MOSMAN</span><span class="nav-meta">Site Card 2026 04 05 Precinct Spit Junction C Dp319194</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-thornleigh-47-dp9791.html"><span class="nav-title">Site Card: 19 OAKLEIGH AVENUE THORNLEIGH</span><span class="nav-meta">Site Card 2026 04 05 Precinct Thornleigh 47 Dp9791</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-waitara-wahroonga-1-dp843067.html"><span class="nav-title">Site Card: 25 BALMORAL STREET WAITARA</span><span class="nav-meta">Site Card 2026 04 05 Precinct Waitara Wahroonga 1 Dp843067</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-westmead-31-dp12067.html"><span class="nav-title">Site Card: 160 BRIDGE ROAD WESTMEAD</span><span class="nav-meta">Site Card 2026 04 05 Precinct Westmead 31 Dp12067</span></a><a class="nav-link" href="deep-dive-asquith-normanhurst-2026-04-05.html"><span class="nav-title">Deep Dive: Asquith / Normanhurst</span><span class="nav-meta">Deep Dive Asquith Normanhurst 2026 04 05</span></a><a class="nav-link" href="deep-dive-chatswood-2026-04-05.html"><span class="nav-title">Deep Dive: Chatswood</span><span class="nav-meta">Deep Dive Chatswood 2026 04 05</span></a><a class="nav-link" href="deep-dive-lane-cove-2026-04-05.html"><span class="nav-title">Deep Dive: Lane Cove</span><span class="nav-meta">Deep Dive Lane Cove 2026 04 05</span></a><a class="nav-link" href="deep-dive-merrylands-2026-04-05.html"><span class="nav-title">Deep Dive: Merrylands</span><span class="nav-meta">Deep Dive Merrylands 2026 04 05</span></a><a class="nav-link" href="deep-dive-mosman-spit-junction-2026-04-05.html"><span class="nav-title">Deep Dive: Mosman / Spit Junction</span><span class="nav-meta">Deep Dive Mosman Spit Junction 2026 04 05</span></a><a class="nav-link" href="deep-dive-pennant-hills-2026-04-05.html"><span class="nav-title">Deep Dive: Pennant Hills</span><span class="nav-meta">Deep Dive Pennant Hills 2026 04 05</span></a><a class="nav-link" href="deep-dive-thornleigh-2026-04-05.html"><span class="nav-title">Deep Dive: Thornleigh</span><span class="nav-meta">Deep Dive Thornleigh 2026 04 05</span></a><a class="nav-link" href="deep-dive-waitara-wahroonga-2026-04-05.html"><span class="nav-title">Deep Dive: Waitara / Wahroonga</span><span class="nav-meta">Deep Dive Waitara Wahroonga 2026 04 05</span></a><a class="nav-link" href="coverage-readiness-greater-sydney-expanded.html"><span class="nav-title">Coverage Readiness: greater-sydney-expanded</span><span class="nav-meta">Coverage Readiness Greater Sydney Expanded</span></a></div></section><section class="nav-group"><div class="nav-heading">Regional</div><div class="nav-group-links"><a class="nav-link" href="client-pack-newcastle-hunter.html"><span class="nav-title">Newcastle-Hunter Client Pack</span><span class="nav-meta">Client Pack Newcastle Hunter</span></a><a class="nav-link" href="top-10-insights-latest.html"><span class="nav-title">Top 10 Insights</span><span class="nav-meta">Top 10 Insights Latest</span></a><a class="nav-link" href="weekly-radar-newcastle-hunter.html"><span class="nav-title">Newcastle-Hunter Planning Opportunity Radar</span><span class="nav-meta">Weekly Radar Newcastle Hunter</span></a><a class="nav-link" href="top-site-screening-newcastle-hunter.html"><span class="nav-title">Newcastle-Hunter Top Site Screening</span><span class="nav-meta">Top Site Screening Newcastle Hunter</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-kotara-19-dp876517.html"><span class="nav-title">Site Card: 89 PARK AVENUE KOTARA</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Kotara 19 Dp876517</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-charlestown-20-dp1177332.html"><span class="nav-title">Site Card: 30 PEARSON STREET CHARLESTOWN</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Charlestown 20 Dp1177332</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-newcastle-city-centre-1-dp867617.html"><span class="nav-title">Site Card: 711 HUNTER STREET NEWCASTLE WEST</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Newcastle City Centre 1 Dp867617</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-newcastle-city-centre-2-dp1271240.html"><span class="nav-title">Site Card: 854 HUNTER STREET NEWCASTLE WEST</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Newcastle City Centre 2 Dp1271240</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-newcastle-city-centre-24-dp1269807.html"><span class="nav-title">Site Card: 5 PERKINS STREET NEWCASTLE</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Newcastle City Centre 24 Dp1269807</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-kotara-140-dp1167789.html"><span class="nav-title">Site Card: 88 PARK AVENUE KOTARA</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Kotara 140 Dp1167789</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-newcastle-city-centre-20-dp1204023.html"><span class="nav-title">Site Card: 45 WATT STREET NEWCASTLE</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Newcastle City Centre 20 Dp1204023</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-nelson-bay-2-dp15998.html"><span class="nav-title">Site Card: 90 MAGNUS STREET NELSON BAY</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Nelson Bay 2 Dp15998</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-newcastle-city-centre-1-dp798865.html"><span class="nav-title">Site Card: 134 KING STREET NEWCASTLE</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Newcastle City Centre 1 Dp798865</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-newcastle-city-centre-4-dp1250295.html"><span class="nav-title">Site Card: 373 HUNTER STREET NEWCASTLE</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Newcastle City Centre 4 Dp1250295</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-raymond-terrace-1-dp789728.html"><span class="nav-title">Site Card: 103 RICHARDSON ROAD RAYMOND TERRACE</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Raymond Terrace 1 Dp789728</span></a><a class="nav-link" href="site-card-newcastle-hunter-precinct-mayfield-4-dp270249.html"><span class="nav-title">Site Card: 4 LAURIO PLACE MAYFIELD WEST</span><span class="nav-meta">Site Card Newcastle Hunter Precinct Mayfield 4 Dp270249</span></a><a class="nav-link" href="deep-dive-mayfield.html"><span class="nav-title">Deep Dive: Mayfield</span><span class="nav-meta">Deep Dive Mayfield</span></a><a class="nav-link" href="deep-dive-newcastle-city-centre.html"><span class="nav-title">Deep Dive: Newcastle City Centre</span><span class="nav-meta">Deep Dive Newcastle City Centre</span></a><a class="nav-link" href="deep-dive-cessnock.html"><span class="nav-title">Deep Dive: Cessnock</span><span class="nav-meta">Deep Dive Cessnock</span></a></div></section><section class="nav-group"><div class="nav-heading">Site Cards</div><div class="nav-group-links"><a class="nav-link" href="site-card-2026-04-05-precinct-asquith-normanhurst-29-dp31482.html"><span class="nav-title">Site Card: 22 CARCOOLA CRESCENT NORMANHURST</span><span class="nav-meta">Site Card 2026 04 05 Precinct Asquith Normanhurst 29 Dp31482</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-carlingford-20-dp32722.html"><span class="nav-title">Site Card: 74 KEELER STREET CARLINGFORD</span><span class="nav-meta">Site Card 2026 04 05 Precinct Carlingford 20 Dp32722</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-chatswood-c-dp385527.html"><span class="nav-title">Site Card: 2A BLAKESLEY STREET CHATSWOOD</span><span class="nav-meta">Site Card 2026 04 05 Precinct Chatswood C Dp385527</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-lane-cove-1-dp1042523.html"><span class="nav-title">Site Card: 76 PENROSE STREET LANE COVE WEST</span><span class="nav-meta">Site Card 2026 04 05 Precinct Lane Cove 1 Dp1042523</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-lane-cove-11-dp13316.html"><span class="nav-title">Site Card: 42 CULLEN STREET LANE COVE WEST</span><span class="nav-meta">Site Card 2026 04 05 Precinct Lane Cove 11 Dp13316</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-lane-cove-39-dp4842.html"><span class="nav-title">Site Card: 14 GATACRE AVENUE LANE COVE</span><span class="nav-meta">Site Card 2026 04 05 Precinct Lane Cove 39 Dp4842</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-lane-cove-44b-dp372323.html"><span class="nav-title">Site Card: 10 MORRICE STREET LANE COVE</span><span class="nav-meta">Site Card 2026 04 05 Precinct Lane Cove 44b Dp372323</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-lane-cove-d-dp15678.html"><span class="nav-title">Site Card: 45 BARWON ROAD LANE COVE WEST</span><span class="nav-meta">Site Card 2026 04 05 Precinct Lane Cove D Dp15678</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-lane-cove-d-dp408643.html"><span class="nav-title">Site Card: 21 PENROSE STREET LANE COVE</span><span class="nav-meta">Site Card 2026 04 05 Precinct Lane Cove D Dp408643</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-marrickville-28-2-dp777.html"><span class="nav-title">Site Card: 1/28 GLEN STREET MARRICKVILLE</span><span class="nav-meta">Site Card 2026 04 05 Precinct Marrickville 28 2 Dp777</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-merrylands-2-dp15979.html"><span class="nav-title">Site Card: 25 CHARLOTTE STREET MERRYLANDS</span><span class="nav-meta">Site Card 2026 04 05 Precinct Merrylands 2 Dp15979</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-pennant-hills-51-dp1284389.html"><span class="nav-title">Site Card: 130 VICTORIA ROAD WEST PENNANT HILLS</span><span class="nav-meta">Site Card 2026 04 05 Precinct Pennant Hills 51 Dp1284389</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-riverwood-86-dp15347.html"><span class="nav-title">Site Card: 5 MOROTAI AVENUE RIVERWOOD</span><span class="nav-meta">Site Card 2026 04 05 Precinct Riverwood 86 Dp15347</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-spit-junction-c-dp319194.html"><span class="nav-title">Site Card: 31 THE GROVE MOSMAN</span><span class="nav-meta">Site Card 2026 04 05 Precinct Spit Junction C Dp319194</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-thornleigh-47-dp9791.html"><span class="nav-title">Site Card: 19 OAKLEIGH AVENUE THORNLEIGH</span><span class="nav-meta">Site Card 2026 04 05 Precinct Thornleigh 47 Dp9791</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-waitara-wahroonga-1-dp843067.html"><span class="nav-title">Site Card: 25 BALMORAL STREET WAITARA</span><span class="nav-meta">Site Card 2026 04 05 Precinct Waitara Wahroonga 1 Dp843067</span></a><a class="nav-link" href="site-card-2026-04-05-precinct-westmead-31-dp12067.html"><span class="nav-title">Site Card: 160 BRIDGE ROAD WESTMEAD</span><span class="nav-meta">Site Card 2026 04 05 Precinct Westmead 31 Dp12067</span></a></div></section><section class="nav-group"><div class="nav-heading">Deep Dives</div><div class="nav-group-links"><a class="nav-link" href="deep-dive-asquith-normanhurst-2026-04-05.html"><span class="nav-title">Deep Dive: Asquith / Normanhurst</span><span class="nav-meta">Deep Dive Asquith Normanhurst 2026 04 05</span></a><a class="nav-link" href="deep-dive-chatswood-2026-04-05.html"><span class="nav-title">Deep Dive: Chatswood</span><span class="nav-meta">Deep Dive Chatswood 2026 04 05</span></a><a class="nav-link" href="deep-dive-lane-cove-2026-04-05.html"><span class="nav-title">Deep Dive: Lane Cove</span><span class="nav-meta">Deep Dive Lane Cove 2026 04 05</span></a><a class="nav-link" href="deep-dive-merrylands-2026-04-05.html"><span class="nav-title">Deep Dive: Merrylands</span><span class="nav-meta">Deep Dive Merrylands 2026 04 05</span></a><a class="nav-link" href="deep-dive-mosman-spit-junction-2026-04-05.html"><span class="nav-title">Deep Dive: Mosman / Spit Junction</span><span class="nav-meta">Deep Dive Mosman Spit Junction 2026 04 05</span></a><a class="nav-link" href="deep-dive-pennant-hills-2026-04-05.html"><span class="nav-title">Deep Dive: Pennant Hills</span><span class="nav-meta">Deep Dive Pennant Hills 2026 04 05</span></a><a class="nav-link" href="deep-dive-thornleigh-2026-04-05.html"><span class="nav-title">Deep Dive: Thornleigh</span><span class="nav-meta">Deep Dive Thornleigh 2026 04 05</span></a><a class="nav-link" href="deep-dive-waitara-wahroonga-2026-04-05.html"><span class="nav-title">Deep Dive: Waitara / Wahroonga</span><span class="nav-meta">Deep Dive Waitara Wahroonga 2026 04 05</span></a><a class="nav-link" href="deep-dive-mayfield.html"><span class="nav-title">Deep Dive: Mayfield</span><span class="nav-meta">Deep Dive Mayfield</span></a><a class="nav-link" href="deep-dive-newcastle-city-centre.html"><span class="nav-title">Deep Dive: Newcastle City Centre</span><span class="nav-meta">Deep Dive Newcastle City Centre</span></a><a class="nav-link" href="deep-dive-cessnock.html"><span class="nav-title">Deep Dive: Cessnock</span><span class="nav-meta">Deep Dive Cessnock</span></a></div></section></nav>
     </aside>
     <main class="main">
       <article class="article"><h1>Sydney Hotspot Development Report</h1>
 <h2>Date</h2>
-<p>2026-04-03</p>
+<p>2026-04-05</p>
 <h2>Purpose</h2>
-<p>Fixed hotspot universe for demonstrating and selling the weekly DevelopmentReport layer. This report is the fixed-universe version of the second product layer: a weekly development-oriented report built around a stable hotspot range rather than the full market.</p>
+<p>Fixed hotspot universe for QA, weekly comparison and structured product validation of the DevelopmentReport layer. This report is the fixed-universe version of the second product layer: a weekly development-oriented report built around a stable hotspot range rather than the full market.</p>
+<h2>Radar Carry-Over</h2>
+<ul>
+<li>Strongest current opportunity in this fixed universe: <strong>Gladesville</strong> (Hunters Hill), rated <strong>A</strong> with derived risk score <strong>0</strong>.</li>
+<li>Highest current friction in this fixed universe: <strong>Bankstown</strong> (Canterbury-Bankstown), rated <strong>C</strong> with derived risk score <strong>5</strong>.</li>
+<li>Highest current site-level candidate inside this fixed universe: <strong>160 HAWKESBURY ROAD WESTMEAD</strong> (Westmead), band <strong>Advance</strong>, score <strong>57</strong>.</li>
+<li>Companion radar artifacts:<ul>
+<li><a href="hero-visual-pack.html"><code>dashboard/hero-visual-pack.html</code></a></li>
+<li><a href="top-10-insights-latest.html"><code>reports/top-10-insights-latest.md</code></a></li>
+<li><a href="weekly-radar-latest.html"><code>reports/weekly-radar-latest.md</code></a></li>
+<li><a href="top-site-screening-latest.html"><code>reports/top-site-screening-latest.md</code></a></li>
+</ul>
+</li>
+</ul>
+<h2>Data Sources</h2>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Source</th>
+<th>Link</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Policy layer</td>
+<td>Planning Proposals Online</td>
+<td><a href="https://www.planningportal.nsw.gov.au/ppr/pre-exhibition/club-punchbowl-planning-proposal">Open source</a></td>
+</tr>
+<tr>
+<td>Risk layer</td>
+<td>Flood Data Portal / Housing Targets / Derived Planning Friction</td>
+<td><a href="https://flooddata.ses.nsw.gov.au/api/3/action/package_search?q=Bankstown">Source 1</a> ; <a href="https://www.planning.nsw.gov.au/policy-and-legislation/housing/housing-targets/canterbury-bankstown-councils-snapshot">Source 2</a> ; <a href="https://www.planningportal.nsw.gov.au/ppr/withdrawn">Source 3</a> ; <a href="https://flooddata.ses.nsw.gov.au/api/3/action/package_search?q=Westmead">Source 4</a></td>
+</tr>
+<tr>
+<td>Planning controls</td>
+<td>NSW EPI Primary Planning Layers</td>
+<td><a href="https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/2">Zoning</a> ; <a href="https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/1">FSR</a> ; <a href="https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/5">Height</a></td>
+</tr>
+<tr>
+<td>Parcel metrics</td>
+<td>NSW Land Parcel and Property Theme - Lot</td>
+<td><a href="https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/FeatureServer/8">Open source</a></td>
+</tr>
+<tr>
+<td>Property / ownership proxy</td>
+<td>NSW Land Parcel and Property Theme - Property</td>
+<td><a href="https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/FeatureServer/12">Open source</a></td>
+</tr>
+<tr>
+<td>Site screening layer</td>
+<td>Current lot/site screening built from NSW open controls, lot/property and open constraint overlays</td>
+<td><code>public.v_site_screening_latest</code></td>
+</tr>
+<tr>
+<td>Market comps research</td>
+<td>NSW land value and property sales web map</td>
+<td><a href="https://portal.spatial.nsw.gov.au/portal/apps/webappviewer/index.html?id=2536c8e4882140eb957e90090cb0ef97">Open source</a></td>
+</tr>
+</tbody></table>
 <h2>Fixed Target Universe</h2>
 <ul>
 <li>Gladesville</li>
@@ -578,14 +651,134 @@
 <td>Watch</td>
 </tr>
 </tbody></table>
-<h2>Why This Universe Works As A DevelopmentReport Demo</h2>
+<p>Recent Apps here means mapped applications with lodgement date on or after <code>2025-01-01</code>. DA / CDC / SSD / Modification should be separated before any deal-level decision.</p>
+<h2>Current Site Screening Layer</h2>
+<p>The table below shows the highest current lot/site candidate surfaced inside each precinct from this fixed universe. It is generated from the automated site layer, not from manual site selection.
+Read the precinct summary and the candidate-site envelope separately. Precinct-level controls describe the broader watchlist bucket, while the site rows below describe the current point-intersected controls for the surfaced lot itself.</p>
+<table>
+<thead>
+<tr>
+<th>Watchlist Bucket</th>
+<th>Top Site</th>
+<th>Band</th>
+<th>Score</th>
+<th>Title Complexity Penalty</th>
+<th>Zoning</th>
+<th>FSR</th>
+<th>Height</th>
+<th>Lot Area</th>
+<th>Frontage</th>
+<th>Constraint Stack</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Westmead</td>
+<td>160 HAWKESBURY ROAD WESTMEAD</td>
+<td>Advance</td>
+<td>57</td>
+<td>0</td>
+<td>MU1</td>
+<td>3</td>
+<td>31m</td>
+<td>8,268.15 sqm</td>
+<td>357.85 m</td>
+<td>No current site-level derived constraint hit</td>
+</tr>
+<tr>
+<td>Bankstown</td>
+<td>66 RICKARD ROAD BANKSTOWN</td>
+<td>Advance</td>
+<td>54</td>
+<td>0</td>
+<td>E2</td>
+<td>4.5</td>
+<td>53m</td>
+<td>5,476.08 sqm</td>
+<td>130.25 m</td>
+<td>No current site-level derived constraint hit</td>
+</tr>
+<tr>
+<td>Edgecliff</td>
+<td>180 OCEAN STREET EDGECLIFF</td>
+<td>Review</td>
+<td>46</td>
+<td>16</td>
+<td>E1</td>
+<td>2.5</td>
+<td>34m</td>
+<td>4,917.76 sqm</td>
+<td>124.51 m</td>
+<td>No current site-level derived constraint hit</td>
+</tr>
+<tr>
+<td>Gladesville - Ryde</td>
+<td>18 HIGH STREET GLADESVILLE</td>
+<td>Review</td>
+<td>39</td>
+<td>0</td>
+<td>R2</td>
+<td>0.5</td>
+<td>9.5m</td>
+<td>1,251.97 sqm</td>
+<td>51.4 m</td>
+<td>No current site-level derived constraint hit</td>
+</tr>
+<tr>
+<td>Westmead - Cumberland</td>
+<td>10-14 BRIDGE ROAD WENTWORTHVILLE</td>
+<td>Review</td>
+<td>36</td>
+<td>0</td>
+<td>R2</td>
+<td>-</td>
+<td>9m</td>
+<td>3,890.46 sqm</td>
+<td>116.47 m</td>
+<td>No current site-level derived constraint hit</td>
+</tr>
+<tr>
+<td>Five Dock</td>
+<td>PARK ROAD FIVE DOCK</td>
+<td>Review</td>
+<td>32</td>
+<td>0</td>
+<td>RE1</td>
+<td>-</td>
+<td>-</td>
+<td>115,262.92 sqm</td>
+<td>1,557.71 m</td>
+<td>Heritage Item [high]</td>
+</tr>
+<tr>
+<td>Gladesville</td>
+<td>72 PRINCE EDWARD STREET GLADESVILLE</td>
+<td>Caution</td>
+<td>20</td>
+<td>0</td>
+<td>R2</td>
+<td>0.5</td>
+<td>8.5m</td>
+<td>799.15 sqm</td>
+<td>23.97 m</td>
+<td>Heritage Item [high]</td>
+</tr>
+</tbody></table>
+<h2>Automated Site-Level Conclusion</h2>
 <ul>
-<li>It is narrow enough to support consistent weekly follow-up.</li>
-<li>It is broad enough to show different site conditions and risk profiles.</li>
-<li>It can carry both “good opportunity” and “high-friction caution” cases in the same weekly package.</li>
-<li>It creates a stable target universe into which zoning, FSR, height, assembly, ownership, comps and residual logic can be added over time.</li>
+<li><strong>2/7</strong> fixed-universe precincts currently surface an <code>Advance</code>-band site candidate.</li>
+<li>Current push-forward watchlist buckets: <strong>Westmead</strong> (160 HAWKESBURY ROAD WESTMEAD); <strong>Bankstown</strong> (66 RICKARD ROAD BANKSTOWN).</li>
+<li>Current verify-first watchlist buckets because the best surfaced site already carries a red flag or title complexity: <strong>Edgecliff</strong> (No current site-level derived constraint hit; title complexity penalty active); <strong>Five Dock</strong> (Heritage Item [high]); <strong>Gladesville</strong> (Heritage Item [high]).</li>
+<li>Watchlist buckets where the best surfaced site still needs more validation before promotion: <strong>Edgecliff</strong> (Review); <strong>Gladesville - Ryde</strong> (Review); <strong>Westmead - Cumberland</strong> (Review); <strong>Five Dock</strong> (Review); <strong>Gladesville</strong> (Caution).</li>
+</ul>
+<h2>Why This Fixed Universe Is Useful</h2>
+<ul>
+<li>It is narrow enough to support consistent weekly follow-up and QA.</li>
+<li>It is broad enough to show different site conditions and risk profiles without pretending to cover the full market.</li>
+<li>It carries both cleaner opportunity cases and higher-friction caution cases in the same weekly package.</li>
+<li>It provides a stable target universe into which zoning, FSR, height, assembly, ownership, comps and residual logic can be added over time.</li>
 </ul>
 <h2>Current Policy Layer</h2>
+<p>Primary source: <a href="https://www.planningportal.nsw.gov.au/ppr/pre-exhibition/club-punchbowl-planning-proposal">Planning Proposals Online</a></p>
 <table>
 <thead>
 <tr>
@@ -621,6 +814,7 @@
 </tr>
 </tbody></table>
 <h2>Current Risk Layer</h2>
+<p>Primary sources: <a href="https://flooddata.ses.nsw.gov.au/api/3/action/package_search?q=Bankstown">Source 1</a> ; <a href="https://www.planning.nsw.gov.au/policy-and-legislation/housing/housing-targets/canterbury-bankstown-councils-snapshot">Source 2</a> ; <a href="https://www.planningportal.nsw.gov.au/ppr/withdrawn">Source 3</a> ; <a href="https://flooddata.ses.nsw.gov.au/api/3/action/package_search?q=Westmead">Source 4</a></p>
 <table>
 <thead>
 <tr>
@@ -632,19 +826,19 @@
 </thead>
 <tbody><tr>
 <td>Gladesville</td>
-<td>No currently surfaced derived risk row</td>
+<td>No currently surfaced derived risk row. This is absence of current signal, not proof of zero site risk.</td>
 <td>-</td>
 <td>-</td>
 </tr>
 <tr>
 <td>Edgecliff</td>
-<td>flood_metadata_signal (medium)</td>
-<td>medium</td>
-<td>Flood Data Portal Metadata Signal</td>
+<td>No currently surfaced derived risk row. This is absence of current signal, not proof of zero site risk.</td>
+<td>-</td>
+<td>-</td>
 </tr>
 <tr>
 <td>Five Dock</td>
-<td>No currently surfaced derived risk row</td>
+<td>No currently surfaced derived risk row. This is absence of current signal, not proof of zero site risk.</td>
 <td>-</td>
 <td>-</td>
 </tr>
@@ -662,6 +856,7 @@
 </tr>
 </tbody></table>
 <h2>Current Planning Controls Layer</h2>
+<p>Primary sources: <a href="https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/2">Zoning</a> ; <a href="https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/1">FSR</a> ; <a href="https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/5">Height</a></p>
 <table>
 <thead>
 <tr>
@@ -716,6 +911,7 @@
 </tbody></table>
 <h2>Current Parcel Metrics Layer</h2>
 <p>All parcel metrics below are sample-based precinct summaries derived from recent mapped application points. They are intended for screening, not as parcel-specific control sheets.</p>
+<p>Primary source: <a href="https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/FeatureServer/8">NSW Land Parcel and Property Theme - Lot</a></p>
 <table>
 <thead>
 <tr>
@@ -795,6 +991,7 @@
 <li><strong>Bankstown</strong>: Preliminary aggregation signal. Property context suggests a fragmented structure with lot-count or dissolve-parcel signals up to 21. This remains a screening judgement, not a parcel-level feasibility conclusion.</li>
 </ul>
 <h2>Current Property / Ownership Proxy Layer</h2>
+<p>Primary source: <a href="https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/FeatureServer/12">NSW Land Parcel and Property Theme - Property</a></p>
 <table>
 <thead>
 <tr>
@@ -863,6 +1060,7 @@
 <p>Not activated. No verified public title-owner dataset is currently integrated.</p>
 <h2>Market Comps</h2>
 <p>Not activated. A public NSW property sales map exists, but a reliable, decision-grade and automation-safe comparable sales dataset is not yet integrated.</p>
+<p>Research path: <a href="https://portal.spatial.nsw.gov.au/portal/apps/webappviewer/index.html?id=2536c8e4882140eb957e90090cb0ef97">NSW land value and property sales web map</a></p>
 <h2>Residual Pricing</h2>
 <p>Not activated. Residual pricing is blocked until comps and stronger cost assumptions are integrated.</p>
 <h2>Hard Information Layer Still To Add</h2>
@@ -872,7 +1070,7 @@
 <li>residual pricing logic</li>
 </ul>
 <h2>Bottom Line</h2>
-<p>This fixed hotspot universe gives the second report a stable weekly scope. That is what makes it demo-able, sellable, and suitable for a higher-priced development-oriented layer.</p>
+<p>This fixed hotspot universe gives the development-oriented report a stable weekly scope for screening, QA and structured iteration. It is useful as a development watchlist layer, but it is not yet a parcel-level decision-grade report.</p>
 </article>
     </main>
   </div>

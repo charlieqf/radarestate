@@ -2,30 +2,33 @@
 
 ## Date
 
-2026-04-03
+2026-04-05
 
 ## Purpose
 
-Fixed hotspot universe for demonstrating and selling the weekly DevelopmentReport layer. This report is the fixed-universe version of the second product layer: a weekly development-oriented report built around a stable hotspot range rather than the full market.
+Fixed hotspot universe for QA, weekly comparison and structured product validation of the DevelopmentReport layer. This report is the fixed-universe version of the second product layer: a weekly development-oriented report built around a stable hotspot range rather than the full market.
 
 ## Radar Carry-Over
 
-- Strongest current opportunity in this fixed universe: **Gladesville** (Hunters Hill), rated **A** with risk score **0**.
-- Highest current friction in this fixed universe: **Bankstown** (Canterbury-Bankstown), rated **C** with risk score **5**.
+- Strongest current opportunity in this fixed universe: **Gladesville** (Hunters Hill), rated **A** with derived risk score **0**.
+- Highest current friction in this fixed universe: **Bankstown** (Canterbury-Bankstown), rated **C** with derived risk score **5**.
+- Highest current site-level candidate inside this fixed universe: **160 HAWKESBURY ROAD WESTMEAD** (Westmead), band **Advance**, score **57**.
 - Companion radar artifacts:
   - `dashboard/hero-visual-pack.html`
   - `reports/top-10-insights-latest.md`
   - `reports/weekly-radar-latest.md`
+  - `reports/top-site-screening-latest.md`
 
 ## Data Sources
 
 | Module | Source | Link |
 | --- | --- | --- |
 | Policy layer | Planning Proposals Online | [Open source](https://www.planningportal.nsw.gov.au/ppr/pre-exhibition/club-punchbowl-planning-proposal) |
-| Risk layer | Flood Data Portal / Housing Targets / Derived Planning Friction | [Source 1](https://flooddata.ses.nsw.gov.au/api/3/action/package_search?q=Bankstown) ; [Source 2](https://www.planning.nsw.gov.au/policy-and-legislation/housing/housing-targets/canterbury-bankstown-councils-snapshot) ; [Source 3](https://www.planningportal.nsw.gov.au/ppr/withdrawn) ; [Source 4](https://flooddata.ses.nsw.gov.au/api/3/action/package_search?q=Edgecliff) ; [Source 5](https://flooddata.ses.nsw.gov.au/api/3/action/package_search?q=Westmead) |
+| Risk layer | Flood Data Portal / Housing Targets / Derived Planning Friction | [Source 1](https://flooddata.ses.nsw.gov.au/api/3/action/package_search?q=Bankstown) ; [Source 2](https://www.planning.nsw.gov.au/policy-and-legislation/housing/housing-targets/canterbury-bankstown-councils-snapshot) ; [Source 3](https://www.planningportal.nsw.gov.au/ppr/withdrawn) ; [Source 4](https://flooddata.ses.nsw.gov.au/api/3/action/package_search?q=Westmead) |
 | Planning controls | NSW EPI Primary Planning Layers | [Zoning](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/2) ; [FSR](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/1) ; [Height](https://mapprod3.environment.nsw.gov.au/arcgis/rest/services/Planning/EPI_Primary_Planning_Layers/MapServer/5) |
 | Parcel metrics | NSW Land Parcel and Property Theme - Lot | [Open source](https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/FeatureServer/8) |
 | Property / ownership proxy | NSW Land Parcel and Property Theme - Property | [Open source](https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/FeatureServer/12) |
+| Site screening layer | Current lot/site screening built from NSW open controls, lot/property and open constraint overlays | `public.v_site_screening_latest` |
 | Market comps research | NSW land value and property sales web map | [Open source](https://portal.spatial.nsw.gov.au/portal/apps/webappviewer/index.html?id=2536c8e4882140eb957e90090cb0ef97) |
 
 ## Fixed Target Universe
@@ -68,12 +71,36 @@ Fixed hotspot universe for demonstrating and selling the weekly DevelopmentRepor
 | 4 | Westmead | Parramatta | B | 3 | 4 | 2 | 51 | 2 | Investigate |
 | 5 | Bankstown | Canterbury-Bankstown | C | 2 | 5 | 5 | 238 | 1 | Watch |
 
-## Why This Universe Works As A DevelopmentReport Demo
+Recent Apps here means mapped applications with lodgement date on or after `2025-01-01`. DA / CDC / SSD / Modification should be separated before any deal-level decision.
 
-- It is narrow enough to support consistent weekly follow-up.
-- It is broad enough to show different site conditions and risk profiles.
-- It can carry both “good opportunity” and “high-friction caution” cases in the same weekly package.
-- It creates a stable target universe into which zoning, FSR, height, assembly, ownership, comps and residual logic can be added over time.
+## Current Site Screening Layer
+
+The table below shows the highest current lot/site candidate surfaced inside each precinct from this fixed universe. It is generated from the automated site layer, not from manual site selection.
+Read the precinct summary and the candidate-site envelope separately. Precinct-level controls describe the broader watchlist bucket, while the site rows below describe the current point-intersected controls for the surfaced lot itself.
+
+| Watchlist Bucket | Top Site | Band | Score | Title Complexity Penalty | Zoning | FSR | Height | Lot Area | Frontage | Constraint Stack |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Westmead | 160 HAWKESBURY ROAD WESTMEAD | Advance | 57 | 0 | MU1 | 3 | 31m | 8,268.15 sqm | 357.85 m | No current site-level derived constraint hit |
+| Bankstown | 66 RICKARD ROAD BANKSTOWN | Advance | 54 | 0 | E2 | 4.5 | 53m | 5,476.08 sqm | 130.25 m | No current site-level derived constraint hit |
+| Edgecliff | 180 OCEAN STREET EDGECLIFF | Review | 46 | 16 | E1 | 2.5 | 34m | 4,917.76 sqm | 124.51 m | No current site-level derived constraint hit |
+| Gladesville - Ryde | 18 HIGH STREET GLADESVILLE | Review | 39 | 0 | R2 | 0.5 | 9.5m | 1,251.97 sqm | 51.4 m | No current site-level derived constraint hit |
+| Westmead - Cumberland | 10-14 BRIDGE ROAD WENTWORTHVILLE | Review | 36 | 0 | R2 | - | 9m | 3,890.46 sqm | 116.47 m | No current site-level derived constraint hit |
+| Five Dock | PARK ROAD FIVE DOCK | Review | 32 | 0 | RE1 | - | - | 115,262.92 sqm | 1,557.71 m | Heritage Item [high] |
+| Gladesville | 72 PRINCE EDWARD STREET GLADESVILLE | Caution | 20 | 0 | R2 | 0.5 | 8.5m | 799.15 sqm | 23.97 m | Heritage Item [high] |
+
+## Automated Site-Level Conclusion
+
+- **2/7** fixed-universe precincts currently surface an `Advance`-band site candidate.
+- Current push-forward watchlist buckets: **Westmead** (160 HAWKESBURY ROAD WESTMEAD); **Bankstown** (66 RICKARD ROAD BANKSTOWN).
+- Current verify-first watchlist buckets because the best surfaced site already carries a red flag or title complexity: **Edgecliff** (No current site-level derived constraint hit; title complexity penalty active); **Five Dock** (Heritage Item [high]); **Gladesville** (Heritage Item [high]).
+- Watchlist buckets where the best surfaced site still needs more validation before promotion: **Edgecliff** (Review); **Gladesville - Ryde** (Review); **Westmead - Cumberland** (Review); **Five Dock** (Review); **Gladesville** (Caution).
+
+## Why This Fixed Universe Is Useful
+
+- It is narrow enough to support consistent weekly follow-up and QA.
+- It is broad enough to show different site conditions and risk profiles without pretending to cover the full market.
+- It carries both cleaner opportunity cases and higher-friction caution cases in the same weekly package.
+- It provides a stable target universe into which zoning, FSR, height, assembly, ownership, comps and residual logic can be added over time.
 
 ## Current Policy Layer
 
@@ -89,13 +116,13 @@ Primary source: [Planning Proposals Online](https://www.planningportal.nsw.gov.a
 
 ## Current Risk Layer
 
-Primary sources: [Source 1](https://flooddata.ses.nsw.gov.au/api/3/action/package_search?q=Bankstown) ; [Source 2](https://www.planning.nsw.gov.au/policy-and-legislation/housing/housing-targets/canterbury-bankstown-councils-snapshot) ; [Source 3](https://www.planningportal.nsw.gov.au/ppr/withdrawn) ; [Source 4](https://flooddata.ses.nsw.gov.au/api/3/action/package_search?q=Edgecliff) ; [Source 5](https://flooddata.ses.nsw.gov.au/api/3/action/package_search?q=Westmead)
+Primary sources: [Source 1](https://flooddata.ses.nsw.gov.au/api/3/action/package_search?q=Bankstown) ; [Source 2](https://www.planning.nsw.gov.au/policy-and-legislation/housing/housing-targets/canterbury-bankstown-councils-snapshot) ; [Source 3](https://www.planningportal.nsw.gov.au/ppr/withdrawn) ; [Source 4](https://flooddata.ses.nsw.gov.au/api/3/action/package_search?q=Westmead)
 
 | Precinct | Current Derived Risk Summary | Highest Severity | Source Mix |
 | --- | --- | --- | --- |
-| Gladesville | No currently surfaced derived risk row | - | - |
-| Edgecliff | flood_metadata_signal (medium) | medium | Flood Data Portal Metadata Signal |
-| Five Dock | No currently surfaced derived risk row | - | - |
+| Gladesville | No currently surfaced derived risk row. This is absence of current signal, not proof of zero site risk. | - | - |
+| Edgecliff | No currently surfaced derived risk row. This is absence of current signal, not proof of zero site risk. | - | - |
+| Five Dock | No currently surfaced derived risk row. This is absence of current signal, not proof of zero site risk. | - | - |
 | Westmead | flood_metadata_signal (high) | high | Flood Data Portal Metadata Signal |
 | Bankstown | flood_metadata_signal (high) ; heat_vulnerability_proxy (high) ; low_tree_canopy_proxy (high) ; policy_withdrawal_friction (medium) | high | Flood Data Portal Metadata Signal ; Housing Targets Council Snapshot ; Derived Planning Friction |
 
@@ -167,4 +194,4 @@ Not activated. Residual pricing is blocked until comps and stronger cost assumpt
 
 ## Bottom Line
 
-This fixed hotspot universe gives the second report a stable weekly scope. That is what makes it demo-able, sellable, and suitable for a higher-priced development-oriented layer.
+This fixed hotspot universe gives the development-oriented report a stable weekly scope for screening, QA and structured iteration. It is useful as a development watchlist layer, but it is not yet a parcel-level decision-grade report.

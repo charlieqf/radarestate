@@ -34,7 +34,7 @@
 - Site rows are read from the saved weekly site snapshot rather than from a live latest-state view.
 - Site screening now uses a default small-mid developer lens, with a slight preference toward townhouse / small subdivision fit over larger-format high-rise or assembly-style parcels.
 - Candidate lots are still ranked by planning fit, local precinct strength, matched signal count, and current red-flag burden, but supersites and large-format high-rise envelopes are intentionally de-emphasised in this default view.
-- Current site screening band mix: **Advance** 69, **Review** 352, **Caution** 153.
+- Current site screening band mix: **Advance** 84, **Review** 414, **Caution** 170.
 - `Advance` means the screening layer currently supports moving into street-level diligence. `Review` means there is enough signal to keep on the working list but not enough to promote immediately. `Caution` means the current signal-to-risk balance is weak or blocked.
 
 ## Site Score Formula
@@ -84,7 +84,7 @@ These are empirical ranges from the currently saved snapshot, not universal plan
 | --- | --- | --- | --- | --- |
 | Planning proposals | 2026-04-01 | 2026-04-05 | - | - |
 | Application signals | 2022-07-07 | 2026-04-05 | 2022-07-07 | 2026-03-28 |
-| Site screening layers | 2026-04-04 | 2026-04-06 | - | - |
+| Site screening layers | 2026-04-07 | 2026-04-07 | - | - |
 
 ## Known Gaps
 

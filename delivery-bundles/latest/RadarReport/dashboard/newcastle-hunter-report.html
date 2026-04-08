@@ -308,7 +308,7 @@
       <div class="hero-card">
         <div class="eyebrow">RadarEstate</div>
         <h1>Newcastle-Hunter Planning And Activity Research Dashboard</h1>
-        <p class="lede">Public-data powered view across housing target pressure, planning proposal pipeline, recent development activity and first-pass risk signals for Newcastle-Hunter. This report is generated directly from Supabase views, not from mock sample JSON.</p>
+        <p class="lede">Public-data powered watchlist and diligence-triage view across housing target pressure, planning proposal pipeline, recent development activity and first-pass risk signals for Newcastle-Hunter. This is a screening dashboard, not a parcel-level decision tool.</p>
       </div>
       <div class="meta">
         <div class="meta-row">
@@ -329,7 +329,7 @@
         </div>
         <div class="meta-row">
           <div class="meta-label">Generated</div>
-          <div class="meta-value" style="font-size:16px">03/04/2026, 16:41:43</div>
+          <div class="meta-value" style="font-size:16px">04/04/2026, 22:04:54</div>
         </div>
       </div>
     </section>
@@ -349,7 +349,7 @@
 
       <div class="panel span-6">
         <h2>Recent Activity Ranking</h2>
-        <p class="subtle">Recent applications from the current focus-council sync window.</p>
+        <p class="subtle">Council tracker recent window starts <code>2024-12-31</code>.</p>
         <canvas id="recentActivityChart"></canvas>
       </div>
       <div class="panel span-6">
@@ -419,13 +419,13 @@
 
       <div class="panel span-6">
         <h2>Top Precinct Shortlist</h2>
-        <p class="subtle">First-pass precinct seed built from mapped proposal and application signals.</p>
+        <p class="subtle">First-pass precinct watchlist. Ratings combine policy and timing, then get downgraded when friction stacks.</p>
         <canvas id="precinctChart"></canvas>
       </div>
 
       <div class="panel span-6">
         <h2>Precinct Shortlist Table</h2>
-        <p class="subtle">Heuristic shortlist only. Constraints and site assembly are not integrated yet.</p>
+        <p class="subtle">Heuristic watchlist only. Recent apps here means mapped applications lodged on or after <code>2025-01-01</code>; no parcel-level feasibility is implied.</p>
         <table>
           <thead>
             <tr>
@@ -439,7 +439,7 @@
           <tbody>
             
               <tr>
-                <td>Mayfield<br><span style="color:var(--muted);font-size:12px">No derived constraint hit</span></td>
+                <td>Mayfield<br><span style="color:var(--muted);font-size:12px">No current derived constraint hit. Not risk-free.</span></td>
                 <td><span class="tag">B</span></td>
                 <td>0</td>
                 <td>213</td>
@@ -447,7 +447,7 @@
               </tr>
             
               <tr>
-                <td>Broadmeadow<br><span style="color:var(--muted);font-size:12px">No derived constraint hit</span></td>
+                <td>Broadmeadow<br><span style="color:var(--muted);font-size:12px">No current derived constraint hit. Not risk-free.</span></td>
                 <td><span class="tag">B</span></td>
                 <td>0</td>
                 <td>28</td>
@@ -532,6 +532,160 @@
                 <td>4</td>
                 <td>176</td>
                 <td>0</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel span-12">
+        <h2>Top Sites</h2>
+        <p class="subtle">Automated lot/site screening cut from the current open-data layer. Sorted by screening score, then mapped signal count, then site area. Watchlist bucket names already split out cross-jurisdiction cases where the governing EPI does not match the broader precinct grouping. Full site-screening report: <a href="../client-output/top-site-screening-newcastle-hunter.html">open report</a>.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Site</th>
+              <th>Precinct</th>
+              <th>Band</th>
+              <th>Score</th>
+              <th>Zoning</th>
+              <th>FSR</th>
+              <th>Height</th>
+              <th>Lot Area</th>
+              <th>Constraint Stack</th>
+              <th>Card</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>89 PARK AVENUE KOTARA</td>
+                <td>Kotara<br><span style="color:var(--muted);font-size:12px">Newcastle</span></td>
+                <td><span class="tag">Advance</span></td>
+                <td>50</td>
+                <td>E1</td>
+                <td>2</td>
+                <td>14m</td>
+                <td>118,436.33 sqm</td>
+                <td>No current site-level derived constraint hit</td>
+                <td><a href="../client-output/site-card-newcastle-hunter-precinct-kotara-19-dp876517.html">Open card</a></td>
+              </tr>
+            
+              <tr>
+                <td>30 PEARSON STREET CHARLESTOWN</td>
+                <td>Charlestown<br><span style="color:var(--muted);font-size:12px">Lake Macquarie</span></td>
+                <td><span class="tag">Advance</span></td>
+                <td>50</td>
+                <td>E2</td>
+                <td>-</td>
+                <td>125m</td>
+                <td>106,914.83 sqm</td>
+                <td>No current site-level derived constraint hit</td>
+                <td><a href="../client-output/site-card-newcastle-hunter-precinct-charlestown-20-dp1177332.html">Open card</a></td>
+              </tr>
+            
+              <tr>
+                <td>711 HUNTER STREET NEWCASTLE WEST</td>
+                <td>Newcastle City Centre<br><span style="color:var(--muted);font-size:12px">Newcastle</span></td>
+                <td><span class="tag">Review</span></td>
+                <td>50</td>
+                <td>E2</td>
+                <td>8</td>
+                <td>90m</td>
+                <td>6,726.85 sqm</td>
+                <td>Heritage Item [high]</td>
+                <td><a href="../client-output/site-card-newcastle-hunter-precinct-newcastle-city-centre-1-dp867617.html">Open card</a></td>
+              </tr>
+            
+              <tr>
+                <td>854 HUNTER STREET NEWCASTLE WEST</td>
+                <td>Newcastle City Centre<br><span style="color:var(--muted);font-size:12px">Newcastle</span></td>
+                <td><span class="tag">Review</span></td>
+                <td>50</td>
+                <td>E2</td>
+                <td>8</td>
+                <td>90m</td>
+                <td>3,947.44 sqm</td>
+                <td>Heritage Item [high]</td>
+                <td><a href="../client-output/site-card-newcastle-hunter-precinct-newcastle-city-centre-2-dp1271240.html">Open card</a></td>
+              </tr>
+            
+              <tr>
+                <td>5 PERKINS STREET NEWCASTLE</td>
+                <td>Newcastle City Centre<br><span style="color:var(--muted);font-size:12px">Newcastle</span></td>
+                <td><span class="tag">Review</span></td>
+                <td>49</td>
+                <td>MU1</td>
+                <td>4</td>
+                <td>42m</td>
+                <td>6,693.51 sqm</td>
+                <td>Heritage Item [high]</td>
+                <td><a href="../client-output/site-card-newcastle-hunter-precinct-newcastle-city-centre-24-dp1269807.html">Open card</a></td>
+              </tr>
+            
+              <tr>
+                <td>88 PARK AVENUE KOTARA</td>
+                <td>Kotara<br><span style="color:var(--muted);font-size:12px">Newcastle</span></td>
+                <td><span class="tag">Advance</span></td>
+                <td>48</td>
+                <td>E1</td>
+                <td>2</td>
+                <td>14m</td>
+                <td>3,440.64 sqm</td>
+                <td>No current site-level derived constraint hit</td>
+                <td>-</td>
+              </tr>
+            
+              <tr>
+                <td>45 WATT STREET NEWCASTLE</td>
+                <td>Newcastle City Centre<br><span style="color:var(--muted);font-size:12px">Newcastle</span></td>
+                <td><span class="tag">Review</span></td>
+                <td>47</td>
+                <td>R4</td>
+                <td>3</td>
+                <td>35m</td>
+                <td>6,221.22 sqm</td>
+                <td>Heritage Item [high]</td>
+                <td>-</td>
+              </tr>
+            
+              <tr>
+                <td>90 MAGNUS STREET NELSON BAY</td>
+                <td>Nelson Bay<br><span style="color:var(--muted);font-size:12px">Port Stephens</span></td>
+                <td><span class="tag">Advance</span></td>
+                <td>45</td>
+                <td>R3</td>
+                <td>2.5</td>
+                <td>17.5m</td>
+                <td>1,368.74 sqm</td>
+                <td>No current site-level derived constraint hit</td>
+                <td>-</td>
+              </tr>
+            
+              <tr>
+                <td>134 KING STREET NEWCASTLE</td>
+                <td>Newcastle City Centre<br><span style="color:var(--muted);font-size:12px">Newcastle</span></td>
+                <td><span class="tag">Review</span></td>
+                <td>38</td>
+                <td>MU1</td>
+                <td>3</td>
+                <td>24m</td>
+                <td>838.23 sqm</td>
+                <td>Heritage Item [high]</td>
+                <td>-</td>
+              </tr>
+            
+              <tr>
+                <td>373 HUNTER STREET NEWCASTLE</td>
+                <td>Newcastle City Centre<br><span style="color:var(--muted);font-size:12px">Newcastle</span></td>
+                <td><span class="tag">Review</span></td>
+                <td>37</td>
+                <td>E2</td>
+                <td>4</td>
+                <td>30m</td>
+                <td>15,272.38 sqm</td>
+                <td>Heritage Item [high]; State Heritage Curtilage [high]</td>
+                <td>-</td>
               </tr>
             
           </tbody>
@@ -758,7 +912,7 @@
   </div>
 
   <script>
-    const reportData = {"reportTitle":"Newcastle-Hunter Planning And Activity Research Dashboard","reportLede":"Public-data powered view across housing target pressure, planning proposal pipeline, recent development activity and first-pass risk signals for Newcastle-Hunter. This report is generated directly from Supabase views, not from mock sample JSON.","meta":{"totalPlanningProposals":424,"totalApplicationSignals":11468,"totalPrecinctShortlist":19,"totalConstraints":32},"recentRanking":[{"council_name":"Lake Macquarie","recent_count":3555,"total_count":17722},{"council_name":"Newcastle","recent_count":2419,"total_count":11496},{"council_name":"Maitland","recent_count":2353,"total_count":10237},{"council_name":"Cessnock","recent_count":1774,"total_count":9905},{"council_name":"Port Stephens","recent_count":1238,"total_count":6632}],"pipeline":[{"stage":"under_assessment","stage_rank":1,"proposal_count":3},{"stage":"pre_exhibition","stage_rank":2,"proposal_count":2},{"stage":"on_exhibition","stage_rank":3,"proposal_count":3},{"stage":"finalisation","stage_rank":5,"proposal_count":2},{"stage":"made","stage_rank":6,"proposal_count":373},{"stage":"withdrawn","stage_rank":7,"proposal_count":41}],"scoreboard":[{"council_name":"Port Stephens","target_value":null,"application_recent_count":1238,"active_pipeline_count":"5"},{"council_name":"Maitland","target_value":null,"application_recent_count":2353,"active_pipeline_count":"2"},{"council_name":"Lake Macquarie","target_value":null,"application_recent_count":3555,"active_pipeline_count":"1"},{"council_name":"Newcastle","target_value":null,"application_recent_count":2419,"active_pipeline_count":"1"},{"council_name":"Cessnock","target_value":null,"application_recent_count":1774,"active_pipeline_count":"1"}],"scatter":[],"watchlist":[{"council_name":"Port Stephens","stage":"under_assessment","title":"Medowie Precinct J","location_text":"Port Stephens"},{"council_name":"Port Stephens","stage":"under_assessment","title":"Nelson Bay Bowling Club Planning Proposal","location_text":"61A Dowling Street Nelson Bay 2315 & more"},{"council_name":"Port Stephens","stage":"under_assessment","title":"The Sandpiper (Precinct1A)","location_text":"16 George Street Fullerton Cove 2318 & more"},{"council_name":"Newcastle","stage":"pre_exhibition","title":"Eden Estates, Wallsend","location_text":"Newcastle"},{"council_name":"Port Stephens","stage":"pre_exhibition","title":"Reclassification and Rezoning of Surplus Council Sites","location_text":"Port Stephens"},{"council_name":"Lake Macquarie","stage":"on_exhibition","title":"Garden Suburb Project","location_text":"Lake Macquarie"},{"council_name":"Maitland","stage":"on_exhibition","title":"Reclassification of Council Owned Land from Community to Operational","location_text":"17 Avard Close Thornton 2322"},{"council_name":"Port Stephens","stage":"on_exhibition","title":"Tomago Industrial Site Planning Proposal","location_text":"Port Stephens"},{"council_name":"Maitland","stage":"finalisation","title":"AMENDMENT TO THE MAITLAND LEP 2011 Stage 4 of the Aberglasslyn URA, Kezia Rd, Oakhampton Various Lot","location_text":"Maitland"},{"council_name":"Cessnock","stage":"finalisation","title":"RECLASSIFICATION OF PART LOT 312 DP 566724 OLD MAITLAND ROAD CESSNOCK","location_text":"Lot 312 Dp566724"}],"precinctShortlist":[{"precinct_name":"Mayfield","council_name":"Newcastle","opportunity_rating":"B","friction_score":0,"recent_application_count":"213","active_pipeline_count":"0","constraint_summary":null},{"precinct_name":"Broadmeadow","council_name":"Newcastle","opportunity_rating":"B","friction_score":0,"recent_application_count":"28","active_pipeline_count":"0","constraint_summary":null},{"precinct_name":"Newcastle City Centre","council_name":"Newcastle","opportunity_rating":"B","friction_score":2,"recent_application_count":"190","active_pipeline_count":"1","constraint_summary":"flood_metadata_signal (high)"},{"precinct_name":"Nelson Bay","council_name":"Port Stephens","opportunity_rating":"B","friction_score":2,"recent_application_count":"169","active_pipeline_count":"1","constraint_summary":"bushfire_spatial_sample (high)"},{"precinct_name":"Rutherford","council_name":"Maitland","opportunity_rating":"B","friction_score":2,"recent_application_count":"142","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high)"},{"precinct_name":"Thornton","council_name":"Maitland","opportunity_rating":"B","friction_score":2,"recent_application_count":"126","active_pipeline_count":"1","constraint_summary":"bushfire_spatial_sample (high)"},{"precinct_name":"Kotara","council_name":"Newcastle","opportunity_rating":"B","friction_score":2,"recent_application_count":"94","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high)"},{"precinct_name":"Charlestown","council_name":"Lake Macquarie","opportunity_rating":"B","friction_score":3,"recent_application_count":"205","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (medium)"},{"precinct_name":"Raymond Terrace","council_name":"Port Stephens","opportunity_rating":"B","friction_score":3,"recent_application_count":"101","active_pipeline_count":"0","constraint_summary":"flood_metadata_signal (high), policy_withdrawal_friction (medium)"},{"precinct_name":"Medowie","council_name":"Port Stephens","opportunity_rating":"C","friction_score":4,"recent_application_count":"235","active_pipeline_count":"1","constraint_summary":"bushfire_spatial_sample (high), biodiversity_spatial_sample (medium), flood_metadata_signal (medium)"},{"precinct_name":"East Maitland","council_name":"Maitland","opportunity_rating":"C","friction_score":4,"recent_application_count":"199","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)"},{"precinct_name":"Belmont","council_name":"Lake Macquarie","opportunity_rating":"C","friction_score":4,"recent_application_count":"176","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)"}],"constrainedPrecincts":[{"precinct_name":"Cessnock","council_name":"Cessnock","friction_score":5,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high), policy_withdrawal_friction (medium)","recent_application_count":"215","active_pipeline_count":"1"},{"precinct_name":"Kurri Kurri","council_name":"Cessnock","friction_score":5,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high), biodiversity_spatial_sample (medium)","recent_application_count":"90","active_pipeline_count":"0"},{"precinct_name":"Medowie","council_name":"Port Stephens","friction_score":4,"constraint_summary":"bushfire_spatial_sample (high), biodiversity_spatial_sample (medium), flood_metadata_signal (medium)","recent_application_count":"235","active_pipeline_count":"1"},{"precinct_name":"East Maitland","council_name":"Maitland","friction_score":4,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","recent_application_count":"199","active_pipeline_count":"0"},{"precinct_name":"Belmont","council_name":"Lake Macquarie","friction_score":4,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","recent_application_count":"176","active_pipeline_count":"0"},{"precinct_name":"Warners Bay","council_name":"Lake Macquarie","friction_score":4,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","recent_application_count":"143","active_pipeline_count":"0"},{"precinct_name":"Maitland","council_name":"Maitland","friction_score":4,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","recent_application_count":"91","active_pipeline_count":"1"},{"precinct_name":"Branxton","council_name":"Cessnock","friction_score":4,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","recent_application_count":"63","active_pipeline_count":"0"},{"precinct_name":"Glendale","council_name":"Lake Macquarie","friction_score":4,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","recent_application_count":"57","active_pipeline_count":"0"},{"precinct_name":"Williamtown","council_name":"Port Stephens","friction_score":4,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","recent_application_count":"21","active_pipeline_count":"0"},{"precinct_name":"Charlestown","council_name":"Lake Macquarie","friction_score":3,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (medium)","recent_application_count":"205","active_pipeline_count":"0"},{"precinct_name":"Raymond Terrace","council_name":"Port Stephens","friction_score":3,"constraint_summary":"flood_metadata_signal (high), policy_withdrawal_friction (medium)","recent_application_count":"101","active_pipeline_count":"0"}],"precinctMapPoints":[{"precinct_name":"Mayfield","council_name":"Newcastle","opportunity_rating":"B","friction_score":0,"recent_application_count":"213","active_pipeline_count":"0","constraint_summary":null,"centroid_latitude":"-32.8951886787323944","centroid_longitude":"151.7356986947887324","point_count":"213"},{"precinct_name":"Broadmeadow","council_name":"Newcastle","opportunity_rating":"B","friction_score":0,"recent_application_count":"28","active_pipeline_count":"0","constraint_summary":null,"centroid_latitude":"-32.9251219796428571","centroid_longitude":"151.7329851960714286","point_count":"28"},{"precinct_name":"Newcastle City Centre","council_name":"Newcastle","opportunity_rating":"B","friction_score":2,"recent_application_count":"190","active_pipeline_count":"1","constraint_summary":"flood_metadata_signal (high)","centroid_latitude":"-32.9255158129473684","centroid_longitude":"151.7668982714210526","point_count":"190"},{"precinct_name":"Nelson Bay","council_name":"Port Stephens","opportunity_rating":"B","friction_score":2,"recent_application_count":"169","active_pipeline_count":"1","constraint_summary":"bushfire_spatial_sample (high)","centroid_latitude":"-32.7278382697326203","centroid_longitude":"152.1246196980213904","point_count":"187"},{"precinct_name":"Rutherford","council_name":"Maitland","opportunity_rating":"B","friction_score":2,"recent_application_count":"142","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high)","centroid_latitude":"-32.7140734649295775","centroid_longitude":"151.5198130042253521","point_count":"142"},{"precinct_name":"Thornton","council_name":"Maitland","opportunity_rating":"B","friction_score":2,"recent_application_count":"126","active_pipeline_count":"1","constraint_summary":"bushfire_spatial_sample (high)","centroid_latitude":"-32.7760346474603175","centroid_longitude":"151.6427373772222222","point_count":"126"},{"precinct_name":"Kotara","council_name":"Newcastle","opportunity_rating":"B","friction_score":2,"recent_application_count":"94","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high)","centroid_latitude":"-32.9436188268085106","centroid_longitude":"151.7019581685106383","point_count":"94"},{"precinct_name":"Charlestown","council_name":"Lake Macquarie","opportunity_rating":"B","friction_score":3,"recent_application_count":"205","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (medium)","centroid_latitude":"-32.9665885695121951","centroid_longitude":"151.6946528149756098","point_count":"205"},{"precinct_name":"Raymond Terrace","council_name":"Port Stephens","opportunity_rating":"B","friction_score":3,"recent_application_count":"101","active_pipeline_count":"0","constraint_summary":"flood_metadata_signal (high), policy_withdrawal_friction (medium)","centroid_latitude":"-32.7566745001941748","centroid_longitude":"151.7586124446601942","point_count":"103"},{"precinct_name":"Medowie","council_name":"Port Stephens","opportunity_rating":"C","friction_score":4,"recent_application_count":"235","active_pipeline_count":"1","constraint_summary":"bushfire_spatial_sample (high), biodiversity_spatial_sample (medium), flood_metadata_signal (medium)","centroid_latitude":"-32.7392477541004184","centroid_longitude":"151.8671744554393305","point_count":"239"},{"precinct_name":"East Maitland","council_name":"Maitland","opportunity_rating":"C","friction_score":4,"recent_application_count":"199","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","centroid_latitude":"-32.7556462314070352","centroid_longitude":"151.5885306355276382","point_count":"199"},{"precinct_name":"Belmont","council_name":"Lake Macquarie","opportunity_rating":"C","friction_score":4,"recent_application_count":"176","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","centroid_latitude":"-33.0290868348295455","centroid_longitude":"151.6610729440909091","point_count":"176"},{"precinct_name":"Warners Bay","council_name":"Lake Macquarie","opportunity_rating":"C","friction_score":4,"recent_application_count":"143","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","centroid_latitude":"-32.9731392439160839","centroid_longitude":"151.6510002275524476","point_count":"143"},{"precinct_name":"Maitland","council_name":"Maitland","opportunity_rating":"C","friction_score":4,"recent_application_count":"91","active_pipeline_count":"1","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","centroid_latitude":"-32.7262288059340659","centroid_longitude":"151.5548097734065934","point_count":"91"},{"precinct_name":"Branxton","council_name":"Cessnock","opportunity_rating":"C","friction_score":4,"recent_application_count":"63","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","centroid_latitude":"-32.6577776341269841","centroid_longitude":"151.3617950396825397","point_count":"63"},{"precinct_name":"Glendale","council_name":"Lake Macquarie","opportunity_rating":"C","friction_score":4,"recent_application_count":"57","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","centroid_latitude":"-32.9287600557894737","centroid_longitude":"151.6475171814035088","point_count":"57"},{"precinct_name":"Williamtown","council_name":"Port Stephens","opportunity_rating":"C","friction_score":4,"recent_application_count":"21","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","centroid_latitude":"-32.8074165015384615","centroid_longitude":"151.8455816065384615","point_count":"26"},{"precinct_name":"Cessnock","council_name":"Cessnock","opportunity_rating":"C","friction_score":5,"recent_application_count":"215","active_pipeline_count":"1","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high), policy_withdrawal_friction (medium)","centroid_latitude":"-32.8299652410232558","centroid_longitude":"151.3499337764186047","point_count":"215"},{"precinct_name":"Kurri Kurri","council_name":"Cessnock","opportunity_rating":"C","friction_score":5,"recent_application_count":"90","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high), biodiversity_spatial_sample (medium)","centroid_latitude":"-32.8163171203333333","centroid_longitude":"151.4810638848888889","point_count":"90"}]};
+    const reportData = {"reportTitle":"Newcastle-Hunter Planning And Activity Research Dashboard","reportLede":"Public-data powered watchlist and diligence-triage view across housing target pressure, planning proposal pipeline, recent development activity and first-pass risk signals for Newcastle-Hunter. This is a screening dashboard, not a parcel-level decision tool.","meta":{"totalPlanningProposals":424,"totalApplicationSignals":11468,"totalPrecinctShortlist":19,"totalConstraints":32,"councilRecentWindowStart":"2024-12-31","precinctRecentWindowStart":"2025-01-01","siteReportHref":"../client-output/top-site-screening-newcastle-hunter.html"},"recentRanking":[{"council_name":"Lake Macquarie","recent_count":3555,"total_count":17722,"recent_window_start":"2024-12-31T13:00:00.000Z"},{"council_name":"Newcastle","recent_count":2419,"total_count":11496,"recent_window_start":"2024-12-31T13:00:00.000Z"},{"council_name":"Maitland","recent_count":2353,"total_count":10237,"recent_window_start":"2024-12-31T13:00:00.000Z"},{"council_name":"Cessnock","recent_count":1774,"total_count":9905,"recent_window_start":"2024-12-31T13:00:00.000Z"},{"council_name":"Port Stephens","recent_count":1238,"total_count":6632,"recent_window_start":"2024-12-31T13:00:00.000Z"}],"pipeline":[{"stage":"under_assessment","stage_rank":1,"proposal_count":3},{"stage":"pre_exhibition","stage_rank":2,"proposal_count":2},{"stage":"on_exhibition","stage_rank":3,"proposal_count":3},{"stage":"finalisation","stage_rank":5,"proposal_count":2},{"stage":"made","stage_rank":6,"proposal_count":373},{"stage":"withdrawn","stage_rank":7,"proposal_count":41}],"scoreboard":[{"council_name":"Port Stephens","target_value":null,"application_recent_count":1238,"active_pipeline_count":"5"},{"council_name":"Maitland","target_value":null,"application_recent_count":2353,"active_pipeline_count":"2"},{"council_name":"Lake Macquarie","target_value":null,"application_recent_count":3555,"active_pipeline_count":"1"},{"council_name":"Newcastle","target_value":null,"application_recent_count":2419,"active_pipeline_count":"1"},{"council_name":"Cessnock","target_value":null,"application_recent_count":1774,"active_pipeline_count":"1"}],"scatter":[],"watchlist":[{"council_name":"Port Stephens","stage":"under_assessment","title":"Medowie Precinct J","location_text":"Port Stephens"},{"council_name":"Port Stephens","stage":"under_assessment","title":"Nelson Bay Bowling Club Planning Proposal","location_text":"61A Dowling Street Nelson Bay 2315 & more"},{"council_name":"Port Stephens","stage":"under_assessment","title":"The Sandpiper (Precinct1A)","location_text":"16 George Street Fullerton Cove 2318 & more"},{"council_name":"Newcastle","stage":"pre_exhibition","title":"Eden Estates, Wallsend","location_text":"Newcastle"},{"council_name":"Port Stephens","stage":"pre_exhibition","title":"Reclassification and Rezoning of Surplus Council Sites","location_text":"Port Stephens"},{"council_name":"Lake Macquarie","stage":"on_exhibition","title":"Garden Suburb Project","location_text":"Lake Macquarie"},{"council_name":"Maitland","stage":"on_exhibition","title":"Reclassification of Council Owned Land from Community to Operational","location_text":"17 Avard Close Thornton 2322"},{"council_name":"Port Stephens","stage":"on_exhibition","title":"Tomago Industrial Site Planning Proposal","location_text":"Port Stephens"},{"council_name":"Maitland","stage":"finalisation","title":"AMENDMENT TO THE MAITLAND LEP 2011 Stage 4 of the Aberglasslyn URA, Kezia Rd, Oakhampton Various Lot","location_text":"Maitland"},{"council_name":"Cessnock","stage":"finalisation","title":"RECLASSIFICATION OF PART LOT 312 DP 566724 OLD MAITLAND ROAD CESSNOCK","location_text":"Lot 312 Dp566724"}],"precinctShortlist":[{"precinct_name":"Mayfield","council_name":"Newcastle","opportunity_rating":"B","friction_score":0,"recent_application_count":"213","active_pipeline_count":"0","constraint_summary":null},{"precinct_name":"Broadmeadow","council_name":"Newcastle","opportunity_rating":"B","friction_score":0,"recent_application_count":"28","active_pipeline_count":"0","constraint_summary":null},{"precinct_name":"Newcastle City Centre","council_name":"Newcastle","opportunity_rating":"B","friction_score":2,"recent_application_count":"190","active_pipeline_count":"1","constraint_summary":"flood_metadata_signal (high)"},{"precinct_name":"Nelson Bay","council_name":"Port Stephens","opportunity_rating":"B","friction_score":2,"recent_application_count":"169","active_pipeline_count":"1","constraint_summary":"bushfire_spatial_sample (high)"},{"precinct_name":"Rutherford","council_name":"Maitland","opportunity_rating":"B","friction_score":2,"recent_application_count":"142","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high)"},{"precinct_name":"Thornton","council_name":"Maitland","opportunity_rating":"B","friction_score":2,"recent_application_count":"126","active_pipeline_count":"1","constraint_summary":"bushfire_spatial_sample (high)"},{"precinct_name":"Kotara","council_name":"Newcastle","opportunity_rating":"B","friction_score":2,"recent_application_count":"94","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high)"},{"precinct_name":"Charlestown","council_name":"Lake Macquarie","opportunity_rating":"B","friction_score":3,"recent_application_count":"205","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (medium)"},{"precinct_name":"Raymond Terrace","council_name":"Port Stephens","opportunity_rating":"B","friction_score":3,"recent_application_count":"101","active_pipeline_count":"0","constraint_summary":"flood_metadata_signal (high), policy_withdrawal_friction (medium)"},{"precinct_name":"Medowie","council_name":"Port Stephens","opportunity_rating":"C","friction_score":4,"recent_application_count":"235","active_pipeline_count":"1","constraint_summary":"bushfire_spatial_sample (high), biodiversity_spatial_sample (medium), flood_metadata_signal (medium)"},{"precinct_name":"East Maitland","council_name":"Maitland","opportunity_rating":"C","friction_score":4,"recent_application_count":"199","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)"},{"precinct_name":"Belmont","council_name":"Lake Macquarie","opportunity_rating":"C","friction_score":4,"recent_application_count":"176","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)"}],"constrainedPrecincts":[{"precinct_name":"Cessnock","council_name":"Cessnock","friction_score":5,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high), policy_withdrawal_friction (medium)","recent_application_count":"215","active_pipeline_count":"1"},{"precinct_name":"Kurri Kurri","council_name":"Cessnock","friction_score":5,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high), biodiversity_spatial_sample (medium)","recent_application_count":"90","active_pipeline_count":"0"},{"precinct_name":"Medowie","council_name":"Port Stephens","friction_score":4,"constraint_summary":"bushfire_spatial_sample (high), biodiversity_spatial_sample (medium), flood_metadata_signal (medium)","recent_application_count":"235","active_pipeline_count":"1"},{"precinct_name":"East Maitland","council_name":"Maitland","friction_score":4,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","recent_application_count":"199","active_pipeline_count":"0"},{"precinct_name":"Belmont","council_name":"Lake Macquarie","friction_score":4,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","recent_application_count":"176","active_pipeline_count":"0"},{"precinct_name":"Warners Bay","council_name":"Lake Macquarie","friction_score":4,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","recent_application_count":"143","active_pipeline_count":"0"},{"precinct_name":"Maitland","council_name":"Maitland","friction_score":4,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","recent_application_count":"91","active_pipeline_count":"1"},{"precinct_name":"Branxton","council_name":"Cessnock","friction_score":4,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","recent_application_count":"63","active_pipeline_count":"0"},{"precinct_name":"Glendale","council_name":"Lake Macquarie","friction_score":4,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","recent_application_count":"57","active_pipeline_count":"0"},{"precinct_name":"Williamtown","council_name":"Port Stephens","friction_score":4,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","recent_application_count":"21","active_pipeline_count":"0"},{"precinct_name":"Charlestown","council_name":"Lake Macquarie","friction_score":3,"constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (medium)","recent_application_count":"205","active_pipeline_count":"0"},{"precinct_name":"Raymond Terrace","council_name":"Port Stephens","friction_score":3,"constraint_summary":"flood_metadata_signal (high), policy_withdrawal_friction (medium)","recent_application_count":"101","active_pipeline_count":"0"}],"precinctMapPoints":[{"precinct_name":"Mayfield","council_name":"Newcastle","opportunity_rating":"B","friction_score":0,"recent_application_count":"213","active_pipeline_count":"0","constraint_summary":null,"centroid_latitude":"-32.8951886787323944","centroid_longitude":"151.7356986947887324","point_count":"213"},{"precinct_name":"Broadmeadow","council_name":"Newcastle","opportunity_rating":"B","friction_score":0,"recent_application_count":"28","active_pipeline_count":"0","constraint_summary":null,"centroid_latitude":"-32.9251219796428571","centroid_longitude":"151.7329851960714286","point_count":"28"},{"precinct_name":"Newcastle City Centre","council_name":"Newcastle","opportunity_rating":"B","friction_score":2,"recent_application_count":"190","active_pipeline_count":"1","constraint_summary":"flood_metadata_signal (high)","centroid_latitude":"-32.9255158129473684","centroid_longitude":"151.7668982714210526","point_count":"190"},{"precinct_name":"Nelson Bay","council_name":"Port Stephens","opportunity_rating":"B","friction_score":2,"recent_application_count":"169","active_pipeline_count":"1","constraint_summary":"bushfire_spatial_sample (high)","centroid_latitude":"-32.7278382697326203","centroid_longitude":"152.1246196980213904","point_count":"187"},{"precinct_name":"Rutherford","council_name":"Maitland","opportunity_rating":"B","friction_score":2,"recent_application_count":"142","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high)","centroid_latitude":"-32.7140734649295775","centroid_longitude":"151.5198130042253521","point_count":"142"},{"precinct_name":"Thornton","council_name":"Maitland","opportunity_rating":"B","friction_score":2,"recent_application_count":"126","active_pipeline_count":"1","constraint_summary":"bushfire_spatial_sample (high)","centroid_latitude":"-32.7760346474603175","centroid_longitude":"151.6427373772222222","point_count":"126"},{"precinct_name":"Kotara","council_name":"Newcastle","opportunity_rating":"B","friction_score":2,"recent_application_count":"94","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high)","centroid_latitude":"-32.9436188268085106","centroid_longitude":"151.7019581685106383","point_count":"94"},{"precinct_name":"Charlestown","council_name":"Lake Macquarie","opportunity_rating":"B","friction_score":3,"recent_application_count":"205","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (medium)","centroid_latitude":"-32.9665885695121951","centroid_longitude":"151.6946528149756098","point_count":"205"},{"precinct_name":"Raymond Terrace","council_name":"Port Stephens","opportunity_rating":"B","friction_score":3,"recent_application_count":"101","active_pipeline_count":"0","constraint_summary":"flood_metadata_signal (high), policy_withdrawal_friction (medium)","centroid_latitude":"-32.7566745001941748","centroid_longitude":"151.7586124446601942","point_count":"103"},{"precinct_name":"Medowie","council_name":"Port Stephens","opportunity_rating":"C","friction_score":4,"recent_application_count":"235","active_pipeline_count":"1","constraint_summary":"bushfire_spatial_sample (high), biodiversity_spatial_sample (medium), flood_metadata_signal (medium)","centroid_latitude":"-32.7392477541004184","centroid_longitude":"151.8671744554393305","point_count":"239"},{"precinct_name":"East Maitland","council_name":"Maitland","opportunity_rating":"C","friction_score":4,"recent_application_count":"199","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","centroid_latitude":"-32.7556462314070352","centroid_longitude":"151.5885306355276382","point_count":"199"},{"precinct_name":"Belmont","council_name":"Lake Macquarie","opportunity_rating":"C","friction_score":4,"recent_application_count":"176","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","centroid_latitude":"-33.0290868348295455","centroid_longitude":"151.6610729440909091","point_count":"176"},{"precinct_name":"Warners Bay","council_name":"Lake Macquarie","opportunity_rating":"C","friction_score":4,"recent_application_count":"143","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","centroid_latitude":"-32.9731392439160839","centroid_longitude":"151.6510002275524476","point_count":"143"},{"precinct_name":"Maitland","council_name":"Maitland","opportunity_rating":"C","friction_score":4,"recent_application_count":"91","active_pipeline_count":"1","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","centroid_latitude":"-32.7262288059340659","centroid_longitude":"151.5548097734065934","point_count":"91"},{"precinct_name":"Branxton","council_name":"Cessnock","opportunity_rating":"C","friction_score":4,"recent_application_count":"63","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","centroid_latitude":"-32.6577776341269841","centroid_longitude":"151.3617950396825397","point_count":"63"},{"precinct_name":"Glendale","council_name":"Lake Macquarie","opportunity_rating":"C","friction_score":4,"recent_application_count":"57","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","centroid_latitude":"-32.9287600557894737","centroid_longitude":"151.6475171814035088","point_count":"57"},{"precinct_name":"Williamtown","council_name":"Port Stephens","opportunity_rating":"C","friction_score":4,"recent_application_count":"21","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high)","centroid_latitude":"-32.8074165015384615","centroid_longitude":"151.8455816065384615","point_count":"26"},{"precinct_name":"Cessnock","council_name":"Cessnock","opportunity_rating":"C","friction_score":5,"recent_application_count":"215","active_pipeline_count":"1","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high), policy_withdrawal_friction (medium)","centroid_latitude":"-32.8299652410232558","centroid_longitude":"151.3499337764186047","point_count":"215"},{"precinct_name":"Kurri Kurri","council_name":"Cessnock","opportunity_rating":"C","friction_score":5,"recent_application_count":"90","active_pipeline_count":"0","constraint_summary":"bushfire_spatial_sample (high), flood_metadata_signal (high), biodiversity_spatial_sample (medium)","centroid_latitude":"-32.8163171203333333","centroid_longitude":"151.4810638848888889","point_count":"90"}],"topSites":[{"site_key":"PRECINCT_KOTARA:19//DP876517","site_label":"89 PARK AVENUE KOTARA","precinct_name":"Kotara","council_name":"Newcastle","watchlist_bucket_name":"Kotara","apparent_site_jurisdiction":"Newcastle","screening_band":"Advance","screening_score":50,"zoning_code":"E1","fsr":"2.0000","height_m":"14.0000","geometry_area_sqm":"118436.33","constraint_summary":"No current site-level derived constraint hit","card_href":"../client-output/site-card-newcastle-hunter-precinct-kotara-19-dp876517.html"},{"site_key":"PRECINCT_CHARLESTOWN:20//DP1177332","site_label":"30 PEARSON STREET CHARLESTOWN","precinct_name":"Charlestown","council_name":"Lake Macquarie","watchlist_bucket_name":"Charlestown","apparent_site_jurisdiction":"Lake Macquarie","screening_band":"Advance","screening_score":50,"zoning_code":"E2","fsr":null,"height_m":"125.0000","geometry_area_sqm":"106914.83","constraint_summary":"No current site-level derived constraint hit","card_href":"../client-output/site-card-newcastle-hunter-precinct-charlestown-20-dp1177332.html"},{"site_key":"PRECINCT_NEWCASTLE_CITY_CENTRE:1//DP867617","site_label":"711 HUNTER STREET NEWCASTLE WEST","precinct_name":"Newcastle City Centre","council_name":"Newcastle","watchlist_bucket_name":"Newcastle City Centre","apparent_site_jurisdiction":"Newcastle","screening_band":"Review","screening_score":50,"zoning_code":"E2","fsr":"8.0000","height_m":"90.0000","geometry_area_sqm":"6726.85","constraint_summary":"Heritage Item [high]","card_href":"../client-output/site-card-newcastle-hunter-precinct-newcastle-city-centre-1-dp867617.html"},{"site_key":"PRECINCT_NEWCASTLE_CITY_CENTRE:2//DP1271240","site_label":"854 HUNTER STREET NEWCASTLE WEST","precinct_name":"Newcastle City Centre","council_name":"Newcastle","watchlist_bucket_name":"Newcastle City Centre","apparent_site_jurisdiction":"Newcastle","screening_band":"Review","screening_score":50,"zoning_code":"E2","fsr":"8.0000","height_m":"90.0000","geometry_area_sqm":"3947.44","constraint_summary":"Heritage Item [high]","card_href":"../client-output/site-card-newcastle-hunter-precinct-newcastle-city-centre-2-dp1271240.html"},{"site_key":"PRECINCT_NEWCASTLE_CITY_CENTRE:24//DP1269807","site_label":"5 PERKINS STREET NEWCASTLE","precinct_name":"Newcastle City Centre","council_name":"Newcastle","watchlist_bucket_name":"Newcastle City Centre","apparent_site_jurisdiction":"Newcastle","screening_band":"Review","screening_score":49,"zoning_code":"MU1","fsr":"4.0000","height_m":"42.0000","geometry_area_sqm":"6693.51","constraint_summary":"Heritage Item [high]","card_href":"../client-output/site-card-newcastle-hunter-precinct-newcastle-city-centre-24-dp1269807.html"},{"site_key":"PRECINCT_KOTARA:140//DP1167789","site_label":"88 PARK AVENUE KOTARA","precinct_name":"Kotara","council_name":"Newcastle","watchlist_bucket_name":"Kotara","apparent_site_jurisdiction":"Newcastle","screening_band":"Advance","screening_score":48,"zoning_code":"E1","fsr":"2.0000","height_m":"14.0000","geometry_area_sqm":"3440.64","constraint_summary":"No current site-level derived constraint hit","card_href":null},{"site_key":"PRECINCT_NEWCASTLE_CITY_CENTRE:20//DP1204023","site_label":"45 WATT STREET NEWCASTLE","precinct_name":"Newcastle City Centre","council_name":"Newcastle","watchlist_bucket_name":"Newcastle City Centre","apparent_site_jurisdiction":"Newcastle","screening_band":"Review","screening_score":47,"zoning_code":"R4","fsr":"3.0000","height_m":"35.0000","geometry_area_sqm":"6221.22","constraint_summary":"Heritage Item [high]","card_href":null},{"site_key":"PRECINCT_NELSON_BAY:2//DP15998","site_label":"90 MAGNUS STREET NELSON BAY","precinct_name":"Nelson Bay","council_name":"Port Stephens","watchlist_bucket_name":"Nelson Bay","apparent_site_jurisdiction":"Port Stephens","screening_band":"Advance","screening_score":45,"zoning_code":"R3","fsr":"2.5000","height_m":"17.5000","geometry_area_sqm":"1368.74","constraint_summary":"No current site-level derived constraint hit","card_href":null},{"site_key":"PRECINCT_NEWCASTLE_CITY_CENTRE:1//DP798865","site_label":"134 KING STREET NEWCASTLE","precinct_name":"Newcastle City Centre","council_name":"Newcastle","watchlist_bucket_name":"Newcastle City Centre","apparent_site_jurisdiction":"Newcastle","screening_band":"Review","screening_score":38,"zoning_code":"MU1","fsr":"3.0000","height_m":"24.0000","geometry_area_sqm":"838.23","constraint_summary":"Heritage Item [high]","card_href":null},{"site_key":"PRECINCT_NEWCASTLE_CITY_CENTRE:4//DP1250295","site_label":"373 HUNTER STREET NEWCASTLE","precinct_name":"Newcastle City Centre","council_name":"Newcastle","watchlist_bucket_name":"Newcastle City Centre","apparent_site_jurisdiction":"Newcastle","screening_band":"Review","screening_score":37,"zoning_code":"E2","fsr":"4.0000","height_m":"30.0000","geometry_area_sqm":"15272.38","constraint_summary":"Heritage Item [high]; State Heritage Curtilage [high]","card_href":null}]};
     const storageKey = 'radarestate-theme';
     const currentTheme = document.documentElement.dataset.theme || 'dark';
     const themeButtons = [...document.querySelectorAll('[data-theme-option]')];
@@ -819,7 +973,7 @@
             'Recent apps: ' + recent + '<br>' +
             'Active pipeline: ' + Number(row.active_pipeline_count || 0) + '<br>' +
             'Risk score: ' + Number(row.friction_score || 0) + '<br>' +
-            'Constraints: ' + (row.constraint_summary || 'None') +
+            'Constraints: ' + (row.constraint_summary || 'No current derived hit. Not risk-free.') +
           '</div>'
         );
         return marker;

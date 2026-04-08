@@ -6,12 +6,12 @@
 
 ## Purpose
 
-Fixed hotspot universe for demonstrating and selling the weekly DevelopmentReport layer. This report is the fixed-universe version of the second product layer: a weekly development-oriented report built around a stable hotspot range rather than the full market.
+Fixed hotspot universe for QA, weekly comparison and structured product validation of the DevelopmentReport layer. This report is the fixed-universe version of the second product layer: a weekly development-oriented report built around a stable hotspot range rather than the full market.
 
 ## Radar Carry-Over
 
-- Strongest current opportunity in this fixed universe: **Gladesville** (Hunters Hill), rated **A** with risk score **0**.
-- Highest current friction in this fixed universe: **Bankstown** (Canterbury-Bankstown), rated **C** with risk score **5**.
+- Strongest current opportunity in this fixed universe: **Gladesville** (Hunters Hill), rated **A** with derived risk score **0**.
+- Highest current friction in this fixed universe: **Bankstown** (Canterbury-Bankstown), rated **C** with derived risk score **5**.
 - Companion radar artifacts:
   - `dashboard/hero-visual-pack.html`
   - `reports/top-10-insights-latest.md`
@@ -68,12 +68,14 @@ Fixed hotspot universe for demonstrating and selling the weekly DevelopmentRepor
 | 4 | Westmead | Parramatta | B | 3 | 4 | 2 | 51 | 2 | Investigate |
 | 5 | Bankstown | Canterbury-Bankstown | C | 2 | 5 | 5 | 238 | 1 | Watch |
 
-## Why This Universe Works As A DevelopmentReport Demo
+Recent Apps here means mapped applications with lodgement date on or after `2025-01-01`. DA / CDC / SSD / Modification should be separated before any deal-level decision.
 
-- It is narrow enough to support consistent weekly follow-up.
-- It is broad enough to show different site conditions and risk profiles.
-- It can carry both “good opportunity” and “high-friction caution” cases in the same weekly package.
-- It creates a stable target universe into which zoning, FSR, height, assembly, ownership, comps and residual logic can be added over time.
+## Why This Fixed Universe Is Useful
+
+- It is narrow enough to support consistent weekly follow-up and QA.
+- It is broad enough to show different site conditions and risk profiles without pretending to cover the full market.
+- It carries both cleaner opportunity cases and higher-friction caution cases in the same weekly package.
+- It provides a stable target universe into which zoning, FSR, height, assembly, ownership, comps and residual logic can be added over time.
 
 ## Current Policy Layer
 
@@ -93,9 +95,9 @@ Primary sources: [Source 1](https://flooddata.ses.nsw.gov.au/api/3/action/packag
 
 | Precinct | Current Derived Risk Summary | Highest Severity | Source Mix |
 | --- | --- | --- | --- |
-| Gladesville | No currently surfaced derived risk row | - | - |
+| Gladesville | No currently surfaced derived risk row. This is absence of current signal, not proof of zero site risk. | - | - |
 | Edgecliff | flood_metadata_signal (medium) | medium | Flood Data Portal Metadata Signal |
-| Five Dock | No currently surfaced derived risk row | - | - |
+| Five Dock | No currently surfaced derived risk row. This is absence of current signal, not proof of zero site risk. | - | - |
 | Westmead | flood_metadata_signal (high) | high | Flood Data Portal Metadata Signal |
 | Bankstown | flood_metadata_signal (high) ; heat_vulnerability_proxy (high) ; low_tree_canopy_proxy (high) ; policy_withdrawal_friction (medium) | high | Flood Data Portal Metadata Signal ; Housing Targets Council Snapshot ; Derived Planning Friction |
 
@@ -167,4 +169,4 @@ Not activated. Residual pricing is blocked until comps and stronger cost assumpt
 
 ## Bottom Line
 
-This fixed hotspot universe gives the second report a stable weekly scope. That is what makes it demo-able, sellable, and suitable for a higher-priced development-oriented layer.
+This fixed hotspot universe gives the development-oriented report a stable weekly scope for screening, QA and structured iteration. It is useful as a development watchlist layer, but it is not yet a parcel-level decision-grade report.

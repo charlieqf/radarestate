@@ -1,0 +1,46 @@
+这份报告对你有一点价值，但对你这种悉尼小开发商，不值 $50/week 原价。
+它更像“每周自动化初筛雷达”，不是能直接支持你拿地、谈价、算 residual、筛 owner 的开发决策工具。  
+如果你平时就在盯自己熟悉的 2-3 个区，这份报告的边际价值会更低。
+有用的地方
+- 能帮你每周快速扫一遍 planning proposals + activity + 粗风险。
+- 如果你想拓新区，它能给你一个 watchlist 起点。
+- 适合“先看哪里值得再研究”，不适合“直接决定买哪块地”。
+为什么不值原价
+1. 核心上不是 parcel-level / deal-grade。
+- 报告自己承认当前 risk layer 还是 proxy + sample-based spatial signals，不是完整 parcel-level constraints：reports/client-pack-latest.md:34-35
+- 更关键的模块还没做完：ownership title context、market comps、residual pricing 都没激活：reports/development-report-standard-universe.md:47-49,150,154,160
+2. 排名逻辑是黑箱，而且有明显异常。
+- Gables、Cronulla、Drummoyne 在榜单里都是 Recent Apps = 0、Pipeline = 0，却仍被列入前十并建议 Investigate：reports/weekly-radar-latest.md:35-37
+- 但交付里没有清楚解释评分公式或排序方法。
+3. 文本 QA 有硬伤。
+- Sydney 的 insights 里混进了 Lake Macquarie，这明显不是悉尼：reports/top-10-insights-latest.md:30-31
+- 风险总数前后不一致。Top 10 写的是 Flood high hits: 40; bushfire high hits: 25：reports/top-10-insights-latest.md:56-61
+- 但周报里写的是 flood = 29, bushfire = 10：reports/weekly-radar-latest.md:22,103-105
+4. 所谓 precinct deep dive，并不够“precinct-pure”。
+- Bankstown deep dive 混入了 Punchbowl、Milperra、Regents Park、Condell Park 甚至 council-wide 项目：reports/deep-dive-bankstown.md:34-45
+- Gladesville deep dive 也混入了 Ryde：reports/deep-dive-gladesville.md:35-43
+- 这会削弱“precinct-level”结论的可用性。
+5. Recent applications 这个指标噪音很大。
+- 深挖里的近期申请大量是 CDC、Modification，未必代表真正有价值的开发机会：reports/deep-dive-bankstown.md:61-72，reports/deep-dive-gladesville.md:58-69
+- 而且时间窗没写清楚。dashboard 只说是 current focus-council sync window，没说明到底是近 7 天、30 天还是 90 天：dashboard/latest-report.html:351-353
+6. 覆盖面和成熟度还不够。
+- 它自己写的是 22 councils / 56 precincts，而且只有 44/56 precincts 有 signal，39/56 有 constraints，却已经给出 READY TO EXPAND：reports/coverage-readiness-greater-sydney-expanded.md:10-18,22,55
+- 这说明产品还在扩展阶段，不算很成熟。
+7. “低风险”有时只是“没抓到风险”。
+- Gladesville 被打成 risk 0，但深挖里又明说：This does not mean risk is absent，只是当前没挂上 derived constraint rows：reports/deep-dive-gladesville.md:73-75
+- 这对开发商很关键，因为 risk 0 很容易被误读成“安全”。
+8. 连样例都承认这是 demo / sales artifact。
+- development-report-standard-universe.md 直接写了这是为了 demonstrating and selling 这个产品层：reports/development-report-standard-universe.md:7-9
+我对价格的判断
+- 按现在这个成熟度，我觉得更像 50-80/月 的产品，不是 50/周。
+- 如果对方坚持按周，我觉得上限大概是 15-20/周。
+- 如果不能做定制，只给这种通用版，我倾向于 直接不订。
+你可以这样压价
+“我看了样例。它对我有一点 watchlist 价值，但不是 decision-grade 的开发报告。你们自己也写明了 risk layer 还是 proxy/sample-based，ownership、comps、residual 都没激活。样例里还有 Sydney 报告混入 Lake Macquarie、风险统计前后不一致、以及 0 apps / 0 pipeline 也排进前十的问题。所以 50/week 我不会接受。  
+如果改成 15-20/week 试用，或者 50-80/month，并且按我指定的 Sydney precincts 定制，同时把 DA / CDC / SSD / Modification 分开，我可以考虑。”
+如果你要继续谈，我建议你附加这几个条件
+1. 明确 recent apps 的时间窗。
+2. 把 DA / CDC / SSD / Modification 分开统计。
+3. Deep dive 只保留 precinct 内项目，不混相邻 suburb 或 council-wide 项目。
+4. 每周至少给你 top 5 precincts 的 parcel-level flood / bushfire / heritage / zoning 快照。
+5. 只覆盖你真正关注的几个 Sydney corridor，不要给你泛泛全市榜单。

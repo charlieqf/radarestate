@@ -1,0 +1,50 @@
+{
+  "topic": "tree-canopy-fun-facts",
+  "series": "sydney-environment-fun-facts",
+  "scope_note": "Low tree canopy is used here as a current environmental comfort signal.",
+  "headline_stat": {
+    "label": "Low tree canopy high hits",
+    "value": 9
+  },
+  "secondary_stat": {
+    "label": "Low tree canopy medium hits",
+    "value": 3
+  },
+  "highlight_precincts": [
+    {
+      "name": "Bankstown",
+      "signal": "low_tree_canopy_proxy",
+      "severity": "high",
+      "context": "Stacks with heat"
+    },
+    {
+      "name": "Ingleburn",
+      "signal": "low_tree_canopy_proxy",
+      "severity": "high",
+      "context": "Stacks with bushfire and flood"
+    },
+    {
+      "name": "Liverpool",
+      "signal": "low_tree_canopy_proxy",
+      "severity": "high",
+      "context": "Stacks with multiple pressures"
+    },
+    {
+      "name": "Campbelltown",
+      "signal": "low_tree_canopy_proxy",
+      "severity": "high",
+      "context": "Stacks with bushfire and flood"
+    },
+    {
+      "name": "Lakemba",
+      "signal": "low_tree_canopy_proxy",
+      "severity": "high",
+      "context": "Pairs with heat"
+    }
+  ],
+  "report_refs": [
+    "reports/top-10-insights-latest.md:23-24",
+    "reports/weekly-radar-latest.md:131-132",
+    "reports/weekly-radar-latest.md:54-63"
+  ]
+}

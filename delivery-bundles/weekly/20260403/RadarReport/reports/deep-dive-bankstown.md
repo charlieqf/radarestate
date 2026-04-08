@@ -16,6 +16,7 @@ Bankstown is worth tracking because activity and policy signals are real, but it
 - Timing score: `5`
 - Friction score: `5`
 - Recent applications: `238`
+- Recent application window start: `2025-01-01`
 - Active planning proposals: `1`
 - State significant projects: `19`
 - Recommended action: `Watch`
@@ -29,22 +30,18 @@ Bankstown is worth tracking because activity and policy signals are real, but it
 
 ## Policy And Planning Context
 
+Only rows with an explicit precinct-level location mention are shown below. Adjacent-suburb and council-wide policy rows are intentionally excluded from this deep dive.
+
 | Stage | Title | Location |
 | --- | --- | --- |
-| Pre-Exhibition | Club Punchbowl Planning Proposal | Canterbury-Bankstown |
 | Made | 74 Rickard Road and 375 Chapel Road (part) Bankstown - Amendment to Bankstown LEP 2015 floor space ratio and building height | 74 Rickard Road And 375 Chapel Road (Part) Bankstown 2200 |
-| Made | 81-105 Wattle Street Punchbowl - Draft Bankstown LEP 2001 Amendment 44 | 81-105 Wattle Street Sydney Punchbowl 2196 |
 | Made | Bankstown LEP 2015 - 83-99 North Terrace and 62 The Mall, Bankstown (50 dwellings and 200 jobs) | 83 North Terrace Sydney Bankstown 2200 & more |
-| Made | Bankstown LEP 2015 - Additional permitted use at 479 Henry Lawson Drive Milperra (0 dwellings) | 479 Henry Lawson Drive Milperra Milperra 2214 |
-| Made | Bankstown LEP 2015 - Amendments to residential uses in R2 zone | Land Where Dual Occupancy Development Are Permissible In Canterbury And Bankstown Leps & more |
-| Made | Bankstown LEP 2015 - Housekeeping Amendments 2017 (0 dwellings) | Canterbury-Bankstown |
-| Made | Bankstown LEP 2015 - Increase the height and FSR for land at 30 - 46 Auburn Road, Regents Park (514 dwellings) | 30 To 46 Auburn Road Sydney Regents Park 2143 |
-| Made | Bankstown LEP 2015 (Amendment No 5) - Amendment to Clause 4.4A (0 dwellings) | Canterbury-Bankstown |
-| Made | Bankstown Local Environmental Plan 2001 (Amendment No 46) - Bankstown CBD | Canterbury-Bankstown |
-| Made | Bankstown Local Environmental Plan 2001 (Amendment No 47) - Bankstown Golf Course - Milperra | Bullecourt Avenue Milperra |
-| Made | Bankstown Local Environmental Plan 2015 (Amendment No. 8) - 10 Simmat Avenue, Condell Park | 10 Simmat Avenue Condell Park 2200 |
+| Made | Reclassification of land at 3 and 5 Leonard Street, Bankstown from Community to Operational | 3 &Amp; 5 Leonard Street Bankstown Bankstown 2200 |
+| Made | Weigand Avenue, Bankstown re-zoning & Bankstown CBD reclassifications | Nos. 2, 2A &Amp; 2C Weigand Avenue Bankstown Bankstown 2200 & more |
 
 ## Development Activity Context
+
+Recent applications below are screening signals with lodgement date on or after `2025-01-01`. DA / CDC / SSD / Modification are separated in the mix because they do not imply the same development-opportunity quality.
 
 | Status | Count |
 | --- | --- |
@@ -55,6 +52,14 @@ Bankstown is worth tracking because activity and policy signals are real, but it
 | Additional Information Requested | 5 |
 | On Exhibition | 1 |
 | Refused | 1 |
+
+| Application Type | Count |
+| --- | --- |
+| DA | 56 |
+| CDC | 154 |
+| SSD | 19 |
+| Modification | 26 |
+| Other | 2 |
 
 | Lodgement | Status | Type | Location |
 | --- | --- | --- | --- |

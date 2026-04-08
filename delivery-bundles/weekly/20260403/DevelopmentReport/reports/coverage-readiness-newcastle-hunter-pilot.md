@@ -15,7 +15,7 @@
 - Precinct mapping: `PASS`
 - Risk layer availability: `PASS`
 - Stable shortlist and report output: `PASS`
-- Overall: `READY TO EXPAND`
+- Overall: `SELECTIVE EXPANSION ONLY`
 
 ## Mapping Coverage
 
@@ -70,6 +70,6 @@
 
 ## Interpretation
 
-- Mapping has moved beyond council-level heat and is now usable at precinct level.
-- The risk layer is already changing shortlist order, which means the expanded pack is doing more than just surfacing hotter places.
-- The current expanded pack can already produce a stable enough shortlist and report set.
+- Mapping has moved beyond council-level heat and is now usable for selective precinct screening, but coverage gaps still remain.
+- The risk layer is already changing shortlist order, which means the expanded pack is doing more than just surfacing hotter places, but it is still a first-pass proxy layer.
+- The current expanded pack can support selective corridor-by-corridor reporting, but it should still be treated as beta coverage rather than broad market-grade maturity.

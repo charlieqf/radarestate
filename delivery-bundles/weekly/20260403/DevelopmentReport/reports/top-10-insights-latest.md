@@ -27,8 +27,8 @@
 
 ## 3. Sydney activity is clustering hardest in the west and north-west
 
-- Finding: `Blacktown`、`The Hills Shire`、`Lake Macquarie`、`Canterbury-Bankstown` currently dominate the council-level activity scoreboard.
-- Evidence: Blacktown: recent apps 4,520, active pipeline 8; The Hills Shire: recent apps 3,603, active pipeline 10; Lake Macquarie: recent apps 3,555, active pipeline 1; Canterbury-Bankstown: recent apps 3,423, active pipeline 1
+- Finding: `Blacktown`、`The Hills Shire`、`Canterbury-Bankstown`、`Liverpool` currently dominate the council-level activity scoreboard.
+- Evidence: Blacktown: recent apps 4,520, active pipeline 8; The Hills Shire: recent apps 3,603, active pipeline 10; Canterbury-Bankstown: recent apps 3,423, active pipeline 1; Liverpool: recent apps 3,320, active pipeline 5
 - Why it matters: This suggests the strongest near-term search universe is not the CBD or the prestige east, but the western, south-western and north-western growth and middle-ring corridors.
 - Action: Use council-level strength as the top-down filter, then move to precinct-level selection.
 
@@ -56,21 +56,21 @@
 ## 7. Flood and bushfire dominate the current risk stack
 
 - Finding: The most common risk signals in the current system are flood metadata hits and bushfire spatial hits, not biodiversity or heritage-style constraints.
-- Evidence: Flood high hits: 40; bushfire high hits: 25.
+- Evidence: Sydney only: flood high hits 29; bushfire high hits 10.
 - Why it matters: That tells us the current shortlist is being shaped much more by environmental and implementation exposure than by abstract planning complexity alone.
 - Action: Keep prioritising better flood and bushfire data quality, because that is where ranking changes are happening most often.
 
 ## 8. Hunter is viable, but it is not a Sydney clone
 
 - Finding: Hunter now clearly supports a real radar product, but the output profile is lower-conviction and more risk-adjusted than Sydney.
-- Evidence: Sydney: A=4, B=35, C=16, avg friction=2.36. Hunter: A=0, B=9, C=10, avg friction=3.05.
+- Evidence: Sydney: A=4, B=27, C=12, avg friction=2.42. Hunter: A=0, B=9, C=10, avg friction=3.05.
 - Why it matters: The Hunter pack is real and usable, but it should be sold and interpreted as a regional watchlist rather than a high-certainty acquisition engine.
 - Action: Frame Hunter outputs as “where to investigate next” instead of “where to move first with highest conviction”.
 
 ## 9. Newcastle core looks stronger than the broader Hunter fringe
 
-- Finding: `Mayfield`、`Broadmeadow` currently form the most compelling part of the Hunter shortlist.
-- Evidence: Mayfield: rating B, recent apps 213, risk 0; Broadmeadow: rating B, recent apps 28, risk 0
+- Finding: `Mayfield`、`Broadmeadow`、`Newcastle City Centre`、`Nelson Bay` currently form the most compelling part of the Hunter shortlist.
+- Evidence: Mayfield: rating B, recent apps 213, risk 0; Broadmeadow: rating B, recent apps 28, risk 0; Newcastle City Centre: rating B, recent apps 190, risk 2; Nelson Bay: rating B, recent apps 169, risk 2
 - Why it matters: This suggests the Hunter story is not evenly distributed. Newcastle core and selected Lake Macquarie / Maitland / Port Stephens nodes are more investable than the region-wide average.
 - Action: Focus deep-dive effort on Newcastle core and the strongest submarkets before widening the regional watchlist.
 

@@ -12,7 +12,7 @@ Companion visual dashboard: `dashboard/latest-report.html`
 
 - Planning proposals tracked: `1,413`
 - Application signals tracked: `45,114`
-- Precinct shortlist items: `55`
+- Precinct shortlist items: `43`
 - Derived constraints: `69`
 
 ## Executive Summary
@@ -21,6 +21,13 @@ Companion visual dashboard: `dashboard/latest-report.html`
 - `Blacktown`, `The Hills Shire`, `Canterbury-Bankstown` remain the strongest council-level activity cluster and are the best candidates for further precinct and street-level work.
 - `Bankstown`, `Ingleburn`, `Liverpool` are now showing obvious risk stacking and are better treated as a risk-adjusted watchlist instead of immediate acquisition priorities. The strongest risk signals currently include flood metadata high hits = 29, bushfire spatial high hits = 10.
 - There are still 107 active proposal items in the pipeline, alongside 1,164 items already in made stage, which is enough to support a sustained planning radar rather than a one-off hotspot view.
+
+## Scoring Method
+
+- This is a first-pass weekly watchlist, not a parcel-level feasibility, pricing or acquisition report.
+- Rating combines policy score and timing score, then downgrades precincts when friction stacks.
+- Precincts with no current active proposals, mapped recent applications or state-significant projects are forced into `Watch` rather than `Investigate`.
+- `Recent Apps` means mapped application signals with lodgement date on or after `2025-01-01`.
 
 ## Top Precinct Hotlist
 
@@ -32,10 +39,10 @@ Companion visual dashboard: `dashboard/latest-report.html`
 | 4 | Cabramatta | Fairfield | A | 4 | 5 | 2 | 257 | 2 | Prioritise |
 | 5 | Seven Hills | Blacktown | B | 2 | 5 | 0 | 282 | 1 | Investigate |
 | 6 | Bexley | Bayside | B | 2 | 5 | 0 | 201 | 1 | Investigate |
-| 7 | Gables | The Hills Shire | B | 3 | 5 | 0 | 0 | 0 | Investigate |
-| 8 | Cronulla | Sutherland Shire | B | 0 | 5 | 0 | 0 | 0 | Investigate |
-| 9 | Drummoyne | Canada Bay | B | 3 | 5 | 0 | 0 | 0 | Investigate |
-| 10 | Croydon | Burwood | B | 2 | 5 | 1 | 192 | 1 | Investigate |
+| 7 | Croydon | Burwood | B | 2 | 5 | 1 | 192 | 1 | Investigate |
+| 8 | Double Bay | Woollahra | B | 3 | 5 | 1 | 182 | 1 | Investigate |
+| 9 | Beverly Hills | Georges River | B | 2 | 5 | 1 | 64 | 1 | Investigate |
+| 10 | Hurstville | Georges River | B | 0 | 5 | 2 | 280 | 0 | Investigate |
 
 ## Highest Friction Precincts
 
@@ -66,6 +73,18 @@ Companion visual dashboard: `dashboard/latest-report.html`
 | Penrith | - | 2,294 | 5 |
 | Parramatta | 19,500 | 2,253 | 6 |
 | Cumberland | - | 2,208 | 2 |
+
+## Recent Application Mix
+
+Current screen window: `2025-01-01`. DA, CDC, SSD and Modification are shown separately because they do not carry the same deal-screening meaning.
+
+| Application Type | Count |
+| --- | --- |
+| DA | 13,017 |
+| CDC | 24,802 |
+| SSD | 1,920 |
+| Modification | 5,121 |
+| Other | 251 |
 
 ## Policy Pipeline
 

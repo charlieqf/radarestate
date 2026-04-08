@@ -3,13 +3,13 @@
   "region_group": "Greater Sydney",
   "window_start": "2025-01-01",
   "totals": {
-    "mapped_application_count": 42765,
-    "recent_application_count": 42762,
-    "recent_da_count": 12914,
-    "recent_cdc_count": 24516,
+    "mapped_application_count": 52216,
+    "recent_application_count": 52213,
+    "recent_da_count": 16178,
+    "recent_cdc_count": 28535,
     "recent_ssd_count": 0,
-    "recent_modification_count": 7567,
-    "recent_other_count": 247
+    "recent_modification_count": 10085,
+    "recent_other_count": 283
   },
   "council_rows": [
     {
@@ -21,146 +21,188 @@
     },
     {
       "rank": 2,
+      "council_name": "Sydney",
+      "recent_application_count": 4327,
+      "active_pipeline_count": 0,
+      "target_value": null
+    },
+    {
+      "rank": 3,
       "council_name": "The Hills Shire",
       "recent_application_count": 3571,
       "active_pipeline_count": 0,
       "target_value": null
     },
     {
-      "rank": 3,
+      "rank": 4,
       "council_name": "Canterbury-Bankstown",
-      "recent_application_count": 3394,
+      "recent_application_count": 3395,
       "active_pipeline_count": 0,
       "target_value": null
     },
     {
-      "rank": 4,
+      "rank": 5,
       "council_name": "Liverpool",
       "recent_application_count": 3291,
       "active_pipeline_count": 0,
       "target_value": null
     },
     {
-      "rank": 5,
+      "rank": 6,
       "council_name": "Inner West",
-      "recent_application_count": 2578,
+      "recent_application_count": 2579,
       "active_pipeline_count": 0,
       "target_value": null
     },
     {
-      "rank": 6,
+      "rank": 7,
       "council_name": "Campbelltown",
       "recent_application_count": 2571,
       "active_pipeline_count": 0,
       "target_value": null
     },
     {
-      "rank": 7,
+      "rank": 8,
       "council_name": "Sutherland Shire",
       "recent_application_count": 2443,
       "active_pipeline_count": 0,
       "target_value": null
     },
     {
-      "rank": 8,
+      "rank": 9,
       "council_name": "Penrith",
       "recent_application_count": 2262,
       "active_pipeline_count": 0,
       "target_value": null
     },
     {
-      "rank": 9,
+      "rank": 10,
       "council_name": "Parramatta",
       "recent_application_count": 2225,
       "active_pipeline_count": 0,
       "target_value": null
     },
     {
-      "rank": 10,
+      "rank": 11,
       "council_name": "Cumberland",
       "recent_application_count": 2188,
       "active_pipeline_count": 0,
       "target_value": null
     },
     {
-      "rank": 11,
+      "rank": 12,
       "council_name": "Fairfield",
       "recent_application_count": 1904,
       "active_pipeline_count": 0,
       "target_value": null
     },
     {
-      "rank": 12,
+      "rank": 13,
       "council_name": "Ryde",
       "recent_application_count": 1812,
       "active_pipeline_count": 0,
       "target_value": null
     },
     {
-      "rank": 13,
+      "rank": 14,
+      "council_name": "Randwick",
+      "recent_application_count": 1615,
+      "active_pipeline_count": 0,
+      "target_value": null
+    },
+    {
+      "rank": 15,
       "council_name": "Woollahra",
       "recent_application_count": 1569,
       "active_pipeline_count": 0,
       "target_value": null
     },
     {
-      "rank": 14,
+      "rank": 16,
       "council_name": "Ku-ring-gai",
       "recent_application_count": 1482,
       "active_pipeline_count": 0,
       "target_value": null
     },
     {
-      "rank": 15,
+      "rank": 17,
       "council_name": "Bayside",
       "recent_application_count": 1417,
       "active_pipeline_count": 0,
       "target_value": null
     },
     {
-      "rank": 16,
+      "rank": 18,
       "council_name": "Georges River",
       "recent_application_count": 1369,
       "active_pipeline_count": 0,
       "target_value": null
     },
     {
-      "rank": 17,
-      "council_name": "Willoughby",
-      "recent_application_count": 1245,
+      "rank": 19,
+      "council_name": "Hornsby",
+      "recent_application_count": 1356,
       "active_pipeline_count": 0,
       "target_value": null
     },
     {
-      "rank": 18,
+      "rank": 20,
+      "council_name": "Willoughby",
+      "recent_application_count": 1246,
+      "active_pipeline_count": 0,
+      "target_value": null
+    },
+    {
+      "rank": 21,
+      "council_name": "Waverley",
+      "recent_application_count": 1204,
+      "active_pipeline_count": 0,
+      "target_value": null
+    },
+    {
+      "rank": 22,
       "council_name": "Canada Bay",
       "recent_application_count": 993,
       "active_pipeline_count": 0,
       "target_value": null
     },
     {
-      "rank": 19,
+      "rank": 23,
       "council_name": "North Sydney",
       "recent_application_count": 882,
       "active_pipeline_count": 0,
       "target_value": null
     },
     {
-      "rank": 20,
+      "rank": 24,
+      "council_name": "Mosman",
+      "recent_application_count": 495,
+      "active_pipeline_count": 0,
+      "target_value": null
+    },
+    {
+      "rank": 25,
+      "council_name": "Lane Cove",
+      "recent_application_count": 450,
+      "active_pipeline_count": 0,
+      "target_value": null
+    },
+    {
+      "rank": 26,
+      "council_name": "Strathfield",
+      "recent_application_count": 415,
+      "active_pipeline_count": 0,
+      "target_value": null
+    },
+    {
+      "rank": 27,
       "council_name": "Burwood",
       "recent_application_count": 414,
       "active_pipeline_count": 0,
       "target_value": null
     },
     {
-      "rank": 21,
-      "council_name": "Strathfield",
-      "recent_application_count": 414,
-      "active_pipeline_count": 0,
-      "target_value": null
-    },
-    {
-      "rank": 22,
+      "rank": 28,
       "council_name": "Hunters Hill",
       "recent_application_count": 272,
       "active_pipeline_count": 0,
@@ -170,6 +212,39 @@
   "precinct_rows": [
     {
       "rank": 1,
+      "precinct_key": "precinct:mosman-spit-junction",
+      "precinct_name": "Mosman / Spit Junction",
+      "council_name": "Mosman",
+      "recent_application_count": 488,
+      "recent_da_count": 224,
+      "recent_cdc_count": 133,
+      "recent_ssd_count": 0,
+      "recent_modification_count": 143
+    },
+    {
+      "rank": 2,
+      "precinct_key": "precinct:gables",
+      "precinct_name": "Gables",
+      "council_name": "The Hills Shire",
+      "recent_application_count": 427,
+      "recent_da_count": 219,
+      "recent_cdc_count": 168,
+      "recent_ssd_count": 0,
+      "recent_modification_count": 51
+    },
+    {
+      "rank": 3,
+      "precinct_key": "precinct:castle-hill",
+      "precinct_name": "Castle Hill",
+      "council_name": "The Hills Shire",
+      "recent_application_count": 478,
+      "recent_da_count": 165,
+      "recent_cdc_count": 249,
+      "recent_ssd_count": 0,
+      "recent_modification_count": 79
+    },
+    {
+      "rank": 4,
       "precinct_key": "precinct:marrickville",
       "precinct_name": "Marrickville",
       "council_name": "Inner West",
@@ -180,7 +255,51 @@
       "recent_modification_count": 77
     },
     {
-      "rank": 2,
+      "rank": 5,
+      "precinct_key": "precinct:surry-hills",
+      "precinct_name": "Surry Hills",
+      "council_name": "Sydney",
+      "recent_application_count": 319,
+      "recent_da_count": 133,
+      "recent_cdc_count": 80,
+      "recent_ssd_count": 0,
+      "recent_modification_count": 118
+    },
+    {
+      "rank": 6,
+      "precinct_key": "precinct:merrylands",
+      "precinct_name": "Merrylands",
+      "council_name": "Cumberland",
+      "recent_application_count": 409,
+      "recent_da_count": 126,
+      "recent_cdc_count": 225,
+      "recent_ssd_count": 0,
+      "recent_modification_count": 74
+    },
+    {
+      "rank": 7,
+      "precinct_key": "precinct:randwick",
+      "precinct_name": "Randwick",
+      "council_name": "Randwick",
+      "recent_application_count": 253,
+      "recent_da_count": 115,
+      "recent_cdc_count": 83,
+      "recent_ssd_count": 0,
+      "recent_modification_count": 63
+    },
+    {
+      "rank": 8,
+      "precinct_key": "precinct:parramatta-cbd",
+      "precinct_name": "Parramatta CBD",
+      "council_name": "Parramatta",
+      "recent_application_count": 327,
+      "recent_da_count": 93,
+      "recent_cdc_count": 183,
+      "recent_ssd_count": 0,
+      "recent_modification_count": 71
+    },
+    {
+      "rank": 9,
       "precinct_key": "precinct:seven-hills",
       "precinct_name": "Seven Hills",
       "council_name": "Blacktown",
@@ -191,7 +310,7 @@
       "recent_modification_count": 33
     },
     {
-      "rank": 3,
+      "rank": 10,
       "precinct_key": "precinct:auburn",
       "precinct_name": "Auburn",
       "council_name": "Cumberland",
@@ -202,7 +321,7 @@
       "recent_modification_count": 49
     },
     {
-      "rank": 4,
+      "rank": 11,
       "precinct_key": "precinct:chatswood",
       "precinct_name": "Chatswood",
       "council_name": "Willoughby",
@@ -213,7 +332,18 @@
       "recent_modification_count": 73
     },
     {
-      "rank": 5,
+      "rank": 12,
+      "precinct_key": "precinct:drummoyne",
+      "precinct_name": "Drummoyne",
+      "council_name": "Canada Bay",
+      "recent_application_count": 167,
+      "recent_da_count": 85,
+      "recent_cdc_count": 46,
+      "recent_ssd_count": 0,
+      "recent_modification_count": 39
+    },
+    {
+      "rank": 13,
       "precinct_key": "precinct:penrith",
       "precinct_name": "Penrith",
       "council_name": "Penrith",
@@ -224,18 +354,18 @@
       "recent_modification_count": 43
     },
     {
-      "rank": 6,
-      "precinct_key": "precinct:epping",
-      "precinct_name": "Epping",
-      "council_name": "Ryde",
-      "recent_application_count": 247,
-      "recent_da_count": 80,
-      "recent_cdc_count": 131,
+      "rank": 14,
+      "precinct_key": "precinct:darlinghurst",
+      "precinct_name": "Darlinghurst",
+      "council_name": "Sydney",
+      "recent_application_count": 191,
+      "recent_da_count": 83,
+      "recent_cdc_count": 34,
       "recent_ssd_count": 0,
-      "recent_modification_count": 54
+      "recent_modification_count": 75
     },
     {
-      "rank": 7,
+      "rank": 15,
       "precinct_key": "precinct:tallawong",
       "precinct_name": "Tallawong",
       "council_name": "Blacktown",
@@ -246,7 +376,7 @@
       "recent_modification_count": 43
     },
     {
-      "rank": 8,
+      "rank": 16,
       "precinct_key": "precinct:marsden-park",
       "precinct_name": "Marsden Park",
       "council_name": "Blacktown",
@@ -257,7 +387,18 @@
       "recent_modification_count": 129
     },
     {
-      "rank": 9,
+      "rank": 17,
+      "precinct_key": "precinct:epping",
+      "precinct_name": "Epping",
+      "council_name": "Ryde",
+      "recent_application_count": 237,
+      "recent_da_count": 77,
+      "recent_cdc_count": 124,
+      "recent_ssd_count": 0,
+      "recent_modification_count": 51
+    },
+    {
+      "rank": 18,
       "precinct_key": "precinct:ashfield",
       "precinct_name": "Ashfield",
       "council_name": "Inner West",
@@ -268,7 +409,7 @@
       "recent_modification_count": 29
     },
     {
-      "rank": 10,
+      "rank": 19,
       "precinct_key": "precinct:double-bay",
       "precinct_name": "Double Bay",
       "council_name": "Woollahra",
@@ -279,18 +420,40 @@
       "recent_modification_count": 73
     },
     {
-      "rank": 11,
+      "rank": 20,
       "precinct_key": "precinct:petersham",
       "precinct_name": "Petersham",
       "council_name": "Inner West",
-      "recent_application_count": 105,
-      "recent_da_count": 68,
+      "recent_application_count": 106,
+      "recent_da_count": 69,
       "recent_cdc_count": 17,
       "recent_ssd_count": 0,
       "recent_modification_count": 21
     },
     {
-      "rank": 12,
+      "rank": 21,
+      "precinct_key": "precinct:granville",
+      "precinct_name": "Granville",
+      "council_name": "Cumberland",
+      "recent_application_count": 181,
+      "recent_da_count": 66,
+      "recent_cdc_count": 94,
+      "recent_ssd_count": 0,
+      "recent_modification_count": 34
+    },
+    {
+      "rank": 22,
+      "precinct_key": "precinct:lane-cove",
+      "precinct_name": "Lane Cove",
+      "council_name": "Lane Cove",
+      "recent_application_count": 200,
+      "recent_da_count": 63,
+      "recent_cdc_count": 97,
+      "recent_ssd_count": 0,
+      "recent_modification_count": 47
+    },
+    {
+      "rank": 23,
       "precinct_key": "precinct:campbelltown",
       "precinct_name": "Campbelltown",
       "council_name": "Campbelltown",
@@ -301,7 +464,18 @@
       "recent_modification_count": 28
     },
     {
-      "rank": 13,
+      "rank": 24,
+      "precinct_key": "precinct:redfern",
+      "precinct_name": "Redfern",
+      "council_name": "Sydney",
+      "recent_application_count": 134,
+      "recent_da_count": 60,
+      "recent_cdc_count": 30,
+      "recent_ssd_count": 0,
+      "recent_modification_count": 45
+    },
+    {
+      "rank": 25,
       "precinct_key": "precinct:croydon",
       "precinct_name": "Croydon",
       "council_name": "Burwood",
@@ -312,7 +486,7 @@
       "recent_modification_count": 36
     },
     {
-      "rank": 14,
+      "rank": 26,
       "precinct_key": "precinct:ingleburn",
       "precinct_name": "Ingleburn",
       "council_name": "Campbelltown",
@@ -323,7 +497,18 @@
       "recent_modification_count": 21
     },
     {
-      "rank": 15,
+      "rank": 27,
+      "precinct_key": "precinct:bondi-junction",
+      "precinct_name": "Bondi Junction",
+      "council_name": "Waverley",
+      "recent_application_count": 179,
+      "recent_da_count": 57,
+      "recent_cdc_count": 92,
+      "recent_ssd_count": 0,
+      "recent_modification_count": 31
+    },
+    {
+      "rank": 28,
       "precinct_key": "precinct:bankstown",
       "precinct_name": "Bankstown",
       "council_name": "Canterbury-Bankstown",
@@ -334,7 +519,7 @@
       "recent_modification_count": 42
     },
     {
-      "rank": 16,
+      "rank": 29,
       "precinct_key": "precinct:gladesville",
       "precinct_name": "Gladesville",
       "council_name": "Hunters Hill",
@@ -345,7 +530,18 @@
       "recent_modification_count": 40
     },
     {
-      "rank": 17,
+      "rank": 30,
+      "precinct_key": "precinct:cronulla",
+      "precinct_name": "Cronulla",
+      "council_name": "Sutherland Shire",
+      "recent_application_count": 188,
+      "recent_da_count": 56,
+      "recent_cdc_count": 88,
+      "recent_ssd_count": 0,
+      "recent_modification_count": 50
+    },
+    {
+      "rank": 31,
       "precinct_key": "precinct:cabramatta",
       "precinct_name": "Cabramatta",
       "council_name": "Fairfield",
@@ -356,7 +552,7 @@
       "recent_modification_count": 38
     },
     {
-      "rank": 18,
+      "rank": 32,
       "precinct_key": "precinct:hurstville",
       "precinct_name": "Hurstville",
       "council_name": "Georges River",
@@ -367,7 +563,7 @@
       "recent_modification_count": 41
     },
     {
-      "rank": 19,
+      "rank": 33,
       "precinct_key": "precinct:bexley",
       "precinct_name": "Bexley",
       "council_name": "Bayside",
@@ -378,7 +574,29 @@
       "recent_modification_count": 35
     },
     {
-      "rank": 20,
+      "rank": 34,
+      "precinct_key": "precinct:carlingford",
+      "precinct_name": "Carlingford",
+      "council_name": "Parramatta",
+      "recent_application_count": 216,
+      "recent_da_count": 51,
+      "recent_cdc_count": 130,
+      "recent_ssd_count": 0,
+      "recent_modification_count": 53
+    },
+    {
+      "rank": 35,
+      "precinct_key": "precinct:kensington",
+      "precinct_name": "Kensington",
+      "council_name": "Randwick",
+      "recent_application_count": 106,
+      "recent_da_count": 49,
+      "recent_cdc_count": 36,
+      "recent_ssd_count": 0,
+      "recent_modification_count": 24
+    },
+    {
+      "rank": 36,
       "precinct_key": "precinct:miranda",
       "precinct_name": "Miranda",
       "council_name": "Sutherland Shire",
@@ -389,7 +607,7 @@
       "recent_modification_count": 29
     },
     {
-      "rank": 21,
+      "rank": 37,
       "precinct_key": "precinct:st-marys",
       "precinct_name": "St Marys",
       "council_name": "Penrith",
@@ -400,7 +618,7 @@
       "recent_modification_count": 24
     },
     {
-      "rank": 22,
+      "rank": 38,
       "precinct_key": "precinct:lindfield",
       "precinct_name": "Lindfield",
       "council_name": "Ku-ring-gai",
@@ -411,7 +629,7 @@
       "recent_modification_count": 42
     },
     {
-      "rank": 23,
+      "rank": 39,
       "precinct_key": "precinct:liverpool",
       "precinct_name": "Liverpool",
       "council_name": "Liverpool",
@@ -422,7 +640,29 @@
       "recent_modification_count": 33
     },
     {
-      "rank": 24,
+      "rank": 40,
+      "precinct_key": "precinct:kingsford",
+      "precinct_name": "Kingsford",
+      "council_name": "Randwick",
+      "recent_application_count": 129,
+      "recent_da_count": 45,
+      "recent_cdc_count": 63,
+      "recent_ssd_count": 0,
+      "recent_modification_count": 25
+    },
+    {
+      "rank": 41,
+      "precinct_key": "precinct:ultimo-broadway",
+      "precinct_name": "Ultimo / Broadway",
+      "council_name": "Sydney",
+      "recent_application_count": 107,
+      "recent_da_count": 44,
+      "recent_cdc_count": 35,
+      "recent_ssd_count": 0,
+      "recent_modification_count": 33
+    },
+    {
+      "rank": 42,
       "precinct_key": "precinct:schofields",
       "precinct_name": "Schofields",
       "council_name": "Blacktown",
@@ -433,7 +673,7 @@
       "recent_modification_count": 23
     },
     {
-      "rank": 25,
+      "rank": 43,
       "precinct_key": "precinct:homebush",
       "precinct_name": "Homebush",
       "council_name": "Strathfield",
@@ -444,7 +684,7 @@
       "recent_modification_count": 18
     },
     {
-      "rank": 26,
+      "rank": 44,
       "precinct_key": "precinct:lakemba",
       "precinct_name": "Lakemba",
       "council_name": "Canterbury-Bankstown",
@@ -455,7 +695,7 @@
       "recent_modification_count": 15
     },
     {
-      "rank": 27,
+      "rank": 45,
       "precinct_key": "precinct:mount-druitt",
       "precinct_name": "Mount Druitt",
       "council_name": "Blacktown",
@@ -466,7 +706,7 @@
       "recent_modification_count": 14
     },
     {
-      "rank": 28,
+      "rank": 46,
       "precinct_key": "precinct:kogarah",
       "precinct_name": "Kogarah",
       "council_name": "Georges River",
@@ -477,7 +717,7 @@
       "recent_modification_count": 26
     },
     {
-      "rank": 29,
+      "rank": 47,
       "precinct_key": "precinct:smithfield",
       "precinct_name": "Smithfield",
       "council_name": "Fairfield",
@@ -488,7 +728,40 @@
       "recent_modification_count": 33
     },
     {
-      "rank": 30,
+      "rank": 48,
+      "precinct_key": "precinct:potts-point-kings-cross",
+      "precinct_name": "Potts Point / Kings Cross",
+      "council_name": "Sydney",
+      "recent_application_count": 98,
+      "recent_da_count": 34,
+      "recent_cdc_count": 21,
+      "recent_ssd_count": 0,
+      "recent_modification_count": 41
+    },
+    {
+      "rank": 49,
+      "precinct_key": "precinct:dural",
+      "precinct_name": "Dural",
+      "council_name": "The Hills Shire",
+      "recent_application_count": 79,
+      "recent_da_count": 34,
+      "recent_cdc_count": 29,
+      "recent_ssd_count": 0,
+      "recent_modification_count": 20
+    },
+    {
+      "rank": 50,
+      "precinct_key": "precinct:waterloo",
+      "precinct_name": "Waterloo",
+      "council_name": "Sydney",
+      "recent_application_count": 89,
+      "recent_da_count": 33,
+      "recent_cdc_count": 22,
+      "recent_ssd_count": 0,
+      "recent_modification_count": 34
+    },
+    {
+      "rank": 51,
       "precinct_key": "precinct:edgecliff",
       "precinct_name": "Edgecliff",
       "council_name": "Woollahra",
@@ -499,7 +772,18 @@
       "recent_modification_count": 16
     },
     {
-      "rank": 31,
+      "rank": 52,
+      "precinct_key": "precinct:kirrawee",
+      "precinct_name": "Kirrawee",
+      "council_name": "Sutherland Shire",
+      "recent_application_count": 131,
+      "recent_da_count": 30,
+      "recent_cdc_count": 88,
+      "recent_ssd_count": 0,
+      "recent_modification_count": 24
+    },
+    {
+      "rank": 53,
       "precinct_key": "precinct:macquarie-park",
       "precinct_name": "Macquarie Park",
       "council_name": "Ryde",
@@ -510,7 +794,7 @@
       "recent_modification_count": 39
     },
     {
-      "rank": 32,
+      "rank": 54,
       "precinct_key": "precinct:west-ryde",
       "precinct_name": "West Ryde",
       "council_name": "Ryde",
@@ -521,7 +805,7 @@
       "recent_modification_count": 27
     },
     {
-      "rank": 33,
+      "rank": 55,
       "precinct_key": "precinct:five-dock",
       "precinct_name": "Five Dock",
       "council_name": "Canada Bay",
@@ -532,7 +816,7 @@
       "recent_modification_count": 17
     },
     {
-      "rank": 34,
+      "rank": 56,
       "precinct_key": "precinct:glenfield",
       "precinct_name": "Glenfield",
       "council_name": "Campbelltown",
@@ -543,7 +827,7 @@
       "recent_modification_count": 0
     },
     {
-      "rank": 35,
+      "rank": 57,
       "precinct_key": "precinct:norwest",
       "precinct_name": "Norwest",
       "council_name": "The Hills Shire",
@@ -554,7 +838,7 @@
       "recent_modification_count": 21
     },
     {
-      "rank": 36,
+      "rank": 58,
       "precinct_key": "precinct:gordon",
       "precinct_name": "Gordon",
       "council_name": "Ku-ring-gai",
@@ -565,7 +849,18 @@
       "recent_modification_count": 14
     },
     {
-      "rank": 37,
+      "rank": 59,
+      "precinct_key": "precinct:sutherland",
+      "precinct_name": "Sutherland",
+      "council_name": "Sutherland Shire",
+      "recent_application_count": 64,
+      "recent_da_count": 22,
+      "recent_cdc_count": 36,
+      "recent_ssd_count": 0,
+      "recent_modification_count": 9
+    },
+    {
+      "rank": 60,
       "precinct_key": "precinct:riverwood",
       "precinct_name": "Riverwood",
       "council_name": "Georges River",
@@ -576,7 +871,7 @@
       "recent_modification_count": 5
     },
     {
-      "rank": 38,
+      "rank": 61,
       "precinct_key": "precinct:westmead",
       "precinct_name": "Westmead",
       "council_name": "Parramatta",
@@ -587,7 +882,7 @@
       "recent_modification_count": 15
     },
     {
-      "rank": 39,
+      "rank": 62,
       "precinct_key": "precinct:beverly-hills",
       "precinct_name": "Beverly Hills",
       "council_name": "Georges River",
@@ -598,7 +893,7 @@
       "recent_modification_count": 8
     },
     {
-      "rank": 40,
+      "rank": 63,
       "precinct_key": "precinct:sandringham",
       "precinct_name": "Sandringham",
       "council_name": "Bayside",
@@ -609,7 +904,7 @@
       "recent_modification_count": 4
     },
     {
-      "rank": 41,
+      "rank": 64,
       "precinct_key": "precinct:st-leonards",
       "precinct_name": "St Leonards",
       "council_name": "North Sydney",
@@ -620,7 +915,7 @@
       "recent_modification_count": 7
     },
     {
-      "rank": 42,
+      "rank": 65,
       "precinct_key": "precinct:meadowbank",
       "precinct_name": "Meadowbank",
       "council_name": "Ryde",
@@ -631,7 +926,7 @@
       "recent_modification_count": 6
     },
     {
-      "rank": 43,
+      "rank": 66,
       "precinct_key": "precinct:macarthur",
       "precinct_name": "Macarthur",
       "council_name": "Campbelltown",
@@ -645,19 +940,19 @@
   "type_mix_rows": [
     {
       "application_bucket": "DA",
-      "count": 12914
+      "count": 16178
     },
     {
       "application_bucket": "CDC",
-      "count": 24516
+      "count": 28535
     },
     {
       "application_bucket": "Modification",
-      "count": 5085
+      "count": 7217
     },
     {
       "application_bucket": "Other",
-      "count": 247
+      "count": 283
     }
   ]
 }

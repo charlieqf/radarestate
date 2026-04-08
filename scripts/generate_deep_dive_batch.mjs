@@ -35,11 +35,13 @@ async function main() {
   const config = readConfig(options.configPath)
 
   for (const precinct of config.precincts || []) {
-    runNodeScript('scripts/generate_deep_dive_memo.mjs', [
+    const args = [
       `--precinct=${precinct}`,
       `--dashboard-path=${config.dashboardPath || 'dashboard/latest-report.html'}`,
       `--radar-path=${config.radarPath || 'reports/weekly-radar-latest.md'}`
-    ])
+    ]
+    if (config.outputName) args.push(`--output-name=${config.outputName}`)
+    runNodeScript('scripts/generate_deep_dive_memo.mjs', args)
   }
 
   if (options.renderHtml) {

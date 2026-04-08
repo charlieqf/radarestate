@@ -216,7 +216,7 @@ function htmlTemplate(data) {
       <div class="panel">
         <div class="eyebrow">RadarEstate</div>
         <h1>Hero Visual Pack</h1>
-        <p class="lede">A visual first read of where opportunity still survives after risk adjustment. The main lens is not “what is hot”, but where policy, activity and friction are misaligned.</p>
+        <p class="lede">A visual first read of where opportunity still survives after risk adjustment. This is a screening lens for watchlist building, not a parcel-level decision tool.</p>
         <div class="legend">
           <span class="legend-item"><span class="legend-dot" style="background:#b7ff3c"></span>A-rated precinct</span>
           <span class="legend-item"><span class="legend-dot" style="background:#33d1ff"></span>B-rated precinct</span>
@@ -228,12 +228,12 @@ function htmlTemplate(data) {
         <div class="stat">
           <div class="stat-label">Strongest Opportunity</div>
           <div class="stat-value">${data.meta.bestOpportunity.precinct_name}</div>
-          <div class="stat-sub">${data.meta.bestOpportunity.council_name} · rating ${data.meta.bestOpportunity.opportunity_rating} · risk ${data.meta.bestOpportunity.friction_score}</div>
+          <div class="stat-sub">${data.meta.bestOpportunity.council_name} · rating ${data.meta.bestOpportunity.opportunity_rating} · derived risk ${data.meta.bestOpportunity.friction_score}</div>
         </div>
         <div class="stat">
           <div class="stat-label">Highest-Frictions</div>
           <div class="stat-value">${data.meta.highestRisk.precinct_name}</div>
-          <div class="stat-sub">${data.meta.highestRisk.council_name} · recent apps ${data.meta.highestRisk.recent_application_count} · risk ${data.meta.highestRisk.friction_score}</div>
+          <div class="stat-sub">${data.meta.highestRisk.council_name} · recent apps ${data.meta.highestRisk.recent_application_count} · derived risk ${data.meta.highestRisk.friction_score}</div>
         </div>
         <div class="stat">
           <div class="stat-label">Region Split</div>

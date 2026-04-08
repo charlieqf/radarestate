@@ -1,0 +1,72 @@
+2. “周报”含金量可能不足
+它叫周报，但核心应用数据窗口是从 2025-01-01 开始累计的 “Recent Apps” (weekly-radar-latest.md:31-33, 80-90)。  
+也就是说，很多表格不是“本周新增情报”，而是一个较长时间窗口里的累计统计。  
+如果每周都卖 $50，你完全可以质疑：
+- 本周新增信息到底有多少？
+- 哪些变化是真正“这周才出现”的？
+- 有没有增量提醒，而不只是重排旧数据？
+3. 评分逻辑不够透明
+报告说 Rating 由 policy + timing - friction 一类逻辑组合而来 (weekly-radar-latest.md:27-33)，但没有解释：
+- 分数怎么打
+- 权重多少
+- A/B/C 的阈值是什么
+- 不同 council / precinct 之间是否可横向比较
+没有透明方法论，你很难判断：
+- Gladesville 为什么一定比 Five Dock 更值得优先
+- 风险 5 和风险 4 的实操差别到底有多大
+4. 对你最重要的“可执行动作”还不够落地
+报告最后给的建议是：
+- 深入街道级研究
+- 维持风险观察名单
+- 去看 dashboard (weekly-radar-latest.md:135-139)
+这类建议没错，但偏泛。  
+对小开发商更有价值的其实是：
+- 本周最该联系的 5 个街段/业主
+- 哪 3 个 precinct 有最可能的 assembly
+- 哪些地块在控规、风险、产权复杂度上最平衡
+- 哪些 precinct 近期政策变动会影响收购节奏
+现在这份报告还没做到这一步。
+5. 存在“产品感强，但实战感弱”的问题
+development-report-standard-universe.md 里有不少内部产品/QA表达，比如：
+- fixed hotspot universe
+- module activation status
+- structured product validation
+- not activated modules
+这些内容对做产品的人有用，但对付费客户来说，有点像把“系统开发进度”也卖给你了。
+
+结构和条理评价
+我的判断是：70分，清晰但不够干净。
+优点：
+- 顶层逻辑顺
+- 表格多，便于扫描
+- 有 scope note，知道自己不是完整决策报告
+问题：
+- 两个 universe 混在一起  
+  周报里自己承认“region totals, configured-precinct watchlists and ranked site-screening outputs do not use the same universe” (weekly-radar-latest.md:33)。  
+  这对普通客户不够友好，容易看着像一套数据，其实口径不同。
+- 重复和自我解释太多  
+  很多篇幅在讲“这是什么、这还没做什么”，而不是直接给你 actionable insight。
+- 术语偏产品内部语言  
+  如 derived constraints, friction, watchlist bucket, module activation，对开发商来说不够接地气。
+
+3. 周报增量不够明确
+要求他们证明：
+- 每周到底新增多少真正新情报
+- 哪些 precinct 评级发生变化
+- 哪些政策或申请是本周新出现的  
+如果做不到，就说明你付的不是“周报价”，只是“重复整理价”。
+4. 方法论不透明
+你可以说：
+- 评分权重未公开
+- A/B/C 评级缺乏可校验标准
+- 风险分值与实际 deal impact 没对应  
+因此只能算参考，不值 $50/周。
+5. 可执行性不足
+你可以明确提出：
+- 目前输出停留在 precinct 层级
+- 没有明确 owner-contact list
+- 没有 site shortlist 的 residual / assembly / comps 支撑  
+所以更接近“市场观察”，不是“开发机会挖掘”。
+6. 内容里有一部分像内部产品说明，不是客户价值
+development-report-standard-universe.md 里很多 QA / module activation 内容，本质上是他们系统还在完善中的证据。  
+你可以据此压价：你不该为其“研发中的半成品模块”付完整版价格。

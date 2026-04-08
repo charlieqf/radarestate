@@ -210,6 +210,7 @@ async function main() {
     const floodRow = riskMix.rows.find((row) => row.constraint_type === 'flood_metadata_signal' && row.severity === 'high')
     const bushfireRow = riskMix.rows.find((row) => row.constraint_type === 'bushfire_spatial_sample' && row.severity === 'high')
     const targetCoverageSydney = `${sydney.councils_with_targets}/${sydney.councils}`
+    const sydneyTargetCoverageComplete = Number(sydney.councils_with_targets || 0) === Number(sydney.councils || 0)
 
     const markdown = [
       '# Top 10 Insights',
@@ -283,11 +284,19 @@ async function main() {
       ),
       insightBlock(
         8,
-        'Target pressure is still only partially visible across Sydney',
-        'Housing target coverage exists in the current Sydney stack, but it is still incomplete and should be treated as directional rather than metro-complete.',
+        sydneyTargetCoverageComplete
+          ? 'Housing target context is complete within the current Sydney target-council scope'
+          : 'Target pressure is still only partially visible across Sydney',
+        sydneyTargetCoverageComplete
+          ? 'Housing target context is complete within the current Sydney target-council scope used in this product, so target pressure can be used as a full layer inside that configured council set.'
+          : 'Housing target coverage exists in the current Sydney stack, but it is still incomplete and should be treated as directional rather than metro-complete.',
         `Target coverage across Greater Sydney councils currently sits at ${targetCoverageSydney}.`,
-        'That means target pressure is useful as a framing signal, but it should not be mistaken for a full metro-wide target model.',
-        'Use target pressure as one lens alongside policy, activity and risk, not as a standalone ranking driver.'
+        sydneyTargetCoverageComplete
+          ? 'That gives the pack a complete target-pressure context inside the configured Sydney council scope, but it should not be overstated as proof that every broader Greater Sydney LGA definition is included.'
+          : 'That means target pressure is useful as a framing signal, but it should not be mistaken for a full metro-wide target model.',
+        sydneyTargetCoverageComplete
+          ? 'Use target pressure as a council-context layer within the configured Sydney scope, then continue to rank actual opportunities with policy, activity, risk and site fit.'
+          : 'Use target pressure as one lens alongside policy, activity and risk, not as a standalone ranking driver.'
       ),
       insightBlock(
         9,

@@ -1,6 +1,6 @@
 # Newcastle-Hunter Planning Opportunity Radar
 
-## Week Of 2026-04-03
+## Week Of 2026-04-04
 
 Companion visual dashboard: `dashboard/newcastle-hunter-report.html`
 
@@ -15,12 +15,22 @@ Companion visual dashboard: `dashboard/newcastle-hunter-report.html`
 - Precinct shortlist items: `19`
 - Derived constraints: `32`
 
+Scope note: the four snapshot numbers above are full region totals for the current source layer, not counts limited to the configured precinct watchlist.
+
 ## Executive Summary
 
 - `Mayfield`, `Broadmeadow`, `Newcastle City Centre` currently form the first priority tier because active pipeline and recent applications are both visible while friction is still manageable.
 - `Lake Macquarie`, `Newcastle`, `Maitland` remain the strongest council-level activity cluster and are the best candidates for further precinct and street-level work.
 - `Cessnock`, `Kurri Kurri`, `Medowie` are now showing obvious risk stacking and are better treated as a risk-adjusted watchlist instead of immediate acquisition priorities. The strongest risk signals currently include flood metadata high hits = 11, bushfire spatial high hits = 15.
 - There are still 10 active proposal items in the pipeline, alongside 373 items already in made stage, which is enough to support a sustained planning radar rather than a one-off hotspot view.
+
+## Scoring Method
+
+- This is a first-pass weekly watchlist, not a parcel-level feasibility, pricing or acquisition report.
+- Rating combines policy score and timing score, then downgrades precincts when friction stacks.
+- Precincts with no current active proposals, mapped recent applications or state-significant projects are forced into `Watch` rather than `Investigate`.
+- `Recent Apps` means mapped application signals with lodgement date on or after `2025-01-01`.
+- Region totals, configured-precinct watchlists and ranked site-screening outputs do not use the same universe. Read each section by its stated scope.
 
 ## Top Precinct Hotlist
 
@@ -61,6 +71,18 @@ Companion visual dashboard: `dashboard/newcastle-hunter-report.html`
 | Maitland | - | 2,353 | 2 |
 | Cessnock | - | 1,774 | 1 |
 | Port Stephens | - | 1,238 | 5 |
+
+## Recent Application Mix
+
+Current screen window: `2025-01-01`. DA, CDC, SSD and Modification are shown separately because they do not carry the same deal-screening meaning.
+
+| Application Type | Count |
+| --- | --- |
+| DA | 6,256 |
+| CDC | 3,629 |
+| SSD | 129 |
+| Modification | 1,440 |
+| Other | 14 |
 
 ## Policy Pipeline
 

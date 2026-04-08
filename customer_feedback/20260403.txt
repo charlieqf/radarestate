@@ -1,0 +1,44 @@
+结论
+这份报告有一定参考意义，但它更像“自动化规划雷达/线索筛选器”，不是“可直接用于拿地决策的开发潜力与风险报告”。
+对我这种悉尼小开发商来说，$50 per week偏贵。
+它有用在哪里
+- 它不是纯样板，确实在聚合公开数据：1,413 个 planning proposals、45,114 个 application signals、55 个 shortlist precincts，且写明来自 Supabase views。见 dashboard/latest-report.html:311-333
+- 能把“机会较干净”和“很活跃但风险堆叠”的 precinct 分开，这对前期筛选有用。见 client-output/weekly-radar-latest.html:402-417
+- Deep dive 里有近期申请、部分提案、source URL，能帮我省掉一部分自己刷 NSW portal 的时间。见 client-output/deep-dive-bankstown.html:493-652
+
+但它不够硬：
+1. 它只是 first-pass / heuristic，不是可直接交易的结论。
+dashboard/latest-report.html:476-477
+dashboard/latest-report.html:874
+client-output/client-pack-latest.html:427-430
+
+2. 风险层大量是 proxy / sample，不是 parcel-level constraints。
+dashboard/README.md:30-36
+client-output/deep-dive-bankstown.html:625-643
+比如 Bankstown 的高风险，部分来自 council-level 的 heat/tree canopy proxy，以及 flood metadata search，不是具体地块叠图。
+
+3. 对开发商最关键的内容基本没做到。
+我通读后没看到 lot size、zoning/FSR/height、assembly feasibility、ownership、sales comps、残值测算。
+这说明它是 radar，不是 acquisition/feasibility report。
+
+4. 覆盖并不完整。
+Sydney 配置里只有 44/56 precincts 有 signal，39/56 有 constraint。见 client-output/coverage-readiness-greater-sydney-expanded.html:417-421, 611-614
+Housing target coverage 也只有 10/22 councils。见 client-output/top-10-insights-latest.html:474-477
+
+5. Precinct matching 不够严。
+Bankstown deep dive 里混进了 Punchbowl、Milperra、Regents Park、Condell Park 等更广范围条目，不像真正精准的 precinct memo。见 client-output/deep-dive-bankstown.html:433-490
+
+6. 评分解释性和 QA 有问题。
+Gables、Cronulla、Drummoyne 被列进 hotlist，但展示数据里 Recent Apps=0、Pipeline=0，仍是 B / Investigate。见 client-output/weekly-radar-latest.html:507-540
+还有一条 “Sydney activity” insight 把 Lake Macquarie 混进 Sydney 叙事，说明区域过滤或文案 QA 不够稳。见 client-output/top-10-insights-latest.html:423-429
+
+7. “每周更新”这件事，这个样本没有证明 freshness 很强。
+最近 weekly pipeline 记录里是 skipSync: true。见 runs/latest-weekly.json:6-15
+这至少说明这次周报生成时，没有重新同步源数据。
+
+我的判断
+- 不是“完全没意义”。
+- 但只值“初筛和盯变化”的钱，不值“高信度开发决策报告”的钱。
+- 如果我自己已经会刷 council/planning portal，它的增量价值会更低。
+- 如果你们能加：（1）每周的delta change；（2）top 3-5 precinct 的 site-level constraint validation
+那我才会考虑 AUD$25-30/周

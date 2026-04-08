@@ -2,7 +2,7 @@
 
 ## Date
 
-2026-04-03
+2026-04-04
 
 ## Executive Summary
 
@@ -16,6 +16,7 @@ Cessnock is worth tracking because activity and policy signals are real, but it 
 - Timing score: `5`
 - Friction score: `5`
 - Recent applications: `215`
+- Recent application window start: `2025-01-01`
 - Active planning proposals: `1`
 - State significant projects: `0`
 - Recommended action: `Watch`
@@ -24,27 +25,31 @@ Cessnock is worth tracking because activity and policy signals are real, but it 
 ## Why This Precinct Surfaced
 
 - Trigger summary: 1 active proposals, 215 recent applications, 0 state significant projects. Risks: bushfire_spatial_sample (high), flood_metadata_signal (high), policy_withdrawal_friction (medium)
-- recent development activity is sufficiently strong to justify immediate attention.
-- there is already a meaningful stock of made-stage planning history in this precinct.
+- Recent development activity is sufficiently strong to justify immediate attention.
+- There is already a meaningful stock of made-stage planning history in this precinct.
 
 ## Policy And Planning Context
 
+Only rows with an explicit precinct-level location mention are shown below. Adjacent-suburb and council-wide policy rows are intentionally excluded from this deep dive.
+
 | Stage | Title | Location |
 | --- | --- | --- |
-| Finalisation | RECLASSIFICATION OF PART LOT 312 DP 566724 OLD MAITLAND ROAD CESSNOCK | Lot 312 Dp566724 |
 | Made | Amendment 11 Cessnock LEP 2011 - Wyndham Street Greta | Wyndham Street Cessnock Greta 2334 |
 | Made | Amendment 16 Cessnock LEP 2011 - Deferred Matters | Watagan Creek Road Cessnock Laguna 2325 & more |
-| Made | Amendment 17 Cessnock Local Environmental Plan 2011 Housekeeping Amendments | Various Lots & more |
-| Made | Amendment 19 Cessnock Local Environmental Plan 2011 - Ruby Street, Bellbird spot rezoning and amending residential land use tables | Part Lot 1 Dp 327785 Bellbird Ruby Street 2325 |
-| Made | Amendment 21 Cessnock LEP 2011 - Bellbird North commercial area expansion and recreation and residential zones map changes | Ruby Street, Christy Road, Tennant Street, Wollombi Road And Mount View Road Bellbird 2325 & more |
 | Made | Amendment to Cessnock LEP 2011 - 12m building height 'Cessnock Civic' Vincent St | Vincent Cessnock 2325 |
 | Made | Amendment to Cessnock LEP 2011 - Integrated Tourist Development Wine Country Drive Golden Bear | Wine Country Drive Cessnock Pokolbin 2320 |
 | Made | Amendment to Cessnock LEP 2011 - Minimum Lot Size 'Cessnock Civic' Vincent St Cessnock | Vincent Cessnock 2325 |
 | Made | Amendment to Cessnock Local Environmental Plan 2011 -Schedule 1 Additional Permitted Uses at Huntlee (B4 Mixed Use zone - Area B) | B4 Mixed Use Zone &#039;Area B&#039; Cessnock Huntlee 2325 |
 | Made | Amendment to the Cessnock Local Environmental Plan 2011 Special Purposes zones | Cessnock |
 | Made | Anomalies Planning Proposal | Cessnock |
+| Made | Bellbird Heights - Conversion | Wollombi Road Cessnock Cessnock 2325 |
+| Made | Bellbird North (Buffer) | Christy Road Cessnock Bellbird North 2325 |
+| Made | Cessnock City Council Numerous Administrative Amendment Planning Proposal 2021 | Cessnock |
+| Made | Cessnock Civic - Cessnock LEP Am 128 | Vincent Street Cessnock Cessnock 2325 & more |
 
 ## Development Activity Context
+
+Recent applications below are screening signals with lodgement date on or after `2025-01-01`. DA / CDC / SSD / Modification are separated in the mix because they do not imply the same development-opportunity quality.
 
 | Status | Count |
 | --- | --- |
@@ -55,6 +60,12 @@ Cessnock is worth tracking because activity and policy signals are real, but it 
 | Withdrawn | 6 |
 | Deferred Commencement | 2 |
 | Rejected | 2 |
+
+| Application Type | Count |
+| --- | --- |
+| DA | 126 |
+| CDC | 64 |
+| Modification | 25 |
 
 | Lodgement | Status | Type | Location |
 | --- | --- | --- | --- |
@@ -90,10 +101,10 @@ Friction is very high. Treat this as a constrained or contested precinct until m
 ## What To Do Next
 
 1. Keep `Cessnock` in the `C`-rated watchlist and treat `Watch` as the current workflow state.
-2. Use `dashboard/latest-report.html` to inspect the surrounding precinct cluster before doing any street-level or owner-contact work.
+2. Use `dashboard/newcastle-hunter-report.html` to inspect the surrounding precinct cluster before doing any street-level or owner-contact work.
 3. Explicitly validate the current risk stack (bushfire_spatial_sample, flood_metadata_signal, policy_withdrawal_friction) before promoting this precinct into a transaction-facing shortlist.
 
 ## References
 
-- `dashboard/latest-report.html`
-- `reports/weekly-radar-latest.md`
+- `dashboard/newcastle-hunter-report.html`
+- `reports/weekly-radar-newcastle-hunter.md`

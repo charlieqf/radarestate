@@ -1,0 +1,50 @@
+{
+  "topic": "livability-fun-ranking",
+  "series": "sydney-environment-fun-facts",
+  "scope_note": "Playful ranking based only on current flood, bushfire, heat, and tree canopy signals in the report. Not an official livability ranking.",
+  "positive_lean": [
+    {
+      "name": "Gladesville",
+      "risk_score": 0,
+      "why": "No current derived hit surfaced in this pass"
+    },
+    {
+      "name": "Five Dock",
+      "risk_score": 0,
+      "why": "No current derived hit surfaced in this pass"
+    },
+    {
+      "name": "Edgecliff",
+      "risk_score": 1,
+      "why": "Positive-lean precinct with only moderate flood signal in current risk layer"
+    }
+  ],
+  "negative_lean": [
+    {
+      "name": "Bankstown",
+      "risk_score": 5,
+      "stack": ["flood", "heat", "low tree canopy"]
+    },
+    {
+      "name": "Ingleburn",
+      "risk_score": 5,
+      "stack": ["bushfire", "flood", "heat", "low tree canopy"]
+    },
+    {
+      "name": "Liverpool",
+      "risk_score": 5,
+      "stack": ["bushfire", "flood", "heat", "low tree canopy"]
+    },
+    {
+      "name": "Campbelltown",
+      "risk_score": 5,
+      "stack": ["bushfire", "flood", "heat", "low tree canopy"]
+    }
+  ],
+  "report_refs": [
+    "reports/weekly-radar-latest.md:39-48",
+    "reports/weekly-radar-latest.md:54-58",
+    "reports/top-10-insights-latest.md:16-18",
+    "reports/top-10-insights-latest.md:23-24"
+  ]
+}

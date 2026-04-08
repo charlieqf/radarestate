@@ -2,7 +2,7 @@
 
 ## Date
 
-2026-04-03
+2026-04-04
 
 ## Executive Summary
 
@@ -16,6 +16,7 @@ Newcastle City Centre is best viewed as a medium-conviction precinct where polic
 - Timing score: `5`
 - Friction score: `2`
 - Recent applications: `190`
+- Recent application window start: `2025-01-01`
 - Active planning proposals: `1`
 - State significant projects: `0`
 - Recommended action: `Investigate`
@@ -24,27 +25,18 @@ Newcastle City Centre is best viewed as a medium-conviction precinct where polic
 ## Why This Precinct Surfaced
 
 - Trigger summary: 1 active proposals, 190 recent applications, 0 state significant projects. Risks: flood_metadata_signal (high)
-- recent development activity is sufficiently strong to justify immediate attention.
-- there is already a meaningful stock of made-stage planning history in this precinct.
+- Recent development activity is sufficiently strong to justify immediate attention.
+- There is already a meaningful stock of made-stage planning history in this precinct.
 
 ## Policy And Planning Context
 
-| Stage | Title | Location |
-| --- | --- | --- |
-| Pre-Exhibition | Eden Estates, Wallsend | Newcastle |
-| Made | 233 Wharf Road, 250 Scott Street, part 150 & 150A Scott Street, Newcastle | 233 Wharf Road Newcastle 2300 |
-| Made | 51 Brown Street, The Hill (Newcastle Reservoirs Site) Amendment 35 | 51 Brown Street Newcastle 2300 & more |
-| Made | Amend Local Environmental Plan 2012 by omitting Clause 7.7 | Newcastle |
-| Made | Amendment 11 Newcastle Local Environmental Plan 2012 - Medium Density Rezoning at Wallsend | No.44 &Amp; 46 George Street, 9 &Amp; 17 James Street, 2 John Street, 1, 3, 5, 7, 9, 11, 13, 15 &Amp; 17 Robert Street Newcastle Wallsend 2287 & more |
-| Made | Amendment 13 Newcastle Local Environmental Plan 2012 - Administrative Housekeeping Amendment | Various Addresses |
-| Made | Amendment 17 Newcastle LEP 2012 - Newcastle Eye Hospital, Waratah | 174-182 Christo Road Waratah Waratah & more |
-| Made | Amendment 18 Newcastle LEP 2012 - 1 Cowper Street Wallsend - Land Reservation Acquisition | 1 Cowper Street Newcastle Wallsend |
-| Made | Amendment 19 Newcastle LEP 2012 - Clause 6.4 Land in the R4 High Density Residential Zone | Newcastle |
-| Made | Amendment 20 to Newcastle Local Environmental Plan 2012- Part A of PP_2014_NEWCA_006_00 | 12 Hansen Place Newcastle Shortland & more |
-| Made | Amendment 21 Newcastle LEP 2012 - Frith and Gavey Streets Mayfield - Industrial zoning | Frith Street Mayfield 2304 & more |
-| Made | Amendment 22 Newcastle LEP 2012 - Rezone Land at 131 to 133 Croudace Road Elermore Vale from R2 Low Density Residential to B2 Local Centre and Amend Development Controls | 131-133 Croudace Road Newcastle Elermore Vale 2287 |
+Only rows with an explicit precinct-level location mention are shown below. Adjacent-suburb and council-wide policy rows are intentionally excluded from this deep dive.
+
+No mapped proposal records currently surfaced for this precinct.
 
 ## Development Activity Context
+
+Recent applications below are screening signals with lodgement date on or after `2025-01-01`. DA / CDC / SSD / Modification are separated in the mix because they do not imply the same development-opportunity quality.
 
 | Status | Count |
 | --- | --- |
@@ -55,6 +47,13 @@ Newcastle City Centre is best viewed as a medium-conviction precinct where polic
 | Additional Information Requested | 8 |
 | Rejected | 3 |
 | Refused | 2 |
+
+| Application Type | Count |
+| --- | --- |
+| DA | 69 |
+| CDC | 88 |
+| Modification | 32 |
+| Other | 1 |
 
 | Lodgement | Status | Type | Location |
 | --- | --- | --- | --- |
@@ -88,10 +87,10 @@ Friction is present but not yet disqualifying. The main task is to keep risk vis
 ## What To Do Next
 
 1. Keep `Newcastle City Centre` in the `B`-rated watchlist and treat `Investigate` as the current workflow state.
-2. Use `dashboard/latest-report.html` to inspect the surrounding precinct cluster before doing any street-level or owner-contact work.
+2. Use `dashboard/newcastle-hunter-report.html` to inspect the surrounding precinct cluster before doing any street-level or owner-contact work.
 3. Explicitly validate the current risk stack (flood_metadata_signal) before promoting this precinct into a transaction-facing shortlist.
 
 ## References
 
-- `dashboard/latest-report.html`
-- `reports/weekly-radar-latest.md`
+- `dashboard/newcastle-hunter-report.html`
+- `reports/weekly-radar-newcastle-hunter.md`

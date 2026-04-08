@@ -1,0 +1,17 @@
+5. 对小开发商的 buy box 不够友好
+- Top sites 里很多地块非常大：345 Victoria Ave Chatswood 约 51,337 sqm，207 Pacific Hwy St Leonards 约 10,051 sqm，2-4 Burbank Place Norwest 约 20,144 sqm。
+- 它的评分公式也偏爱大面积、大 frontage、高 FSR、高 height 的地块。
+- 如果你是做小中型 apartment、mixed-use infill 或小型 townhouse/land subdivision，这套默认筛选未必贴合。
+- 证据：reports/top-site-screening-2026-04-05.md:22-33，reports/methodology-appendix.md:40-52
+
+6. Timing score 可能被 CDC 噪音污染
+- 它的 timing score 很大程度看 recent application count，但样本里很多 precinct 的 activity 其实是 CDC 为主。
+- 例如 Penrith：351 recent apps 里 238 是 CDC，85 才是 DA。
+- 对开发拿地来说，CDC 数量未必等于开发机会质量。
+- 证据：reports/methodology-appendix.md:24-29，reports/deep-dive-penrith-2026-04-05.md:56-72
+
+7. 覆盖还不完整
+- 它自己说 Sydney housing target coverage 目前只有 10/22 councils。
+- 还承认 policy coverage before 2026-04-01 is not retained。
+- 说明数据库成熟度还在建设中。
+- 证据：reports/top-10-insights-latest.md:63-68，reports/methodology-appendix.md:78-83,90-93

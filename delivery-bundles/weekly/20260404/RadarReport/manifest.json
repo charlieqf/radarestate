@@ -1,0 +1,10 @@
+{
+  "generated_at": "2026-04-04T11:05:07.114Z",
+  "report_type": "RadarReport",
+  "notes": "Weekly radar, watchlist and supporting visual/report outputs.",
+  "contents": [
+    "client-output/",
+    "dashboard/",
+    "reports/"
+  ]
+}

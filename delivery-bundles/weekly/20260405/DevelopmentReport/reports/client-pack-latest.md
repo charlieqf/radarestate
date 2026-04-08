@@ -70,7 +70,7 @@
 - Coverage readiness memo: `reports/coverage-readiness-greater-sydney-expanded.md`
 - Methodology appendix: `reports/methodology-appendix.md`
 - Full report lead takeaway: Strongest current precinct signal: **Mosman / Spit Junction** (precinct council context: Mosman) is rated **A** with policy **4**, timing **5** and risk **2**.
-- Delta report summary: **2026-03-29 -> 2026-04-05**. 71 precincts currently carry formal ratings, 574 new shortlisted sites, +634 application signals versus prior snapshot.
+- Delta report summary: **2026-03-29 -> 2026-04-05**. 71 precincts currently carry formal ratings, 668 new shortlisted sites, +634 application signals versus prior snapshot.
 
 ## Notes
 

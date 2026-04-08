@@ -1,0 +1,50 @@
+{
+  "topic": "heat-fun-facts",
+  "series": "sydney-environment-fun-facts",
+  "scope_note": "Heat values are current proxy signals in the report, not a full microclimate model.",
+  "headline_stat": {
+    "label": "Heat high hits",
+    "value": 3
+  },
+  "secondary_stat": {
+    "label": "Heat medium hits",
+    "value": 4
+  },
+  "highlight_precincts": [
+    {
+      "name": "Bankstown",
+      "signal": "heat_vulnerability_proxy",
+      "severity": "high",
+      "context": "Also stacks with low tree canopy"
+    },
+    {
+      "name": "Liverpool",
+      "signal": "heat_vulnerability_proxy",
+      "severity": "high",
+      "context": "Also stacks with flood and bushfire"
+    },
+    {
+      "name": "Lakemba",
+      "signal": "heat_vulnerability_proxy",
+      "severity": "high",
+      "context": "Pairs with low tree canopy"
+    },
+    {
+      "name": "Ingleburn",
+      "signal": "heat_vulnerability_proxy",
+      "severity": "medium",
+      "context": "Part of stacked-risk cluster"
+    },
+    {
+      "name": "Campbelltown",
+      "signal": "heat_vulnerability_proxy",
+      "severity": "medium",
+      "context": "Part of stacked-risk cluster"
+    }
+  ],
+  "report_refs": [
+    "reports/top-10-insights-latest.md:23-24",
+    "reports/weekly-radar-latest.md:129-130",
+    "reports/weekly-radar-latest.md:54-63"
+  ]
+}
