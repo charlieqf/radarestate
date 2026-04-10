@@ -109,6 +109,7 @@
     position: sticky;
     top: 10px;
     z-index: 20;
+    padding: 14px 16px;
   }
 
   .toolbar-row,
@@ -121,20 +122,27 @@
 
   .progress-text {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     align-items: baseline;
     flex-wrap: wrap;
   }
 
   .progress-count {
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 700;
     color: #173b63;
+    line-height: 1.1;
   }
 
   .progress-percent {
-    font-size: 14px;
+    font-size: 12px;
     color: var(--muted);
+    font-weight: 700;
+  }
+
+  .control-card .ghost-button {
+    padding: 8px 10px;
+    font-size: 12px;
   }
 
   .ghost-button {
@@ -275,8 +283,8 @@
   }
 
   .progress-track {
-    margin-top: 12px;
-    height: 10px;
+    margin-top: 8px;
+    height: 6px;
     border-radius: 999px;
     background: #e8eef5;
     overflow: hidden;
@@ -294,14 +302,14 @@
   .status-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 10px;
-    margin-top: 12px;
+    gap: 6px;
+    margin-top: 8px;
   }
 
   .status-pill {
     border-radius: 12px;
-    padding: 10px 12px;
-    font-size: 13px;
+    padding: 7px 9px;
+    font-size: 12px;
     font-weight: 700;
     border: 1px solid var(--line);
     background: #f7fbff;
@@ -323,8 +331,8 @@
   .quick-nav {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 14px;
+    gap: 6px;
+    margin-top: 8px;
   }
 
   .quick-nav a {
@@ -333,8 +341,8 @@
     background: var(--accent-soft);
     border: 1px solid #cfe0f3;
     border-radius: 999px;
-    padding: 7px 10px;
-    font-size: 12px;
+    padding: 5px 8px;
+    font-size: 11px;
     font-weight: 700;
     white-space: nowrap;
   }
@@ -494,9 +502,9 @@
 
     .control-card {
       top: 8px;
+      padding: 12px 14px;
     }
 
-    .toolbar-row,
     .section-head {
       align-items: flex-start;
       flex-direction: column;
@@ -504,6 +512,19 @@
 
     .ghost-button {
       width: 100%;
+    }
+
+    .control-card .toolbar-row {
+      align-items: center;
+      justify-content: space-between;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .control-card .ghost-button {
+      width: auto;
+      flex: 0 0 auto;
     }
 
     .status-grid,
@@ -562,16 +583,12 @@
   </section>
 
   <section class="control-card">
-    <div class="eyebrow">Checklist Progress</div>
     <div class="toolbar-row">
-      <div>
-        <div class="progress-text">
-          <span class="progress-count" id="progressCount">0 / 0 已完成</span>
-          <span class="progress-percent" id="progressPercent">0%</span>
-        </div>
-        <p class="hint">勾选表示该项已经确认、完成或核查通过。</p>
+      <div class="progress-text">
+        <span class="progress-count" id="progressCount">0 / 0 已完成</span>
+        <span class="progress-percent" id="progressPercent">0%</span>
       </div>
-      <button type="button" class="ghost-button" id="resetChecks">清空全部勾选</button>
+      <button type="button" class="ghost-button" id="resetChecks">清空勾选</button>
     </div>
     <div class="progress-track"><span class="progress-bar" id="progressBar"></span></div>
     <div class="status-grid">
