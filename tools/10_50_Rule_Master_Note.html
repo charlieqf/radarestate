@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NSW 10/50 Checklist</title>
+<style>
+  :root {
+    --ink: #1b2a38;
+    --muted: #5b6776;
+    --line: #d7e1ec;
+    --panel: #ffffff;
+    --panel-soft: #f7fbff;
+    --accent: #1a4f8f;
+    --accent-soft: #eaf3fb;
+    --success: #1f8a4c;
+    --success-soft: #eef8f1;
+    --warn: #a45a11;
+    --warn-soft: #fff4e8;
+    --shadow: 0 14px 36px rgba(18, 42, 72, 0.08);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  input,
+  textarea,
+  button {
+    font: inherit;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    padding: 14px;
+    background: #eef3f8;
+    color: var(--ink);
+    font-family: Calibri, Arial, sans-serif;
+    line-height: 1.6;
+  }
+
+  .page {
+    max-width: 920px;
+    margin: 0 auto 40px;
+  }
+
+  .hero,
+  .record-card,
+  .control-card,
+  .info-card,
+  .check-section,
+  .footer-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    padding: 22px;
+    margin-bottom: 14px;
+  }
+
+  .hero {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  }
+
+  .record-card {
+    background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  h1 {
+    margin: 0 0 10px;
+    font-size: 28px;
+    line-height: 1.15;
+    color: #173b63;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 19px;
+    line-height: 1.25;
+    color: #173b63;
+  }
+
+  p {
+    margin: 0 0 12px;
+  }
+
+  .lede {
+    font-size: 15px;
+  }
+
+  .updated,
+  .hint,
+  .section-tip,
+  .footer-note {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .control-card {
+    position: sticky;
+    top: 10px;
+    z-index: 20;
+  }
+
+  .toolbar-row,
+  .section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .progress-text {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    flex-wrap: wrap;
+  }
+
+  .progress-count {
+    font-size: 22px;
+    font-weight: 700;
+    color: #173b63;
+  }
+
+  .progress-percent {
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .ghost-button {
+    border: 1px solid var(--line);
+    background: #fff;
+    color: #173b63;
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .primary-button {
+    border: 1px solid #1f5fa8;
+    background: linear-gradient(180deg, #2b7cff 0%, #1f67ca 100%);
+    color: #fff;
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .danger-button {
+    color: #8f2c24;
+    border-color: #ebc4bf;
+    background: #fff7f6;
+  }
+
+  .field-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .field {
+    display: grid;
+    gap: 6px;
+  }
+
+  .field-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #173b63;
+  }
+
+  .text-input,
+  .search-input {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 11px 12px;
+    background: #fff;
+    color: var(--ink);
+  }
+
+  .text-input:focus,
+  .search-input:focus {
+    outline: 2px solid rgba(43, 124, 255, 0.14);
+    border-color: #7eaded;
+  }
+
+  .record-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .record-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 999px;
+    padding: 7px 10px;
+    border: 1px solid var(--line);
+    background: #f7fbff;
+    color: #173b63;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .record-status.is-dirty {
+    border-color: #f0d7bc;
+    background: var(--warn-soft);
+    color: var(--warn);
+  }
+
+  .record-status.is-saved {
+    border-color: #c6e4cf;
+    background: var(--success-soft);
+    color: var(--success);
+  }
+
+  .search-wrap {
+    margin-top: 14px;
+  }
+
+  .records-list {
+    display: grid;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .record-item,
+  .record-empty {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--panel-soft);
+    padding: 12px;
+  }
+
+  .record-item {
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .record-item.is-active {
+    border-color: #7eaded;
+    background: #eef5ff;
+  }
+
+  .record-name {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    color: #173b63;
+  }
+
+  .record-address,
+  .record-meta {
+    display: block;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .progress-track {
+    margin-top: 12px;
+    height: 10px;
+    border-radius: 999px;
+    background: #e8eef5;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    display: block;
+    height: 100%;
+    width: 0;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #2b7cff 0%, #23a6d5 100%);
+    transition: width 180ms ease;
+  }
+
+  .status-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .status-pill {
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-size: 13px;
+    font-weight: 700;
+    border: 1px solid var(--line);
+    background: #f7fbff;
+    color: #173b63;
+  }
+
+  .status-pill.ok {
+    border-color: #c6e4cf;
+    background: var(--success-soft);
+    color: var(--success);
+  }
+
+  .status-pill.warn {
+    border-color: #f0d7bc;
+    background: var(--warn-soft);
+    color: var(--warn);
+  }
+
+  .quick-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .quick-nav a {
+    text-decoration: none;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border: 1px solid #cfe0f3;
+    border-radius: 999px;
+    padding: 7px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .section-progress {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .check-section.section-complete {
+    border-color: #c6e4cf;
+  }
+
+  .checklist {
+    display: grid;
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--panel-soft);
+    padding: 12px;
+  }
+
+  .check-item input {
+    width: 22px;
+    height: 22px;
+    margin: 2px 0 0;
+    accent-color: var(--accent);
+    flex: 0 0 auto;
+  }
+
+  .check-copy {
+    min-width: 0;
+  }
+
+  .check-title {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    color: #173b63;
+  }
+
+  .check-note {
+    display: block;
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .check-item.is-checked {
+    background: var(--success-soft);
+    border-color: #c6e4cf;
+  }
+
+  .check-item.is-checked .check-title {
+    color: var(--success);
+  }
+
+  .note-strip {
+    border: 1px solid #cfe0f3;
+    background: var(--accent-soft);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 13px;
+    margin-top: 12px;
+  }
+
+  .note-strip.warning {
+    border-color: #f0d7bc;
+    background: var(--warn-soft);
+  }
+
+  .rule-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .rule-card {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 14px;
+    background: var(--panel-soft);
+  }
+
+  .rule-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #173b63;
+    margin-bottom: 8px;
+  }
+
+  .rule-range {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-radius: 999px;
+    padding: 4px 8px;
+    margin-bottom: 8px;
+  }
+
+  .time-tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-radius: 999px;
+    padding: 3px 8px;
+    margin-bottom: 6px;
+  }
+
+  blockquote {
+    margin: 14px 0 0;
+    padding: 12px 14px;
+    border-left: 4px solid var(--accent);
+    border-radius: 10px;
+    background: var(--accent-soft);
+  }
+
+  .footer-card {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 720px) {
+    body {
+      padding: 10px;
+    }
+
+    .hero,
+    .record-card,
+    .control-card,
+    .info-card,
+    .check-section,
+    .footer-card {
+      padding: 16px;
+      border-radius: 14px;
+    }
+
+    h1 {
+      font-size: 24px;
+    }
+
+    h2 {
+      font-size: 18px;
+    }
+
+    .control-card {
+      top: 8px;
+    }
+
+    .toolbar-row,
+    .section-head {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .ghost-button {
+      width: 100%;
+    }
+
+    .status-grid,
+    .field-grid,
+    .rule-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .quick-nav {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .check-item {
+      padding: 12px 10px;
+    }
+
+    .record-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <section class="hero">
+    <div class="eyebrow">Mobile Checklist</div>
+    <h1>NSW 10/50 植被清除规则</h1>
+    <p class="lede">适合手机和 iPad 现场使用的最小可行版本。现在可以按客户姓名和住址保存、检索并继续编辑 checklist。</p>
+    <p class="updated">最后更新：2026年4月</p>
+  </section>
+
+  <section class="record-card">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">Checklist Records</div>
+        <h2>案件资料与保存</h2>
+      </div>
+      <div class="record-status" id="recordStatus">未保存记录</div>
+    </div>
+    <div class="field-grid">
+      <label class="field">
+        <span class="field-label">客户姓名</span>
+        <input class="text-input" id="clientNameInput" type="text" placeholder="例如：ACME Developments / 张总">
+      </label>
+      <label class="field">
+        <span class="field-label">住址</span>
+        <input class="text-input" id="siteAddressInput" type="text" placeholder="例如：12 Example Street, Chatswood NSW">
+      </label>
+    </div>
+    <div class="record-actions">
+      <button type="button" class="primary-button" id="saveRecord">保存 / 更新 Checklist</button>
+      <button type="button" class="ghost-button" id="newRecord">新建空白 Checklist</button>
+      <button type="button" class="ghost-button danger-button" id="deleteRecord">删除当前记录</button>
+    </div>
+    <p class="hint">搜索会按客户姓名和住址匹配。点击已保存记录即可恢复当时的勾选状态。</p>
+    <div class="search-wrap">
+      <input class="search-input" id="recordSearch" type="search" placeholder="搜索客户姓名或住址">
+    </div>
+    <div class="records-list" id="recordsList"></div>
+  </section>
+
+  <section class="control-card">
+    <div class="eyebrow">Checklist Progress</div>
+    <div class="toolbar-row">
+      <div>
+        <div class="progress-text">
+          <span class="progress-count" id="progressCount">0 / 0 已完成</span>
+          <span class="progress-percent" id="progressPercent">0%</span>
+        </div>
+        <p class="hint">勾选表示该项已经确认、完成或核查通过。</p>
+      </div>
+      <button type="button" class="ghost-button" id="resetChecks">清空全部勾选</button>
+    </div>
+    <div class="progress-track"><span class="progress-bar" id="progressBar"></span></div>
+    <div class="status-grid">
+      <div class="status-pill warn" id="eligibilityStatus">使用前提未完成</div>
+      <div class="status-pill warn" id="evidenceStatus">文件包未备齐</div>
+      <div class="status-pill warn" id="riskStatus">风险排查未完成</div>
+    </div>
+    <nav class="quick-nav" aria-label="Section navigation">
+      <a href="#eligibility">使用前提</a>
+      <a href="#scope">操作范围</a>
+      <a href="#neighbour">邻居 Dwelling</a>
+      <a href="#evidence">文件包</a>
+      <a href="#risk">风险排查</a>
+      <a href="#workflow">DD 流程</a>
+    </nav>
+  </section>
+
+  <section class="info-card" id="principle">
+    <h2>一、基本原理</h2>
+    <p>10/50 是一个 <strong>州级 statutory exemption</strong>，不是 council permit。只要按 Code 操作，clearing 行为属于 authorised clearing，不会因为缺少 council approval 自动变成 offence。</p>
+    <p>它不是“先批后砍”的证书，而是一个 <strong>statutory defence</strong>。被投诉时，你要能证明自己符合 Code 的每一个条件。</p>
+  </section>
+
+  <section class="check-section" id="eligibility" data-check-section="eligibility">
+    <div class="section-head">
+      <h2>二、使用前提（缺一不可）</h2>
+      <div class="section-progress" data-section-progress></div>
+    </div>
+    <p class="section-tip">这 5 项必须全部满足，才适合继续依赖 10/50。</p>
+    <div class="checklist">
+      <label class="check-item">
+        <input type="checkbox" data-check-id="eligibility-entitlement" data-group="eligibility">
+        <span class="check-copy">
+          <span class="check-title">地块位于 RFS 指定的 10/50 Entitlement Area 内</span>
+          <span class="check-note">每次 clearing 当天都要重新查 tool 确认，不要只看旧截图。</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="eligibility-dwelling" data-group="eligibility">
+        <span class="check-copy">
+          <span class="check-title">现场存在已建成、合法、可居住的 dwelling</span>
+          <span class="check-note">必须是 habitable building，不适用于空地或拟建房。</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="eligibility-final-oc" data-group="eligibility">
+        <span class="check-copy">
+          <span class="check-title">该 dwelling 具有 lawful Final OC</span>
+          <span class="check-note">只有 Interim OC 不够，不能当成 10/50 的触发基础。</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="eligibility-owner" data-group="eligibility">
+        <span class="check-copy">
+          <span class="check-title">操作人是 landowner，或已取得 landowner 书面授权</span>
+          <span class="check-note">租客不能单独使用 10/50，必须有业主书面同意。</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="eligibility-not-proposed" data-group="eligibility">
+        <span class="check-copy">
+          <span class="check-title">本次依赖的是现状 dwelling，而不是 proposed dwelling</span>
+          <span class="check-note">10/50 不能拿来为未来开发或拟建住宅提前清树。</span>
+        </span>
+      </label>
+    </div>
+  </section>
+
+  <section class="info-card" id="scope">
+    <div class="section-head">
+      <h2>三、能砍什么、砍多远</h2>
+    </div>
+    <div class="rule-grid">
+      <div class="rule-card">
+        <div class="rule-title">树木整棵移除</div>
+        <div class="rule-range">10 米内</div>
+        <p>只要树干 circumference 大于 30cm，且树木任何部分落在 dwelling 外墙 10 米内，就可能符合。</p>
+      </div>
+      <div class="rule-card">
+        <div class="rule-title">下层植被清除</div>
+        <div class="rule-range">50 米内</div>
+        <p>灌木等下层植被可在 dwelling 外墙 50 米内处理，通常无需 council 批准。</p>
+      </div>
+      <div class="rule-card">
+        <div class="rule-title">树枝修剪</div>
+        <div class="rule-range">伸入 10 米内</div>
+        <p>即使树干在 10 米外，伸入 10 米内的树枝也可修剪，但应按 AS 4373-2007 标准执行。</p>
+      </div>
+    </div>
+    <div class="note-strip">距离从 <strong>dwelling 外墙</strong>算起，包括 permanently attached 结构，如 deck、verandah、attached garage；不包括独立车库或独立建筑。</div>
+  </section>
+
+  <section class="check-section" id="neighbour" data-check-section="neighbour">
+    <div class="section-head">
+      <h2>四、借用邻居 dwelling 触发 10 米</h2>
+      <div class="section-progress" data-section-progress></div>
+    </div>
+    <p class="section-tip">这部分只在“树离你自己的 dwelling 超过 10 米，但离邻居 dwelling 不足 10 米”时使用。</p>
+    <div class="checklist">
+      <label class="check-item">
+        <input type="checkbox" data-check-id="neighbour-consent" data-group="neighbour">
+        <span class="check-copy">
+          <span class="check-title">已取得邻居书面同意</span>
+          <span class="check-note">最好让 arborist 见证并留书面记录。</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="neighbour-trunk" data-group="neighbour">
+        <span class="check-copy">
+          <span class="check-title">确认树干 trunk 在你自己的地块上</span>
+          <span class="check-note">如果树干不在你自己的 land，上述技巧不能直接套用。</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="neighbour-envelope" data-group="neighbour">
+        <span class="check-copy">
+          <span class="check-title">arborist 已画出现有 house 和所有相邻 dwelling 的 10 米 envelope</span>
+          <span class="check-note">逐棵标注哪些树的 trunk 落在 qualifying 范围内，这是最大化 10/50 清除权的关键。</span>
+        </span>
+      </label>
+    </div>
+  </section>
+
+  <section class="check-section" id="evidence" data-check-section="evidence">
+    <div class="section-head">
+      <h2>五、“免死金牌”文件包</h2>
+      <div class="section-progress" data-section-progress></div>
+    </div>
+    <p class="section-tip">这套文件是被 Council 或邻居质疑时的核心 defence pack。</p>
+    <div class="checklist">
+      <label class="check-item">
+        <input type="checkbox" data-check-id="evidence-rfs-pdf" data-group="evidence">
+        <span class="check-copy">
+          <span class="check-title">当天 RFS online tool 的 PDF 截图</span>
+          <span class="check-note">必须是 clearing 当天重新运行的结果，不能用旧档代替。</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="evidence-survey" data-group="evidence">
+        <span class="check-copy">
+          <span class="check-title">现有 dwelling 外墙位置的 survey 或 sketch</span>
+          <span class="check-note">用于证明 10 米和 50 米距离的起算点。</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="evidence-tree-record" data-group="evidence">
+        <span class="check-copy">
+          <span class="check-title">每棵拟移除树的 trunk 测量记录和现场照片</span>
+          <span class="check-note">建议把胸高 1.3m 处 circumference 的测量方式一并留档。</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="evidence-title-location" data-group="evidence">
+        <span class="check-copy">
+          <span class="check-title">确认树在自己 land 上的图纸或定位证明</span>
+          <span class="check-note">特别是涉及边界树或邻居 dwelling 触发时，更要留图。</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="evidence-neighbour-consent" data-group="evidence">
+        <span class="check-copy">
+          <span class="check-title">如借用邻居 dwelling，已存档邻居书面同意书</span>
+          <span class="check-note">没有该同意书，就不要主张你在借用邻居 dwelling。</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="evidence-arborist" data-group="evidence">
+        <span class="check-copy">
+          <span class="check-title">合资质 arborist 的 invoice 和 compliance letter</span>
+          <span class="check-note">让执行人和执行标准都留痕，不要只靠口头说明。</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="evidence-fast-check" data-group="evidence">
+        <span class="check-copy">
+          <span class="check-title">已做快速核查：无旧 DA 保树、无 88B 限制、无 Heritage exclusion</span>
+          <span class="check-note">这是防止“看似能清，实则被排除”的最低门槛检查。</span>
+        </span>
+      </label>
+    </div>
+    <blockquote><strong>被 Council 质疑时：</strong>直接出示文件包，并要求 officer 指明是哪一条 exclusion 让这次 clearing 失效，而不是泛泛争辩。</blockquote>
+  </section>
+
+  <section class="check-section" id="risk" data-check-section="risk">
+    <div class="section-head">
+      <h2>六、高风险排查</h2>
+      <div class="section-progress" data-section-progress></div>
+    </div>
+    <div class="note-strip warning">这里的勾选含义是：<strong>该风险点已经核查，并确认不阻断本次 10/50</strong>。如果风险真实存在，不要勾选。</div>
+    <div class="checklist">
+      <label class="check-item">
+        <input type="checkbox" data-check-id="risk-da-tree" data-group="risk">
+        <span class="check-copy">
+          <span class="check-title">DA 条件保树已核查</span>
+          <span class="check-note">旧 DA 或 consent 没有要求保留相关树木。</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="risk-88b" data-group="risk">
+        <span class="check-copy">
+          <span class="check-title">88B covenant 限制已核查</span>
+          <span class="check-note">title 上不存在禁止伐树的 covenant。</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="risk-hca" data-group="risk">
+        <span class="check-copy">
+          <span class="check-title">Heritage Conservation Area 已核查</span>
+          <span class="check-note">确认相关树木不在 HCA exclusion 范围内。</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="risk-slope" data-group="risk">
+        <span class="check-copy">
+          <span class="check-title">坡度限制已核查</span>
+          <span class="check-note">如坡度超过 18 度，已取得必要的 geotechnical support，或确认不触发该限制。</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="risk-waterway" data-group="risk">
+        <span class="check-copy">
+          <span class="check-title">河道 / 湖泊 10 米 buffer 已核查</span>
+          <span class="check-note">确认不落入不能清理的水体 buffer。</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="risk-soil" data-group="risk">
+        <span class="check-copy">
+          <span class="check-title">土壤扰动风险已控制</span>
+          <span class="check-note">不会动土，也不会用 bulldozer、excavator、grader 做违规操作。</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="risk-fauna" data-group="risk">
+        <span class="check-copy">
+          <span class="check-title">Protected fauna 风险已核查</span>
+          <span class="check-note">确认不会因为 10/50 而误以为自己被豁免 NPWS 责任。</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="risk-interim-oc" data-group="risk">
+        <span class="check-copy">
+          <span class="check-title">Interim OC 风险已排除</span>
+          <span class="check-note">现场不是只有 Interim OC，而是有 lawful Final OC。</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="risk-vacant" data-group="risk">
+        <span class="check-copy">
+          <span class="check-title">Vacant land 风险已排除</span>
+          <span class="check-note">现场不是无 dwelling 的空地情形。</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="risk-consent-tree" data-group="risk">
+        <span class="check-copy">
+          <span class="check-title">Development consent 保树条件已核查</span>
+          <span class="check-note">没有其他 development consent 指定必须保留相关树木。</span>
+        </span>
+      </label>
+    </div>
+  </section>
+
+  <section class="check-section" id="workflow" data-check-section="workflow">
+    <div class="section-head">
+      <h2>七、收地前 Due Diligence 流程</h2>
+      <div class="section-progress" data-section-progress></div>
+    </div>
+    <p class="section-tip">Developer 标准顺序。勾选表示该动作已完成或已留档。</p>
+    <div class="checklist">
+      <label class="check-item">
+        <input type="checkbox" data-check-id="workflow-1" data-group="workflow">
+        <span class="check-copy">
+          <span class="time-tag">Exchange前</span>
+          <span class="check-title">查 RFS online tool，确认地块在 Entitlement Area 内</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="workflow-2" data-group="workflow">
+        <span class="check-copy">
+          <span class="time-tag">Exchange前</span>
+          <span class="check-title">查 LEP，确认是否在 Heritage Conservation Area 内</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="workflow-3" data-group="workflow">
+        <span class="check-copy">
+          <span class="time-tag">Exchange前</span>
+          <span class="check-title">查旧 DA 条件，确认有无保树要求</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="workflow-4" data-group="workflow">
+        <span class="check-copy">
+          <span class="time-tag">Exchange前</span>
+          <span class="check-title">查 title / 88B，确认有无 covenant 限制伐树</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="workflow-5" data-group="workflow">
+        <span class="check-copy">
+          <span class="time-tag">Exchange前</span>
+          <span class="check-title">确认 existing dwelling 具有 lawful Final OC</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="workflow-6" data-group="workflow">
+        <span class="check-copy">
+          <span class="time-tag">Exchange前</span>
+          <span class="check-title">请 arborist 画 10 米 envelope 图，含所有相邻 dwelling</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="workflow-7" data-group="workflow">
+        <span class="check-copy">
+          <span class="time-tag">清树当天</span>
+          <span class="check-title">重新运行 RFS online tool，并保存 PDF 存档</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="workflow-8" data-group="workflow">
+        <span class="check-copy">
+          <span class="time-tag">清树前</span>
+          <span class="check-title">如需借用邻居 dwelling，先取得邻居书面同意</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="workflow-9" data-group="workflow">
+        <span class="check-copy">
+          <span class="time-tag">清树时</span>
+          <span class="check-title">聘请 AQF Level 5 arborist 执行，并保留完整施工记录</span>
+        </span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" data-check-id="workflow-10" data-group="workflow">
+        <span class="check-copy">
+          <span class="time-tag">清树后</span>
+          <span class="check-title">完整文件包至少保存 3 年</span>
+        </span>
+      </label>
+    </div>
+  </section>
+
+  <section class="footer-card">
+    <p class="footer-note">参考来源：NSW RFS 10/50 Code of Practice、Service NSW、Ku-ring-gai Council 网站。</p>
+  </section>
+</main>
+
+<script>
+  const RECORDS_KEY = 'nsw-10-50-checklist-records-v1';
+  const DRAFT_KEY = 'nsw-10-50-checklist-draft-v1';
+  const ACTIVE_RECORD_KEY = 'nsw-10-50-checklist-active-v1';
+  const LEGACY_STATE_KEY = 'nsw-10-50-mobile-checklist-v1';
+
+  const checks = Array.from(document.querySelectorAll('input[type="checkbox"][data-check-id]'));
+  const sections = Array.from(document.querySelectorAll('[data-check-section]'));
+  const progressCount = document.getElementById('progressCount');
+  const progressPercent = document.getElementById('progressPercent');
+  const progressBar = document.getElementById('progressBar');
+  const resetChecks = document.getElementById('resetChecks');
+  const eligibilityStatus = document.getElementById('eligibilityStatus');
+  const evidenceStatus = document.getElementById('evidenceStatus');
+  const riskStatus = document.getElementById('riskStatus');
+  const clientNameInput = document.getElementById('clientNameInput');
+  const siteAddressInput = document.getElementById('siteAddressInput');
+  const recordStatus = document.getElementById('recordStatus');
+  const saveRecord = document.getElementById('saveRecord');
+  const newRecord = document.getElementById('newRecord');
+  const deleteRecord = document.getElementById('deleteRecord');
+  const recordSearch = document.getElementById('recordSearch');
+  const recordsList = document.getElementById('recordsList');
+
+  let currentRecordId = null;
+  let isDirty = false;
+
+  function safeJsonParse(value, fallback) {
+    try {
+      const parsed = JSON.parse(value);
+      return parsed ?? fallback;
+    } catch (error) {
+      return fallback;
+    }
+  }
+
+  function escapeHtml(value) {
+    return String(value || '').replace(/[&<>"']/g, (char) => {
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      };
+      return map[char] || char;
+    });
+  }
+
+  function readRecords() {
+    const records = safeJsonParse(localStorage.getItem(RECORDS_KEY), []);
+    return Array.isArray(records) ? records : [];
+  }
+
+  function writeRecords(records) {
+    localStorage.setItem(RECORDS_KEY, JSON.stringify(records));
+  }
+
+  function groupChecks(groupName) {
+    return checks.filter((check) => check.dataset.group === groupName);
+  }
+
+  function setStatus(element, state, text) {
+    element.className = `status-pill ${state}`;
+    element.textContent = text;
+  }
+
+  function snapshotChecks() {
+    const state = {};
+    checks.forEach((check) => {
+      state[check.dataset.checkId] = check.checked;
+    });
+    return state;
+  }
+
+  function applyChecks(state = {}) {
+    checks.forEach((check) => {
+      check.checked = Boolean(state[check.dataset.checkId]);
+    });
+  }
+
+  function countChecked(state = {}) {
+    return checks.reduce((total, check) => total + (state[check.dataset.checkId] ? 1 : 0), 0);
+  }
+
+  function buildCheckState(activeIds) {
+    const activeSet = new Set(activeIds);
+    return checks.reduce((state, check) => {
+      state[check.dataset.checkId] = activeSet.has(check.dataset.checkId);
+      return state;
+    }, {});
+  }
+
+  const DEMO_RECORDS = [
+    {
+      id: 'demo-harbourline-chatswood',
+      clientName: 'Harbourline Developments',
+      siteAddress: '12 Archer Street, Chatswood NSW 2067',
+      updatedAt: '2026-04-09T09:30:00.000Z',
+      checks: buildCheckState([
+        'eligibility-entitlement',
+        'eligibility-dwelling',
+        'eligibility-final-oc',
+        'eligibility-owner',
+        'eligibility-not-proposed',
+        'evidence-rfs-pdf',
+        'evidence-survey',
+        'evidence-tree-record',
+        'evidence-title-location',
+        'risk-da-tree',
+        'risk-88b',
+        'risk-hca',
+        'risk-interim-oc',
+        'workflow-1',
+        'workflow-2',
+        'workflow-3',
+        'workflow-4',
+        'workflow-5',
+        'workflow-6'
+      ])
+    },
+    {
+      id: 'demo-harbourline-lanecove',
+      clientName: 'Harbourline Developments',
+      siteAddress: '44 Longueville Road, Lane Cove NSW 2066',
+      updatedAt: '2026-04-08T05:10:00.000Z',
+      checks: buildCheckState([
+        'eligibility-entitlement',
+        'eligibility-dwelling',
+        'eligibility-owner',
+        'neighbour-consent',
+        'neighbour-trunk',
+        'evidence-rfs-pdf',
+        'evidence-neighbour-consent',
+        'risk-da-tree',
+        'risk-88b',
+        'workflow-1',
+        'workflow-4',
+        'workflow-8'
+      ])
+    },
+    {
+      id: 'demo-lanshore-westmead',
+      clientName: 'Lanshore Capital',
+      siteAddress: '88 Hawkesbury Road, Westmead NSW 2145',
+      updatedAt: '2026-04-07T02:45:00.000Z',
+      checks: buildCheckState([
+        'eligibility-entitlement',
+        'eligibility-dwelling',
+        'eligibility-owner',
+        'evidence-rfs-pdf',
+        'risk-hca',
+        'workflow-1',
+        'workflow-2'
+      ])
+    }
+  ];
+
+  function hasAnyContent() {
+    return Boolean(
+      clientNameInput.value.trim() ||
+      siteAddressInput.value.trim() ||
+      checks.some((check) => check.checked)
+    );
+  }
+
+  function formatDate(value) {
+    if (!value) return '';
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) return '';
+    return parsed.toLocaleString('zh-CN', { hour12: false });
+  }
+
+  function saveDraft() {
+    const draft = {
+      currentRecordId,
+      clientName: clientNameInput.value.trim(),
+      siteAddress: siteAddressInput.value.trim(),
+      checks: snapshotChecks(),
+      isDirty
+    };
+
+    if (!draft.clientName && !draft.siteAddress && !Object.values(draft.checks).some(Boolean) && !draft.currentRecordId) {
+      localStorage.removeItem(DRAFT_KEY);
+      return;
+    }
+
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+  }
+
+  function seedDemoRecordsIfEmpty() {
+    const existing = readRecords();
+    if (existing.length > 0) return existing;
+    writeRecords(DEMO_RECORDS);
+    return DEMO_RECORDS;
+  }
+
+  function updateSectionProgress() {
+    sections.forEach((section) => {
+      const groupName = section.dataset.checkSection;
+      const items = groupChecks(groupName);
+      const done = items.filter((item) => item.checked).length;
+      const progress = section.querySelector('[data-section-progress]');
+      if (progress) {
+        progress.textContent = `${done} / ${items.length} 已勾选`;
+      }
+      section.classList.toggle('section-complete', items.length > 0 && done === items.length);
+    });
+  }
+
+  function updateSummary() {
+    const total = checks.length;
+    const done = checks.filter((check) => check.checked).length;
+    const percent = total ? Math.round((done / total) * 100) : 0;
+
+    progressCount.textContent = `${done} / ${total} 已完成`;
+    progressPercent.textContent = `${percent}%`;
+    progressBar.style.width = `${percent}%`;
+
+    checks.forEach((check) => {
+      const item = check.closest('.check-item');
+      if (item) item.classList.toggle('is-checked', check.checked);
+    });
+
+    const eligibility = groupChecks('eligibility');
+    const eligibilityDone = eligibility.filter((check) => check.checked).length;
+    const eligibilityMissing = eligibility.length - eligibilityDone;
+    if (eligibilityMissing === 0) {
+      setStatus(eligibilityStatus, 'ok', '使用前提已满足');
+    } else {
+      setStatus(eligibilityStatus, 'warn', `使用前提还差 ${eligibilityMissing} 项`);
+    }
+
+    const evidence = groupChecks('evidence');
+    const evidenceDone = evidence.filter((check) => check.checked).length;
+    if (evidenceDone === evidence.length) {
+      setStatus(evidenceStatus, 'ok', '文件包已备齐');
+    } else {
+      setStatus(evidenceStatus, 'warn', `文件包已备 ${evidenceDone}/${evidence.length}`);
+    }
+
+    const risk = groupChecks('risk');
+    const riskDone = risk.filter((check) => check.checked).length;
+    const riskMissing = risk.length - riskDone;
+    if (riskMissing === 0) {
+      setStatus(riskStatus, 'ok', '风险点已逐项核查');
+    } else {
+      setStatus(riskStatus, 'warn', `风险点还差 ${riskMissing} 项`);
+    }
+
+    updateSectionProgress();
+  }
+
+  function updateRecordStatus() {
+    const records = readRecords();
+    const currentRecord = currentRecordId ? records.find((record) => record.id === currentRecordId) : null;
+
+    recordStatus.className = 'record-status';
+    if (isDirty && hasAnyContent()) {
+      recordStatus.classList.add('is-dirty');
+      recordStatus.textContent = currentRecord ? '当前记录有未保存变更' : '新记录尚未保存';
+      return;
+    }
+
+    if (currentRecord) {
+      recordStatus.classList.add('is-saved');
+      recordStatus.textContent = `已保存 · ${formatDate(currentRecord.updatedAt)}`;
+      return;
+    }
+
+    recordStatus.textContent = '未保存记录';
+  }
+
+  function renderRecords() {
+    const allRecords = readRecords().sort((left, right) => new Date(right.updatedAt) - new Date(left.updatedAt));
+    const query = recordSearch.value.trim().toLowerCase();
+    const filtered = allRecords.filter((record) => {
+      const haystack = `${record.clientName || ''} ${record.siteAddress || ''}`.toLowerCase();
+      return !query || haystack.includes(query);
+    });
+
+    if (!allRecords.length) {
+      recordsList.innerHTML = '<div class="record-empty">还没有已保存 checklist。先填写客户姓名和住址，再点“保存 / 更新 Checklist”。</div>';
+      return;
+    }
+
+    if (!filtered.length) {
+      recordsList.innerHTML = '<div class="record-empty">没有找到匹配的客户姓名或住址。</div>';
+      return;
+    }
+
+    recordsList.innerHTML = filtered.map((record) => {
+      const done = countChecked(record.checks || {});
+      const activeClass = record.id === currentRecordId ? ' is-active' : '';
+      return `
+        <button type="button" class="record-item${activeClass}" data-record-id="${escapeHtml(record.id)}">
+          <span class="record-name">${escapeHtml(record.clientName || '未命名客户')}</span>
+          <span class="record-address">${escapeHtml(record.siteAddress || '未填写住址')}</span>
+          <span class="record-meta">完成 ${done}/${checks.length} · 更新于 ${escapeHtml(formatDate(record.updatedAt))}</span>
+        </button>
+      `;
+    }).join('');
+
+    recordsList.querySelectorAll('[data-record-id]').forEach((button) => {
+      button.addEventListener('click', () => {
+        loadRecord(button.dataset.recordId, true);
+      });
+    });
+  }
+
+  function confirmDiscardChanges(message) {
+    if (!isDirty) return true;
+    return window.confirm(message || '当前有未保存变更，确定继续吗？');
+  }
+
+  function applyRecord(record, dirty = false) {
+    currentRecordId = record?.id || null;
+    clientNameInput.value = record?.clientName || '';
+    siteAddressInput.value = record?.siteAddress || '';
+    applyChecks(record?.checks || {});
+    isDirty = dirty;
+
+    if (currentRecordId) {
+      localStorage.setItem(ACTIVE_RECORD_KEY, currentRecordId);
+    } else {
+      localStorage.removeItem(ACTIVE_RECORD_KEY);
+    }
+
+    saveDraft();
+    updateSummary();
+    updateRecordStatus();
+    renderRecords();
+  }
+
+  function loadRecord(recordId, confirmDirty = false) {
+    if (confirmDirty && !confirmDiscardChanges('当前有未保存变更，确定切换到另一条记录吗？')) return;
+    const record = readRecords().find((item) => item.id === recordId);
+    if (!record) return;
+    applyRecord(record, false);
+  }
+
+  function createBlankRecord(confirmDirty = true) {
+    if (confirmDirty && !confirmDiscardChanges('当前有未保存变更，确定新建空白 checklist 吗？')) return;
+    currentRecordId = null;
+    clientNameInput.value = '';
+    siteAddressInput.value = '';
+    applyChecks({});
+    isDirty = false;
+    localStorage.removeItem(ACTIVE_RECORD_KEY);
+    localStorage.removeItem(DRAFT_KEY);
+    updateSummary();
+    updateRecordStatus();
+    renderRecords();
+  }
+
+  function saveCurrentRecord() {
+    const clientName = clientNameInput.value.trim();
+    const siteAddress = siteAddressInput.value.trim();
+
+    if (!clientName || !siteAddress) {
+      window.alert('请先填写客户姓名和住址，再保存 checklist。');
+      return;
+    }
+
+    const records = readRecords();
+    const record = {
+      id: currentRecordId || `record-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      clientName,
+      siteAddress,
+      checks: snapshotChecks(),
+      updatedAt: new Date().toISOString()
+    };
+
+    const existingIndex = records.findIndex((item) => item.id === record.id);
+    if (existingIndex >= 0) {
+      records[existingIndex] = record;
+    } else {
+      records.unshift(record);
+    }
+
+    writeRecords(records);
+    currentRecordId = record.id;
+    isDirty = false;
+    localStorage.setItem(ACTIVE_RECORD_KEY, currentRecordId);
+    saveDraft();
+    updateSummary();
+    updateRecordStatus();
+    renderRecords();
+  }
+
+  function deleteCurrentRecordById() {
+    if (!currentRecordId) {
+      window.alert('当前没有已保存记录可删除。');
+      return;
+    }
+
+    const records = readRecords();
+    const currentRecord = records.find((item) => item.id === currentRecordId);
+    const label = currentRecord ? `${currentRecord.clientName} / ${currentRecord.siteAddress}` : '当前记录';
+    if (!window.confirm(`确定删除 ${label} 吗？`)) return;
+
+    writeRecords(records.filter((item) => item.id !== currentRecordId));
+    createBlankRecord(false);
+  }
+
+  function handleMetaChange() {
+    isDirty = true;
+    saveDraft();
+    updateRecordStatus();
+  }
+
+  function handleCheckChange() {
+    isDirty = true;
+    saveDraft();
+    updateSummary();
+    updateRecordStatus();
+  }
+
+  function loadInitialState() {
+    const records = seedDemoRecordsIfEmpty();
+    const activeRecordId = localStorage.getItem(ACTIVE_RECORD_KEY);
+    if (activeRecordId) {
+      const activeRecord = records.find((item) => item.id === activeRecordId);
+      if (activeRecord) {
+        applyRecord(activeRecord, false);
+        return;
+      }
+      localStorage.removeItem(ACTIVE_RECORD_KEY);
+    }
+
+    const draft = safeJsonParse(localStorage.getItem(DRAFT_KEY), null);
+    if (draft && (draft.clientName || draft.siteAddress || Object.values(draft.checks || {}).some(Boolean))) {
+      currentRecordId = draft.currentRecordId || null;
+      clientNameInput.value = draft.clientName || '';
+      siteAddressInput.value = draft.siteAddress || '';
+      applyChecks(draft.checks || {});
+      isDirty = Boolean(draft.isDirty || draft.clientName || draft.siteAddress || Object.values(draft.checks || {}).some(Boolean));
+      updateSummary();
+      updateRecordStatus();
+      renderRecords();
+      return;
+    }
+
+    const legacyState = safeJsonParse(localStorage.getItem(LEGACY_STATE_KEY), null);
+    if (legacyState && typeof legacyState === 'object') {
+      applyChecks(legacyState);
+      isDirty = Object.values(legacyState).some(Boolean);
+      saveDraft();
+      updateSummary();
+      updateRecordStatus();
+      renderRecords();
+      return;
+    }
+
+    if (records.length > 0) {
+      applyRecord(records[0], false);
+      return;
+    }
+
+    updateSummary();
+    updateRecordStatus();
+    renderRecords();
+  }
+
+  checks.forEach((check) => {
+    check.addEventListener('change', handleCheckChange);
+  });
+
+  clientNameInput.addEventListener('input', handleMetaChange);
+  siteAddressInput.addEventListener('input', handleMetaChange);
+  recordSearch.addEventListener('input', renderRecords);
+  saveRecord.addEventListener('click', saveCurrentRecord);
+  newRecord.addEventListener('click', () => createBlankRecord(true));
+  deleteRecord.addEventListener('click', deleteCurrentRecordById);
+
+  resetChecks.addEventListener('click', () => {
+    if (!window.confirm('确定要清空当前 checklist 的全部勾选吗？')) return;
+    checks.forEach((check) => {
+      check.checked = false;
+    });
+    isDirty = true;
+    saveDraft();
+    updateSummary();
+    updateRecordStatus();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  loadInitialState();
+</script>
+</body>
+</html>
